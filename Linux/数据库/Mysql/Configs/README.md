@@ -1,10 +1,6 @@
-Datastrangler.com had a great set of configuration files for almost any type, this website is now offline so I had the files on my computer. 
-
-The files work perfect and are for MySQL 5.x and up.
-
-Please feel free to update them.
-
-Best regards,
-
-Rodrigo Violante
-rodrigo at volume dot mx
+#### 备忘
+```
+获取Mysql相应的程序使用的默认配置：
+  [root@localhost ~]# mysql --print-defaults    #客户端
+  [root@localhost ~]# mysqld --print-defaults   #服务端
+```
