@@ -1,5 +1,5 @@
 #### 备忘
-```
+```txt
 获取Mysql的相关可执行命令默认使用的配置：
   [root@localhost ~]# mysql --print-defaults      #客户端
   [root@localhost ~]# mysqld --print-defaults     #服务端
