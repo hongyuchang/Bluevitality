@@ -1,7 +1,7 @@
 # 工作，学习，记录
 
 - [ ] BASH 与 Python 的不断完善 （ 完善VIM的IDE环境 ）
-- [ ] 各项目的README与sh的不断完善与修改，抽时间快速复习.....
+- [ ] 各项目的README与sh的不断完善与修改，书签更迭，抽时间快速复习.....
 - [ ] sed/awk的大纲笔记，Git备忘优化排版，优化例子，echars的常用demo(模板)
 - [ ] GRUB2，U盘版编译内核+BusyBox的Linux，CentOS7启动流程不断归纳细化的md
 - [ ] ~~LVM~~, ~~LVM的镜像~~/条带 ~~mdadm的README~~
