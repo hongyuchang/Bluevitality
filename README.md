@@ -1,10 +1,9 @@
 # 工作，学习，记录
 
 - [ ] BASH 与 Python 的不断完善 （ 完善VIM的IDE环境 ）
-- [ ] 各项目的README与sh的不断完善与修改
+- [ ] 各项目的README与sh的不断完善与修改，抽时间快速复习.....
 - [ ] sed/awk的大纲笔记，Git备忘优化排版，优化例子，echars的常用demo(模板)
 - [ ] GRUB2，U盘版编译内核+BusyBox的Linux，CentOS7启动流程不断归纳细化的md
-- [ ] 抽时间，快速复习一遍.....
 - [ ] ~~LVM~~, ~~LVM的镜像~~/条带 ~~mdadm的README~~
 - [x] ~~Quota的配置流程记录（加注释）~~
 - [x] ~~php 5.6 & 7.1 install~~
@@ -30,7 +29,7 @@
 - [x] ~~Samba~~ & ~~vsftp~~
 - [x] stunel，PPTP的README & 脚本， shadowsock
 - [ ] python的：~~jinja生成配置文件的demo（过滤器，流程控制，对象，宏）~~，~~sqlalchemy的常规demo~~，disutils项目打包成模块的demo，sockerserver
-- [ ] tcpdump，wireshark 的md
+- [ ] ~~tcpdump，wireshark 的md~~
 - [x] ~~nodejs安装及配置流程说明~~
 - [ ] chef，~~ansible的完整流程相关文件结构&README文档~~
 - [ ] Rsyslog的模板规则及模块demo & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，corosyc
