@@ -19,51 +19,6 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 修改密码：	 use dbname ; db.changeUserPassword('username','passowrd');
 入库认证：	 use dbname ; db.auth('username','passowrd');
 ```
-#### mongoexport & mongoimport ： 导出与导入
-```txt
-mongoexport / mongoimport 是逻辑方式的导入与导出，mongodump / mondorestore 是二进制方式的导入与导出
-
-注：对数据执行备份之前需要先对数据库加锁!当备份完成后再释放锁：
-	1 > use admin
-	2 > db.runCommand( { fsync: 1, lock: true } );	#加锁
-	......(备份过程略)
-	3 > db.fsyncUnlock();							#解锁
-
-mongoexport
-	-d	库（导入/导出可以是本地也可以是远程服务器）
-	-c	集合  
-	-f	列名   
-	-q	条件   
-	-o	导出名	
-	--csv	EXCEl
-	
-	导出: mongoexport -d 库 -c 集合 -f 列1,列n -q '{name:{$lte:1000}}' -o ./dump.json
-
-mongoimport：
-	-type	默认json [csv/json]
-	-file	文件路径
-	-f		导入的数据存于哪些列
-	--headrline	跳过第一行
-	
-	导入：mongoimport -d 库 -c 集合 --type csv --headrline -f 列1,列n --file ./dump.csv
-
-mongodump:
-	-h	服务器IP
-	-u	账号
-	-p	密码
-	-d	库 
-	-c	集合
-	-f	列名  #默认导出到mongo的dump目录（包括数据及索引信息）
-	-o	备份文件存放位置
-	
-mondorestore：
-	-h	服务器IP
-	-u	账号
-	-p	密码
-	-d	库（要还原的数据库名字，当然这个名称也可以和备份时候的不一样） 
-	--drop	恢复的时候，先删除当前数据，然后恢复备份的数据。就是说，恢复后，备份后添加修改的数据都会被删除
-	--dir	指定备份的二进制文件所在路径
-```
 #### mongod 服务启动时参数
 ```txt
 ************************************* 基本配置 *********************************************
