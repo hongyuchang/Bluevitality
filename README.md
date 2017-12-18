@@ -46,4 +46,4 @@
 - [X] ~~Varnish~~
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ
-- [ ] Zxarps
+- [x] ~~Zxarps~~
