@@ -95,7 +95,7 @@
 │   │   ├── Mongodb
 │   │   │   └── 资料
 │   │   ├── Mysql
-│   │   │   ├── Configs
+│   │   │   ├── conf
 │   │   │   ├── Galera
 │   │   │   ├── Innobackupex
 │   │   │   ├── Mycat
