@@ -80,10 +80,25 @@ OpenJDK 64-Bit Server VM (build 25.151-b12, mixed mode)
     <property name="readOnly">true</property>  
 </user> 
 [root@localhost ~]# vim /usr/local/mycat/conf/schema.xml                    #修改Myscat配置文件
-......                                                                      #设置读写分离
-<writeHost host="hostM1" url="<address>:<port>" user="<user>" password="<password>">
-    <readHost host="hostS1" url="<address>:<port>" user="<user>" password="<password>" />
+......                                                                      #设置读写分离及自动切换
 </writeHost>
+<?xml version="1.0"?>  
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">  
+<mycat:schema xmlns:mycat="http://io.mycat/">  
+    <schema name="TESTDB" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn1">    
+    </schema>  
+    <dataNode name="dn1" dataHost="localhost1" database="test" />  
+    <dataHost name="localhost1" maxCon="1000" minCon="10" balance="1" writeType="0"  
+             dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">  
+        <heartbeat>show slave status</heartbeat>  
+        <!-- can have multi write hosts -->  
+        <writeHost host="hostM1" url="<address>:<port>" user="<user>" password="<password>">  
+            <!-- can have multi read hosts -->  
+            <readHost host="hostS1" url="<address>:<port>" user="<user>" password="<password>" />
+        </writeHost>  
+        <writeHost host="hostM2" url="localhost:3307" user="root" password="123456"/>  
+    </dataHost>  
+</mycat:schema> 
 .....
 [root@localhost ~]# /usr/local/mycat/bin/mycat start                                #启动mycat
 [root@localhost ~]# mysql -uroot -pMYCAT_PASSOWRD -h127.0.0.1 -P8066 -DTESTDB       #链接mycat
