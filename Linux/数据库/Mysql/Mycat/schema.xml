@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
 <!DOCTYPE mycat:schema SYSTEM "schema.dtd">
 <mycat:schema xmlns:mycat="http://io.mycat/">
-
+    
+    <!-- 
+    name    唯一标识dataHost标签，供上层的标签使用
+    maxCon  指定每个读写实例连接池的最大连接
+    minCon  指定每个读写实例连接池的最小连接
+    -->
     <schema name="TESTDB" checkSQLschema="false" sqlMaxLimit="100">
         <!-- Table 标签定义了MyCat中的逻辑表，所有需要拆分的表都需要在这个标签中定义
         primaryKey  该逻辑表对应真实表的主键
@@ -31,10 +36,15 @@
 
     <!-- 读写分离
     balance="#"：
-        0   
-        1   
-        2   
-        3   
+        0   不开启读写分离机制，所有读操作都发送到当前可用的writeHost上
+        1   全部的readHost与stand by writeHost参与select语句的负载均衡，简单的说当双主双从模式(M1->S1，M2->S2，并且M1与M2互为主备)
+        2   所有读操作都随机的在writeHost、readhost上分发
+        3   所有读请求随机的分发到wiriterHost对应的readhost执行，writerHost不负担读压力（在1.4及其以后版本有）
+
+    writeType="#":
+        0   所有写操作发送到配置的第一个writeHost，第一个挂了切到还生存的第二个writeHost，重新启动后已切换后的为准
+        1   所有写操作都随机的发送到配置的writeHost，1.5以后废弃不推荐。
+        2   不执行写操作
     -->
     <dataHost name="localhost1" maxCon="1000" minCon="10" balance="0" writeType="0" dbType="mysql"
               dbDriver="native" switchType="1" slaveThreshold="100">
