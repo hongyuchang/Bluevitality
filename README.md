@@ -6,14 +6,14 @@
 - [ ] GRUB2，U盘版编译内核+BusyBox的Linux，CentOS7启动流程不断归纳细化的md
 - [ ] ~~LVM~~, ~~LVM的镜像~~/条带 ~~mdadm的README~~
 - [x] ~~Quota的配置流程记录（加注释）~~
-- [x] ~~php 5.6 & 7.1 install~~
+- [x] ~~php 5.6 & 7.1 install~~，Open LDAP，~~nsswitch~~
 - [ ] ~~keepalived配置文件注释完成，haproxy脚本，lvs完善~~，drbd，heartbeat(安装部分不完善)
 - [x] ~~Supervisor，xinetd 的demo与readme~~，~~Flask相关的gunicorn和manage的md或sh~~ systemd的@与.timer.target的说明
 - [x] ~~mutt+mstp的脚本~~ grafana配合zabbix
 - [ ] ~~tomcat 安装脚本~~、~~tomcat集群会话共享~~~~，~~jmx监控~~ ~~及zabbix监控tomcat~~，JVM优化，多实例，~~jar与jmap的demo~~
 - [x] ~~memcahed的README & 安装脚本~~ tomcat的MSM会话共享md测试有问题
-- [ ] ~~mysql~~，~~mysql主从~~，5.6自带的半同步插件.sh，~~GTID~~，~~Mysqldump / xtrabackup~~ / lvm快照备份db脚本
-- [ ] ~~nginx~~、~~Nginx4层LB的demo~~，mysql多实例，mysql性能及状态查询的一个view视图
+- [ ] ~~mysql~~，~~主从~~，~~5.6半同步插件~~，多实例，~~GTID~~，~~Mysqldump / xtrabackup~~ / lvm快照备份db脚本
+- [ ] ~~nginx~~、~~Nginx4层LB的demo~~，mysql性能及状态查询的若干sql组成的脚本
 - [x] ~~galera cluster & mycat~~
 - [x] ~~redis主从，redis分布式集群（多写）~~
 - [ ] rpm 和 yum 的原理 目录 参数 全部总结细化 & ~~rpmbuild 重新整理~~
@@ -26,7 +26,7 @@
 - [ ] linux当前环境检测及(性能/安全)设置脚本（py）
 - [ ] ~~python 3.6 安装.sh~~ python环境变量的说明及目录结构
 - [x] ~~Samba~~ & ~~vsftp~~
-- [x] stunel，PPTP的README & 脚本， shadowsock
+- [ ] stunel，PPTP的README，shadowsock，OpenVPN，IPsec + L2TP
 - [ ] python的：~~jinja生成配置文件的demo（过滤器，流程控制，对象，宏）~~，~~sqlalchemy的常规demo~~，disutils项目打包成模块的demo，sockerserver
 - [ ] ~~tcpdump，wireshark 的md~~
 - [x] ~~nodejs安装及配置流程说明~~
@@ -41,8 +41,6 @@
 - [ ] consul 分步骤按格式存储，修改RAEDME
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
 - [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
-- [ ] LDAP，~~nsswitch~~
-- [ ] OpenVPN
 - [X] ~~Varnish~~
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
