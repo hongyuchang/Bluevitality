@@ -1,0 +1,28 @@
+1、分别在主从节点上安装相关的插件
+
+master> INSTALL PLUGIN rpl_semi_sync_master SONAME 'semisync_master.so';
+slave> INSTALL PLUGIN rpl_semi_sync_slave SONAME 'semisync_slave.so';
+
+2、启用半同步复制
+
+在master上的配置文件中，添加
+rpl_semi_sync_master_enabled=ON
+
+在至少一个slave节点的配置文件中添加
+rpl_semi_sync_slave_enabled=ON
+
+而后重新启动mysql服务即可生效。
+
+
+或者，也可以mysql服务上动态启动其相关功能：
+
+master> SET GLOBAL rpl_semi_sync_master_enabled = ON;
+slave> SET GLOBAL rpl_semi_sync_slave_enabled = ON;
+slave> STOP SLAVE IO_THREAD; START SLAVE IO_THREAD;
+
+3、确认半同步功能已经启用
+
+master> CREATE DATABASE magedudb;
+master> SHOW STATUS LIKE 'Rpl_semi_sync_master_yes_tx';
+
+slave> SHOW DATABASES; 
