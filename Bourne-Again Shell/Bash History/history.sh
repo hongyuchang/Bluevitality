@@ -1,3 +1,6 @@
+[root@localhost ~]# curl www.baidu.com -s -w %{http_code}"\n" -o /dev/null 
+200
+
 [root@localhost ~]# grep -v "^$" ip
 192.168.1.5 
 192.168.1.5 
