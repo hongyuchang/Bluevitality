@@ -155,7 +155,7 @@ MySQL> show global variables like'%gtid%';
 | simplified_binlog_gtid_recovery | OFF   |
 +---------------------------------+-------+
 7 rows in set (0.01 sec)
-MySQL > show slave status\G;
+MySQL> show slave status\G;
             ................
              Slave_IO_Running: Yes
             Slave_SQL_Running: Yes
