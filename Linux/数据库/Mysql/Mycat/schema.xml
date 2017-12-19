@@ -25,7 +25,7 @@
         </table>
     </schema>
 
-    <!-- 该属性用于绑定逻辑库到某个具体的database上，如果定义了这个属性，那么这个逻辑库就不能工作在分库分表模式下了。
+    <!-- <定义数据的操作节点，该属性用于绑定逻辑库到某个具体的database，若定义此属性那么逻辑库就不能工作在分库分表模式下
     也就是说对这个逻辑库的所有操作会直接作用到绑定的dataNode上，这个schema就可以用作读写分离和主从切换
     name    定义数据节点的名字，这个名字需要是唯一的，我们需要在table标签上应用这个名字，来建立表与分片对应的关系
     dataHost    该属性用于定义该分片属于哪个数据库实例的，属性值是引用dataHost标签上定义的name属性
@@ -46,8 +46,10 @@
         1   所有写操作都随机的发送到配置的writeHost，1.5以后废弃不推荐。
         2   不执行写操作
     -->
+    <!-- 定义数据节点，包括了各种逻辑项的配置 -->
     <dataHost name="localhost1" maxCon="1000" minCon="10" balance="0" writeType="0" dbType="mysql"
               dbDriver="native" switchType="1" slaveThreshold="100">
+        <!-- 配置真实MySQL与MyCat的心跳 -->
         <heartbeat>select user()</heartbeat>
         <!-- 定义可写主机 -->
         <writeHost host="hostM1" url="localhost:3306" user="root" password="123456">
