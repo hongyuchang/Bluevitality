@@ -3,6 +3,7 @@
 │   ├── Bash History
 │   ├── Dialog
 │   ├── Vim
+│   │   └── Setup
 │   └── 收集的资料（备忘）
 ├── Linux
 │   ├── Cluster
@@ -47,6 +48,7 @@
 │   │   ├── Nginx
 │   │   │   ├── conf
 │   │   │   ├── Setup 1.12.1
+│   │   │   ├── 一些资料
 │   │   │   └── 资料
 │   │   ├── Nodejs
 │   │   │   └── Setup 8.1.4
@@ -262,4 +264,4 @@
     │   └── Improve
     └── Tools
 
-262 directories
+264 directories
