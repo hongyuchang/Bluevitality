@@ -67,7 +67,7 @@ MySQL> show master status;   #记录日志位置
 [root@Slave ~]# systemctl stop mysqld
 ```
 
-#### 修改从服务器的 my.cnf 文件
+#### 修改从节点的 Mysql 配置文件： my.cnf
 ```txt
 [mysqld]
 
@@ -152,9 +152,6 @@ MySQL > show slave status\G;
                     SQL_Delay: 0
 ```
 
-
-
-
 #### UUID的问题
 ```txt
 MySQL [123test]> show variables like 'datadir';    
@@ -170,4 +167,3 @@ MySQL [123test]> show variables like 'datadir';
 [auto]
 server-uuid=764eb613-8165-11e7-b960-000c29b97472
 ```
-
