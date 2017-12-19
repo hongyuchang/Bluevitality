@@ -1,5 +1,6 @@
-#### 修改主服务器的 my.cnf 文件
-```txt
+#### 修改主节点的 Mysql 配置文件： my.cnf
+```bash
+[root@localhost ~]# cat /etc/my.cnf
 [mysqld]
 
 #主从ID标识
@@ -22,14 +23,13 @@ binlog_format=mixed
 #N：每N次事务提交之后由Mysql强制回写到持久化
 sync_binlog=1
 
-#需同步的数据库
-binlog-do-db
+#需同步的数据库，注：binlog-do-db 与 binlog-ignore-db 为互斥关系
+binlog-do-db = 
 
 #需忽略的数据库
 binlog-ignore-db = mysql
 binlog-ignore-db = performance_schema
 binlog-ignore-db = information_schema
-binlog-ignore-db = test
 
 #从服务器是否对二进制日志进行校验，NONE可兼容旧版本
 binlog_checksum=NONE
@@ -39,8 +39,7 @@ binlog_checksum=NONE
 #STRICT_TRANS_TABLES    严格模式，进行数据的严格校验，错误数据不能插入，报error错误
 sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
 
-#重读配置
-[root@Master ~]# systemctl restart mysqld
+[root@Master ~]# systemctl restart mysqld       #重读Mysql服务的配置文件
 ```
 
 #### Master 授权同步账号
@@ -50,13 +49,12 @@ mysql> flush privileges;
 ```
 
 #### 将完整备份导到从库
-```txt
+```bash
 #拷出主服务器数据
 [root@Master ~]# mysqldump -u $name -p --flush-logs --master-data=2 --single-transaction $dbname > ${dbname}.sql 
 [root@Master ~]# scp ${dbname}.sql  root@<slave_address>:/var/lib/mysql
 
-#记录日志位置
-MySQL> show master status;
+MySQL> show master status;   #记录日志位置
 +------------------+----------+--------------+---------------------------------------------+-------------------+
 | File             | Position | Binlog_Do_DB | Binlog_Ignore_DB                            | Executed_Gtid_Set |
 +------------------+----------+--------------+---------------------------------------------+-------------------+
@@ -64,13 +62,10 @@ MySQL> show master status;
 +------------------+----------+--------------+---------------------------------------------+-------------------+
 1 row in set (0.00 sec)
 
-
 #从服务器还原数据(某些场合需要先创建数据库后在执行导入)
 [root@Slave ~]# mysqldump -u $username -p$password $dbname < ${dbname}.sql
 [root@Slave ~]# systemctl stop mysqld
 ```
-
-
 
 #### 修改从服务器的 my.cnf 文件
 ```txt
@@ -119,7 +114,6 @@ replicate-ignore-db=information_schema
 replicate-ignore-db=cluster
 replicate-ignore-db=mysql
 
-
 #让备库从主复制数据时写到二进制日志
 #备开启log-bin后若直接写数据是记入二进制日志的，但备通过I0线程读取主库二进制日志后通过SQL线程写入的数据不会写入binlog
 #当备服务器又作为他服务器的主时需设置此参数
@@ -131,7 +125,6 @@ slave-skip-errors=all
 #当从库等待指定的秒数后才认为网络故障，然后再重连并追赶这段时间主库的数据
 slave-net-timeout=60
 
-#重读配置
 [root@Master ~]# systemctl restart mysqld
 ```
 
@@ -171,15 +164,10 @@ MySQL [123test]> show variables like 'datadir';
 | datadir       | /data/ |
 +---------------+--------+
 1 row in set (0.00 sec)
+
 #在实验环境中使用的是克隆机，因UUID相同导致了备服务器的IO线程打不开，因此需要修改此UUID
 [root@localhost etc]# cat /data/auto.cnf    
 [auto]
 server-uuid=764eb613-8165-11e7-b960-000c29b97472
 ```
-
-
-
-
-
-
 
