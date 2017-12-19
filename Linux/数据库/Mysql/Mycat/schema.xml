@@ -35,7 +35,7 @@
     <dataNode name="dn2" dataHost="localhost1" database="db2" />
     <dataNode name="dn3" dataHost="localhost1" database="db3" />
 
-    <!-- 读写分离
+    <!-- 读写分离及故障切换
     balance="#"：
         0   不开启读写分离机制，所有读操作都发送到当前可用的writeHost上
         1   全部的readHost与stand by writeHost参与select语句的负载均衡，简单的说当双主双从模式(M1->S1，M2->S2，并且M1与M2互为主备)
@@ -46,6 +46,12 @@
         0   所有写操作发送到配置的第一个writeHost，第一个挂了切到还生存的第二个writeHost，重新启动后已切换后的为准
         1   所有写操作都随机的发送到配置的writeHost，1.5以后废弃不推荐。
         2   不执行写操作
+
+    switchType='#'
+       -1   不自动切换
+        1   默认，表示自动切换
+        2   基于MySQL主从同步的状态决定是否切换,心跳语句为 show slave status
+        3   基于MySQL galary cluster的切换机制（适合集群）（1.4.1），心跳语句为 show status like 'wsrep%'
     -->
     <!-- 定义数据节点，包括了各种逻辑项的配置 -->
     <dataHost name="localhost1" maxCon="1000" minCon="10" balance="0" writeType="0" dbType="mysql"
