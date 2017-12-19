@@ -46,7 +46,7 @@ sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
 ```
 
 #### Master 授权同步账号
-```txt
+```mysql
 mysql> grant replication slave on  *.*  to 'username'@'%' identified by 'password';
 mysql> flush privileges;
 ```
@@ -72,7 +72,7 @@ MySQL> show master status;
 ```
 
 #### 修改从节点的 Mysql 配置文件： my.cnf
-```txt
+```bash
 [mysqld]
 
 #主从ID标识
@@ -138,7 +138,7 @@ slave-net-timeout = 60
 ```
 
 #### 在备服务器进行同步
-```txt
+```mysql
 mysql> change master to master_host='192.168.139.132',master_user='root', master_password='123456'
     -> master_auto_position=1; 
 mysql> start slave;
@@ -162,7 +162,7 @@ MySQL > show slave status\G;
 ```
 
 #### UUID的问题
-```txt
+```bash
 MySQL [123test]> show variables like 'datadir';    
 +---------------+--------+
 | Variable_name | Value  |
