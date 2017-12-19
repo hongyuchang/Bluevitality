@@ -1,3 +1,0 @@
-#!/bin/bash
-/etc/rc.d/init.d/mysql bootstrap
-service mysql stop
