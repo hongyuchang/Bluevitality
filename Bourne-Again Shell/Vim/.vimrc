@@ -1,3 +1,7 @@
+set encoding=utf-8          #编码
+set cursorline              #突出显示当前行
+set tabstop=4               #制表符4个空格
+set incsearch               #输入搜索内容时就显示搜索结果
 
 # F5自动运行并分屏输出（本配置段在写入~/.vimrc前需要先创建文件：mkdir ~/.vim）
 function! Setup_ExecNDisplay()
