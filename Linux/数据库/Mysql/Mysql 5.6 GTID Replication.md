@@ -72,22 +72,25 @@ MySQL> show master status;   #记录日志位置
 [mysqld]
 
 #主从ID标识
-server-id=2
+server-id = 2
 
-#read_only=on
+#read_only = on
 
 #二进制日志
 log_bin = mysql-bin
 
 #使用全局事务唯一标识进行同步，否则就是普通的复制架构
-gtid-mode=on
+gtid-mode = on
 #强制GTID的一致性
-enforce-gtid-consistency=true
+enforce-gtid-consistency = true
 
-#从服务器的SQL线程数；0表示关闭多线程复制功能
-slave-parallel-workers=2
+#从服务器的SQL线程数；0表示关闭多线程复制功能（开启多线程复制，5.6版本为1库执行1个sql线程，5.7为1组1线程）
+slave-parallel-workers = 6
 
-#SQL线程读取relay-log的内容在从服务器回放
+#自 Mysql 5.7 版本开始支持真正的并行复制（DATABASE：基于库，LOGICAL_CLOCK：基于组）
+#slave-parallel-type = [ DATABASE | LOGICAL_CLOCK ]
+
+#SQL线程读取 relay-log 的内容在从节点中回放（中继日志）
 relay-log = slave-relay-bin
 relay-log-index = slave-relay-bin.index
 
@@ -102,17 +105,17 @@ sync_relay_log = 0
 sync_relay_log_info = 1
 
 #需复制的数据库 ( 与ignore互斥 )
-#replicate-do-db=123test
+#replicate-do-db = 123test
 
 #不写入二进制日志的数据库，注：bin-do-db,bin-ignore-db 为互斥关系，只需设置其中一项即可
-binlog-ignore-db=information_schema
-binlog-ignore-db=cluster
-binlog-ignore-db=mysql
+binlog-ignore-db = information_schema
+binlog-ignore-db = cluster
+binlog-ignore-db = mysql
 
 #需忽略的数据库
-replicate-ignore-db=information_schema
-replicate-ignore-db=cluster
-replicate-ignore-db=mysql
+replicate-ignore-db = information_schema
+replicate-ignore-db = cluster
+replicate-ignore-db = mysql
 
 #让备库从主复制数据时写到二进制日志
 #备开启log-bin后若直接写数据是记入二进制日志的，但备通过I0线程读取主库二进制日志后通过SQL线程写入的数据不会写入binlog
@@ -120,10 +123,10 @@ replicate-ignore-db=mysql
 log-slave-updates
 
 #定义复制过程中备服务器可忽略的错误号，当复制过程中遇到定义的错误号就可以自动跳过来执行后面的SQL
-slave-skip-errors=all
+slave-skip-errors = all
 
 #当从库等待指定的秒数后才认为网络故障，然后再重连并追赶这段时间主库的数据
-slave-net-timeout=60
+slave-net-timeout = 60
 
 [root@Master ~]# systemctl restart mysqld
 ```
