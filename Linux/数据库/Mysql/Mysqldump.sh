@@ -7,9 +7,6 @@ MYSQL_HOST="127.0.0.1"
 MYSQL_PORT="3306"
 BACKUP_HOME="/data/db_backup"
 
-set -e
-set -x
-
 #身份检查
 if [ $(id -u) != "0" ]; then
     echo "error: user must be an administrator"
@@ -34,5 +31,7 @@ mysqldump \
 --ignore-table=mysql.user \
 --routines \
 > ${BACKUP_HOME:?error}/mysql_db_backup.$(date +%Y%m%d).sql
+
+echo -e "\nScript Execution Time： \033[32m${SECONDS}s\033[0m"
 
 exit 0
