@@ -18,12 +18,11 @@
 - [x] ~~redis主从，redis分布式集群（多写）~~
 - [ ] rpm 和 yum 的原理 目录 参数 全部总结细化 & ~~rpmbuild 重新整理~~
 - [ ] 阿里云API的demo，阿里云赛门铁克免费CA的申请流程
-- [ ] mysql命令收集，归纳，整理 ---> .md
+- [ ] mysql CRUD与管理命令的收集，归纳，整理 ---> .md
 - [ ] 系统内核的优化脚本，要按用途分类进行设置，并提供手动设置和提示的功能！
 - [ ] 防火墙优化的脚本，安全加固用的（根据各个模块写一个脚本，根据提示执行优化加固用，建议和系统优化脚本在一起）
 - [ ] ~~zabbix的userparameter目录结构整理及规范格式的各片段README~~，SNMP，~~zabbix监控tomcat的jmx~~，proxy的脚本和md
 - [x] ~~openssl CA及服务端证书免交互生成脚本~~ ~~openssl 加解密相关demo~~
-- [ ] docker的swarm流程脚本，Jenkins
 - [ ] linux当前环境检测及(性能/安全)设置脚本（py）
 - [ ] ~~python 3.6 安装.sh~~ python环境变量的说明及目录结构
 - [x] ~~Samba~~ & ~~vsftp~~
@@ -38,6 +37,7 @@
 - [ ] DNS下增加rndc，demo改版，增删区域的脚本
 - [ ] ~~ISCSI~~ ~~& gfs & clvm~~（仅流程），tcpcopy & ipref 的README与sh
 - [x] ~~expect~~
+- [ ] docker的swarm流程脚本，Jenkins
 - [ ] consul 分步骤按格式存储，修改RAEDME
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
 - [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
@@ -45,5 +45,5 @@
 - [ ] OpenVPN
 - [X] ~~Varnish~~
 - [X] ~~VNC~~ & ~~NTP~~
-- [ ] RabbitMQ
+- [ ] RabbitMQ，~~ActiveMQ~~
 - [x] ~~Zxarps~~
