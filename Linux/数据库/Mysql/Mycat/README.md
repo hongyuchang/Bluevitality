@@ -67,12 +67,19 @@ OpenJDK 64-Bit Server VM (build 25.151-b12, mixed mode)
 [root@localhost ~]# adduser -r -g mycat mycat                               #
 [root@localhost ~]# chown -R mycat.mycat /usr/local/mycat                   #
 [root@localhost ~]# cd /usr/local/mycat/
-[root@localhost ~]# vim /usr/local/mycat/conf/schema.xml                    #修改Myscat配置文件
+[root@localhost ~]# vim /usr/local/mycat/conf/server.xml                    #修改Myscat配置文件
 ......                                                                      #配置mycat的用户名密码
-<user name="root">
-   <property name="password">MYCAT_PASSOWRD</property>
-   <property name="schemas">TESTDB</property>
-</user>
+<user name="root">  
+    <property name="password">digdeep</property>  
+    <property name="schemas">TESTDB</property>  
+</user>  
+  
+<user name="user">  
+    <property name="password">user</property>  
+    <property name="schemas">TESTDB</property>  
+    <property name="readOnly">true</property>  
+</user> 
+[root@localhost ~]# vim /usr/local/mycat/conf/schema.xml                    #修改Myscat配置文件
 ......                                                                      #设置读写分离
 <writeHost host="hostM1" url="<address>:<port>" user="<user>" password="<password>">
     <readHost host="hostS1" url="<address>:<port>" user="<user>" password="<password>" />
