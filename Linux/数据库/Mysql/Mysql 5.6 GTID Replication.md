@@ -120,7 +120,7 @@ replicate-ignore-db = mysql
 #让备库从主复制数据时写到二进制日志
 #备开启log-bin后若直接写数据是记入二进制日志的，但备通过I0线程读取主库二进制日志后通过SQL线程写入的数据不会写入binlog
 #当备服务器又作为他服务器的主时需设置此参数
-log-slave-updates
+log-slave-updates = true
 
 #定义复制过程中备服务器可忽略的错误号，当复制过程中遇到定义的错误号就可以自动跳过来执行后面的SQL
 slave-skip-errors = all
