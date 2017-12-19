@@ -156,9 +156,11 @@ MySQL> show global variables like'%gtid%';
 +---------------------------------+-------+
 7 rows in set (0.01 sec)
 MySQL > show slave status\G;
+            ................
              Slave_IO_Running: Yes
             Slave_SQL_Running: Yes
                     SQL_Delay: 0
+            ................
 ```
 
 #### UUID的问题
