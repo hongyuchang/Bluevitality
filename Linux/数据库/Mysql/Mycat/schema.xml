@@ -8,7 +8,8 @@
     minCon  指定每个读写实例连接池的最小连接
     -->
     <schema name="TESTDB" checkSQLschema="false" sqlMaxLimit="100">
-        <!-- Table 标签定义了MyCat中的逻辑表，所有需要拆分的表都需要在这个标签中定义
+        <!-- 
+        Table       定义了MyCat中的逻辑表，所有需要拆分的表都需要在这个标签中定义
         primaryKey  该逻辑表对应真实表的主键
         ........
         -->
@@ -27,7 +28,7 @@
 
     <!-- <定义数据的操作节点，该属性用于绑定逻辑库到某个具体的database，若定义此属性那么逻辑库就不能工作在分库分表模式下
     也就是说对这个逻辑库的所有操作会直接作用到绑定的dataNode上，这个schema就可以用作读写分离和主从切换
-    name    定义数据节点的名字，这个名字需要是唯一的，我们需要在table标签上应用这个名字，来建立表与分片对应的关系
+    name        定义数据节点的名字，这个名字需要是唯一的，我们需要在table标签上应用这个名字，来建立表与分片对应的关系
     dataHost    该属性用于定义该分片属于哪个数据库实例的，属性值是引用dataHost标签上定义的name属性
     -->
     <dataNode name="dn1" dataHost="localhost1" database="db1" />
