@@ -6,8 +6,9 @@
 #主从ID标识
 server_id = 1
 
-#使用全局事务唯一标识进行同步（以下任一参数不开启都会报错）
+#使用全局事务唯一标识来进行同步（以下任一参数不开启都会报错）
 gtid-mode=on
+#强制保证GTID的一致性
 enforce-gtid-consistency=true
 log-slave-updates=true
 
@@ -40,6 +41,8 @@ binlog_checksum=NONE
 sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
 
 [root@Master ~]# systemctl restart mysqld       #重读Mysql服务的配置文件
+[root@Master ~]# systemctl stop firewalld
+[root@Master ~]# setenforce 0
 ```
 
 #### Master 授权同步账号
@@ -54,7 +57,8 @@ mysql> flush privileges;
 [root@Master ~]# mysqldump -u $name -p --flush-logs --master-data=2 --single-transaction $dbname > ${dbname}.sql 
 [root@Master ~]# scp ${dbname}.sql  root@<slave_address>:/var/lib/mysql
 
-MySQL> show master status;   #记录日志位置
+#记录日志位置
+MySQL> show master status;
 +------------------+----------+--------------+---------------------------------------------+-------------------+
 | File             | Position | Binlog_Do_DB | Binlog_Ignore_DB                            | Executed_Gtid_Set |
 +------------------+----------+--------------+---------------------------------------------+-------------------+
@@ -74,14 +78,14 @@ MySQL> show master status;   #记录日志位置
 #主从ID标识
 server-id = 2
 
+#强制只读，命令行方式修改： Mysql [(none)] > SET @@global.read_only = ON;
 #read_only = on
 
 #二进制日志
 log_bin = mysql-bin
 
-#使用全局事务唯一标识进行同步，否则就是普通的复制架构
+#使用全局事务唯一标识进行同步并强制GTID的一致性，否则就是普通的复制架构
 gtid-mode = on
-#强制GTID的一致性
 enforce-gtid-consistency = true
 
 #从服务器的SQL线程数；0表示关闭多线程复制功能（开启多线程复制，5.6版本为1库执行1个sql线程，5.7为1组1线程）
@@ -129,6 +133,8 @@ slave-skip-errors = all
 slave-net-timeout = 60
 
 [root@Master ~]# systemctl restart mysqld
+[root@Master ~]# systemctl stop firewalld
+[root@Master ~]# setenforce 0
 ```
 
 #### 在备服务器进行同步
