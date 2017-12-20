@@ -31,7 +31,7 @@
 - [ ] ~~tcpdump，wireshark 的md~~
 - [x] ~~nodejs安装及配置流程说明~~
 - [ ] chef，~~ansible的完整流程相关文件结构&README文档~~
-- [ ] Rsyslog的模板规则及模块demo & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，~~corosyc + Pacemaker~~
+- [ ] Rsyslog的模板规则及模块demo & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，~~corosyc + Pacemaker~~(继续完善!)
 - [ ] demo（模板改用新版本形式：https://www.cnblogs.com/itcomputer/p/6241421.html ） Rsyslog调用日志并使用模板处理
 - [ ] ~~nodejs~~和mqtt的安装及相关设置，~~包括https，pm2，npm~~
 - [ ] DNS下增加rndc，demo改版，增删区域的脚本
