@@ -12,7 +12,7 @@
 - [x] ~~mutt+mstp的脚本~~ grafana配合zabbix
 - [ ] ~~tomcat 安装脚本~~、~~tomcat集群会话共享~~~~，~~jmx监控~~ ~~及zabbix监控tomcat~~，JVM优化，多实例，~~jar与jmap的demo~~
 - [x] ~~memcahed的README & 安装脚本~~ tomcat的MSM会话共享md测试有问题
-- [ ] ~~mysql~~，~~主从~~，~~5.6半同步插件~~，多实例，~~GTID~~，~~Mysqldump / xtrabackup~~ / lvm快照备份db脚本
+- [ ] ~~mysql~~，~~主从~~，~~5.6半同步插件~~，MHA，多实例，~~GTID~~，~~Mysqldump / xtrabackup~~ / lvm快照备份db脚本
 - [ ] ~~nginx~~、~~Nginx4层LB的demo~~，mysql性能及状态查询的若干sql组成的脚本
 - [x] ~~galera cluster & mycat~~
 - [x] ~~redis主从，redis分布式集群（多写）~~
