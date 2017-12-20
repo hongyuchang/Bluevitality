@@ -234,7 +234,7 @@ Online: [ node1.test.com node2.test.com ]
 
 [root@localhost ~]# yum -y install python-dateutil python-lxml
 [root@localhost ~]# rpm -ivh python-parallax-1.0.0a1-7.1.noarch.rpm
-[root@localhost ~]# rpm -ivh crmsh-*						#安装本README所在的当前URL下的rpm包....
+[root@localhost ~]# rpm -ivh crmsh-*				#安装本README所在的当前URL下的rpm包....
 [root@localhost ~]# #crm                                	#直接输入crm将进入子命令模式
 [root@localhost ~]# crm status                          	#查看下localhost上的集群状态信息
 Last updated: Sun Apr 20 16:56:11 2014
