@@ -207,7 +207,7 @@ Version: 1.1.8-7.el6-394e906
 Online: [ node1.test.com node2.test.com ]
 
 ```
-#### 安装crmsh
+#### 安装 crmsh
 ```bash
 #[root@localhost corosync]# cd /etc/yum.repos.d/   
 #[root@localhost corosync]# wget http://download.opensuse.org/repositories\
