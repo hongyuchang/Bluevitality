@@ -146,15 +146,15 @@ quorum {					#经测试，此处若不设置会使集群建立失败 ( 需注意
     two_node: 1					#
 }
 
-aisexec {  
-    user: root              			#以什么身份运行插件 "service"（aisexec段可省略）
-    group: root             			#
-}			
+#aisexec {  
+#    user: root              			#以什么身份运行插件 "service"（aisexec段可省略）
+#    group: root             			#
+#}			
 			
-service {  			
-    ver: 0                  			#版本
-    name: pacemaker         			#名称
-} 
+#service {  					#在 corosync V2版下 Pacemaker 需作为独立的服务运行....
+#    ver: 0                  			#版本
+#    name: pacemaker         			#名称
+#} 
 
 [root@localhost corosync]# ip link show | grep MULTICAST        #检查网卡是否开启组播（默认开启）
 2: eno16777736: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc ........
