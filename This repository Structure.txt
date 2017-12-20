@@ -99,7 +99,6 @@
 │   │   │   └── 资料
 │   │   ├── Mysql
 │   │   │   ├── conf
-│   │   │   ├── Configs
 │   │   │   ├── Galera
 │   │   │   ├── Innobackupex
 │   │   │   ├── Mycat
@@ -264,4 +263,4 @@
     │   └── Improve
     └── Tools
 
-264 directories
+263 directories
