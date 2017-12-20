@@ -206,13 +206,20 @@ Version: 1.1.8-7.el6-394e906
 0 Resources configured. 
 Online: [ node1.test.com node2.test.com ]
 
-[root@localhost corosync]# cd /etc/yum.repos.d/   
-[root@localhost corosync]# wget http://download.opensuse.org/repositories\
-/network:/ha-clustering:/Stable/CentOS_CentOS-7/network:ha-clustering:Stable.repo   
-[root@localhost corosync]# yum -y install deltarpm
-[root@localhost corosync]# yum -y install crmsh pssh    #安装Crmsh
-[root@localhost ~]# #crm                                #进入子命令模式
-[root@localhost ~]# crm status                          #查看下localhost上的集群状态信息
+```
+#### 安装crmsh
+```bash
+#[root@localhost corosync]# cd /etc/yum.repos.d/   
+#[root@localhost corosync]# wget http://download.opensuse.org/repositories\
+#/network:/ha-clustering:/Stable/CentOS_CentOS-7/network:ha-clustering:Stable.repo   
+#[root@localhost corosync]# yum -y install deltarpm
+#[root@localhost corosync]# yum -y install crmsh pssh    	#yum方式安装Crmsh（可能会有问题）
+
+[root@localhost ~]# yum -y install python-dateutil python-lxml
+[root@localhost ~]# rpm -ivh python-parallax-1.0.0a1-7.1.noarch.rpm
+[root@localhost ~]# rpm -ivh crmsh-*				#安装本README所在的当前URL下的rpm包....
+[root@localhost ~]# #crm                                	#直接输入crm将进入子命令模式
+[root@localhost ~]# crm status                          	#查看下localhost上的集群状态信息
 Last updated: Sun Apr 20 16:56:11 2014
 Last change: Sun Apr 20 16:50:32 2014 via crmd on node2.shuishui.com
 Stack: classic openais (with plugin)
