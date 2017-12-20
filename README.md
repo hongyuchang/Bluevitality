@@ -41,7 +41,7 @@
 - [ ] consul 分步骤按格式存储，修改RAEDME
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
 - [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
-- [ ] 分布式系统的 CAP 与 DTP 的README
+- [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
 - [X] ~~Varnish~~
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
