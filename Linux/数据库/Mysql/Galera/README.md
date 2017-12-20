@@ -37,6 +37,8 @@ MariaDB-server MariaDB-client                                  
 [root@localhost ~]# systemctl start mariadb
 [root@localhost ~]# mysql_secure_installation                   #进行安全初始化
 [root@localhost ~]# systemctl stop mariadb
+[root@localhost ~]# rpm -ql galera | grep smm.so                #提供 wsrep 的插件
+/usr/lib64/galera/libgalera_smm.so
 [root@localhost ~]# cat /etc/my.cnf.d/galera.cnf                #加入 galera Cluster 的配置信息
 [galera]
 wsrep_on=ON
