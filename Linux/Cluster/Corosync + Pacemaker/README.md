@@ -66,17 +66,17 @@ Pacemaker启动的2种方式：
 [root@localhost ~]# systemctl stop firewalld
 [root@localhost ~]# setenforce 0
 [root@localhost ~]# hostnamectl set-hostname <NODE_NAME>		#设置节点名称
-[root@localhost ~]# cat /etc/sysconfig/network					#
+[root@localhost ~]# cat /etc/sysconfig/network				#
 HOSTNAME=node1
 [root@localhost ~]# vim /etc/hosts                  			#修改主机名并集群节点间主机名映射
-[root@localhost ~]# scp /etc/hosts root@node{1..N}:/etc/hosts	#将主机名映射同步至所有集群节点...
+[root@localhost ~]# scp /etc/hosts root@node{1..N}:/etc/hosts		#将主机名映射同步至所有集群节点...
 [root@localhost ~]# ssh-keygen -t rsa
 [root@localhost ~]# ssh-copy-id -i ~/.ssh/id_rsa.pub root@node{1..N}
 [root@localhost ~]# ntpdate 192.168.10.1            			#集群节点间保持时间同步
 [root@localhost ~]# hwclock -w
 [root@localhost ~]# yum info corosync  | grep '版本'
 版本    ：2.4.0
-[root@localhost ~]# yum info pacemaker | grep '版本'		  #2.X版之后其不在支持以corosync的插件方式运行
+[root@localhost ~]# yum info pacemaker | grep '版本'	      #2.X版之后其不在支持以corosync的插件方式运行
 版本    ：1.1.16                                    
 [root@localhost ~]# yum -y install corosync pacemaker pssh
 [root@localhost ~]# rpm -ql corosync
@@ -135,15 +135,15 @@ logging {
 	debug: off
 	timestamp: on                           #是否在日志中打开时间戳功能
 	logger_subsys {
-		subsys: QUORUM                  	#记录其特定类型的子系统信息到日志
+		subsys: QUORUM                  #记录其特定类型的子系统信息到日志
 		debug: off
 	}
 }
 
-quorum {								#经测试，此处若不设置会使集群建立失败 ( 需注意的地方! ).....
+quorum {					#经测试，此处若不设置会使集群建立失败 ( 需注意的地方! ).....
     provider: corosync_votequorum		#	
-    expected_votes: 2					#	
-    two_node: 1							#
+    expected_votes: 2				#	
+    two_node: 1					#
 }
 
 aisexec {  
@@ -163,7 +163,7 @@ service {
 # corosync生成key文件会默认调用/dev/random随机数设备，一旦系统中断的IRQS的随机数不够用将会产生大量等待时间
 # 解决办法：在另一个终端下载大文件来产生磁盘IO进行随机数产生或：find . > /dev/null
 
-[root@localhost ~]# corosync-keygen								#生成密钥文件（需确其保权限为400）
+[root@localhost ~]# corosync-keygen				#生成密钥文件（需确其保权限为400）
 Corosync Cluster Engine Authentication key generator.
 Gathering 1024 bits for key from /dev/random.
 Press keys on your keyboard to generate entropy (bits = 200).
@@ -245,7 +245,7 @@ Errors found during check: config not valid
 
 [root@localhost ~]# yum -y install python-dateutil python-lxml passh
 [root@localhost ~]# rpm -ivh python-parallax-1.0.0a1-7.1.noarch.rpm
-[root@localhost ~]# rpm -ivh crmsh-*							#安装本README所在的当前URL下的rpm包..
+[root@localhost ~]# rpm -ivh crmsh-*					#安装本README所在的当前URL下的rpm包..
 [root@localhost ~]# #crm                                		#直接输入crm将进入子命令模式
 [root@localhost ~]# crm status                          		#查看下localhost上的集群状态信息
 
@@ -256,7 +256,7 @@ Last updated: Wed Dec 20 22:03:37 2017
 Last change: Wed Dec 20 21:59:03 2017 by hacluster via crmd on node1
 2 nodes configured 2 expected votes                            		#节点数量，期望有几票 
 0 Resources configured.                                         	#当前有几个资源被配置
-Online: [ node1 node2 ]                                  			#在线节点
+Online: [ node1 node2 ]                                  		#在线节点
 No resources
 ```
 #### crmsh 命令
