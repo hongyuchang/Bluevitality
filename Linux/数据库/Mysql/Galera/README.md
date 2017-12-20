@@ -3,7 +3,7 @@
 Galera Cluster 是在 Mysql / mariadb 基础上提供的一种底层复制机制，使用 Galera 需要下载集成此功能的数据库进行编译才可以
 注：设置Galera集群至少要3台服务器（若仅两台的话需特殊配置："arbitrator" 详情请参照官方文档）其原理复杂但实现简单.....
 
-支持 Wresp 复制的发行版：（安装 Galera-Cluster 时将替换掉正常使用的 RDBMS ）
+支持使用Wresp协议进行复制的发行版：（安装 Galera-Cluster 时将替换掉正常使用的 RDBMS ）
   1.Percona-Cluster
   2.Mariadb-Cluster ---> https://mariadb.com/kb/en/library/yum/#installing-mariadb-galera-cluster-with-yum
 
@@ -37,7 +37,7 @@ MariaDB-server MariaDB-client                                  
 [root@localhost ~]# systemctl start mariadb
 [root@localhost ~]# mysql_secure_installation                   #进行安全初始化
 [root@localhost ~]# systemctl stop mariadb
-[root@localhost ~]# rpm -ql galera | grep smm.so                #提供 wsrep 的插件
+[root@localhost ~]# rpm -ql galera | grep smm.so                #提供 wsrep 协议的插件
 /usr/lib64/galera/libgalera_smm.so
 [root@localhost ~]# cat /etc/my.cnf.d/galera.cnf                #加入 galera Cluster 的配置信息
 [galera]
