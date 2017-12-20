@@ -186,9 +186,9 @@ Writing corosync key to /etc/corosync/authkey.
 11月 21 12:26:06 localhost.localdomain corosync[25362]:   [MAIN  ] Completed service synchronization......
 11月 21 12:26:07 localhost.localdomain corosync[25355]: Starting Corosync Cluster Engine (corosy.....
 11月 21 12:26:07 localhost.localdomain systemd[1]: Started Corosync Cluster Engine.
-[root@node1 ~]# systemctl start corosync
-[root@node2 ~]# systemctl start corosync
-[root@node3 ~]# systemctl start corosync
+[root@node1 ~]# systemctl start corosync && systemctl start pacemaker
+[root@node2 ~]# systemctl start corosync && systemctl start pacemaker
+[root@node3 ~]# systemctl start corosync && systemctl start pacemaker
 
 #查看corosync引擎是否正常启动
 [root@node1 ~]# grep -e "Corosync Cluster Engine" -e "configuration file" /var/log/cluster/corosync.log    
@@ -218,6 +218,14 @@ Aug 13 14:20:15 corosync [pcmk  ] Logging: Initialized pcmk_startup
 Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Maximum core file size is: 18446744073709551615    
 Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Service: 9    
 Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Local hostname: node1.test.com
+
+# corosync默认启用了stonith，而当前集群并没有相应的stonith设备，因此此默认配置目前尚不可用
+# 即：没有 STONITH 设备，此处实验性目的可以忽略
+[root@localhost ~]# crm_verify -L -V
+   error: unpack_resources:     Resource start-up disabled since no STONITH resources have been defined
+   error: unpack_resources:     Either configure some or disable STONITH with the stonith-enabled option
+   error: unpack_resources:     NOTE: Clusters with shared data need STONITH to ensure data integrity
+Errors found during check: config not valid
 
 #查看集群状态
 [root@node1 ~]# crm_mon
@@ -254,4 +262,5 @@ Version: 1.1.8-7.el6-394e906
 Online: [ node2.shuishui.com ]                                  #在线节点
 OFFLINE: [ node1.shuishui.com ]                                 #node1已经离线
  webip  (ocf::heartbeat:IPaddr):  Started node2.shuishui.com  	#webip转移到了node2上
+
 ```
