@@ -70,6 +70,8 @@ Pacemaker启动的2种方式：
 HOSTNAME=node1
 [root@localhost ~]# vim /etc/hosts                  		#修改主机名并集群节点间主机名映射
 [root@localhost ~]# scp /etc/hosts root@node{1..N}:/etc/hosts	#将主机名映射同步至所有集群节点...
+[root@localhost ~]# ssh-keygen -t rsa
+[root@localhost ~]# ssh-copy-id -i ~/.ssh/id_rsa.pub root@node{1..N}
 [root@localhost ~]# ntpdate 192.168.10.1            		#集群节点间保持时间同步
 [root@localhost ~]# hwclock -w
 [root@localhost ~]# yum info corosync  | grep '版本'
@@ -133,7 +135,7 @@ logging {
 	debug: off
 	timestamp: on                           #是否在日志中打开时间戳功能
 	logger_subsys {
-		subsys: QUORUM                      #记录其特定类型的子系统信息到日志
+		subsys: QUORUM                  #记录其特定类型的子系统信息到日志
 		debug: off
 	}
 }
@@ -167,7 +169,7 @@ Press keys on your keyboard to generate entropy (bits = 968).
 Press keys on your keyboard to generate entropy (bits = 1016).
 Writing corosync key to /etc/corosync/authkey.
 [root@localhost ~]# scp -p /etc/corosync/{authkey,corosync.conf} node{1..n}:/etc/corosync   #拷贝到集群各节点
-[root@localhost ~]# systemctl start  corosync                   #需要在集群的各个节点执行此操作
+[root@localhost ~]# systemctl start  corosync                   #需要在集群的各个节点同时执行此操作!!
 [root@localhost ~]# systemctl status corosync
 ● corosync.service - Corosync Cluster Engine
    Loaded: loaded (/usr/lib/systemd/system/corosync.service; disabled; vendor preset: disabled)
@@ -180,10 +182,10 @@ Writing corosync key to /etc/corosync/authkey.
    CGroup: /system.slice/corosync.service
            └─25362 corosync
 
-11月 21 12:26:06 localhost.localdomain corosync[25362]:   [QB    ] server name: cfg
-11月 21 12:26:06 localhost.localdomain corosync[25362]:   [SERV  ] Service engine lo........(略)
-11月 21 12:26:06 localhost.localdomain corosync[25362]:   [TOTEM ] A new membership (192.168.0.3:4) w.....
-11月 21 12:26:06 localhost.localdomain corosync[25362]:   [MAIN  ] Completed service synchronization......
+11月 21 12:26:06 localhost.localdomain corosync[25362]: [QB    ] server name: cfg
+11月 21 12:26:06 localhost.localdomain corosync[25362]: [SERV  ] Service engine lo........(略)
+11月 21 12:26:06 localhost.localdomain corosync[25362]: [TOTEM ] A new membership (192.168.0.3:4) w.....
+11月 21 12:26:06 localhost.localdomain corosync[25362]: [MAIN  ] Completed service synchronization......
 11月 21 12:26:07 localhost.localdomain corosync[25355]: Starting Corosync Cluster Engine (corosy.....
 11月 21 12:26:07 localhost.localdomain systemd[1]: Started Corosync Cluster Engine.
 [root@node1 ~]# systemctl start corosync && systemctl start pacemaker
