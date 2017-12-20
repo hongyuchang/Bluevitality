@@ -140,10 +140,10 @@ logging {
 	}
 }
 
-quorum {					#经测试，此处若不设置会使集群建立失败 ( 需注意的地方! ).....
-    provider: corosync_votequorum		#	
-    expected_votes: 2				#	
-    two_node: 1					#
+quorum {					#仲裁投票，经测试此处若不设置会使集群建立失败 ( 需注意! ).....
+    provider: corosync_votequorum		#投票系统
+    expected_votes: 2				#期望的投票?... :-) 	
+    two_node: 1					#是否为2节点集群
 }
 
 #aisexec {  
