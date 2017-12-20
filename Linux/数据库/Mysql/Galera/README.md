@@ -53,7 +53,7 @@ wsrep_node_name="node1"                                         #本节点的hos
 #wsrep_sst_auth=root:command
 #wsrep_provider_options="socket.ssl_key=/etc/pki/galera/galera.key; socket.ssl_cert=/etc/pki/galera/galera.crt;"
 
-#因systemd默认不支持加入参数，手动启动, ⚠ --wsrep-new-cluster 参数仅在初始化集群时使用! 且只能在任1个节点使用!（初始节点）
+#因systemd默认不支持加入参数，手动启动, ⚠ --wsrep-new-cluster 参数仅在初始化集群时使用! 且只能在任1个节点使用!（初始化）
 [root@localhost ~]# /usr/libexec/mysqld --wsrep-new-cluster --user=root &  
 
 [root@localhost ~]# tail -f /var/log/mariadb/mariadb.log                    #观察日志
