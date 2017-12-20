@@ -1,10 +1,10 @@
 .
 ├── Bourne-Again Shell
-│   ├── Bash History
 │   ├── Dialog
+│   ├── History Memo
 │   ├── Vim
 │   │   └── Setup
-│   └── 收集的资料（备忘）
+│   └── 资料（备忘）
 ├── Linux
 │   ├── Cluster
 │   │   ├── Corosync
