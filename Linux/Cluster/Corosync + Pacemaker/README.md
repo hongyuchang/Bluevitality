@@ -78,7 +78,7 @@ HOSTNAME=node1
 版本    ：2.4.0
 [root@localhost ~]# yum info pacemaker | grep '版本'# 2.X版本之后其不在支持以corosync的插件方式运行
 版本    ：1.1.16                                    
-[root@localhost ~]# yum -y install corosync pacemaker
+[root@localhost ~]# yum -y install corosync pacemaker pssh
 [root@localhost ~]# rpm -ql corosync
 /etc/corosync                                       #配置文件目录
 /etc/corosync/corosync.conf.example                 #
