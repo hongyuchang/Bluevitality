@@ -19,7 +19,7 @@ Galera Cluster 是在 Mysql / mariadb 基础上提供的一种底层复制机制
   9.数据复制保持连续性
 
 ```
-#### Galera 部署流程 （环境：CentOS 7）
+#### Galera 部署流程 （ 环境：CentOS7 ）
 ```bash
 [root@localhost ~]# vim /etc/hosts                              #在每个节点上配置集群内各节点的主机名与IP映射
 [root@localhost ~]# systemctl stop firewalld
