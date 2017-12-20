@@ -57,7 +57,7 @@ Pacemaker启动的2种方式：
                             \     ↓
                             [Cluster Glue]
 ```
-#### Corosync + pacemaker 部署流程（仅参考，crmsh部分在centos7上有问题，需要改为使用红帽的pcs）
+#### Corosync + pacemaker 部署流程（ 注意：crmsh 被 centos7 从yum源移除，默认使用的是红帽的 "pcs" ）
 ```bash
 # 注：
 # Corosync v1.x 没有投票系统，需要安装使用cman作为插件运行
@@ -259,7 +259,4 @@ Last change: Wed Dec 20 21:59:03 2017 by hacluster via crmd on node1
 Online: [ node1 node2 ]                                  		#在线节点
 No resources
 ```
-#### crmsh 命令
-```crmsh
-
-```
+#### 关于 crmsh 的使用部分，由于篇幅原因，请参考本路径下的 CRMSH.md 文档....
