@@ -63,7 +63,7 @@ Pacemaker启动的2种方式：
 # Corosync v1.x 没有投票系统，需要安装使用cman作为插件运行
 # Corosync v2.x 支持投票系统，支持冲裁，可完全独立运行
 
-[root@localhost ~]# systemctl stop
+[root@localhost ~]# systemctl stop firewalld
 [root@localhost ~]# setenforce 0
 [root@localhost ~]# hostnamectl set-hostname <NODE_NAME>	#设置节点名称
 [root@localhost ~]# cat /etc/sysconfig/network			#
@@ -80,10 +80,10 @@ HOSTNAME=node1
 版本    ：1.1.16                                    
 [root@localhost ~]# yum -y install corosync pacemaker pssh
 [root@localhost ~]# rpm -ql corosync
-/etc/corosync                                       #配置文件目录
-/etc/corosync/corosync.conf.example                 #
-/etc/corosync/corosync.conf.example.udpu            #
-/etc/corosync/corosync.xml.example                  #
+/etc/corosync                                       		#配置文件目录
+/etc/corosync/corosync.conf.example                 		#
+/etc/corosync/corosync.conf.example.udpu            		#
+/etc/corosync/corosync.xml.example                  		#
 /etc/corosync/uidgid.d
 /etc/dbus-1/system.d/corosync-signals.conf
 /etc/logrotate.d/corosync
@@ -93,13 +93,13 @@ HOSTNAME=node1
 /usr/bin/corosync-xmlproc
 /usr/lib/systemd/system/corosync-notifyd.service
 /usr/lib/systemd/system/corosync.service
-/usr/sbin/corosync                                  #主程序
-/usr/sbin/corosync-cfgtool                          #辅助性工具
-/usr/sbin/corosync-cmapctl                          #
-/usr/sbin/corosync-cpgtool                          #
-/usr/sbin/corosync-keygen                           #
-/usr/sbin/corosync-notifyd                          #
-/usr/sbin/corosync-quorumtool                       #实现集群节点防止脑裂时的法定票数计算的工具
+/usr/sbin/corosync                                  		#主程序
+/usr/sbin/corosync-cfgtool                          		#辅助性工具
+/usr/sbin/corosync-cmapctl                          		#
+/usr/sbin/corosync-cpgtool                          		#
+/usr/sbin/corosync-keygen                           		#
+/usr/sbin/corosync-notifyd                          		#
+/usr/sbin/corosync-quorumtool                       		#实现集群节点防止脑裂时的法定票数计算的工具
 /usr/share/corosync
 /usr/share/corosync/corosync
 /usr/share/corosync/corosync-notifyd
@@ -112,11 +112,11 @@ HOSTNAME=node1
 [root@localhost corosync]# cat corosync.conf
 #totem 定义底层信息层如何通信（心跳）
 totem {                     
-	version: 2              #totem使用的版本
-   	secauth: off            #启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
-   	threads: 2              #工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
-	crypto_cipher: none     #
-	crypto_hash: none       #
+	version: 2              		#totem使用的版本
+   	secauth: off            		#启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
+   	threads: 2              		#工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
+	crypto_cipher: none     		#
+	crypto_hash: none       		#
 	interface {
 		ringnumber: 0                   #环数量，保持为0即可
 		bindnetaddr: 192.168.1.0        #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
@@ -140,18 +140,20 @@ logging {
 	}
 }
 
-quorum {
-
+quorum {					#经测试，此处若不设置会使集群建立失败.....
+    provider: corosync_votequorum		#	
+    expected_votes: 2				#	
+    two_node: 1					#
 }
 
 aisexec {  
-    user: root              #以什么身份运行插件 "service"（aisexec段可省略）
-    group: root             #
-}
-
-service {  
-    ver: 0                  #版本
-    name: pacemaker         #名称
+    user: root              			#以什么身份运行插件 "service"（aisexec段可省略）
+    group: root             			#
+}			
+			
+service {  			
+    ver: 0                  			#版本
+    name: pacemaker         			#名称
 } 
 
 [root@localhost corosync]# ip link show | grep MULTICAST        #检查网卡是否开启组播（默认开启）
@@ -230,15 +232,7 @@ Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Local hostname: node1.test
 Errors found during check: config not valid
 
 #查看集群状态
-[root@node1 ~]# crm_mon
-Last updated: Tue Aug 13 17:41:31 2013  
-Last change: Tue Aug 13 14:20:40 2013 via crmd on node1.test.com    
-Stack: classic openais (with plugin)    
-Current DC: node2.test.com - partition with quorum    
-Version: 1.1.8-7.el6-394e906    
-2 Nodes configured, 2 expected votes    
-0 Resources configured. 
-Online: [ node1.test.com node2.test.com ]
+
 
 ```
 #### 安装 crmsh ( pacemaker 的配置接口 )
@@ -247,22 +241,21 @@ Online: [ node1.test.com node2.test.com ]
 #[root@localhost corosync]# wget http://download.opensuse.org/repositories\
 #/network:/ha-clustering:/Stable/CentOS_CentOS-7/network:ha-clustering:Stable.repo   
 #[root@localhost corosync]# yum -y install deltarpm
-#[root@localhost corosync]# yum -y install crmsh pssh    	#yum方式安装Crmsh（可能会有问题）
+#[root@localhost corosync]# yum -y install crmsh pssh    		#yum方式安装Crmsh（可能会有问题）
 
-[root@localhost ~]# yum -y install python-dateutil python-lxml
+[root@localhost ~]# yum -y install python-dateutil python-lxml passh
 [root@localhost ~]# rpm -ivh python-parallax-1.0.0a1-7.1.noarch.rpm
-[root@localhost ~]# rpm -ivh crmsh-*				#安装本README所在的当前URL下的rpm包....
-[root@localhost ~]# #crm                                	#直接输入crm将进入子命令模式
-[root@localhost ~]# crm status                          	#查看下localhost上的集群状态信息
-Last updated: Sun Apr 20 16:56:11 2014
-Last change: Sun Apr 20 16:50:32 2014 via crmd on node2.shuishui.com
-Stack: classic openais (with plugin)
-Current DC: node2.shuishui.com - partition WITHOUT quorum       #当前 DC
-Version: 1.1.8-7.el6-394e906
-2 Nodes configured, 2 expected votes                            #节点数量，期望有几票 
-0 Resources configured.                                         #当前有几个资源被配置
-Online: [ node2.shuishui.com ]                                  #在线节点
-OFFLINE: [ node1.shuishui.com ]                                 #node1已经离线
- webip  (ocf::heartbeat:IPaddr):  Started node2.shuishui.com  	#webip转移到了node2上
+[root@localhost ~]# rpm -ivh crmsh-*					#安装本README所在的当前URL下的rpm包..
+[root@localhost ~]# #crm                                		#直接输入crm将进入子命令模式
+[root@localhost ~]# crm status                          		#查看下localhost上的集群状态信息
 
+[root@localhost ~]# crm status
+Stack: corosync
+Current DC: node1 (version 1.1.16-12.el7_4.5-94ff4df) - partition with quorum
+Last updated: Wed Dec 20 22:03:37 2017
+Last change: Wed Dec 20 21:59:03 2017 by hacluster via crmd on node1
+2 nodes configured 2 expected votes                            		#节点数量，期望有几票 
+0 Resources configured.                                         	#当前有几个资源被配置
+Online: [ node1 node2 ]                                  		#在线节点
+No resources
 ```
