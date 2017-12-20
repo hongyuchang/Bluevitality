@@ -19,7 +19,7 @@ Galera Cluster 是在 Mysql / mariadb 基础上提供的一种底层复制机制
   9.数据复制保持连续性
 
 ```
-#### Galera 部署流程 （ 环境：CentOS7 ）
+#### Galera Cluster 部署流程 （ 环境：CentOS7 ）
 ```bash
 [root@localhost ~]# vim /etc/hosts                              #在每个节点上配置集群内各节点的主机名与IP映射
 [root@localhost ~]# systemctl stop firewalld
@@ -88,8 +88,9 @@ wsrep_incoming_addresses = 10.128.20.17:3306,10.128.20.16:3306,10.128.20.18:3306
 ```
 #### 注意
 ```txt
-配置参数"wsrep_cluster_address"中的"gcomm://" 是特殊的地址,仅仅是Galera cluster初始化启动时候使用。
-如果集群启动以后，我们关闭了第一个节点，那么再次启动的时候必须先修改"gcomm://"为其他节点的集群地址
+/etc/my.cnf.d/galera.cnf的配置参数 "wsrep_cluster_address" 中的 "gcomm://" 是特殊的地址：
+  wsrep_cluster_address 仅在 Galera cluster 初始化启动时使用
+  如果集群启动以后我们关闭了第一个节点（初始化节点），那么再次启动的时候必须先修改 "gcomm://" 为其他活跃节点的集群地址
 
 为了能够引入配置，需要在/etc/my.cnf中加入：!includedir /etc/my.cnf.d/
 ```
