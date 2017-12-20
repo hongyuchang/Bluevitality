@@ -18,27 +18,27 @@ Corosync： http://corosync.github.io/corosync/
         3. 配置接口和统计数据是在内存数据库中维护的因此其性能高效，速度快，便捷
         4. ........
 
-corosync + pacemaker 相关的管理工具：
-    1.crmsh   由suse提供
-    2.pcs     由centos提供（centos6.6以后的默认）
+corosync + pacemaker 相关的2种管理工具：
+    1. crmsh   由suse提供
+    2. pcs     由redhat提供（centos6.6以后的默认）
 
-Pacemaker的启动有两种方式：
-    1. 以插件方式随corosync启动，类似于heartbeat的CRM（默认方式，corosync在2.X版以后不再支持这种方式）
+Pacemaker启动的2种方式：
+    1. 以插件方式随corosync启动，类似于heartbeat的CRM（默认的方式，corosync在2.X版以后不再支持这种方式）
     2. 作为独立的服务启动（会是将来更新的更强大的功能的方式）
 
 各项目间的编译依赖：
 
-        > 这部分的组件非必须（其目的是为了实现集群文件系统的功能）
-        >            [CLVM2]   [GFS2]   [OCFS2]                   
-        >                |        |        |                      
-        >            [Distributed Lock Manager]   <---  分布式锁管理器
+        -> 这部分的组件非必须（其目的是为了实现集群文件系统的功能）
+        ->           [CLVM2]   [GFS2]   [OCFS2]                   
+        ->               |        |        |                      
+        ->           [Distributed Lock Manager]     <---  分布式锁管理器
                                   |                               
-                             [Pacemaker]  <---  其有多个版本在同时维护并且使用方式不同
+                             [Pacemaker]    <---  其有多个版本在同时维护并且使用方式不同
                              /    ↑    \
                             /     |    [Corosync]
                 [Resource Agents] |
                             \     ↓
-                           [Cluster Glue]
+                            [Cluster Glue]
 ```
 #### Corosync + pacemaker 部署流程（仅参考，crmsh部分在centos7上有问题，需要改为使用红帽的pcs）
 ```bash
@@ -87,20 +87,19 @@ Pacemaker的启动有两种方式：
 #totem 定义底层信息层如何通信（心跳）
 totem {                     
 	version: 2              #totem使用的版本
-    secauth: off            #启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
-    threads: 2              #工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
+   	secauth: off            #启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
+   	threads: 2              #工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
 	crypto_cipher: none     #
 	crypto_hash: none       #
 	interface {
-		ringnumber: 0                       #环数量，保持为0即可
-		bindnetaddr: 192.168.1.0            #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
-		mcastaddr: 239.255.1.1              #多播地址（需要开启网卡的组播 "MULTICAST"，默认开启）
-		mcastport: 5405                     #多播端口
-		ttl: 1                              #
+		ringnumber: 0                   #环数量，保持为0即可
+		bindnetaddr: 192.168.1.0        #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
+		mcastaddr: 239.255.1.1          #多播地址（需要开启网卡的组播 "MULTICAST"，默认开启）
+		mcastport: 5405                 #多播端口
+		ttl: 1                          #
 	}
 }
 
-#日志
 logging {
 	fileline: off
 	to_stderr: no                           #是否将日志发往标准错误输出
@@ -127,13 +126,14 @@ aisexec {
 service {  
     ver: 0                  #版本
     name: pacemaker         #名称
-}   
+} 
+
 [root@localhost corosync]# ip link show | grep MULTICAST        #检查网卡是否开启组播（默认开启）
 2: eno16777736: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc ........
 
-#若在配置文件中启用 secauth/crypto_* 则需要使用 corosync-keygen 生成密钥文件
-#corosync生成key文件会默认调用/dev/random随机数设备，一旦系统中断的IRQS的随机数不够用将会产生大量等待时间
-#解决办法：在另一个终端下载大文件来产生磁盘IO进行随机数产生或：find . > /dev/null
+# 若在配置文件中启用 secauth/crypto_* 则需要使用 corosync-keygen 生成密钥文件
+# corosync生成key文件会默认调用/dev/random随机数设备，一旦系统中断的IRQS的随机数不够用将会产生大量等待时间
+# 解决办法：在另一个终端下载大文件来产生磁盘IO进行随机数产生或：find . > /dev/null
 
 [root@localhost ~]# corosync-keygen
 Corosync Cluster Engine Authentication key generator.
@@ -229,5 +229,5 @@ Version: 1.1.8-7.el6-394e906
 0 Resources configured.                                         #当前有几个资源被配置
 Online: [ node2.shuishui.com ]                                  #在线节点
 OFFLINE: [ node1.shuishui.com ]                                 #node1已经离线
- webip  (ocf::heartbeat:IPaddr):    Started node2.shuishui.com  #webip转移到了node2上
+ webip  (ocf::heartbeat:IPaddr):  Started node2.shuishui.com  	#webip转移到了node2上
 ```
