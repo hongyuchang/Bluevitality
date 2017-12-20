@@ -57,7 +57,7 @@ mysql> flush privileges;
 [root@Master ~]# mysqldump -u $name -p --flush-logs --master-data=2 --single-transaction $dbname > ${dbname}.sql 
 [root@Master ~]# scp ${dbname}.sql  root@<slave_address>:/var/lib/mysql
 
-#记录日志位置
+#记录主节点的二进制日志位置（在使用传统复制方式时需要进行记录供后续同步操作时使用，使用GTID方式时此步骤直接省略）
 MySQL> show master status;
 +------------------+----------+--------------+---------------------------------------------+-------------------+
 | File             | Position | Binlog_Do_DB | Binlog_Ignore_DB                            | Executed_Gtid_Set |
