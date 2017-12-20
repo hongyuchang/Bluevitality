@@ -3,7 +3,7 @@
 Heartbeat从2010年之后就不再继续维护，而Corosync则仍然处于活跃期...
 
 AIS: 全称："Application Interface Standard" 开源的是 OpenAIS
-    其类似于POSIX的API，但AIS是用于定义中间件的，这些规范的主要目的就是为了提高中间组件可移植性和应用程序的高可用性
+    其类似于POSIX的API但AIS是用于定义中间件的，这些规范的主要目的就是为了提高中间组件可移植性和应用程序高可用性
     OpenAIS提供一种集群模式，包括集群框架，集群成员管理，通信方式，集群监测等，能够为集群软件或工具提供满足 AIS标准的集群接口
     OpenAIS组件包括AMF,CLM,CKPT,EVT,LCK,MSG，TMR,CPG,EVS等。注意：它没有集群资源管理功能，不能独立形成一个集群
     OpenAIS主要包含三个分支：Picacho，Whitetank，Wilson。其中Wilson是最新的
