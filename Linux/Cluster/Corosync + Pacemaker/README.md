@@ -10,13 +10,30 @@ AIS: 全称："Application Interface Standard" 开源的是 OpenAIS
 
 Corosync： http://corosync.github.io/corosync/
     是OpenAIS发展到Wilson版本后衍生出来的开放性集群引擎工程。可以说Corosync是OpenAIS工程的一部分（集群引擎项目）
-    Corosync是一种集群管理引擎，类似于heartbeat的思想
+    Corosync可提供完整的HA功能，但要实现更多，更复杂的功能就需要使用OpenAIS了
+    Corosync是一种集群管理引擎，类似于heartbeat的思想，它是未来的发展方向。在以后的新项目里一般采用Corosync
     
     核心特性：
         1. 能够将多个主机构建成一个主机组，并且在主机组之间同步状态数据
         2. 提供了较为简洁的可用性管理器以实现在各种应用程序发生故障时的重启
         3. 配置接口和统计数据是在内存数据库中维护的因此其性能高效，速度快，便捷
         4. ........
+
+Pacemaker：
+	是开源的高可用资源管理器(CRM)，其位于HA集群架构中资源管理、资源代理(RA)这个层次
+	pacemaker本身只是资源管理器，我们需要接口才能对pacemker上的资源进行定义与管理，而crmsh即是pacemaker的配置接口!
+	能够实现：
+		监测并恢复节点和服务级别的故障
+		存储无关，并不需要共享存储
+		资源无关，任何能用脚本控制的资源都可以作为服务来管理
+		支持使用STONITH来保证数据一致性。
+		支持大型或者小型的集群
+		支持quorate(法定人数) 或 resource(资源) 驱动的集群
+		支持几乎所有的冗余配置，包括Active/Active, Active/Passive, N+1, N+M, N-to-1 and N-to-N
+		自动同步各个节点的配置文件
+		可以设定集群范围内的ordering, colocation , anti-colocation约束
+		支持更多高级服务类型:支持需要在多个节点运行的服务,支持需要多种模式的服务。(比如 主/从,主/备)
+		统一的，脚本化的，cluster shell
 
 corosync + pacemaker 相关的2种管理工具：
     1. crmsh   由suse提供
@@ -207,7 +224,7 @@ Version: 1.1.8-7.el6-394e906
 Online: [ node1.test.com node2.test.com ]
 
 ```
-#### 安装 crmsh
+#### 安装 crmsh ( pacemaker 的配置接口 )
 ```bash
 #[root@localhost corosync]# cd /etc/yum.repos.d/   
 #[root@localhost corosync]# wget http://download.opensuse.org/repositories\
@@ -217,7 +234,7 @@ Online: [ node1.test.com node2.test.com ]
 
 [root@localhost ~]# yum -y install python-dateutil python-lxml
 [root@localhost ~]# rpm -ivh python-parallax-1.0.0a1-7.1.noarch.rpm
-[root@localhost ~]# rpm -ivh crmsh-*				#安装本README所在的当前URL下的rpm包....
+[root@localhost ~]# rpm -ivh crmsh-*						#安装本README所在的当前URL下的rpm包....
 [root@localhost ~]# #crm                                	#直接输入crm将进入子命令模式
 [root@localhost ~]# crm status                          	#查看下localhost上的集群状态信息
 Last updated: Sun Apr 20 16:56:11 2014
