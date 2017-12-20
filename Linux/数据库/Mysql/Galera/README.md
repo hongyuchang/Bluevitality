@@ -1,16 +1,23 @@
 #### 备忘
 ```txt
-1.同步复制
-2.真正的multi-master，即所有节点可以同时读写数据库
-3.自动的节点成员控制，失效节点自动被清除（当失效节点重新加入集群时需修改wsrep_cluster_address为集群内互活跃成员地址!）
-4.新节点加入数据自动复制
-5.真正的并行复制，行级，同时具有读和写的扩展能力
-6.用户可以直接连接集群，使用感受上与MySQL完全一致
-7.节点间数据是同步的,而Master/Slave模式是异步的,不同slave上的binlog可能是不同的
-8.不存在丢失交易的情况，当节点发生崩溃时无数据丢失
-9.数据复制保持连续性
+Galera Cluster 是在 Mysql / mariadb 基础上提供的一种底层复制机制，使用 Galera 需要下载集成此功能的数据库进行编译才可以
+注：设置Galera集群至少要3台服务器（若仅两台的话需特殊配置："arbitrator" 详情请参照官方文档）其原理复杂但实现简单.....
 
-注：安装MariaDB集群至少需要3台服务器（如果只有两台的话需要特殊配置，请参照官方文档）
+支持 Wresp 复制的发行版：（安装 Galera-Cluster 时将替换掉正常使用的 RDBMS ）
+  1.Percona-Cluster
+  2.Mariadb-Cluster ---> https://mariadb.com/kb/en/library/yum/#installing-mariadb-galera-cluster-with-yum
+
+特性：
+  1.同步复制
+  2.真正的 multi-master，所有节点可以同时读写数据库
+  3.自动的成员控制，失效节点自动被清除（当失效节点重新加入集群时需修改 wsrep_cluster_address 参数为集群内互活跃成员地址）
+  4.新节点加入数据自动复制
+  5.真正的并行复制，行级，同时具有读和写的扩展能力
+  6.用户可以直接连接集群，使用感受上与MySQL完全一致
+  7.节点间数据是同步的,而 Master/Slave 模式是异步的,不同 slave 上的 binlog 可能是不同的
+  8.不存在丢失交易的情况，当节点发生崩溃时无数据丢失
+  9.数据复制保持连续性
+
 ```
 #### Galera 部署流程 （环境：CentOS 7）
 ```bash
@@ -18,37 +25,45 @@
 [root@localhost ~]# systemctl stop firewalld
 [root@localhost ~]# systemctl disable firewalld
 
-[root@localhost ~]# yum install -y mariadb mariadb-galera-server mariadb-galera-common galera rsync
+[root@localhost ~]# cat >> /etc/yum.repos.d/MariaDB.repo <<eof 
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+eof
+[root@localhost ~]# yum install -y mariadb Mariadb-Galera-server Mariadb-Galera-common galera rsync \
+MariaDB-server MariaDB-client                                   #新版本或许会改变RPM包名字（此处全部下载）...
 [root@localhost ~]# systemctl start mariadb
 [root@localhost ~]# mysql_secure_installation                   #进行安全初始化
 [root@localhost ~]# systemctl stop mariadb
-[root@localhost ~]# cat /etc/my.cnf.d/galera.cnf                #
+[root@localhost ~]# cat /etc/my.cnf.d/galera.cnf                #加入 galera Cluster 的配置信息
 [galera]
 wsrep_on=ON
-wsrep_provider=/usr/lib64/galera/libgalera_smm.so
-wsrep_cluster_address="gcomm://192.168.1.112,192.168.1.113 "    #可用/etc/hosts映射（集群内任1成员IP即可，可多个）
-binlog_format=row                                               #二进制日志格式
-default_storage_engine=InnoDB                                   #默认存储引擎（目前Galera仅支持Innodb）
-innodb_autoinc_lock_mode=2                                      
-bind-address=0.0.0.0                                            #
-wsrep_cluster_name="MyCluster"
-wsrep_node_address="192.168.1.112"                              #本节点的IP地址
+wsrep_provider=/usr/lib64/galera/libgalera_smm.so               #指向提供 wsrep 的插件，rpm -ql x | grep smm.so
+wsrep_cluster_address="gcomm://192.168.1.112,192.168.1.113 "    #可用/etc/hosts映射（集群内任1成员IP即可，可多个）
+binlog_format=row                                               #binlog格式，在 Galera 集群应使用：row 或 mix
+default_storage_engine=InnoDB                                   #默认存储引擎（目前Galera仅支持Innodb）
+innodb_autoinc_lock_mode=2                                      #锁格式
+bind-address=0.0.0.0                                            #wsrep的监听地址
+wsrep_cluster_name="Galera-Cluster"                             #当前的 Galera 集群的名字标识
+wsrep_node_address="192.168.1.112"                              #本节点的IP地址
 wsrep_node_name="node1"                                         #本节点的hostname值（必须）
-wsrep_sst_method=rsync
-wsrep_sst_auth=root:command
+#wsrep_sst_method=rsync
+#wsrep_sst_auth=root:command
 #wsrep_provider_options="socket.ssl_key=/etc/pki/galera/galera.key; socket.ssl_cert=/etc/pki/galera/galera.crt;"
 
-[root@localhost ~]# /usr/libexec/mysqld --wsrep-new-cluster --user=root &   #因systemd默认不支持加入参数，手动启动
-#警告⚠：--wsrep-new-cluster 参数只能在初始化集群使用，且只能在一个节点使用!（初始节点）....
+#因systemd默认不支持加入参数，手动启动, ⚠ --wsrep-new-cluster 参数仅在初始化集群时使用! 且只能在任1个节点使用!（初始节点）
+[root@localhost ~]# /usr/libexec/mysqld --wsrep-new-cluster --user=root &  
 
 [root@localhost ~]# tail -f /var/log/mariadb/mariadb.log                    #观察日志
 150701 19:54:17 [Note] WSREP: wsrep_load(): loading provider library 'none'
 150701 19:54:17 [Note] /usr/libexec/mysqld: ready for connections.          #出现ready for connections 证明启动成功
 Version: '5.5.40-MariaDB-wsrep'  socket: '/var/lib/mysql/mysql.sock' port: 3306  MariaDB Server, ......
 
-[root@localhost2 ~]# systemctl start mariadb            #陆续启用其他节点
-[root@localhost3 ~]# systemctl start mariadb
-[root@localhost4 ~]# systemctl start mariadb            #查看 /var/log/mariadb/mariadb.log 可看到节点均加入了集群
+[root@mariadb-2 ~]# systemctl start mariadb            #陆续启用其他节点
+[root@mariadb-3 ~]# systemctl start mariadb
+[root@mariadb-4 ~]# systemctl start mariadb            #查看 /var/log/mariadb/mariadb.log 可看到节点均加入了集群
 
 
 [root@localhost4 ~]#mysql -uroot -p123456  -e 'show status like "wsrep_%";'
