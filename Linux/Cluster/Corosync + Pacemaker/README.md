@@ -63,8 +63,15 @@ Pacemaker启动的2种方式：
 # Corosync v1.x 没有投票系统，需要安装使用cman作为插件运行
 # Corosync v2.x 支持投票系统，支持冲裁，可完全独立运行
 
-[root@localhost ~]# vim /etc/hosts                  #修改主机名并集群节点间主机名映射
-[root@localhost ~]# ntpdate 192.168.10.1            #集群节点间保持时间同步
+[root@localhost ~]# systemctl stop
+[root@localhost ~]# setenforce 0
+[root@localhost ~]# hostnamectl set-hostname <NODE_NAME>	#设置节点名称
+[root@localhost ~]# cat /etc/sysconfig/network			#
+HOSTNAME=node1
+[root@localhost ~]# vim /etc/hosts                  		#修改主机名并集群节点间主机名映射
+[root@localhost ~]# scp /etc/hosts root@node{1..N}:/etc/hosts	#将主机名映射同步至所有集群节点...
+[root@localhost ~]# ntpdate 192.168.10.1            		#集群节点间保持时间同步
+[root@localhost ~]# hwclock -w
 [root@localhost ~]# yum info corosync  | grep '版本'
 版本    ：2.4.0
 [root@localhost ~]# yum info pacemaker | grep '版本'# 2.X版本之后其不在支持以corosync的插件方式运行
@@ -152,15 +159,15 @@ service {
 # corosync生成key文件会默认调用/dev/random随机数设备，一旦系统中断的IRQS的随机数不够用将会产生大量等待时间
 # 解决办法：在另一个终端下载大文件来产生磁盘IO进行随机数产生或：find . > /dev/null
 
-[root@localhost ~]# corosync-keygen
+[root@localhost ~]# corosync-keygen				#生成密钥文件（需确其保权限为400）
 Corosync Cluster Engine Authentication key generator.
 Gathering 1024 bits for key from /dev/random.
 Press keys on your keyboard to generate entropy (bits = 200).
 Press keys on your keyboard to generate entropy (bits = 968).
 Press keys on your keyboard to generate entropy (bits = 1016).
-Writing corosync key to /etc/corosync/authkey.                  #生成了密钥文件（需确其保权限为400）
+Writing corosync key to /etc/corosync/authkey.
 [root@localhost ~]# scp -p /etc/corosync/{authkey,corosync.conf} node{1..n}:/etc/corosync   #拷贝到集群各节点
-[root@localhost ~]# systemctl start corosync                    #需要在集群的各个节点执行此操作
+[root@localhost ~]# systemctl start  corosync                   #需要在集群的各个节点执行此操作
 [root@localhost ~]# systemctl status corosync
 ● corosync.service - Corosync Cluster Engine
    Loaded: loaded (/usr/lib/systemd/system/corosync.service; disabled; vendor preset: disabled)
@@ -213,7 +220,7 @@ Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Service: 9
 Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Local hostname: node1.test.com
 
 #查看集群状态
-[root@node1 ~]# crm_mon 
+[root@node1 ~]# crm_mon
 Last updated: Tue Aug 13 17:41:31 2013  
 Last change: Tue Aug 13 14:20:40 2013 via crmd on node1.test.com    
 Stack: classic openais (with plugin)    
