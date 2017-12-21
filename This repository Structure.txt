@@ -78,7 +78,7 @@
 │   │   │   ├── Corosync + Pacemaker + PCS +GFS2 +CLVM
 │   │   │   ├── GFS + CLVM
 │   │   │   ├── Setup
-│   │   │   └── 一些资料
+│   │   │   └── 资料
 │   │   ├── NFS
 │   │   ├── Rsync + Inotity
 │   │   │   ├── Configs
