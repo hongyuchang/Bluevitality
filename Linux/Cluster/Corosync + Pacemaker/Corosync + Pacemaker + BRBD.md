@@ -12,7 +12,14 @@ CRMSH 的部分子参数：
     master-max：         最多有多少份克隆资源可以被定义成主资源，默认1
     master-node-max：    每个节点上最多有多少份克隆资源可以被提升为主资源，默认1
 ```
-
+#### 实验环境
+```txt
+                            corosync                  corosync
+                               ↓                         ↓ 
+                            [Node1]    <========>     [Node2]
+                               ↑                         ↑
+                            Pacemaker                 Pacemaker
+```
 #### 当集群节点为偶数或 2 个时执行如下操作关闭仲裁及 stonith
 ```bash
 [root@node1 ~]# crm configure
