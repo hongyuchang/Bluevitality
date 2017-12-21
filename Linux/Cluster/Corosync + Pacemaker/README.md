@@ -20,7 +20,7 @@ Corosync： http://corosync.github.io/corosync/
         4. ........
 
 Pacemaker：
-	是开源的高可用资源管理器(CRM)，其位于HA集群架构中资源管理、资源代理(RA)这个层次
+	是开源的高可用资源管理器(CRM)，其主要由Python和C开发，其位于HA集群架构中资源管理、资源代理(RA)的层次
 	pacemaker本身只是资源管理器，我们需要接口才能对pacemker上的资源进行定义与管理，而crmsh即是pacemaker的配置接口!
 	能够实现：
 		监测并恢复节点和服务级别的故障
@@ -36,12 +36,12 @@ Pacemaker：
 		统一的，脚本化的，cluster shell
 
 corosync + pacemaker 相关的2种管理工具：
-    1. crmsh   由suse提供
-    2. pcs     由redhat提供（centos6.6以后的默认）
+    1. crmsh   由suse提供，crmsh 2.X更完善（支持HA全生命周期的管理），但7系列不在提供安装源...
+    2. pcs     由redhat提供（centos6.5+以后默认使用）
 
 Pacemaker启动的2种方式：
-    1. 以插件方式随corosync启动，类似于heartbeat的CRM（默认的方式，corosync在2.X版以后不再支持这种方式）
-    2. 作为独立的服务启动（会是将来更新的更强大的功能的方式）
+    1. 以插件方式随corosync启动，类似于heartbeat集成的CRM（本是默认的方式，但在corosync在2.X版以后不再支持这种方式）
+    2. 作为独立的守护进程启动（会是将来更新的更强大的功能的方式）
 
 各项目间的编译依赖：
 
@@ -243,7 +243,7 @@ Errors found during check: config not valid
 #[root@localhost corosync]# yum -y install deltarpm
 #[root@localhost corosync]# yum -y install crmsh pssh    		#yum方式安装Crmsh（可能会有问题）
 
-[root@localhost ~]# yum -y install python-dateutil python-lxml passh
+[root@localhost ~]# yum -y install python-dateutil python-lxml passh	#passh是crmsh的依赖
 [root@localhost ~]# rpm -ivh python-parallax-1.0.0a1-7.1.noarch.rpm
 [root@localhost ~]# rpm -ivh crmsh-*					#安装本README所在的当前URL下的rpm包..
 [root@localhost ~]# #crm                                		#直接输入crm将进入子命令模式
