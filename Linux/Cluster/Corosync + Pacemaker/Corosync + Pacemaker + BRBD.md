@@ -25,7 +25,7 @@ CRMSH 的部分子参数：
 [root@node1 ~]# crm configure
 crm(live)configure# property stonith-enable=false
 crm(live)configure# property no-quorum-policy=ignore
-crm(live)configure# rsc_defaults resource-stickiness=100
+crm(live)configure# rsc_defaults resource-stickiness=100    #资源对当前节点的默认粘性
 crm(live)configure# verify
 crm(live)configure# commit
 ```
