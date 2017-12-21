@@ -236,7 +236,7 @@ Errors found during check: config not valid
 
 
 ```
-#### 安装 crmsh ( pacemaker 的配置接口 )
+#### 安装 crmsh ( pacemaker 的配置接口，不需要安装在集群的每个节点上，但通常为了配置的方便因此所有节点都会安装 )
 ```bash
 #[root@localhost corosync]# cd /etc/yum.repos.d/   
 #[root@localhost corosync]# wget http://download.opensuse.org/repositories\
