@@ -8,7 +8,8 @@
 ├── Linux
 │   ├── Cluster
 │   │   ├── Corosync + Pacemaker
-│   │   │   └── 资料
+│   │   │   ├── 资料
+│   │   │   └── 软件
 │   │   ├── DRBD
 │   │   │   ├── conf
 │   │   │   ├── Softs
@@ -177,7 +178,7 @@
 │   ├── 自动化
 │   │   ├── Ansible
 │   │   │   ├── Role
-│   │   │   └── 一些资料
+│   │   │   └── 资料
 │   │   └── Cobbler
 │   ├── 软件包管理
 │   │   └── Rpmbuild
@@ -263,4 +264,4 @@
     │   └── Improve
     └── Tools
 
-263 directories
+264 directories
