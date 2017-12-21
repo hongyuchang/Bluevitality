@@ -10,18 +10,18 @@
 #### HA Cluster 组件说明
 ```txt
 HA 术语：
-    CRM 集群资源管理器 Cluster Resource Manager
-    LRM 本地资源管理器
+    CRM 集群资源管理器 Cluster Resource Manager，一系列的集群事物由其完成管理
+    LRM 本地资源管理器，Pacemaker即是CRM又是LRM
     CIB 集群信息基库，其使用XML格式的配置文件，工作时常驻在内存中并且需要通知给除DC外的其它节点
     DC  集群中的一个节点会被选为指定的集群协调器，这意味着它具有主CIB
-    RA  资源代理层（Resource Agents）
+    RA  资源代理层（Resource Agents），RA是有类别的（查看RA类别：crm ra classes）
     PE  策略引擎（Policy Engine），来定义资源转移的一整套转移方式，其仅做策略而不执行资源转移的过程
     TE  即（Transition Engine），它就是来执行PE做出的策略的并且只有DC上才运行PE和TE!...
     
 高可用集群大致可分为三个层次结构（不同的实现略有差异）由下而上大致可分为：
 
     1. Messaging 与 Membership 层：
-        位于最底层的即信息和成员关系层
+        位于最底层的即信息和成员关系层 （简单来说本层主要负责传递心跳信息和集群事物信息）
         Messaging主要用于节点之间传递心跳信息，也称为心跳层。节点间传递心跳可通过广播，组播，单播等方式进行
         成员关系层"Membership"主要作用是主节点（DC）通过 Cluster Consensus Menbership Service（CCM或CCS）
         这种服务由"Messaging"层提供的信息通过计算来产生一个完整的成员关系。其主要实现承上启下的作用：
