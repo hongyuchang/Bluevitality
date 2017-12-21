@@ -53,9 +53,9 @@ Pacemaker启动的2种方式：
                                   ↓                               
                              [Pacemaker]    <---  其有多个版本在同时维护并且使用方式不同
                              /    ↑    ↘
-                            /     |     [Corosync]
-                [Resource Agents] |
-                           ↘     ↓
+                            /     |      [Corosync]
+              [Resource Agents]   |
+                           \      ↓
                             [Cluster Glue]
 ```
 #### Corosync + pacemaker 部署流程（ 注意：crmsh 被 centos7 从yum源移除，默认使用的是红帽的 "pcs" ）
