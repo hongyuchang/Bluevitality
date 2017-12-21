@@ -14,11 +14,11 @@ CRMSH 的部分子参数：
 ```
 #### 实验环境
 ```txt
-                            corosync                  corosync
-                               ↓                         ↓ 
-                            [Node1]    <========>     [Node2]
-                               ↑                         ↑
-                            Pacemaker                 Pacemaker
+                        corosync  drbd            corosync  drbd
+                           ↘     ↙                 ↘     ↙
+                            [Node1]    <========>    [Node2]
+                               ↑                        ↑
+                            Pacemaker                Pacemaker
 ```
 #### 当集群节点为偶数或 2 个时执行如下操作关闭仲裁及 stonith
 ```bash
