@@ -10,16 +10,17 @@ AIS: 全称："Application Interface Standard" 开源的是 OpenAIS
 
 Corosync： http://corosync.github.io/corosync/
     是OpenAIS发展到Wilson版本后衍生出来的开放性集群引擎工程。可以说Corosync是OpenAIS工程的一部分（集群引擎项目）
-    Corosync可提供完整的HA功能，但要实现更多，更复杂的功能就需要使用OpenAIS了
+    Corosync可提供完整的HA功能，但要实现更多，更复杂的功能就需要使用OpenAIS了 (注：cman与corosync的作用类似)
     Corosync是一种集群管理引擎，类似于heartbeat的思想，它是未来的发展方向。在以后的新项目里一般采用Corosync
-    
+    Corosync没有属于自己的资源管理器，因此需要Pacemaker来实现（ CMAN与Corosync作用类似，CMAN的资源管理器是rgmanager）
+    
     核心特性：
         1. 能够将多个主机构建成一个主机组，并且在主机组之间同步状态数据
         2. 提供了较为简洁的可用性管理器以实现在各种应用程序发生故障时的重启
         3. 配置接口和统计数据是在内存数据库中维护的因此其性能高效，速度快，便捷
         4. ........
 
-Pacemaker：
+Pacemaker： （REHL7之后正式使用其替代rgmanager）
 	是开源的高可用资源管理器(CRM)，其主要由Python和C开发，其位于HA集群架构中资源管理、资源代理(RA)的层次
 	pacemaker本身只是资源管理器，我们需要接口才能对pacemker上的资源进行定义与管理，而crmsh即是pacemaker的配置接口!
 	能够实现：
@@ -47,14 +48,14 @@ Pacemaker启动的2种方式：
 
         -> 这部分的组件非必须（其目的是为了实现集群文件系统的功能）
         ->           [CLVM2]   [GFS2]   [OCFS2]                   
-        ->               |        |        |                      
+        ->               ↓        ↓        ↓                      
         ->           [Distributed Lock Manager]     <---  分布式锁管理器
-                                  |                               
+                                  ↓                               
                              [Pacemaker]    <---  其有多个版本在同时维护并且使用方式不同
-                             /    ↑    \
-                            /     |    [Corosync]
+                             /    ↑    ↘
+                            /     |     [Corosync]
                 [Resource Agents] |
-                            \     ↓
+                           ↘     ↓
                             [Cluster Glue]
 ```
 #### Corosync + pacemaker 部署流程（ 注意：crmsh 被 centos7 从yum源移除，默认使用的是红帽的 "pcs" ）
