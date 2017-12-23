@@ -47,6 +47,9 @@ function disable_sec() {
 
 disable_sec || :
 
+#设置Initiator端的名字 
+echo "InitiatorName=$(iscsi-iname -p iqn.2017.01.com.test)" > /etc/iscsi/initiatorname.iscsi  
+
 #若启用认证则写入验证信息
 [ ${USE_AUTH} -eq 1 ] && {
     [[ -f /etc/iscsi/iscsid.conf ]] || exit 1
