@@ -77,8 +77,8 @@
 │   │   ├── Ceph
 │   │   ├── Glusterfs
 │   │   ├── ISCSI + GFS2 + CLVM
-│   │   │   ├── Corosync + Pacemaker + PCS +GFS2 +CLVM
-│   │   │   ├── RHCS + GFS2 + CLVM
+│   │   │   ├── Corosync + Pacemaker  + GFS2 + CLVM
+│   │   │   ├── RHCS + GFS2 + CLVM ( 旧 )
 │   │   │   ├── Setup
 │   │   │   └── 资料
 │   │   ├── NFS
@@ -132,7 +132,7 @@
 │   │   └── Zabbix
 │   │       ├── Configs
 │   │       ├── Setup 3.4
-│   │       └── 一些资料
+│   │       └── 资料
 │   ├── 网络相关
 │   │   ├── DHCP
 │   │   ├── GRE
