@@ -12,8 +12,8 @@
 │   │   │   └── 软件
 │   │   ├── DRBD
 │   │   │   ├── conf
-│   │   │   ├── Softs
-│   │   │   └── 资料
+│   │   │   ├── 资料
+│   │   │   └── 软件
 │   │   ├── Hadoop
 │   │   ├── HAproxy
 │   │   │   ├── conf
@@ -22,11 +22,10 @@
 │   │   ├── Heartbeat
 │   │   │   ├── conf  1.x
 │   │   │   └── Setup 3.0.5
-│   │   ├── LVS + Keepalive
-│   │   │   ├── Check Scripts
-│   │   │   ├── LVS
-│   │   │   └── 资料
-│   │   └── RHCS
+│   │   └── LVS + Keepalive
+│   │       ├── Check Scripts
+│   │       ├── LVS
+│   │       └── 资料
 │   ├── Daemon Manage
 │   │   ├── Supervisor
 │   │   │   └── Configs
@@ -265,4 +264,4 @@
     │   └── Improve
     └── Tools
 
-265 directories
+264 directories
