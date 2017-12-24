@@ -1,10 +1,10 @@
 #### 实验环境
 ```txt
-                            corosync                       corosync
-                               ↓                              ↓ 
-                            [Node1]    <=============>     [Node2]
-                               ↑                              ↑
-                            Pacemaker                      Pacemaker
+                            corosync                    corosync
+                               ↓                           ↓ 
+                            [Node1]    <==========>     [Node2]
+                               ↑                           ↑
+                            Pacemaker                   Pacemaker
 ```
 #### CRMSH 下的帮助信息 ...
 ```bash
