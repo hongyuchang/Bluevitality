@@ -7,7 +7,7 @@
 - [ ] ~~LVM~~, ~~LVM的镜像~~/条带 ~~mdadm的README~~
 - [x] ~~Quota的配置流程记录（加注释）~~
 - [x] ~~php 5.6 & 7.1 install~~，Open LDAP，~~nsswitch~~
-- [ ] ~~keepalived配置文件注释完成，haproxy脚本，lvs完善~~，drbd，heartbeat(安装部分不完善)，heartbeat深入研究
+- [ ] ~~keepalived配置文件注释完成，haproxy脚本，lvs完善~~，drbd，heartbeat(安装部分不完善)，heartbeat研究
 - [x] ~~Supervisor，xinetd 的demo与readme~~，~~Flask相关的gunicorn和manage的md或sh~~ systemd的@与.timer.target的说明
 - [x] ~~mutt+mstp的脚本~~ grafana配合zabbix
 - [ ] ~~tomcat 安装脚本~~、~~tomcat集群会话共享~~~~，~~jmx监控~~ ~~及zabbix监控tomcat~~，JVM优化，多实例，~~jar与jmap的demo~~
@@ -31,7 +31,7 @@
 - [ ] ~~tcpdump，wireshark 的md~~
 - [x] ~~nodejs安装及配置流程说明~~
 - [ ] chef，~~ansible的完整流程相关文件结构&README文档~~
-- [ ] Rsyslog的模板规则及模块demo & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，~~corosyc + Pacemaker~~(继续完善!) crmsh的md更改+ demo
+- [ ] Rsyslog的模板规则及模块 & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，gfs2+clvm@coroync，~~corosyc + Pacemaker~~(继续完善!) crmsh的md更改+ demo
 - [ ] demo（模板改用新版本形式：https://www.cnblogs.com/itcomputer/p/6241421.html ） Rsyslog调用日志并使用模板处理
 - [ ] ~~nodejs~~和mqtt的安装及相关设置，~~包括https，pm2，npm~~
 - [ ] DNS下增加rndc，demo改版，增删区域的脚本
