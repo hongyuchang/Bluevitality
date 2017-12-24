@@ -24,11 +24,11 @@ eof
 [root@localhost ~]# service ricci start
 ```
 #### Luci设置页面
-  ![png](/Images/URL1.png)
-  ![png](/Images/URL2.png)
-  ![png](/Images/URL3.png)
-  ![png](/Images/URL4.png)
-  ![png](/Images/URL5.png)
+  ![png](Images/URL1.png)
+  ![png](Images/URL2.png)
+  ![png](Images/URL3.png)
+  ![png](Images/URL4.png)
+  ![png](Images/URL5.png)
 
 #### 创建完之后
 ```bash
