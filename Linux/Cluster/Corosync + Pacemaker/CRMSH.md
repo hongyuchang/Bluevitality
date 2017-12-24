@@ -1,13 +1,14 @@
 #### 实验环境
 ```txt
-                            corosync                  corosync
-                               ↓                         ↓ 
-                            [Node1]    <========>     [Node2]
-                               ↑                         ↑
-                            Pacemaker                 Pacemaker
+                            corosync                       corosync
+                               ↓                              ↓ 
+                            [Node1]    <=============>     [Node2]
+                               ↑                              ↑
+                            Pacemaker                      Pacemaker
 ```
 #### CRMSH 下的帮助信息 ...
 ```bash
+[root@localhost ~]# crm_verify -V -L      #检查并显示当前集群的配置是否存在问题
 [root@localhost ~]# crm
 crm(live)# help                           #进入SHELL后输入help可进入类似于Less命令的翻页模式查看帮助
 Help overview for crmsh                   #命令可用TAB键补全
