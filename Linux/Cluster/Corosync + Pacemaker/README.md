@@ -191,9 +191,10 @@ Writing corosync key to /etc/corosync/authkey.
 11月 21 12:26:06 localhost.localdomain corosync[25362]: [MAIN  ] Completed service synchronization......
 11月 21 12:26:07 localhost.localdomain corosync[25355]: Starting Corosync Cluster Engine (corosy.....
 11月 21 12:26:07 localhost.localdomain systemd[1]: Started Corosync Cluster Engine.
-[root@node1 ~]# systemctl start corosync && systemctl start pacemaker
-[root@node2 ~]# systemctl start corosync && systemctl start pacemaker
-[root@node3 ~]# systemctl start corosync && systemctl start pacemaker
+
+[root@node1 ~]# systemctl start corosync && systemctl start pacemaker	#在集群各节点启动corosync+pacemaker
+[root@node2 ~]# systemctl start corosync && systemctl start pacemaker	#	
+[root@node3 ~]# systemctl start corosync && systemctl start pacemaker	#	
 
 #查看corosync引擎是否正常启动
 [root@node1 ~]# grep -e "Corosync Cluster Engine" -e "configuration file" /var/log/cluster/corosync.log    
