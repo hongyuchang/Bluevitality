@@ -72,7 +72,7 @@ HOSTNAME=node1
 [root@localhost ~]# vim /etc/hosts                  			#修改主机名并集群节点间主机名映射
 [root@localhost ~]# scp /etc/hosts root@node{1..N}:/etc/hosts		#将主机名映射同步至所有集群节点...
 [root@localhost ~]# ssh-keygen -t rsa
-[root@localhost ~]# ssh-copy-id -i ~/.ssh/id_rsa.pub root@node{1..N}
+[root@localhost ~]# ssh-copy-id -i ~/.ssh/id_rsa.pub root@node{1..N}	#crmsh借助pssh使用ssh进行节点间通讯
 [root@localhost ~]# ntpdate 192.168.10.1            			#集群节点间保持时间同步
 [root@localhost ~]# hwclock -w
 [root@localhost ~]# yum info corosync  | grep '版本'
@@ -113,11 +113,11 @@ HOSTNAME=node1
 [root@localhost corosync]# cat corosync.conf
 #totem 定义底层信息层如何通信（心跳）
 totem {                     
-	version: 2              			#totem使用的版本
-   	secauth: off            			#启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
-   	threads: 2              			#工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
-	crypto_cipher: none     			#
-	crypto_hash: none       			#
+	version: 2              		#totem使用的版本
+   	secauth: off            		#启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
+   	threads: 2              		#工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
+	crypto_cipher: none     		#
+	crypto_hash: none       		#
 	interface {
 		ringnumber: 0                   #环数量，保持为0即可
 		bindnetaddr: 192.168.1.0        #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
@@ -260,4 +260,4 @@ Last change: Wed Dec 20 21:59:03 2017 by hacluster via crmd on node1
 Online: [ node1 node2 ]                                  		#在线节点
 No resources
 ```
-#### 关于 crmsh 的使用部分，由于篇幅原因，请参考本路径下的 CRMSH.md 文档....
+#### 关于 crmsh 的使用部分，由于篇幅原因请参考本路径下的 ./CRMSH.md 文档....
