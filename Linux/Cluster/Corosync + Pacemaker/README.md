@@ -119,12 +119,19 @@ totem {
 	crypto_cipher: none     		#
 	crypto_hash: none       		#
 	interface {
-		ringnumber: 0                   #环数量，保持为0即可
-		bindnetaddr: 192.168.1.0        #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
+		ringnumber: 0                   #环数量，保持为0即可（当各节点有多个接口与节点间链接时要指定多个）
+		bindnetaddr: 192.168.1.0        #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
 		mcastaddr: 239.255.1.1          #多播地址（需要开启网卡的组播 "MULTICAST"，默认开启）
 		mcastport: 5405                 #多播端口
 		ttl: 1                          #
 	}
+	# interface {
+	# 	ringnumber: 1          
+	# 	bindnetaddr: 192.168.2.0
+	# 	mcastaddr: 239.255.1.2  
+	# 	mcastport: 5405
+	# 	ttl: 1                  
+	# }
 }
 
 logging {
