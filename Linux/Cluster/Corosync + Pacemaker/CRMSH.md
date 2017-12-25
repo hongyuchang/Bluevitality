@@ -257,7 +257,7 @@ pingd          portblock          postfix       \rabbitmq-cluster   redis       
 slapd          symlink            tomcat  
 crm(live)ra# list service       #service就是LSB而已~!
 ......（略）
-crm(live)ra# info               #查看某一个资源代理自己的帮助信息
+crm(live)ra# info               #查看某一个资源代理自己的帮助信息(注：RA的systemd脚本调的资源要在各节点enable后使用...)
 Display all 285 possibilities? (y or n)
 lsb:netconsole                           service:microcode                        systemd:exim 
 lsb:network                              service:netconsole                       systemd:firewalld 
