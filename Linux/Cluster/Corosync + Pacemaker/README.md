@@ -114,10 +114,11 @@ HOSTNAME=node1
 #totem 定义底层信息层如何通信（心跳）
 totem {                     
 	version: 2              		#totem使用的版本
-   	secauth: off            		#启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
    	threads: 2              		#工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
-	crypto_cipher: none     		#
-	crypto_hash: none       		#
+   	secauth: off            		#启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
+	crypto_cipher: none     		#aes128/...
+	crypto_hash: none       		#sha1/...
+	
 	interface {
 		ringnumber: 0                   #环数量，保持为0即可（当各节点有多个接口与节点间链接时要指定多个）
 		bindnetaddr: 192.168.1.0        #使多播地址工作在本机的哪个网段之上（不是本机的IP地址!）
@@ -125,6 +126,7 @@ totem {
 		mcastport: 5405                 #多播端口
 		ttl: 1                          #
 	}
+	
 	# interface {
 	# 	ringnumber: 1          
 	# 	bindnetaddr: 192.168.2.0
@@ -133,6 +135,20 @@ totem {
 	# 	ttl: 1                  
 	# }
 }
+
+#nodelist {					#Node信息 ( 实际生产中可不配nodelist，只要Node间认证通过即可.. )
+#	node {
+#		ring0_addr: 192.168.1.1		#Node的网络环的第0地址
+#		ring0_addr: 192.168.2.1		#Node的网络环的第1地址
+#		nodeid: 1			同interface的ringnumber部分...
+#	}
+
+#	node {
+#		ring0_addr: 192.168.1.2
+#		ring0_addr: 192.168.2.2
+#		nodeid: 2
+#	}
+#}
 
 logging {
 	fileline: off
@@ -151,7 +167,7 @@ logging {
 quorum {					#仲裁投票，经测试此处若不设置会使集群建立失败 ( 需注意! ).....
     provider: corosync_votequorum		#投票系统
     expected_votes: 2				#期望的投票?... :-) 	
-    two_node: 1					#是否为2节点集群
+    two_node: 1					#是否为2节点集群 "bool"
 }
 
 #aisexec {  
@@ -179,7 +195,7 @@ Press keys on your keyboard to generate entropy (bits = 968).
 Press keys on your keyboard to generate entropy (bits = 1016).
 Writing corosync key to /etc/corosync/authkey.
 [root@localhost ~]# scp -p /etc/corosync/{authkey,corosync.conf} node{1..n}:/etc/corosync   #拷贝到集群各节点
-[root@localhost ~]# systemctl start  corosync                   #需要在集群的各个节点同时执行此操作!!
+[root@localhost ~]# systemctl start  corosync                   #需要在集群的各个节点同时执行此操作!!!
 [root@localhost ~]# systemctl status corosync
 ● corosync.service - Corosync Cluster Engine
    Loaded: loaded (/usr/lib/systemd/system/corosync.service; disabled; vendor preset: disabled)
