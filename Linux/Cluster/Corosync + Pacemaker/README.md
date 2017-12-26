@@ -313,3 +313,8 @@ No resources
 ......
 ```
 #### 关于 crmsh 的使用部分，由于篇幅原因请参考本路径下的 ./CRMSH.md 文档....
+```txt
+[root@localhost ~]# crm confgure
+crm(live)configure# property no-quorum-policy=ignore
+crm(live)configure# property stonith-enabled=false
+```
