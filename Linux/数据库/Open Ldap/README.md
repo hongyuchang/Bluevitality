@@ -25,13 +25,35 @@ LDAP的概念：
         
         Example：dn："cn=baby,ou=marketing,ou=people,dc=mydomain,dc=org"
         通过DN的层次型语法结构，可以方便地表示出条目在LDAP树中的位置，通常用于检索。
-        rdn：        一般指dn逗号最左边部分，如cn=baby。它与RootDN不同，RootDN通常与RootPW同时出现，特指管理LDAP中信息的最高权限用户
-        Base DN：    LDAP目录树的最顶部就是根，也就是所谓的“Base DN"，如"dc=mydomain,dc=org"。
+        rdn：        一般指dn逗号最左边部分，如cn=baby。它与RootDN不同，RootDN常与RootPW同时出现，特指管理LDAP信息的用户
+        Base DN：    LDAP目录树的最顶部就是根，也就是所谓的“Base DN"，如"dc=mydomain,dc=org"。
 
     属性：Attribute
         属性不是随便定义的，需要符合一定的规则，而这个规则可以通过schema制定（objectClass的类型）
         每个条目都可有很多属性，如常见的人都有姓名、地址、电话等属性。每个属性都有名称及对应值，属性值可有单个或多个
         LDAP为人员组织机构中常见的对象都设计了属性 (比如commonName，surname)。
+        
+        c：  国家
+        l：  地名，如城市或者其他地理区域的名字
+        cn： common name，指对象的名字。如果指人需要使用其全名
+        dc： domain Component，常用来指一个域名的一部分
+        sn： surname，指一个人的姓
+        givenName： 指人的名字，不能用来指姓
+        mail：   电子信箱地址
+        telephoneNumber：    电话号码，应该带有所在的国家的代码
+        o：  organizationName，指一个组织的名字
+        ou： organizationalUnitName，指一个组织单元的名字
+        uid：    userid，通常指某个用户的登录名，与Linux系统中用户的uid不同
+
+       下面列出部分常用objectClass要求必设的属性。 
+             account：userid
+             organization：o 
+             person：cn和sn 
+             organizationalPerson：与person相同
+             organizationalRole：cn
+             organizationUnit：ou 
+             posixGroup：cn、gidNumber
+             posixAccount：cn、gidNumber、homeDirectory、uid、uidNumber 
 
     LDIF 数据交换格式: "LDAP Data Interchange Format" 是LDAP数据库信息的一种文本格式，用于数据导入/出，每行都是"属性:值"对
     可以说LDIF文件是OpenLDAP操作数据或修改配置的一切来源
