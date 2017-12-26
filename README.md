@@ -25,7 +25,7 @@
 - [x] ~~openssl CA及服务端证书免交互生成脚本~~ ~~openssl 加解密相关demo~~
 - [ ] linux当前环境检测及(性能/安全)设置脚本（py）
 - [ ] ~~python 3.6 安装.sh~~ python环境变量的说明及目录结构
-- [x] ~~Samba~~ & ~~vsftp~~ nfs的权限映射相关
+- [x] ~~Samba~~ & ~~vsftp~~ nfs的权限映射相关及autofs
 - [ ] stunel，PPTP的README，shadowsock，OpenVPN，IPsec + L2TP
 - [ ] python的：~~jinja生成配置文件的demo（过滤器，流程控制，对象，宏）~~，~~sqlalchemy的常规demo~~，disutils项目打包成模块的demo，sockerserver
 - [ ] ~~tcpdump，wireshark 的md~~
