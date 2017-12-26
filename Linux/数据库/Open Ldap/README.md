@@ -32,18 +32,20 @@ LDAP的概念：
         属性不是随便定义的，需要符合一定的规则，而这个规则可以通过schema制定（objectClass的类型）
         每个条目都可有很多属性，如常见的人都有姓名、地址、电话等属性。每个属性都有名称及对应值，属性值可有单个或多个
         LDAP为人员组织机构中常见的对象都设计了属性 (比如commonName，surname)。属性的冒号后面必须留空格，值的后面不能有空格
+        属性支持高级的过滤功能
         
         c：  国家
         l：  地名，如城市或者其他地理区域的名字
-        cn： common name，指对象的名字。如果指人需要使用其全名
-        dc： domain Component，常用来指一个域名的一部分
-        sn： surname，指一个人的姓
+        cn： common name，指对象名字。如果指人需要使用其全名（公共名称）
+        dc： domain Component，常用来指域名的一部分，如：example.com ---> dc=example,dc=com
+        dn:  唯一的辨别名(条目)，类似Linux的绝对路径，每个对象都有个唯一的名称，如："uid=tom,ou=market,dc=example,dc=com"
+        sn： surname，指一个人的姓
         givenName： 指人的名字，不能用来指姓
         mail：   电子信箱地址
         telephoneNumber：    电话号码，应该带有所在的国家的代码
-        o：  organizationName，指一个组织的名字
-        ou： organizationalUnitName，指一个组织单元的名字
-        uid：    userid，通常指某个用户的登录名，与Linux系统中用户的uid不同
+        o： organizationName，指一个组织的名字
+        ou： organizationalUnitName，指一个组织单元的名字，是容器对象，它可以包含其他的各种对象
+        uid： userid，通常指某用户的登录名，与Linux中的用户UID不同
 
        下面列出部分常用objectClass要求必设的属性。 
              account：userid
