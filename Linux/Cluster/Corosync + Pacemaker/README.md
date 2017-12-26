@@ -316,4 +316,5 @@ No resources
 ```txt
 [root@localhost ~]# crm confgure property no-quorum-policy=ignore	在两节点集群的时需要取消投票
 [root@localhost ~]# crm confgure property stonith-enabled=false
+[root@localhost ~]# crm confgure commit
 ```
