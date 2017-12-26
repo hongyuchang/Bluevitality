@@ -49,9 +49,9 @@ Pacemaker启动的2种方式：
         -> 这部分的组件非必须（其目的是为了实现集群文件系统的功能）
         ->           [CLVM2]   [GFS2]   [OCFS2]                   
         ->               ↓        ↓        ↓                      
-        ->           [Distributed Lock Manager]     <---  分布式锁管理器
+        ->           [Distributed Lock Manager]       <-------    分布式锁管理器
                                   ↓                               
-                             [Pacemaker]    <---  其有多个版本在同时维护并且使用方式不同
+                             [Pacemaker]      <-------    其有多个版本在同时维护并且使用方式不同
                              /    ↑    ↘
                             /     |      [Corosync]
               [Resource Agents]   |
@@ -115,7 +115,7 @@ HOSTNAME=node1
 totem {                     
 	version: 2              		#totem使用的版本
    	threads: 2              		#工作线程数（若设为0则其不基于线程模式工作而使用进程模式）
-   	secauth: off            		#启用心跳认证功能（若启用则需要执行：corosync-keygen生成密钥文件）
+   	secauth: off            		#启用心跳认证（若启用则需要执行：corosync-keygen生成密钥文件）
 	crypto_cipher: none     		#aes128/...
 	crypto_hash: none       		#sha1/...
 	
@@ -256,11 +256,15 @@ Aug 13 14:20:15 corosync [pcmk  ] info: pcmk_startup: Local hostname: node1.test
    error: unpack_resources:     NOTE: Clusters with shared data need STONITH to ensure data integrity
 Errors found during check: config not valid
 
-#查看集群状态
-
-
+#查看当前节点的corosync状态
+[root@localhost ~]# corosync-cfgtool -s
+Printing ring status.
+Local node ID 2130706433
+RING ID 0
+        id      = 192.168.0.3
+        status  = ring 0 active with no faults
 ```
-#### 安装 crmsh ( pacemaker 的配置接口，不需要安装在集群的每个节点上，但通常为了配置的方便因此所有节点都会安装 )
+#### 安装 crmsh ( 它是pacemaker的配置接口，不需要安装在集群的每个节点上，但通常为了配置方便因此所有节点都会安装 )
 ```bash
 #[root@localhost corosync]# cd /etc/yum.repos.d/   
 #[root@localhost corosync]# wget http://download.opensuse.org/repositories\
@@ -274,7 +278,8 @@ Errors found during check: config not valid
 [root@localhost ~]# #crm                                		#直接输入crm将进入子命令模式
 [root@localhost ~]# crm status                          		#查看下localhost上的集群状态信息
 
-[root@localhost ~]# crm status
+[root@localhost ~]# #crm_mon 						
+[root@localhost ~]# crm status						#也可用pacemaker自带的crm_mon查看...
 Stack: corosync
 Current DC: node1 (version 1.1.16-12.el7_4.5-94ff4df) - partition with quorum
 Last updated: Wed Dec 20 22:03:37 2017
@@ -283,5 +288,28 @@ Last change: Wed Dec 20 21:59:03 2017 by hacluster via crmd on node1
 0 Resources configured.                                         	#当前有几个资源被配置
 Online: [ node1 node2 ]                                  		#在线节点
 No resources
+
+[root@localhost ~]# crm_node -l						#列出所有已知的集群内的节点
+1 node1
+2 node2
+3 node3
+
+[root@localhost ~]# crm_verify -V -L      				#检查并显示当前集群的配置是否存在问题
+```
+#### /etc/sysconfig/pacemaker
+```bash
+[root@localhost ~]# vim /etc/sysconfig/pacemaker
+#PCMK_STACK=cman							#是否使用cman作为其底层的协议栈
+#PCMK_debug=yes|no|crmd|pengine|cib|stonith-ng|attrd|pacemakerd		#对哪些子系统做DEBUG
+
+#PCMK_logfile=/var/log/pacemaker.log					#syslog日志相关
+#PCMK_logfacility=none|daemon|user|local0|local1|local2|local3|local4|local5|local6|local7
+#PCMK_logpriority=emerg|alert|crit|error|warning|notice|info|debug
+
+# Use this TCP port number when connecting to a Pacemaker Remote node. This
+# value must be the same on all nodes. The default is "3121".
+# PCMK_remote_port=3121
+
+......
 ```
 #### 关于 crmsh 的使用部分，由于篇幅原因请参考本路径下的 ./CRMSH.md 文档....
