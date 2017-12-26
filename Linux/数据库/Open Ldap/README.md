@@ -39,11 +39,12 @@ LDAP的概念：
         cn： common name，指对象名字。如果指人需要使用其全名（公共名称）
         dc： domain Component，常用来指域名的一部分，如：example.com ---> dc=example,dc=com
         dn:  唯一的辨别名(条目)，类似Linux的绝对路径，每个对象都有个唯一的名称，如："uid=tom,ou=market,dc=example,dc=com"
+        rdn: 相对辨别名，类似Linux的相对路径，它是与目录树结构无关的部分
         sn： surname，指一个人的姓
         givenName： 指人的名字，不能用来指姓
         mail：   电子信箱地址
         telephoneNumber：    电话号码，应该带有所在的国家的代码
-        o： organizationName，指一个组织的名字
+        o： organizationName，指组织的名字
         ou： organizationalUnitName，指一个组织单元的名字，是容器对象，它可以包含其他的各种对象
         uid： userid，通常指某用户的登录名，与Linux中的用户UID不同
 
