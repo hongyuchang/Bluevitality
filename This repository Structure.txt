@@ -28,11 +28,11 @@
 │   │       └── 资料
 │   ├── Daemon Manage
 │   │   ├── Supervisor
-│   │   │   └── Configs
+│   │   │   └── conf
 │   │   ├── Systemd
-│   │   │   └── Configs
+│   │   │   └── conf
 │   │   └── Xinetd
-│   │       └── Configs
+│   │       └── conf
 │   ├── Linux Kernel
 │   │   └── Images
 │   ├── Virtual
