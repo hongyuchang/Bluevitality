@@ -18,10 +18,10 @@ bash-4.4# touch 1       #创建
 
 [root@localhost ~]# docker inspect -f "{{.Mounts}}" client2
 [{24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c \
-/var/lib/docker/volumes/24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c/_data /leader local  true }]
+/var/lib/docker/volumes/24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c/_data /leader local true }]
 [root@localhost ~]# docker inspect -f "{{.Mounts}}" client1
 [{24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c \
-/var/lib/docker/volumes/24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c/_data /leader local  true }]
+/var/lib/docker/volumes/24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c/_data /leader local true }]
 
 [root@localhost ~]# docker volume ls
 DRIVER              VOLUME NAME
