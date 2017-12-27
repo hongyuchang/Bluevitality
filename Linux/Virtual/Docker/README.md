@@ -245,20 +245,4 @@ CONTAINER ID        IMAGE                   COMMAND                  CREATED    
 
 #注：
 #entrypoint总是被执行，即使在docker run命令后指定了要运行的命令。此命令会被认为是entrypoint的参数，替换掉CMD中的默
-
-```
-
-#### 
-```bash
-
-```
-
-#### 
-```bash
-
-```
-
-#### 
-```bash
-
 ```
