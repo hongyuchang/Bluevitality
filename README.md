@@ -11,7 +11,7 @@
 - [x] ~~Supervisor，xinetd 的demo与readme~~，~~Flask相关的gunicorn和manage的md或sh~~ systemd的@与.timer.target的说明
 - [x] ~~mutt+mstp的脚本~~ grafana配合zabbix
 - [ ] ~~tomcat 安装脚本~~、~~tomcat集群会话共享~~~~，~~jmx监控~~ ~~及zabbix监控tomcat~~，JVM优化，多实例，~~jar与jmap的demo~~
-- [x] ~~memcahed的README & 安装脚本~~ tomcat的MSM会话共享md测试有问题, 编译java和环境设置的md
+- [x] ~~memcahed的README & 安装脚本~~ tomcat的MSM会话共享md测试有问题, ~~编译java和环境设置的md~~
 - [ ] ~~mysql~~，~~主从~~，~~5.6半同步插件~~，MHA，多实例，~~GTID~~，~~Mysqldump / xtrabackup~~ / lvm快照备份db脚本
 - [ ] ~~nginx~~、~~Nginx4层LB的demo~~，mysql性能及状态查询的若干sql组成的脚本
 - [x] ~~galera cluster & mycat~~
@@ -37,7 +37,7 @@
 - [ ] DNS下增加rndc，demo改版，增删区域的脚本
 - [ ] ~~ISCSI~~ ~~& gfs & clvm~~（仅流程）命令创建target的脚本并伴随注释，ISCSI的多路径冗余和负载均衡，tcpcopy & ipref 的README与sh
 - [x] ~~expect~~
-- [ ] docker的swarm流程脚本，Jenkins
+- [ ] docker的swarm流程脚本，~~Jenkins~~
 - [ ] consul 分步骤按格式存储，修改RAEDME
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
 - [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
