@@ -37,6 +37,7 @@
 │   │   └── Images
 │   ├── Virtual
 │   │   ├── Docker
+│   │   │   └── 私有仓库
 │   │   ├── kubernets
 │   │   ├── KVM
 │   │   │   └── 一些资料
@@ -76,7 +77,7 @@
 │   │   ├── Ceph
 │   │   ├── Glusterfs
 │   │   ├── ISCSI + GFS2 + CLVM
-│   │   │   ├── Corosync + Pacemaker  + GFS2 + CLVM
+│   │   │   ├── Corosync + Pacemaker  + GFS2 + CLVM ( 未完成 )
 │   │   │   ├── RHCS + GFS2 + CLVM ( 旧 )
 │   │   │   ├── Setup
 │   │   │   └── 资料
@@ -267,4 +268,4 @@
     │   └── Improve
     └── Tools
 
-267 directories
+268 directories
