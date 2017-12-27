@@ -203,27 +203,48 @@ CONTAINER ID        IMAGE                   COMMAND                  CREATED    
 8829aa998c35
 
 # docker run 参数：(docker create 与 docker run 类似，但其仅创建容器而不运行)
-# --name    容器的名字
-# -v        指定宿主机与容器间映射的目录或文件
-# -i        提供交互式接口
-# -t        提供一个伪终端
-# -p        指定宿主机与容器的端口间的映射关系
-# -P        根据容器dockerfile中EXPOSE的端口与宿主机随机的端口进行映射
-# -e        传递给容器的环境变量
-# -d        使容器后台执行，相当于linux中的nohup
-# -m        内存使用量的限制
-# -h        容器的主机名（--hostname）
-# exec      进入到容器内部 eg: docker exec -it <xxx> /bin/bash
-# attach    不建议...
-# -net      容器使用的网络类型
-# --rm      当容器运行结束后自动删除
-# -w        容器的工作目录
-# --ip      容器的IPV4地址
-# --dns     容器使用的DNS服务器
-# --restart 容器运行结束后的动作? eg:--restart=always
+# --name       容器的名字
+# -v           指定宿主机与容器间映射的目录或文件
+# -i           提供交互式接口
+# -t           提供一个伪终端
+# -p           指定宿主机与容器的端口间的映射关系
+# -P           根据容器dockerfile中EXPOSE的端口与宿主机随机的端口进行映射
+# -e           传递给容器的环境变量
+# -d           使容器后台执行，相当于linux中的nohup
+# -m           内存使用量的限制
+# -h           容器的主机名（--hostname）
+# exec         进入到容器内部 eg: docker exec -it <xxx> /bin/bash
+# attach       不建议...
+# -net         容器使用的网络类型
+# --rm         当容器运行结束后自动删除
+# -w           容器的工作目录
+# --ip         容器的IPV4地址
+# --dns        容器使用的DNS服务器
+# --restart    容器运行结束后的动作? eg:--restart=always
 ```
-#### 
+#### Dockerfile
 ```bash
+[root@localhost ~]# docker commit <container> [repo:tag]     #将容器打包为镜像（此方式方便快速但不规范且无法自动化）
+[root@localhost ~]# cat Dockerfile
+# FROM         以哪个镜像为基础进行制作
+# MAINTAINER   维护者信息
+# ARG          由外部启动时必须传入的参数，用--build-arg传递参数：docker build --build-arg v=2.1 Dockerfile
+# ENV          定义容器的环境变量
+# RUN          构建镜像时执行的命令（每个RUN均创建一个新的AUFS层）
+# ADD          将本地文件添加到容器中，identity, gzip, bzip2，xz，tar.gz，tgz等类型将被tar自动解压
+# COPY         同ADD，但不会解压文件
+# VOLUME       用于指定持久化目录
+# EXPOSE       容器需要暴露的端口
+# LABEL        给镜像添加信息。用docker inspect可查看镜像的相关信息，如：LABEL version="1.0"
+# ENTRYPOINT   配置容器，使其可执行化（若CMD也存在则CMD的内容相当于ENTRYPOINT的参数）
+# CMD          在容器启动时进行调用的命令
+# WORKDIR      工作目录
+# USER         用于设定容器的运行用户名或UID
+
+[root@localhost ~]# docker build -t "name:tag" .            #根据当前路径下的Dockerfile开始构建镜像
+
+#注：
+#entrypoint总是被执行，即使在docker run命令后指定了要运行的命令。此命令会被认为是entrypoint的参数，替换掉CMD中的默
 
 ```
 
