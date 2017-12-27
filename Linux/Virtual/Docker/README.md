@@ -1,10 +1,17 @@
 #### 下载Docker及说明 （ 环境：CentOS 7.3 ）
 ```bash
+[root@localhost ~]# uname -r                          #内核版本至少需要 >= 3.8
+3.10.0-327.el7.x86_64
+[root@localhost ~]# systemctl disable firewalld
+[root@localhost ~]# systemctl stop firewalld   
+[root@localhost ~]# yum -y install iptables-services  #docker需要使用iptables进行网络的NAT转换
+[root@localhost ~]# systemctl start iptables
+[root@localhost ~]# systemctl enable iptables
 [root@localhost ~]# yum -y install docker
 [root@localhost ~]# systemctl enable docker
 [root@localhost ~]# systemctl start docker
 
-[root@localhost ~]# systemctl cat docker.service      #Docker的service unit文件
+[root@localhost ~]# systemctl cat docker.service      #Docker Daemon的service unit文件
 # /usr/lib/systemd/system/docker.service
 [Unit]
 Description=Docker Application Container Engine
@@ -46,8 +53,84 @@ KillMode=process
 
 [Install]
 WantedBy=multi-user.target
-```
 
+[root@localhost ~]# docker version          #查看其客户端与服务端的版本信息...
+Client:
+ Version:         1.12.6
+ API version:     1.24
+ Package version: docker-1.12.6-68.gitec8512b.el7.centos.x86_64
+ Go version:      go1.8.3
+ Git commit:      ec8512b/1.12.6
+ Built:           Mon Dec 11 16:08:42 2017
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.12.6
+ API version:     1.24
+ Package version: docker-1.12.6-68.gitec8512b.el7.centos.x86_64
+ Go version:      go1.8.3
+ Git commit:      ec8512b/1.12.6
+ Built:           Mon Dec 11 16:08:42 2017
+ OS/Arch:         linux/amd64
+
+[root@localhost ~]# docker info             #查看docker daemon 的信息
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 1
+Server Version: 1.12.6
+Storage Driver: devicemapper
+ Pool Name: docker-253:0-33680589-pool
+ Pool Blocksize: 65.54 kB
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
+ Data file: /dev/loop0
+ Metadata file: /dev/loop1
+ Data Space Used: 41.16 MB
+ Data Space Total: 107.4 GB
+ Data Space Available: 12.54 GB
+ Metadata Space Used: 626.7 kB
+ Metadata Space Total: 2.147 GB
+ Metadata Space Available: 2.147 GB
+ Thin Pool Minimum Free Space: 10.74 GB
+ Udev Sync Supported: true
+ Deferred Removal Enabled: true
+ Deferred Deletion Enabled: true
+ Deferred Deleted Device Count: 0
+ Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Use `--storage-opt dm.t\
+ hinpooldev` to specify a custom block storage device.
+ Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+ Library Version: 1.02.107-RHEL7 (2015-10-14)
+Logging Driver: journald
+Cgroup Driver: systemd
+Plugins:
+ Volume: local
+ Network: bridge null host overlay
+Swarm: inactive
+Runtimes: docker-runc runc
+Default Runtime: docker-runc
+Security Options: seccomp selinux
+Kernel Version: 3.10.0-327.el7.x86_64
+Operating System: CentOS Linux 7 (Core)
+OSType: linux
+Architecture: x86_64
+Number of Docker Hooks: 3
+CPUs: 4
+Total Memory: 1.939 GiB
+Name: localhost.localdomain
+ID: 3MTC:MFMI:XPSP:STZL:UYV7:U3IY:VVSC:V2TL:D7VD:LVPO:5K2M:TDE7
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+WARNING: bridge-nf-call-iptables is disabled
+WARNING: bridge-nf-call-ip6tables is disabled
+Insecure Registries:
+ 127.0.0.0/8
+Registries: docker.io (secure)
+```
 #### 下载 docker 镜像 ...
 ```bash
 [root@localhost ~]# docker search bash
@@ -79,12 +162,43 @@ Digest: sha256:b146a2e9aadaf2ed4a540324094412f2cd3f609f8a2f55ed608285f85f12a0f1
 REPOSITORY          TAG                 IMAGE ID            CREATED                  SIZE
 docker.io/bash      latest              a853bea42baa        Less than a second ago   12.22 MB
 
-#注：docker官方建议配置信息以参数形式传递进入容器，并且一个容易最好只运行一个进程...
+# 注：
+# docker官方建议配置信息以参数形式传递进入容器，并且一个容易最好只运行一个进程...
+# docker容器中的程序是在前台执行的...，若运行后台程序则需要在容器内使用supervisor...
+
+[root@localhost ~]# ip link show dev docker0                    #默认的docker虚拟桥（交换），所有的容器均连接至此设备
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT 
+    link/ether 02:42:ad:8f:48:42 brd ff:ff:ff:ff:ff:ff
+[root@localhost ~]# ip address show dev docker0
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN 
+    link/ether 02:42:ad:8f:48:42 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 scope global docker0     #docker为网桥分配的私有地址，其仅能够在本机进行访问
+       valid_lft forever preferred_lft forever
 ```
 
-#### 
+#### 容器相关的操作
 ```bash
-
+[root@localhost etc]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED                  SIZE
+docker.io/bash      latest              a853bea42baa        Less than a second ago   12.22 MB
+[root@localhost etc]# docker run docker.io/bash:latest ip add show  #此处的ip add show为docker.io/bash运行的命令
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+4: eth0@if5: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.2/16 scope global eth0            #此处的地址与宿主机的docker0网桥处于同一个逻辑网段
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:acff:fe11:2/64 scope link tentative 
+       valid_lft forever preferred_lft forever
+[root@localhost etc]# docker ps -a                  #显示所有容器（包括已经运行退出的容器）
+CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS                     PORTS               NAMES
+8829aa998c35        docker.io/bash:latest   "docker-entrypoint.sh"   2 minutes ago       Exited (0) 2 minutes ago                    drunk_spence
+[root@localhost etc]# docker ps -aq                 #仅显示容器ID
+8829aa998c35
 ```
 #### 
 ```bash
