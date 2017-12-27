@@ -1,20 +1,37 @@
+#### 初次登陆时输入Jenkins的初始密码
 ![jenkins-img](资料/Imgaes/00输入初始密码.png)
+#### 初次登陆时选择要安装的插件
 ![jenkins-img](资料/Imgaes/01.png)
 ![jenkins-img](资料/Imgaes/02选择需要的插件.png)
+#### 登陆Jenkins
 ![jenkins-img](资料/Imgaes/03登陆.png)
+#### 安装插件
+![jenkins-img](资料/Imgaes/08安装插件.png)
+#### 系统管理 - 全局工具设置 - 设置JAVA与MAVEN的环境变量
 ![jenkins-img](资料/Imgaes/04全局工具设置.png)
 ![jenkins-img](资料/Imgaes/05在全局中设置JDK和MAVEN的变量.png)
+#### 新建任务
 ![jenkins-img](资料/Imgaes/06新建任务.png)
 ![jenkins-img](资料/Imgaes/07选择风格.png)
-![jenkins-img](资料/Imgaes/08安装插件.png)
+#### 选择构建类型
 ![jenkins-img](资料/Imgaes/09选择构建类型.png)
+#### 
 ![jenkins-img](资料/Imgaes/10构建流程01.png)
+#### 
 ![jenkins-img](资料/Imgaes/10构建流程02.png)
+#### 
 ![jenkins-img](资料/Imgaes/10构建流程03.png)
+#### 
 ![jenkins-img](资料/Imgaes/10构建流程04.png)
+#### 
 ![jenkins-img](资料/Imgaes/10构建流程05.png)
+#### 系统管理 - 系统设置 - Publish over SSH
 ![jenkins-img](资料/Imgaes/10构建流程06SSH01构建设置.png)
+#### 
 ![jenkins-img](资料/Imgaes/10构建流程06SSH02系统设置.png)
+#### Publish over SSH 在C端执行的脚本（Exec command）
 ![jenkins-img](资料/Imgaes/10构建流程06SSH03执行的脚本内容.png)
+#### 立即构建
 ![jenkins-img](资料/Imgaes/11立即构建.png)
+#### 查看构建的输出
 ![jenkins-img](资料/Imgaes/12构建输出.png)
