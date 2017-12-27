@@ -14,7 +14,10 @@ supervisor可以对进程组统一管理，也就是说可以把需要管理的�
 
 #### Example.conf
 ```conf
-[program:usercenter]        ;usercenter 是应用的唯一标识，其不能重复。对它的所有操作如：start, restart..都通过名字实现
+[supervisor]
+nodaemon=true               ;当在docker容器内用于管理后台守护进程时需将Supervisor设置为前台启动~
+
+[program:usercenter]        ;usercenter 是应用的唯一标识，其不能重复。对它的所有操作如：start, restart..都通过名字实现
 directory = /home/leon/projects/usercenter          ; 程序的启动目录（command指令的工作目录）
 command = gunicorn -w 8 -b 0.0.0.0:17510 wsgi:app   ; 启动命令
 priority=1                                          ; 启动优先级
