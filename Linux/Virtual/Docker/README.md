@@ -190,15 +190,37 @@ docker.io/bash      latest              a853bea42baa        Less than a second a
        valid_lft forever preferred_lft forever
 4: eth0@if5: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
     link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff
-    inet 172.17.0.2/16 scope global eth0            #此处的地址与宿主机的docker0网桥处于同一个逻辑网段
+    inet 172.17.0.2/16 scope global eth0                    #此处的地址与宿主机的docker0网桥处于同一个逻辑网段
        valid_lft forever preferred_lft forever
     inet6 fe80::42:acff:fe11:2/64 scope link tentative 
        valid_lft forever preferred_lft forever
-[root@localhost etc]# docker ps -a                  #显示所有容器（包括已经运行退出的容器）
+[root@localhost etc]# docker ps -a                          #显示所有容器（包括已经运行退出的容器）
 CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS                     PORTS               NAMES
 8829aa998c35        docker.io/bash:latest   "docker-entrypoint.sh"   2 minutes ago       Exited (0) 2 minutes ago                    drunk_spence
-[root@localhost etc]# docker ps -aq                 #仅显示容器ID
+[root@localhost etc]# docker ps -aq                         #仅显示容器ID
 8829aa998c35
+[root@localhost etc]# docker rm -f $(docker ps -aq)         #删除所有容器
+8829aa998c35
+
+# docker run 参数：(docker create 与 docker run 类似，但其仅创建容器而不运行)
+# --name    容器的名字
+# -v        指定宿主机与容器间映射的目录或文件
+# -i        提供交互式接口
+# -t        提供一个伪终端
+# -p        指定宿主机与容器的端口间的映射关系
+# -P        根据容器dockerfile中EXPOSE的端口与宿主机随机的端口进行映射
+# -e        传递给容器的环境变量
+# -d        使容器后台执行，相当于linux中的nohup
+# -m        内存使用量的限制
+# -h        容器的主机名（--hostname）
+# exec      进入到容器内部 eg: docker exec -it <xxx> /bin/bash
+# attach    不建议...
+# -net      容器使用的网络类型
+# --rm      当容器运行结束后自动删除
+# -w        容器的工作目录
+# --ip      容器的IPV4地址
+# --dns     容器使用的DNS服务器
+# --restart 容器运行结束后的动作? eg:--restart=always
 ```
 #### 
 ```bash
