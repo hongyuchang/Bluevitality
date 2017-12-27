@@ -78,6 +78,8 @@ Digest: sha256:b146a2e9aadaf2ed4a540324094412f2cd3f609f8a2f55ed608285f85f12a0f1
 [root@localhost ~]# docker images                               #查看本地的docker镜像
 REPOSITORY          TAG                 IMAGE ID            CREATED                  SIZE
 docker.io/bash      latest              a853bea42baa        Less than a second ago   12.22 MB
+
+#注：docker官方建议配置信息以参数形式传递进入容器，并且一个容易最好只运行一个进程...
 ```
 
 #### 
