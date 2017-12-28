@@ -9,7 +9,7 @@
 #### k8s安装流程
 ```bash
 [root@node1 ~]# yum -y install kubernetes* ntp flannel etcd docker  #在所有节点执行安装...
-[root@node2 ~]# yum -y install kubernetes* ntp flannel etcd docker  #
+[root@node* ~]# yum -y install kubernetes* ntp flannel etcd docker  #
 [root@node1 ~]# setenforce 0 && systemctl stop firewalld
 [root@node2 ~]# setenforce 0 && systemctl stop firewalld
 [root@node1 ~]# cat /etc/hosts
@@ -41,16 +41,15 @@ ETCD_ADVERTISE_CLIENT_URLS="http://localhost:2379,http://192.168.0.3:2379"      
 #ETCD_INITIAL_CLUSTER="default=http://localhost:2380"
 .......
 #ETCD_ENABLE_V2="true"
-[root@node1 ~]# systemctl start etcd
-[root@node1 ~]# systemctl enable etcd
+[root@node1 ~]# systemctl enable etcd && systemctl start etcd
 
 [root@node1 ~]# etcdctl member list                 #检查etcd集群成员列表，这里只有一台
 8e9e05c52164694d: name=default peerURLs=http://localhost:2380 clientURLs=http://192.168.0.3:2379,\
 http://localhost:2379 isLeader=true
-[root@node1 ~]# etcdctl set /k8s/network/config '{"Network": "192.168.0.0/24"}' #配置etcd
-{"Network": "192.168.0.0/24"}
+[root@node1 ~]# etcdctl set /k8s/network/config '{"Network": "192.168.0.0/16"}' #配置etcd（曾用/24出故障)
+{"Network": "192.168.0.0/16"}
 [root@node1 ~]# etcdctl get /k8s/network/config
-{"Network": "192.168.0.0/24"}
+{"Network": "192.168.0.0/16"}
 ```
 #### 部署 Master
 ```bash
@@ -58,12 +57,12 @@ http://localhost:2379 isLeader=true
 KUBE_LOGTOSTDERR="--logtostderr=true"
 KUBE_LOG_LEVEL="--v=0"
 KUBE_ALLOW_PRIV="--allow-privileged=false"
-KUBE_MASTER="--master=http://127.0.0.1:8080"    #APISERVER在什么地方运行
+KUBE_MASTER="--master=http://192.168.0.3:8080"    #APISERVER在什么地方运行
 
 [root@node1 ~]# cat /etc/kubernetes/apiserver    
 KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"              #KUBE_API的绑定地址
 KUBE_API_PORT="--port=8080"
-KUBELET_PORT="--kubelet_port=10250" #??????
+KUBELET_PORT="--kubelet_port=10250"                             # Port minions listen on
 KUBE_ETCD_SERVERS="--etcd-servers=http://192.168.0.3:2379"      #指明etcd地址
 KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=192.168.0.0/24"
 KUBE_ADMISSION_CONTROL="--admission-control=AlwaysAdmit,NamespaceLifecycle,NamespaceExists,\
@@ -76,9 +75,8 @@ KUBE_CONTROLLER_MANAGER_ARGS=""
 [root@node1 ~]# cat /etc/kubernetes/scheduler                   #配置kube-scheduler配置文件
 KUBE_SCHEDULER_ARGS="--address=0.0.0.0"
 
-[root@node1 ~]# systemctl start kube-apiserver
-[root@node1 ~]# systemctl start kube-controller-manager
-[root@node1 ~]# systemctl start kube-scheduler
+[root@node1 ~]# systemctl enable kube-apiserver kube-scheduler kube-controller-manager
+[root@node1 ~]# systemctl start  kube-apiserver kube-scheduler kube-controller-manager
 ```
 #### Node 1
 ```bash
@@ -92,7 +90,7 @@ OPTIONS='--insecure-registry registry:5000'
 #配置node1网络，本实例采用flannel方式来配置，如需其他方式，请参考Kubernetes官网
 [root@node1 ~]# cat /etc/sysconfig/flanneld    
 FLANNEL_ETCD_ENDPOINTS="http://192.168.0.3:2379"
-FLANNEL_ETCD_PREFIX="/Network/network"
+FLANNEL_ETCD_PREFIX="/k8s/network"
 FLANNEL_OPTIONS="--iface=eno16777736"
 
 [root@node1 ~]# cat /etc/kubernetes/config                      #配置node1 kube-proxy
@@ -130,7 +128,7 @@ OPTIONS='--insecure-registry registry:5000'
 #配置node2网络，本实例采用flannel方式来配置，如需其他方式，请参考Kubernetes官网
 [root@node2 ~]# cat /etc/sysconfig/flanneld    
 FLANNEL_ETCD_ENDPOINTS="http://192.168.0.3:2379"
-FLANNEL_ETCD_PREFIX="/Network/network"
+FLANNEL_ETCD_PREFIX="/k8s/network"                              #即获取之前在etcd中设置的网络...
 FLANNEL_OPTIONS="--iface=eno16777736"
 
 [root@node2 ~]# cat /etc/kubernetes/config                      #配置node2 kube-proxy
@@ -157,8 +155,8 @@ KUBELET_ARGS=""
 [root@node2 ~]# systemctl start docker
 ```
 ```bash
-[root@node1 ~]# kubectl get nodes                               #至此，整个Kubernetes集群搭建完毕
-NAME      STATUS    AGE
-node1     Ready     15m
-node2     Ready     15m
+[root@node1 ~]# kubectl get nodes                               #至此，整个Kubernetes集群搭建完毕    
+NAME      STATUS     AGE
+node1     Ready      9m
+node2     NotReady   8s
 ```
