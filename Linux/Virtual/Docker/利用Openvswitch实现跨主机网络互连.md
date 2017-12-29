@@ -1,0 +1,69 @@
+#### 环境
+```txt
+    容器网段：10.1.0.0/24        10.2.0.0/24
+             |                      |
+            [Host1]   <------>  [Host2]
+             /                       \
+    主机IP:192.168.0.3            主机IP:192.168.0.4
+```
+#### 部署流程 @ Host1
+```txt
+[root@node1 ~]# ovs-vsctl add-br obr0
+[root@node1 ~]# ovs-vsctl add-port obr0 gre0
+[root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4
+[root@node1 ~]# ovs-vsctl show
+286c02ff-a812-42ab-ac8a-cd342aeb6275
+    Bridge "obr0"
+        Port "gre0"
+            Interface "gre0"
+                type: gre
+                options: {remote_ip="192.168.0.4"}
+        Port "obr0"
+            Interface "obr0"
+                type: internal
+    ovs_version: "2.7.0"
+[root@node1 ~]# yum -y install bridge-utils
+[root@node1 ~]# brctl addbr br0
+[root@node1 ~]# ifconfig br0 10.1.0.0 netmask 255.255.255.0
+[root@node1 ~]# brctl addif br0 obr0
+[root@node1 ~]# brctl show
+bridge name     bridge id               STP enabled     interfaces
+br0             8000.b659c28ce04f       no              obr0
+docker0         8000.024263517750       no
+[root@node1 ~]# vim /etc/sysconfig/docker-network  #--->  DOCKER_NETWORK_OPTIONS="-b=br0"
+[root@node1 ~]# systemctl daemon-reload
+[root@node1 ~]# systemctl restart docker
+[root@node1 ~]# ip route add 10.2.0.0/24 via 192.168.0.4 dev eno16777736
+```
+#### 部署流程 @ Host2
+```txt
+[root@node2 ~]# ovs-vsctl add-br obr0
+[root@node2 ~]# ovs-vsctl add-port obr0 gre0
+[root@node2 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.3
+[root@node2 ~]# ovs-vsctl show
+4dcf9f5c-f225-477b-a6be-0ae836399b1f
+    Bridge "obr0"
+        Port "obr0"
+            Interface "obr0"
+                type: internal
+        Port "gre0"
+            Interface "gre0"
+                type: gre
+                options: {remote_ip="192.168.0.3"}
+    ovs_version: "2.7.0"
+[root@node2 ~]# yum -y install bridge-utils
+[root@node2 ~]# brctl addbr br0
+[root@node2 ~]# ifconfig br0 10.1.0.0 netmask 255.255.255.0
+[root@node2 ~]# brctl addif br0 obr0
+[root@node2 ~]# brctl show
+bridge name     bridge id               STP enabled     interfaces
+br0             8000.b659c28ce04f       no              obr0
+docker0         8000.024263517750       no
+[root@node2 ~]# vim /etc/sysconfig/docker-network  #--->  DOCKER_NETWORK_OPTIONS="-b=br0"
+[root@node2 ~]# systemctl daemon-reload
+[root@node2 ~]# systemctl restart docker
+```
+#### 测试
+```
+到此，如果没有出现任何问题的话，最后node1和node2上的两个容器之间能够互相ping通
+```
