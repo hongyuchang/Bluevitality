@@ -64,6 +64,47 @@ docker0         8000.024263517750       no
 [root@node2 ~]# systemctl restart docker
 ```
 #### 测试
-```
-到此，如果没有出现任何问题的话，最后node1和node2上的两个容器之间能够互相ping通
+```bash
+#到此，如果没有出现任何问题的话，最后node1和node2上的两个容器之间能够互相ping通
+[root@node2 ~]# docker run -it docker.io/bash
+bash-4.4# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: gre0@NONE: <NOARP> mtu 1476 qdisc noop state DOWN 
+    link/gre 0.0.0.0 brd 0.0.0.0
+3: gretap0@NONE: <BROADCAST,MULTICAST> mtu 1462 qdisc noop state DOWN qlen 1000
+    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+8: eth0@if9: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
+    link/ether 02:42:0a:02:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 10.2.0.2/24 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:aff:fe02:2/64 scope link tentative 
+       valid_lft forever preferred_lft forever
+       
+[root@node1 ~]# docker run -it docker.io/bash 
+bash-4.4# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: gre0@NONE: <NOARP> mtu 1476 qdisc noop state DOWN 
+    link/gre 0.0.0.0 brd 0.0.0.0
+3: gretap0@NONE: <BROADCAST,MULTICAST> mtu 1462 qdisc noop state DOWN qlen 1000
+    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+9: eth0@if10: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
+    link/ether 02:42:0a:01:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 10.1.0.2/24 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:aff:fe01:2/64 scope link tentative 
+       valid_lft forever preferred_lft forever
+bash-4.4# ping 10.2.0.2
+PING 10.2.0.2 (10.2.0.2): 56 data bytes
+64 bytes from 10.2.0.2: seq=0 ttl=62 time=0.721 ms
+64 bytes from 10.2.0.2: seq=1 ttl=62 time=0.616 ms
 ```
