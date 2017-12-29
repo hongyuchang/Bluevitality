@@ -8,9 +8,9 @@
 ```
 #### 部署流程 @ Host1
 ```txt
-[root@node1 ~]# ovs-vsctl add-br obr0
-[root@node1 ~]# ovs-vsctl add-port obr0 gre0
-[root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4
+[root@node1 ~]# ovs-vsctl add-br obr0                                               #创建网桥：0br0
+[root@node1 ~]# ovs-vsctl add-port obr0 gre0                                        #添加网桥接口gre0到网桥obr0
+[root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4 #启用GRE并设置对端外网IP
 [root@node1 ~]# ovs-vsctl show
 286c02ff-a812-42ab-ac8a-cd342aeb6275
     Bridge "obr0"
@@ -23,9 +23,9 @@
                 type: internal
     ovs_version: "2.7.0"
 [root@node1 ~]# yum -y install bridge-utils
-[root@node1 ~]# brctl addbr br0
-[root@node1 ~]# ifconfig br0 10.1.0.0 netmask 255.255.255.0
-[root@node1 ~]# brctl addif br0 obr0
+[root@node1 ~]# brctl addbr br0                                 #创建网桥br0
+[root@node1 ~]# ifconfig br0 10.1.0.0 netmask 255.255.255.0     #设置网桥br0的IP地址（每个Node节点不能相同）
+[root@node1 ~]# brctl addif br0 obr0                            #将obr0添加到br0
 [root@node1 ~]# brctl show
 bridge name     bridge id               STP enabled     interfaces
 br0             8000.b659c28ce04f       no              obr0
@@ -33,7 +33,7 @@ docker0         8000.024263517750       no
 [root@node1 ~]# vim /etc/sysconfig/docker-network  #--->  DOCKER_NETWORK_OPTIONS="-b=br0"
 [root@node1 ~]# systemctl daemon-reload
 [root@node1 ~]# systemctl restart docker
-[root@node1 ~]# ip route add 10.2.0.0/24 via 192.168.0.4 dev eno16777736
+[root@node1 ~]# ip route add 10.2.0.0/24 via 192.168.0.4 dev eno16777736    #设置到对端节点的路由
 ```
 #### 部署流程 @ Host2
 ```txt
