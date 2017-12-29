@@ -1,6 +1,6 @@
 #### 部署
 ```bash 
-[root@node1 ~]# yum -y install rpm-build selinux-policy-devel
+[root@node1 ~]# yum -y install rpm-build selinux-policy-devel python-six
 [root@node1 ~]# ll
 总用量 6008
 -rw-r--r--. 1 root root 6149523 12月 30 02:33 openvswitch-2.7.0.tar.gz   #下载源码并创建rpm包
