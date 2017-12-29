@@ -38,7 +38,8 @@
 │   ├── Virtual
 │   │   ├── Docker
 │   │   │   └── 私有仓库
-│   │   ├── kubernets
+│   │   ├── Kubernetes
+│   │   │   └── 资料
 │   │   ├── KVM
 │   │   │   └── 一些资料
 │   │   └── OpenStack
@@ -267,4 +268,4 @@
     │   └── Improve
     └── Tools
 
-267 directories
+268 directories
