@@ -7,7 +7,7 @@
     主机IP:192.168.0.3            主机IP:192.168.0.4
 ```
 #### 部署流程 @ Host1
-```txt
+```bash
 [root@node1 ~]# ovs-vsctl add-br obr0                                               #创建网桥：0br0
 [root@node1 ~]# ovs-vsctl add-port obr0 gre0                                        #添加网桥接口gre0到网桥obr0
 [root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4 #启用GRE并设置对端外网IP
@@ -36,7 +36,7 @@ docker0         8000.024263517750       no
 [root@node1 ~]# ip route add 10.2.0.0/24 via 192.168.0.4 dev eno16777736    #设置到对端节点的路由
 ```
 #### 部署流程 @ Host2
-```txt
+```bash
 [root@node2 ~]# ovs-vsctl add-br obr0
 [root@node2 ~]# ovs-vsctl add-port obr0 gre0
 [root@node2 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.3
