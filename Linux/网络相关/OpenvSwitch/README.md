@@ -1,4 +1,5 @@
-``` 部署
+#### 部署
+```bash 
 [root@node1 ~]# yum -y install rpm-build
 [root@node1 ~]# ll
 总用量 6008
