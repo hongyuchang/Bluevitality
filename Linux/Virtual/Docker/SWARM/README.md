@@ -6,7 +6,7 @@
 ```
 #### 说明
 ```txt
-Swarm支持设置一组Manager Node，通过支持多Manager Node实现HA
+Swarm支持设置一组Manager Node，通过支持多Manager Node实现HA (集群中包含Manager和Worker两类Node)
 Docker 1.12中Swarm已内置了服务发现工具，不再需要像以前使用 Etcd 或 Consul 这些工具来配置服务发现
 对于容器来说若没有外部通信但又是运行中的状态会被服务发现工具认为是 Preparing 状态，但若映射了端口则会是 Running 状态。
 docker service [ls/ps/rm/scale/inspect/update]
@@ -15,6 +15,11 @@ Swarm使用Raft协议保证多Manager间状态的一致性。基于Raft协议，
 每个Node的配置可能不同，比如有的适合CPU密集型应用，有的适合运行IO密集型应用
 Swarm支持给每个Node添加标签元数据，这样可根据Node标签来选择性地调度某个服务部署到期望的一组Node上
 ```
+#### Demo
+![img](资料/swarm-multiple-manager-architecture.png)
+`Swarm使用了Raft协议来保证多个Manager之间状态的一致性。基于Raft协议，Manager Node具有一定的容错功能`  
+`假设Swarm集群中有个N个Manager Node，那么整个集群可以容忍最多有(N-1)/2个节点失效` 
+![img](资料/services-diagram.png)
 #### 各节点加入swarm集群
 ```bash
 #master节点创建集群并将其他节点加入swarm集群中
@@ -118,9 +123,9 @@ host-b
 host-c
 
 #改变Node角色：（dorker Node可以变为Manager Node，这样实际Worker Node由工作Node变成了管理Node）
-[root@host-a ~]# docker node promote  <node*>		#提权
-[root@host-a ~]# docker node demote  <node*>		#降权
-[root@host-a ~]#  docker swarm node leave [--force]	#退出所在集群
+[root@host-a ~]# docker node promote  <node*>		#提权 (升为manager节点)
+[root@host-a ~]# docker node demote  <node*>		#降权 (部署服务只能在管理节点manager上进行)
+[root@host-a ~]# docker swarm node leave [--force]	#退出所在集群
 ```
 #### 流程
 ```bash
@@ -132,17 +137,15 @@ a88ql269d3t1ev1yq4n828yut
 [root@host-b ~]# docker pull docker.io/bashell/alpine-bash     #
 [root@host-c ~]# docker pull docker.io/bashell/alpine-bash     #
 
-#创建bash容器的服务，服务名为t1，使其同时能运行在2个节点上（必须在Manager操作）
-#若Swarm集群中其他Node的容器也使用my-network这个网络，那么处于该网络中的所有容器间均可连通！
+#创建bash容器的服务，服务名为t1，使其同时能运行在2个节点上
+#若Swarm集群中其他Node的容器也使用my-network网络，那么处于该网络中的所有容器间均可连通！
 [root@host-a ~]# docker service create --replicas 2 --network my-network  --name t1  docker.io/bashell/alpine-bash      
 9ye311ixoipa4zt372c5smx5i
 [root@host-a ~]# docker service ps t1   	#查看t1服务状态
 ID                         NAME      IMAGE                          NODE    DESIRED STATE  CURRENT STATE             ERROR
 0f0eiadl2npvvfm3qi8jincvn  t1.1      docker.io/bashell/alpine-bash  host-c  Running        Preparing 16 seconds ago  
-brz7bfagxyzkmqlcte3h7i6r3  t1.2      docker.io/bashell/alpine-bash  host-b  Running        Preparing 8 seconds ago   
-dfj51c5jfbbl25rb59e8zts3d   \_ t1.2  docker.io/bashell/alpine-bash  host-a  Shutdown       Complete 8 seconds ago 
+brz7bfagxyzkmqlcte3h7i6r3  t1.2      docker.io/bashell/alpine-bash  host-b  Running        Preparing 8 seconds ago    
 [root@host-a ~]# docker service rm t1   	#删除t1服务
-
 [root@host-a ~]# docker service ls      	#查看集群服务列表
 ID            NAME       REPLICAS  IMAGE           COMMAND
 436wxwxfb7je  test_bash  0/2       docker.io/bash  
@@ -216,14 +219,14 @@ elm590j5t2jmmvfewqgr7g78z  test_bash.2      docker.io/bash  host-b  Running     
     }
 ]
 ```
-#### 扩容缩容及滚动更新
+#### 服务的扩容缩容及滚动更新
 ```bash
 #Swarm支持服务扩容缩容，通过--mode设置服务类型，提供了两种模式
-#replicated：	指定服务Task的个数（需要创建几个冗余副本），这也是Swarm默认使用的服务类型
-#global：	在Swarm集群的每个Node上都创建一个服务！
+#replicated：	指定服务个数（需创建几个冗余副本），这也是Swarm默认使用的服务类型
+#global：	在Swarm集群的每个Node上都创建一个服务!
+#Example：	docker service create --name test --mode global registry.hundsun.com/library/busybox ping 1.1.1.1
 		
-#服务扩容缩容：在Manager Node上执行（将前面部署的2个副本的myredis服务，扩容到3个副本）
-#docker service scale <ID>=<Task>	
+#服务扩容缩容：在Manager Node上执行（将前面部署的2个副本的myredis服务，扩容到3个副本）格式：docker service scale <ID>=<num>	
 [root@host-a ~]# docker service scale myredis=3		
 	#查看服务信息：docker service ls
 	#ID            NAME    MODE        	REPLICAS  IMAGE
@@ -249,3 +252,9 @@ elm590j5t2jmmvfewqgr7g78z  test_bash.2      docker.io/bash  host-b  Running     
 [root@host-a ~]# docker service update --image redis:3.0.7 redis:3.0.6
 #将Redis服务对应的Image版本由3.0.6更新为3.0.7，同样，若更新失败则暂停本次更新。
 ```
+#### 设置服务的挂载卷
+```bash
+[root@host-a ~]# docker service create --name test --mount src=/root,dst=/root registry.abc.com/library/busybox \
+ping 1.1.1.1		#将服务运行所在的主机目录root映射至服务的root目录
+```
+
