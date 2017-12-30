@@ -21,6 +21,12 @@ bash-4.4# ping demo1.1.8gb683zx67i0o1wo2gpsjvz0g    #pingdemo1的DNS名称，发
 PING demo1.1.8gb683zx67i0o1wo2gpsjvz0g (10.0.9.3): 56 data bytes
 64 bytes from 10.0.9.3: seq=0 ttl=64 time=0.531 ms
 64 bytes from 10.0.9.3: seq=1 ttl=64 time=0.609 ms
+bash-4.4# nslookup tasks.demo1                      #器内部，使用特殊查询DNS来找到demo1服务的所有容器的IP地址                                                                                                                                                         
+nslookup: can't resolve '(null)': Name does not resolve
+
+Name:      tasks.demo1
+Address 1: 10.0.9.3 demo1.1.8gb683zx67i0o1wo2gpsjvz0g.my-network
+Address 2: 10.0.9.4 demo1.2.8n1plpbgx7iqp4i5g04079mty.my-network
 
 [root@host-b ~]#  docker network inspect my-network
 [
