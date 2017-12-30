@@ -22,3 +22,5 @@ PING demo1.1.8gb683zx67i0o1wo2gpsjvz0g (10.0.9.3): 56 data bytes
 64 bytes from 10.0.9.3: seq=0 ttl=64 time=0.531 ms
 64 bytes from 10.0.9.3: seq=1 ttl=64 time=0.609 ms
 ```
+#### 其他相关博文的转载
+![img](资料/DNS.png)
