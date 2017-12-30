@@ -60,12 +60,15 @@ For more details, please visit https://github.com/vmware/harbor .
 ![image](资料/1.png)
 ![image](资料/2.png)
 ![image](资料/3.png)
+#### 创建用户
 ![image](资料/4.png)
 ![image](资料/5.png)
+#### 创建项目
 ![image](资料/6.png)
+#### 为项目添加成员用户
 ![image](资料/7.png)
 ![image](资料/8.png)
-![image](资料/9.png)
+
 #### 节点上传镜像
 ```txt
 [root@node2 ~]# vim /etc/sysconfig/docker   #---> OPTIONS='...... --insecure-registry 192.168.0.3'
@@ -86,3 +89,5 @@ The push refers to a repository [192.168.0.3/test_bash/centos_bash]     #注！h
 6dfaec39e726: Pushed 
 latest: digest: sha256:bd9d81423a86120d50da7fbea234922c1eafd818481c879cf46830a93ccb431b size: 946
 ```
+#### Node2上传的镜像已经存在于仓库中
+![image](资料/9.png)
