@@ -37,7 +37,7 @@
 │   │   └── Images
 │   ├── Virtual
 │   │   ├── Docker
-│   │   │   └── 私有仓库
+│   │   │   └── 企业仓库 - Harbor
 │   │   ├── Kubernetes
 │   │   │   └── 资料
 │   │   ├── KVM
