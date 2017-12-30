@@ -12,6 +12,8 @@ alrj33okhrqa  demo1  2/2       docker.io/bashell/alpine-bash  ping www.163.com
 
 #### 测试
 ```bash
+#通常Docker官方推荐使用dig，nslookup或其它查询工具来查询通过DNS对服务名的访问。因为VIP是逻辑IP，ping并不是确认VIP连通性的正确的工具
+
 [root@host-b ~]# docker ps
 CONTAINER ID        IMAGE                                  COMMAND             CREATED             STATUS              PORTS               NAMES
 454c481f4349        docker.io/bashell/alpine-bash:latest   "ping www.qq.com"   25 seconds ago      Up 23 seconds                           demo2.1.2yip71mh1aschw596wp6wrkxm
@@ -21,7 +23,7 @@ bash-4.4# ping demo1.1.8gb683zx67i0o1wo2gpsjvz0g    #pingdemo1的DNS名称，发
 PING demo1.1.8gb683zx67i0o1wo2gpsjvz0g (10.0.9.3): 56 data bytes
 64 bytes from 10.0.9.3: seq=0 ttl=64 time=0.531 ms
 64 bytes from 10.0.9.3: seq=1 ttl=64 time=0.609 ms
-bash-4.4# nslookup tasks.demo1                      #器内部，使用特殊查询DNS来找到demo1服务的所有容器的IP地址                                                                                                                                                         
+bash-4.4# nslookup tasks.demo1                      #容器内部，使用特殊查询DNS来找到demo1服务的所有容器的IP地址                                                                                                                                                         
 nslookup: can't resolve '(null)': Name does not resolve
 
 Name:      tasks.demo1
