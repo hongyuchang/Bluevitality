@@ -21,6 +21,48 @@ bash-4.4# ping demo1.1.8gb683zx67i0o1wo2gpsjvz0g    #pingdemo1的DNS名称，发
 PING demo1.1.8gb683zx67i0o1wo2gpsjvz0g (10.0.9.3): 56 data bytes
 64 bytes from 10.0.9.3: seq=0 ttl=64 time=0.531 ms
 64 bytes from 10.0.9.3: seq=1 ttl=64 time=0.609 ms
+
+[root@host-b ~]#  docker network inspect my-network
+[
+    {
+        "Name": "my-network",
+        "Id": "a88ql269d3t1ev1yq4n828yut",
+        "Scope": "swarm",
+        "Driver": "overlay",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "10.0.9.0/24",
+                    "Gateway": "10.0.9.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Containers": {
+            "014067903d08282c890a5ce57ae3245fb0962b522719306f9e6020d6fcd7a75b": {
+                "Name": "demo2.2.2uks2aqkl2ev2fj3gpzffbfq4",
+                "EndpointID": "4f5d7b1615aae29409e0b5e5ef275fcec7eaf1305117467fb1aa4fabcc55f11c",
+                "MacAddress": "02:42:0a:00:09:07",
+                "IPv4Address": "10.0.9.7/24",
+                "IPv6Address": ""
+            },
+            "454c481f4349ab3b7a883c436c5a756fca42a93fb5f206545a50d36b109d512c": {
+                "Name": "demo2.1.2yip71mh1aschw596wp6wrkxm",
+                "EndpointID": "e4e69eae64c6c6d0899644ececaa31e20b7f755e7ebd41b186eb0c3e89d0d164",
+                "MacAddress": "02:42:0a:00:09:06",
+                "IPv4Address": "10.0.9.6/24",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.driver.overlay.vxlanid_list": "257"
+        },
+        "Labels": {}
+    }
+]
 ```
 #### 其他相关博文的转载
 ![img](资料/DNS.png)
