@@ -22,3 +22,12 @@ openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec
 286c02ff-a812-42ab-ac8a-cd342aeb6275
     ovs_version: "2.7.0"
 ```
+#### Demo
+```bash
+[root@node1 ~]# ovs-vsctl add-br br0                        #新建网桥设备
+[root@node1 ~]# ovs-vsctl set bridge br0 stp_enable=true    #启用生成树协议
+[root@node1 ~]# ovs-vsctl add-port br0 eth0                 #添加接口到网桥（网桥中加入的物理接口不可以有IP地址）
+[root@node1 ~]# ovs-vsctl add-port br0 eth1                 #
+[root@node1 ~]# ovs-vsctl add-bond br0 bond0 eth2 eth3      #多网卡绑定
+[root@node1 ~]# fconfig br0 192.168.128.5 netmask 255.255.255.0     #为网桥设置IP
+```
