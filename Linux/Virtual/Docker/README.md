@@ -245,4 +245,17 @@ CONTAINER ID        IMAGE                   COMMAND                  CREATED    
 
 #注：
 #entrypoint总是被执行，即使在docker run命令后指定了要运行的命令。此命令会被认为是entrypoint的参数，替换掉CMD中的默
+
+[root@node2 ~]# docker history docker.io/nginx              #查看镜像的构建历史...
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+3f8a4339aadd        4 days ago          /bin/sh -c #(nop)  CMD ["nginx" "-g" "daemon    0 B                 
+<missing>           4 days ago          /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]         0 B                 
+<missing>           4 days ago          /bin/sh -c #(nop)  EXPOSE 80/tcp                0 B                 
+<missing>           4 days ago          /bin/sh -c ln -sf /dev/stdout /var/log/nginx/   0 B                 
+<missing>           4 days ago          /bin/sh -c set -x  && apt-get update  && apt-   53.23 MB            
+<missing>           4 days ago          /bin/sh -c #(nop)  ENV NJS_VERSION=1.13.8.0.1   0 B                 
+<missing>           4 days ago          /bin/sh -c #(nop)  ENV NGINX_VERSION=1.13.8-1   0 B                 
+<missing>           2 weeks ago         /bin/sh -c #(nop)  LABEL maintainer=NGINX Doc   0 B                 
+<missing>           2 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0 B                 
+<missing>           2 weeks ago         /bin/sh -c #(nop) ADD file:f30a8b5b7cdc9ba33a   55.25 MB 
 ```
