@@ -318,4 +318,17 @@ Connection: keep-alive
 ETag: "5a422e5a-264"
 Accept-Ranges: bytes
 
+# 注：
+# swarm集群的service端口暴露有如下特性:
+# 公共的端口会暴露在每个swarm集群的每个服务节点上，并且请求进入公共端口后会负载均衡到所有的sevice实例上
+# 
+# swarm集群负载均衡service有两种方式
+# 	VIP： 每个service会得到一个virtual IP地址作为服务请求的入口。基于virtual IP进行负载均衡.
+# 	DNSRR:  service利用DNS解析来进行负载均衡, 这种模式在旧的Docker Engine下, 经常行为诡异…所以不推荐
+# 	
+# 	指定一个service的模式, 可在创建service的时使用如下命令:
+# 	docker service create --endpoint-mode [vip|dnssrr] <service name>
+# 
+# 	修改一个service的模式, 使用如下命令:
+# 	docker service update --endpoint-mode [vip|dnssrr] <service name>
 ```
