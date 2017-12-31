@@ -26,3 +26,5 @@ bash-4.4# touch 1       #创建
 DRIVER              VOLUME NAME
 local               24a42a02d190b94d5ef5e64036bee67a53ebb5d7b91ad40114370cd84f05622c    #client1与2均使用了此VOLUME
 ```
+#### 摘 (REF:http://dockone.io/article/128)
+![img](Swarm/资料/--volume-from.png)
