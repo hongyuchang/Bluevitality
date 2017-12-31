@@ -127,7 +127,7 @@ host-c
 [root@host-a ~]# docker node demote  <node*>		#降权 (部署服务只能在管理节点manager上进行)
 [root@host-a ~]# docker swarm node leave [--force]	#退出所在集群
 ```
-#### 流程
+#### 常规部署流程
 ```bash
 #创建Overlay网络（创建Overlay网络my-network后集群中所有的Manager都可访问。以后在创建服务时只要指定使用的网络即可）
 [root@host-a ~]# docker network create -d overlay --subnet=10.0.9.0/24  my-network
@@ -257,7 +257,7 @@ elm590j5t2jmmvfewqgr7g78z  test_bash.2      docker.io/bash  host-b  Running     
 [root@host-a ~]# docker service create --name test --mount src=/root,dst=/root registry.abc.com/library/busybox \
 ping 1.1.1.1		#将服务运行所在的主机目录root映射至服务的root目录
 ```
-#### 集群服务访问测试
+#### 集群服务访问测试 （集群成员节点：node1,node2,node3）
 ```bash
 [root@node1 ~]# docker network create -d overlay --subnet=10.0.9.0/24  my-network
 ezdmu0wh5rjqiw73jnuvgfky5
