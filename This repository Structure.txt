@@ -37,7 +37,7 @@
 │   │   └── Images
 │   ├── Virtual
 │   │   ├── Docker
-│   │   │   ├── SWARM
+│   │   │   ├── Swarm
 │   │   │   └── 企业仓库 - Harbor
 │   │   ├── Kubernetes
 │   │   │   └── 资料
