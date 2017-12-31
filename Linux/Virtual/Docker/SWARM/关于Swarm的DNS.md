@@ -13,6 +13,8 @@ alrj33okhrqa  demo1  2/2       docker.io/bashell/alpine-bash  ping www.163.com
 #### 测试
 ```bash
 #通常Docker官方推荐使用dig，nslookup或其它查询工具来查询通过DNS对服务名的访问。因为VIP是逻辑IP，ping并不是确认VIP连通性的正确的工具
+#连接到默认的bridge网络连接的容器需要明确的在启动时使用『–link』参数相互指定，才能在容器里使用容器名称连接到对方。
+#而连接到自定义网络的容器，不需要任何配置就可以直接使用容器名连接到任何一个属于同一网络中的容器。
 #在相同网络中的容器可直接使用名称相互找到对方，而在不同网络中的不能够直接通信!...
 
 [root@host-b ~]# docker ps
