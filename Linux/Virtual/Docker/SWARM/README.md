@@ -258,7 +258,7 @@ elm590j5t2jmmvfewqgr7g78z  test_bash.2      docker.io/bash  host-b  Running     
 ping 1.1.1.1		#将服务运行所在的主机目录root映射至服务的root目录
 ```
 #### 集群服务访问测试
-```
+```bash
 [root@node1 ~]# docker network create -d overlay --subnet=10.0.9.0/24  my-network
 ezdmu0wh5rjqiw73jnuvgfky5
 [root@node1 ~]# docker service create --replicas 2 -p 80:80 --network my-network --name nginx  docker.io/nginx   
