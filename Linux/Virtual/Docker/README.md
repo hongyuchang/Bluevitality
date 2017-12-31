@@ -203,7 +203,7 @@ CONTAINER ID        IMAGE                   COMMAND                  CREATED    
 8829aa998c35
 
 # docker run 参数：(docker create 与 docker run 类似，但其仅创建容器而不运行)
-# --name       容器的名字，存在于docker下相同网络内的DNS中
+# --name       容器的名字，存在于相同网络内的DNS中(在相同网络中的容器可直接使用名称相互找到对方，而在不同网络中的不能够直接通信)
 # -v           指定宿主机与容器间映射的目录或文件
 # -i           提供交互式接口
 # -t           提供一个伪终端
