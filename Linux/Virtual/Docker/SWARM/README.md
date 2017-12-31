@@ -257,4 +257,65 @@ elm590j5t2jmmvfewqgr7g78z  test_bash.2      docker.io/bash  host-b  Running     
 [root@host-a ~]# docker service create --name test --mount src=/root,dst=/root registry.abc.com/library/busybox \
 ping 1.1.1.1		#将服务运行所在的主机目录root映射至服务的root目录
 ```
+#### 集群服务访问测试
+```
+[root@node1 ~]# docker network create -d overlay --subnet=10.0.9.0/24  my-network
+ezdmu0wh5rjqiw73jnuvgfky5
+[root@node1 ~]# docker service create --replicas 2 -p 80:80 --network my-network --name nginx  docker.io/nginx   
+1u1zx7kaxqqye5uyj7ql14nc1
+[root@node1 ~]# docker ps
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS           PORTS               NAMES
+ad9d41d128d5        docker.io/nginx:latest   "nginx -g 'daemon off"   48 minutes ago      Up 48 minutes    80/tcp              nginx.1.5et4bssqn7r1f4r20zbaishae
+[root@node1 ~]# docker service ls
+ID            NAME   REPLICAS  IMAGE            COMMAND
+1u1zx7kaxqqy  nginx  2/2       docker.io/nginx  
+[root@node1 ~]# docker service ps nginx
+ID                         NAME     IMAGE            NODE   DESIRED STATE  CURRENT STATE           ERROR
+5et4bssqn7r1f4r20zbaishae  nginx.1  docker.io/nginx  node1  Running        Running 48 minutes ago  
+ef2uqjk5ahni7vuzcsjnn0vxg  nginx.2  docker.io/nginx  node3  Running        Running 48 minutes ago  
+[root@node1 ~]# docker service scale nginx=1
+nginx scaled to 1
+[root@node1 ~]# docker service ps nginx     
+ID                         NAME     IMAGE            NODE   DESIRED STATE  CURRENT STATE           ERROR
+5et4bssqn7r1f4r20zbaishae  nginx.1  docker.io/nginx  node1  Running        Running 49 minutes ago  
+ef2uqjk5ahni7vuzcsjnn0vxg  nginx.2  docker.io/nginx  node3  Shutdown       Shutdown 6 seconds ago  
+[root@node1 ~]# docker node ls
+ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
+0w6j0cdz5scm36xrnq380ymek *  node1     Ready   Active        Leader
+72lkynzdke93zbz9r6wobvh7z    node3     Ready   Active        
+9tkkcbrwustuqvibm3v9j8qbn    node2     Ready   Active
 
+[root@node1 ~]# curl -I node1       #在集群中，访问任何一个成员节点均可访问到服务（轮询）
+HTTP/1.1 200 OK
+Server: nginx/1.13.8
+Date: Sat, 30 Dec 2017 17:07:10 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Tue, 26 Dec 2017 11:11:22 GMT
+Connection: keep-alive
+ETag: "5a422e5a-264"
+Accept-Ranges: bytes
+
+[root@node1 ~]# curl -I node2
+HTTP/1.1 200 OK
+Server: nginx/1.13.8
+Date: Sat, 30 Dec 2017 17:07:12 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Tue, 26 Dec 2017 11:11:22 GMT
+Connection: keep-alive
+ETag: "5a422e5a-264"
+Accept-Ranges: bytes
+
+[root@node1 ~]# curl -I node3
+HTTP/1.1 200 OK
+Server: nginx/1.13.8
+Date: Sat, 30 Dec 2017 17:07:13 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Tue, 26 Dec 2017 11:11:22 GMT
+Connection: keep-alive
+ETag: "5a422e5a-264"
+Accept-Ranges: bytes
+
+```
