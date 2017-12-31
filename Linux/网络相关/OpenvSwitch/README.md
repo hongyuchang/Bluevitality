@@ -45,7 +45,10 @@ OpenvSwitch中有多个命令，分别有不同的作用：
 [root@node1 ~]# ovs-vsctl add-bond br0 bond0 eth2 eth3      #多网卡绑定 add-bond <bridge> <port> <iface...>
 [root@node1 ~]# ifconfig br0 192.168.128.5 netmask 255.255.255.0     #为网桥设置IP (internal port 可配IP地址)
 [root@node1 ~]# ovs-vsctl list-ports br0                    #列出br0上的端口（不包括internal port）
-[root@node1 ~]# ovs-vsctl list interface eth8               #列出OVS中端口eth1的详细数据
+[root@node1 ~]# ovs-vsctl list interface eth8               #列出OVS中端口eth1的详细数据
+[root@node1 ~]# ovs-vsctl list-br                           #列出网桥
+[root@node1 ~]# ovs-vsctl port-to-br xxx                    #列出挂载某网络接口的所有网桥
+[root@node1 ~]# ovs-vsctl show                              #查看全部信息
 
 #VLAN
 [root@node1 ~]# ovs-vsctl set port eth0 tag=10              #设置br0中的端口eth0为VLAN 10
