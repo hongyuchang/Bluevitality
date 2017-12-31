@@ -16,5 +16,5 @@ docker volume ls -f dangling=true
 ```Bash
 docker volume rm $(docker volume ls -qf dangling=true)
 ```
-#### 新版的DOCEKR增加了清理占用资源的命令
-![img](Swarm/资料/清理docker资源.png)
+#### 新版DOCKER增加了清理占用资源的命令
+![img](Swarm/资料/清理Docker资源.png)
