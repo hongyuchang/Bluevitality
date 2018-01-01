@@ -55,13 +55,3 @@ rabbitmq
 stunnel，OpenVPN，IPsec + L2TP
 ceph
 ```
-#### 复习顺序
-```txt
------------------------ CCNP
------------------------ Python
------------------------ Linux
-Vim,SQL,Mysql,HTTP,Nginx,Apache,shell,Kernel,Grub2,Linux FS,Rsyslog + Logrotate,Filesystem + BTRFS
-
-
-
-```
