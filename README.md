@@ -37,8 +37,8 @@
 - [ ] DNS下增加rndc，demo改版
 - [ ] ~~ISCSI~~ ~~& gfs & clvm~~（仅流程）命令创建target的脚本并伴随注释，ISCSI的多路径冗余和负载均衡，tcpcopy & ipref 的README与sh
 - [x] ~~expect~~
-- [ ] ~~docker的swarm流程脚本，~~ ~~Jenkins~~
-- [ ] consul 分步骤按格式存储，修改RAEDME
+- [x] ~~docker的swarm流程脚本，~~ ~~Jenkins~~
+- [x] ~~consul 分步骤按格式存储，修改RAEDME~~
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
 - [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
 - [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
@@ -46,3 +46,12 @@
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
 - [x] ~~Zxarps~~
+
+
+#### 以后补充
+```txt
+kubernetes
+rabbitmq
+stunnel，OpenVPN，IPsec + L2TP
+ceph
+```
