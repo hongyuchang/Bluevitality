@@ -141,14 +141,13 @@ node1  192.168.0.5:8301  alive   server  0.8.1  2         dc1
 node2  192.168.0.6:8301  alive   client  0.8.1  2         dc1
 node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 ```
-#### 注册服务
+#### 注册服务以及查询
 ```bash
 #搭建好conusl集群后用户和程序便能到consul中去查询&注册服务。可通过2种方式：
 #   1： 服务定义文件
 #   2： HTTP API
-#首先为consul创建配置目录，其会载入此目录所有文件，在Unix中通常类似：/etc/consul.d 然后编辑服务定义
-#本例假设有名叫web的服务运行在80端口，另为其设一个标签："tags"，这样可使用其作为额外的查询方式......
-#如需注册多个服务可在Consul配置目录下创建多个服务定义文件
+#本例假设有名叫web2的服务运行在80端口，另为其设一个标签："tags" 以便使用其作为额外的查询信息......
+#如需注册多个服务可在配置目录下创建多个服务定义文件。若使用RESTFul API的方式则无需执行consul reload
 [root@node2 ~]# echo '{"service": {"name": "web2", "tags": ["rails"], "port": 80}}' > /etc/consul.d/web.json
 [root@node2 ~]# consul reload					#重载Client端的Consul配置信息...
 
@@ -185,6 +184,14 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
         }
     }
 ]
+#仅查询状态健康的web2服务：curl http://localhost:8500/v1/health/service/web2?passing
+
+#通过内置的DNS查询服务信息（基于标记的服务查询的格式是 TAG.NAME.service.consul）
+[root@node1 ~]# dig +short @127.0.0.1 -p 8600 web2.service.consul  SRV
+1 1 82 node2.node.dc1.consul.	#启动的82为服务端口，node2.node.dc1.consul为服务名，可借助查询到的此域名访问
+
+[root@node1 ~]# dig +short @127.0.0.1 -p 8600 web2.service.consul A
+192.168.0.6			#服务所在的IP地址
 ```
 #### 健康检查
 ```bash
@@ -246,7 +253,7 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 # 	 "warning"
 # 	 "critical"
 ```
-
+![check](资料/check.png)
 
 
 
