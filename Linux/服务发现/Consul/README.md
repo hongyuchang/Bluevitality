@@ -24,6 +24,7 @@ Archive:  consul_0.8.1_linux_amd64.zip
 [root@node1 ~]# mkdir -p /etc/consul.d/ 
 [root@node1 ~]# consul agent -server -rejoin -bootstrap -data-dir /var/consul -node=node1 -ui \
 -config-dir=/etc/consul.d/ -bind=192.168.0.5 -client 0.0.0.0
+
 ==> WARNING: Bootstrap mode enabled! Do not enable unless necessary
 ==> Starting Consul agent...
 ==> Consul agent running!
@@ -73,6 +74,24 @@ Archive:  consul_0.8.1_linux_amd64.zip
 #-pid-file      记录pid号
 #-datacenter    数据中心名字，旧版本选项为：-dc
 #-ui		启动内建的Web页面
+
+# consul也支持使用json方式保存启动配置信息：
+# {  
+# 	"datacenter": "east-aws",  	
+# 	"data_dir": "/opt/consul",  
+# 	"log_level": "INFO",  	
+# 	"node_name": "foobar",  
+# 	"server": true,  
+# 	"watches": [  
+# 		{  
+# 			"type": "checks",  
+# 			"handler": "/usr/bin/health-check-handler.sh" 
+# 		}  
+# 	],  
+# 	"telemetry": {  
+# 		"statsite_address": "127.0.0.1:2180"  
+# 	}  
+# }
 ```
 #### Consul 客户端部署
 ```bash
