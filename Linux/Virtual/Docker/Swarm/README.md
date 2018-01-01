@@ -14,6 +14,21 @@ docker service [ls/ps/rm/scale/inspect/update]
 Swarm使用Raft协议保证多Manager间状态的一致性。基于Raft协议，Manager Node具有一定容错功能（可容忍最多有(N-1)/2个节点失效）
 每个Node的配置可能不同，比如有的适合CPU密集型应用，有的适合运行IO密集型应用
 Swarm支持给每个Node添加标签元数据，这样可根据Node标签来选择性地调度某个服务部署到期望的一组Node上
+
+docker Swarm mode下会为每个节点的docker engine内置一个DNS server
+各个节点间的DNS server通过control plane的gossip协议互相交互信息。注：此处DNS server用于容器间的服务发现。
+swarm mode会为每个--net=自定义网络的service分配一个DNS entry。注：目前必须是自定义网络，比如overaly。
+而bridge和routing mesh的service，是不会分配DNS的!...
+默认当创建一个服务连接到网络时，集群为该服务分配vip，vip基于服务名称映射到DNS别名。网络上的容器服务通过gossip共享DNS映射
+
+docker 1.12 的swarm 集群的自动发现有两种方式, virtual IP address (VIP) 与 DNS round-robin
+
+关于sarm create下--publish选项的补充说明：
+要将服务端口发布到集群外部使用--publish，集群使每个节点访问目标端口都可访问!
+若外部主机连接到任何群集节点上的该端口，则路由网络将其路由到任务。外部主机无需知道服务任务的IP或内部使用的端口与其进行交互
+当用户或进程连接到服务时，任何运行服务任务的工作节点都可能会响应。
+Example：$ docker service create --name my_web--replicas 3 --publish 8080:80 ngin    （假设当前集群有10个节点）
+三个任务最多可运行在三个节点。不需要知道哪些节点正在运行该任务，连接到10个节点中一个的8080端口都将连到3个nginx中的任一个!
 ```
 #### Demo
 ![img](资料/swarm-multiple-manager-architecture.png)
@@ -331,4 +346,9 @@ Accept-Ranges: bytes
 # 
 # 	修改一个service的模式, 使用如下命令:
 # 	docker service update --endpoint-mode [vip|dnssrr] <service name>
+```
+#### 查看服务使用的vip ( 摘 )
+```bash
+[root@swarm-manager ~]#  docker service inspect --format='{{.Endpoint.VirtualIPs}}'   my-web
+[{aoqs3p835s5glx69hi46ou2dw 10.0.9.2/24}]
 ```
