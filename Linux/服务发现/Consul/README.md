@@ -22,7 +22,7 @@ Archive:  consul_0.8.1_linux_amd64.zip
 [root@node3 ~]# install -m 755 consul /usr/local/bin/consul  #
 
 [root@node1 ~]# mkdir -p /etc/consul.d/ 
-[root@node1 ~]# consul agent -server -rejoin -bootstrap -data-dir /var/consul -node=node1 \
+[root@node1 ~]# consul agent -server -rejoin -bootstrap -data-dir /var/consul -node=node1 -ui \
 -config-dir=/etc/consul.d/ -bind=192.168.0.5 -client 0.0.0.0
 ==> WARNING: Bootstrap mode enabled! Do not enable unless necessary
 ==> Starting Consul agent...
@@ -56,7 +56,7 @@ Archive:  consul_0.8.1_linux_amd64.zip
 ==> Newer Consul version available: 1.0.2 (currently running: 0.8.1)
     2017/12/31 15:09:53 [INFO] agent: Synced service 'consul'
 
-#参数说明
+#参数：
 #-server	使agent运行在server模式
 #-rejoin	忽略先前的离开、再次启动时仍尝试加入集群
 #-bootstrap-expect 在1个"datacenter"中期望的server数量，启用则等待达到指定数量时才引导整个集群（不能和bootstrap共用）
@@ -71,7 +71,8 @@ Archive:  consul_0.8.1_linux_amd64.zip
 #-log-level	日志级别。默认"info"。有如下级别："trace","debug", "info", "warn",  "err"。可用：consul monitor来连接节点查看日志
 #-syslog        将日志记录进syslog，仅支持Linux和OSX平台
 #-pid-file      记录pid号
-#-datacenter    数据中心名字，旧版本选项为：-dc
+#-datacenter    数据中心名字，旧版本选项为：-dc
+#-ui		启动内建的Web页面
 ```
 #### Consul 客户端部署
 ```bash
@@ -115,8 +116,8 @@ Archive:  consul_0.8.1_linux_amd64.zip
 ```
 #### 查看集群节点成员
 ```bash
-[root@node1 ~]# consul members
-Node   Address           Status  Type    Build  Protocol  DC
+[root@node1 ~]# consul members	     #或：curl -s http://192.168.0.5:8500/v1/agent/members | python -m json.tool
+Node   Address           Status  Type    Build  Protocol  DC
 node1  192.168.0.5:8301  alive   server  0.8.1  2         dc1
 node2  192.168.0.6:8301  alive   client  0.8.1  2         dc1
 node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
@@ -124,75 +125,79 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 #### 注册服务
 ```bash
 #搭建好conusl集群后用户和程序便能到consul中去查询&注册服务。可通过2种方式：
-# 1：服务定义文件
-# 2：HTTP API
-#首先为consul创建配置目录，其会载入此目录所有文件，在Unix中通常类似：/etc/consul.d。然后编辑服务定义
+#   1： 服务定义文件
+#   2： HTTP API
+#首先为consul创建配置目录，其会载入此目录所有文件，在Unix中通常类似：/etc/consul.d 然后编辑服务定义
 #本例假设有名叫web的服务运行在80端口，另为其设一个标签："tags"，这样可使用其作为额外的查询方式......
 #如需注册多个服务可在Consul配置目录下创建多个服务定义文件
 [root@node2 ~]# echo '{"service": {"name": "web", "tags": ["rails"], "port": 80}}' > /etc/consul.d/web.json
+[root@node2 ~]# consul reload					#重载Client端的Consul配置信息...
 
-#重启C端服务
-[root@node2 ~]# consul agent -ui -data-dir /var/consul -node=node2 -datacenter=dc1 -config-dir=/etc/consul.d/ \
-> -rejoin -bind=192.168.0.6  -join 192.168.0.5                       
-==> Starting Consul agent...
-==> Joining cluster...
-    Join completed. Synced with 1 initial agents
-==> Consul agent running!
-           Version: 'v0.8.1'
-           Node ID: '8e0284b0-9c86-be65-972a-30a2d9d11b1b'
-         Node name: 'node2'
-        Datacenter: 'dc1'
-            Server: false (bootstrap: false)
-       Client Addr: 127.0.0.1 (HTTP: 8500, HTTPS: -1, DNS: 8600)
-      Cluster Addr: 192.168.0.6 (LAN: 8301, WAN: 8302)
-    Gossip encrypt: false, RPC-TLS: false, TLS-Incoming: false
-             Atlas: <disabled>
-
+#当出现下列输出中的 agent: Synced service XXX 时，说明服务注册成功!...
 ==> Log data will now stream in as it occurs:
-
-    2017/12/31 15:43:18 [INFO] serf: Ignoring previous leave in snapshot
-    2017/12/31 15:43:18 [INFO] serf: EventMemberJoin: node2 192.168.0.6
-    2017/12/31 15:43:18 [INFO] serf: Attempting re-join to previously known node: node3: 192.168.0.7:8301
-    2017/12/31 15:43:18 [INFO] agent: (LAN) joining: [192.168.0.5]
-    2017/12/31 15:43:18 [WARN] memberlist: Refuting a suspect message (from: node2)
-    2017/12/31 15:43:18 [INFO] serf: EventMemberJoin: node3 192.168.0.7
-    2017/12/31 15:43:18 [INFO] serf: EventMemberJoin: node1 192.168.0.5
+    ........(略)
     2017/12/31 15:43:18 [INFO] serf: Re-joined to previously known node: node3: 192.168.0.7:8301
     2017/12/31 15:43:18 [INFO] consul: adding server node1 (Addr: tcp/192.168.0.5:8300) (DC: dc1)
     2017/12/31 15:43:18 [INFO] agent: (LAN) joined: 1 Err: <nil>
     2017/12/31 15:43:18 [INFO] agent: Synced service 'web'      #载入了服务定义并成功注册...
 ==> Newer Consul version available: 1.0.2 (currently running: 0.8.1)
+
+#查询注册的服务所在的IP及端口等信息
+[root@node1 ~]# curl -s http://node1:8500/v1/catalog/service/web2 | python -m json.tool
+[
+    {
+        "Address": "192.168.0.6",
+        "CreateIndex": 930,
+        "ID": "8e0284b0-9c86-be65-972a-30a2d9d11b1b",
+        "ModifyIndex": 930,
+        "Node": "node2",
+        "NodeMeta": {},
+        "ServiceAddress": "",
+        "ServiceEnableTagOverride": false,
+        "ServiceID": "web2",
+        "ServiceName": "web2",
+        "ServicePort": 82,
+        "ServiceTags": [
+            "rails1"
+        ],
+        "TaggedAddresses": {
+            "lan": "192.168.0.6",
+            "wan": "192.168.0.6"
+        }
+    }
+]
 ```
 #### 健康检查
 ```bash
 #与服务定义相同，检查定义可通过2种方式：1：检查定义、2：HTTP API
-#在基于脚本的健康检查中的约定：脚本运行于与Consul进程相同的UID，若脚本以非0值退出则此节点被标为不健康！
-#每种check都须包含name，但：id、notes是可选的。若未提供id则其被设为name。
+#在基于脚本的健康检查中的约定：脚本运行于与Consul进程相同的UID并且其以非0值返回则此节点被标为不健康!
+#Check脚本可自由地做任何事情确定check状态。唯一限制是退出代码必须遵循下面的约定：0 -> 正常、 1 -> 告警、其他 -> 失败
+#每种check都须包含name，但id、notes可选。若未提供id则其被设为name。
 #在一个节点中的每个check的ID必须唯一！因此若check的name值冲突那么ID就应设置......
 #字段notes用于增强checks的可读性。Script check中"notes"字段可由脚本生成，脚本其他的输出保存在notes中以供查看
 #字段notes同样适用HTTP接口更新TTL check的外部程序一样可设置notes字段......
-#Check脚本可自由地做任何事情确定check状态。唯一限制是退出代码必须遵循下面的约定：0-->正常、1-->告警、其他-->失败。
-#注意，当尝试用DNS查询不健康的服务时Consul将不会返回结果，因为服务不健康！.....
+#注意，当尝试用DNS查询不健康的服务时Consul将不会返回结果，因为服务不健康!.....
 
-#示例一：
-{  
-	"check": {  
-		"id": "mem-util",  
-		"name": "Memoryutilization",  "script": "/usr/local/bin/check_mem.py",  "interval": "10s",  
-		"timeout": "1s"  
-	}  
-} 
+#Example1：
+	{  
+	   "check": {  
+	      "id": "mem-util",  
+	      "name": "Memoryutilization",  "script": "/usr/local/bin/check_mem.py",  "interval": "10s",  
+	      "timeout": "1s"  
+	   }  
+	} 
 	
-#示例二：
-{  
-	"check": {  
-		"id": "mem-util",  
-		"name": "Memoryutilization",  
-		"docker_container_id": "f972c95ebf0e",  
-		"shell": "/bin/bash",  "script": "/usr/local/bin/check_mem.py",  
-		"interval": "10s"  
-	}  
-}
+#Example2：
+	{  
+	   "check": {  
+	      "id": "mem-util",  
+	      "name": "Memoryutilization",  
+	      "docker_container_id": "f972c95ebf0e",  
+	      "shell": "/bin/bash",  "script": "/usr/local/bin/check_mem.py",  
+	      "interval": "10s"  
+	   }  
+	}
+
 [root@node2 ~]# echo '{"check": {"name": "ping", "script": "ping -c1 163.com >/dev/null", "interval": "30s"}}' \
 >/etc/consul.d/ping.json
 
@@ -209,6 +214,15 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 		"ServiceName": "web"
 	}
 ]
+
+#查询所有健康状态的检查：
+[root@node1 ~]# curl -s http://localhost:8500/v1/health/state/passing?dc=dc1 | python -m json.tool
+state可以是：
+	"any"
+	"unknown"
+	"passing"
+	"warning"
+	"critical"
 ```
 
 
