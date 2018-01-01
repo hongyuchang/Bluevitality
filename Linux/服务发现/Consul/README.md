@@ -130,7 +130,7 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 #首先为consul创建配置目录，其会载入此目录所有文件，在Unix中通常类似：/etc/consul.d 然后编辑服务定义
 #本例假设有名叫web的服务运行在80端口，另为其设一个标签："tags"，这样可使用其作为额外的查询方式......
 #如需注册多个服务可在Consul配置目录下创建多个服务定义文件
-[root@node2 ~]# echo '{"service": {"name": "web", "tags": ["rails"], "port": 80}}' > /etc/consul.d/web.json
+[root@node2 ~]# echo '{"service": {"name": "web2", "tags": ["rails"], "port": 80}}' > /etc/consul.d/web.json
 [root@node2 ~]# consul reload					#重载Client端的Consul配置信息...
 
 #当出现下列输出中的 agent: Synced service XXX 时，说明服务注册成功!...
@@ -139,7 +139,7 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
     2017/12/31 15:43:18 [INFO] serf: Re-joined to previously known node: node3: 192.168.0.7:8301
     2017/12/31 15:43:18 [INFO] consul: adding server node1 (Addr: tcp/192.168.0.5:8300) (DC: dc1)
     2017/12/31 15:43:18 [INFO] agent: (LAN) joined: 1 Err: <nil>
-    2017/12/31 15:43:18 [INFO] agent: Synced service 'web'      #载入了服务定义并成功注册...
+    2017/12/31 15:43:18 [INFO] agent: Synced service 'web2'     #载入了服务定义并成功注册...
 ==> Newer Consul version available: 1.0.2 (currently running: 0.8.1)
 
 #查询注册的服务所在的IP及端口等信息
@@ -177,52 +177,55 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 #字段notes用于增强checks的可读性。Script check中"notes"字段可由脚本生成，脚本其他的输出保存在notes中以供查看
 #字段notes同样适用HTTP接口更新TTL check的外部程序一样可设置notes字段......
 #注意，当尝试用DNS查询不健康的服务时Consul将不会返回结果，因为服务不健康!.....
-
-#Example1：
-	{  
-	   "check": {  
-	      "id": "mem-util",  
-	      "name": "Memoryutilization",  "script": "/usr/local/bin/check_mem.py",  "interval": "10s",  
-	      "timeout": "1s"  
-	   }  
-	} 
 	
-#Example2：
+#Example1：
 	{  
 	   "check": {  
 	      "id": "mem-util",  
 	      "name": "Memoryutilization",  
 	      "docker_container_id": "f972c95ebf0e",  
-	      "shell": "/bin/bash",  "script": "/usr/local/bin/check_mem.py",  
-	      "interval": "10s"  
+	      "shell": "/bin/bash",  "script": "/usr/local/bin/check_mem.py", "interval": "10s"  
 	   }  
 	}
+
+#Example2:
+	{  
+		"service":{  
+			"id": "jetty",  
+			"name": "jetty", "address": "192.168.1.200", "port": 8080, "tags": ["dev"],  
+			"checks": [  
+				{  
+					"http": "http://192.168.1.200:8080/health", "interval": "5s"  
+				}  
+			]  
+	}  }  
 
 [root@node2 ~]# echo '{"check": {"name": "ping", "script": "ping -c1 163.com >/dev/null", "interval": "30s"}}' \
 >/etc/consul.d/ping.json
 
-#注意:此命令可运行在任何节点！~。critical特指集群节点的状态，即查询健康状态为critical的节点...
-[root@node2 ~]# curl http://localhost:8500/v1/health/state/critical	
-[
-	{
-		"Node": "agent-two", 
-		"CheckID": "service:web", 
-		"Name": "Service 'web' check", 
-		"Status": "critical", 
-		"Notes": "", 
-		"ServiceID": "web", 
-		"ServiceName": "web"
-	}
-]
-
-#查询所有健康状态的检查：
+#查询特定健康状态的服务：
 [root@node1 ~]# curl -s http://localhost:8500/v1/health/state/passing?dc=dc1 | python -m json.tool
-state可以是：
-	"any"
-	"unknown"
-	"passing"
-	"warning"
-	"critical"
+[
+    {
+        "CheckID": "ping",
+        "CreateIndex": 892,
+        "ModifyIndex": 915,
+        "Name": "ping",
+        "Node": "node1",
+        "Notes": "",
+        "Output": "",
+        "ServiceID": "",
+        "ServiceName": "",
+        "Status": "passing"
+    },
+    ......(略)
+    
+# state可以是：			eg：/v1/health/state/<XXXX>?dc=XX
+# 	 "any"
+# 	 "unknown"
+# 	 "passing"
+# 	 "warning"
+# 	 "critical"
 ```
 
 
