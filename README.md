@@ -11,19 +11,17 @@
 - [x] ~~Supervisor，xinetd 的demo与readme~~，~~Flask相关的gunicorn和manage的md或sh~~ systemd的@与.timer.target的说明
 - [x] ~~mutt+mstp的脚本~~ grafana配合zabbix
 - [ ] ~~tomcat 安装脚本~~、~~tomcat集群会话共享~~~~，~~jmx监控~~ ~~及zabbix监控tomcat~~，JVM优化，多实例，~~jar与jmap的demo~~
-- [x] ~~memcahed的README & 安装脚本~~ tomcat的MSM会话共享md测试有问题, ~~编译java和环境设置的md~~
+- [x] ~~memcahed的README & 安装脚本~~ tomcat的MSM会话共享md测试有问题, Mysql的MHA标准流程MD
 - [ ] ~~mysql~~，~~主从~~，~~5.6半同步插件~~，MHA，多实例，~~GTID~~，~~Mysqldump / xtrabackup~~ / lvm快照备份db脚本
-- [ ] ~~nginx~~、~~Nginx4层LB的demo~~，mysql性能及状态查询的若干sql组成的脚本
+- [ ] ~~nginx~~、~~Nginx4层LB的demo~~，mysql性能及状态查询的若干sql组成的脚本，~~Varnish~~
 - [x] ~~galera cluster & mycat~~
 - [x] ~~redis主从，redis分布式集群（多写）~~
 - [ ] rpm 和 yum 的原理 目录 参数 全部总结细化 & ~~rpmbuild 重新整理~~
 - [ ] 阿里云API的demo，阿里云赛门铁克免费CA的申请流程
-- [ ] mysql CRUD与管理命令的收集，归纳，整理 ---> .md
 - [ ] 系统内核的优化脚本，要按用途分类进行设置，并提供手动设置和提示的功能！
 - [ ] 防火墙优化的脚本，安全加固用的（根据各个模块写一个脚本，根据提示执行优化加固用，建议和系统优化脚本在一起）
 - [ ] ~~zabbix的userparameter目录结构整理及规范格式的各片段README~~，SNMP，~~zabbix监控tomcat的jmx~~，proxy的脚本和md
 - [x] ~~openssl CA及服务端证书免交互生成脚本~~ ~~openssl 加解密相关demo~~
-- [ ] linux当前环境检测及(性能/安全)设置脚本（py）
 - [ ] ~~python 3.6 安装.sh~~ python环境变量的说明及目录结构
 - [x] ~~Samba~~ & ~~vsftp~~ nfs的权限映射相关及autofs
 - [ ] stunel，PPTP的README，shadowsock，OpenVPN，IPsec + L2TP
@@ -31,7 +29,7 @@
 - [ ] ~~tcpdump，wireshark 的md~~
 - [x] ~~nodejs安装及配置流程说明~~
 - [ ] chef，~~ansible的完整流程相关文件结构&README文档~~
-- [ ] Rsyslog的模板规则及模块 & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，gfs2+clvm@coroync，~~corosyc + Pacemaker~~(继续完善!) crmsh的md更改+ demo
+- [ ] Rsyslog的模板规则及模块 & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，gfs2+clvm@coroync，~~corosyc + Pacemaker~~ crmsh的md更改
 - [ ] demo（模板改用新版本形式：https://www.cnblogs.com/itcomputer/p/6241421.html ） Rsyslog调用日志并使用模板处理
 - [ ] ~~nodejs~~和mqtt的安装及相关设置，~~包括https，pm2，npm~~
 - [ ] DNS下增加rndc，demo改版
@@ -42,16 +40,15 @@
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
 - [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
 - [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
-- [X] ~~Varnish~~
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
 - [x] ~~Zxarps~~
-
 
 #### 以后补充
 ```txt
 kubernetes
 rabbitmq
 stunnel，OpenVPN，IPsec + L2TP
+zookeeper，Kafka
 ceph
 ```
