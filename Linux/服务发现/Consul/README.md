@@ -140,6 +140,48 @@ Node   Address           Status  Type    Build  Protocol  DC
 node1  192.168.0.5:8301  alive   server  0.8.1  2         dc1
 node2  192.168.0.6:8301  alive   client  0.8.1  2         dc1
 node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
+
+#注：通过member查看的是最终一致性，强一致性需要去server端查看：
+#这里访问本地时将会自动转发至server端！：
+[root@node3 ~]# curl localhost:8500/v1/catalog/nodes
+[
+    {
+        "Address": "192.168.0.5",
+        "CreateIndex": 5,
+        "ID": "8166fcee-5187-609d-ef62-159cf6951df9",
+        "Meta": {},
+        "ModifyIndex": 6,
+        "Node": "node1",
+        "TaggedAddresses": {
+            "lan": "192.168.0.5",
+            "wan": "192.168.0.5"
+        }
+    },
+    {
+        "Address": "192.168.0.6",
+        "CreateIndex": 2073,
+        "ID": "8e0284b0-9c86-be65-972a-30a2d9d11b1b",
+        "Meta": {},
+        "ModifyIndex": 2073,
+        "Node": "node2",
+        "TaggedAddresses": {
+            "lan": "192.168.0.6",
+            "wan": "192.168.0.6"
+        }
+    },
+    {
+        "Address": "192.168.0.7",
+        "CreateIndex": 80,
+        "ID": "c8798f09-a694-882a-8be3-8c1f44bf868a",
+        "Meta": {},
+        "ModifyIndex": 81,
+        "Node": "node3",
+        "TaggedAddresses": {
+            "lan": "192.168.0.7",
+            "wan": "192.168.0.7"
+        }
+    }
+]
 ```
 #### 注册服务以及查询
 ```bash
@@ -187,11 +229,16 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 #仅查询状态健康的web2服务：curl http://localhost:8500/v1/health/service/web2?passing
 
 #通过内置的DNS查询服务信息（基于标记的服务查询的格式是 TAG.NAME.service.consul）
+#默认的所有DNS名字会都在consul命名空间下，这个子域告诉Consul,我们在查询服务,NAME则是服务的名称
 [root@node1 ~]# dig +short @127.0.0.1 -p 8600 web2.service.consul  SRV
-1 1 82 node2.node.dc1.consul.	#启动的82为服务端口，node2.node.dc1.consul为服务名，可借助查询到的此域名访问
+1 1 82 node2.node.dc1.consul.	#启动的82为服务端口，其中的node2.node.dc1.consul为服务名，可借助查询到的此域名访问
 
 [root@node1 ~]# dig +short @127.0.0.1 -p 8600 web2.service.consul A
 192.168.0.6			#服务所在的IP地址
+
+注：NS API中节点名称结构为 NAME.node.consul或者NAME.node.DATACENTER.consul
+#如果数据中心名字省略,Consul只会查询本地数据中心.
+#请求Consul返回有rails标签的web服务：dig @127.0.0.1 -p 8600 rails.web.service.consul SRV
 ```
 #### 健康检查
 ```bash
