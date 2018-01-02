@@ -30,14 +30,14 @@
 [root@node1 ~]# cat /etc/etcd/etcd.conf             #配置etcd服务器(k8s的数据库系统)
 #[Member]
 ETCD_NAME=default
-ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
-ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379"       #写入监听地址
+ETCD_DATA_DIR="/var/lib/etcd/default.etcd"          #数据存储目录
+ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379"       #写入监听地址（client通信端口）
 ETCD_NAME="default"
 .......
 #
 #[Clustering]
-#ETCD_INITIAL_ADVERTISE_PEER_URLS="http://localhost:2380"
-ETCD_ADVERTISE_CLIENT_URLS="http://localhost:2379,http://192.168.0.3:2379"      #写入通告地址
+#ETCD_INITIAL_ADVERTISE_PEER_URLS="http://localhost:2380"                       #peer初始化广播端口
+ETCD_ADVERTISE_CLIENT_URLS="http://localhost:2379,http://192.168.0.3:2379"      #写入通告地址（集群成员）
 #ETCD_INITIAL_CLUSTER="default=http://localhost:2380"
 .......
 #ETCD_ENABLE_V2="true"
@@ -51,7 +51,7 @@ http://localhost:2379 isLeader=true
 [root@node1 ~]# etcdctl get /k8s/network/config
 {"Network": "192.168.0.0/16"}
 ```
-#### 部署 Master
+#### 部署 Master 
 ```bash
 [root@node1 ~]# cat /etc/kubernetes/config      #配置master服务器
 KUBE_LOGTOSTDERR="--logtostderr=true"
@@ -64,7 +64,7 @@ KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"              #KUBE_API的绑�
 KUBE_API_PORT="--port=8080"
 KUBELET_PORT="--kubelet_port=10250"                             # Port minions listen on
 KUBE_ETCD_SERVERS="--etcd-servers=http://192.168.0.3:2379"      #指明etcd地址
-KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=192.168.0.0/24"
+KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=192.168.0.0/24"      #外网网段，k8s通过其把服务暴露出去
 KUBE_ADMISSION_CONTROL="--admission-control=AlwaysAdmit,NamespaceLifecycle,NamespaceExists,\
 LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota"
 KUBE_API_ARGS=""
@@ -109,6 +109,8 @@ KUBELET_PORT="--port=10250"
 KUBELET_HOSTNAME="--hostname-override=node1"                    #汇报的本机名称
 KUBELET_API_SERVER="--api-servers=http://192.168.0.3:8080"      #要访问的APISERVER(Master地址)
 KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest"
+#kubenet服务的启动要依赖pause这个镜像, 默认kubenet从google镜像服务下载, 而由于GFW原因会不成功，这里我们指定为docker的镜像
+#手动方式镜像下载: docker pull docker.io/kubernetes/pause
 KUBELET_ARGS=""
 
 [root@node1 ~]# systemctl start flanneld
