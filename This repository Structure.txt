@@ -48,11 +48,10 @@
 │   │   ├── Apache
 │   │   │   ├── Configs
 │   │   │   ├── Setup 2.4.25
-│   │   │   └── 一些资料
+│   │   │   └── 资料
 │   │   ├── Nginx
 │   │   │   ├── conf
 │   │   │   ├── Setup 1.12.1
-│   │   │   ├── 一些资料
 │   │   │   └── 资料
 │   │   ├── Nodejs
 │   │   │   └── Setup 8.1.4
@@ -271,4 +270,4 @@
     │   └── Improve
     └── Tools
 
-271 directories
+270 directories
