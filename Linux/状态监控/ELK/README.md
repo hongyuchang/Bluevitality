@@ -155,4 +155,18 @@ Elastic集群内节点的状态：
     复制之所以重要，有两个主要原因：
         - 在分片/节点失败时提供HA。因此注意到复制分片不与原/主要（original/primary）分片置于同一节点上非常重要的
         - 扩展你的搜索量/吞吐量，因为搜索可以在所有的复制上并行运行
+
+Elastic的主要文件：
+[root@node2 ~]# rpm -ql elasticsearch | grep -e bin -e etc
+/etc/elasticsearch
+/etc/elasticsearch/elasticsearch.yml
+/etc/elasticsearch/logging.yml
+/etc/elasticsearch/scripts
+/etc/init.d/elasticsearch
+/etc/sysconfig/elasticsearch
+/usr/share/elasticsearch/bin
+/usr/share/elasticsearch/bin/elasticsearch
+/usr/share/elasticsearch/bin/elasticsearch-systemd-pre-exec
+/usr/share/elasticsearch/bin/elasticsearch.in.sh
+/usr/share/elasticsearch/bin/plugin
 ```
