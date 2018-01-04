@@ -43,7 +43,7 @@ State      Recv-Q Send-Q          Local Address:Port        Peer Address:Port
 LISTEN     0      128          ::ffff:127.0.0.1:9300                  :::*                  
 LISTEN     0      128                       ::1:9300                  :::*
 ```
-#### 验证 - 对Elasticsearch的所有访问都是通过ES的Restful API进行的，因此，在Linux下要使用curl命令...
+#### 验证安装   -   注：对Elasticsearch的所有访问都是通过ES的Restful API进行的，因此，在Linux下要使用curl命令...
 ```bash
 any_node ~]# curl -X GET http://localhost:9200/_cluster/stats?pretty    #查看集群状态信息
 #使用'_cluster'这个API说明是通过集群接口执行的（ES中的API均使用下划线开头来表示）
