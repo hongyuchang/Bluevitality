@@ -128,7 +128,7 @@
 │   │   └── RabbitMQ
 │   ├── 状态监控
 │   │   ├── ELK
-│   │   ├── Flume
+│   │   │   └── 资料
 │   │   ├── Logrotate
 │   │   ├── Mutt + mstmp
 │   │   ├── Rsyslog
