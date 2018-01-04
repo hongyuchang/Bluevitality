@@ -31,7 +31,7 @@ Installed plugins in /usr/share/elasticsearch/plugins:
     - license
     - marvel-agent
 ```
-#### Demo - WEB站点类型的ES插件
+#### WEB站点类型的ES插件:
 #### http://x.x.x.x:9200/_plugin/Bigdesk
 ![img](资料/Bigdesk.jpg)
 #### http://x.x.x.x:9200/_plugin/Head
