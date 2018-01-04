@@ -183,8 +183,22 @@ NOTE: Unable to verify checksum for downloaded plugin (unable to find .sha1 or .
 Installed head into /usr/share/elasticsearch/plugins/head
 [root@node2 ~]# /usr/share/elasticsearch/bin/plugin list                                #列出安装的插件
 Installed plugins in /usr/share/elasticsearch/plugins:                                  #以下都是常用的...
-    - head
-    - kopf
-    - bigdesk
-    - marvel-agent
+    - head                                  #以下都是站点类型的插件，可通过 _site/<plugin_name> 的API方式访问
+    - kopf                                  #ES的API方式的管理工具
+    - bigdesk                               #ES集群的监控工具
+    - marvel-agent                          #Marvel能够让你通过Kibana非常容易的监视ES
+
+#站点类型的插件访问方式：
+[root@node2 bigdesk]# curl http://192.168.0.6:9200/_site/marvel/?pretty
+{
+  "error" : {
+    "root_cause" : [ {
+      "type" : "illegal_argument_exception",
+      "reason" : "No feature for name [marvel]"
+    } ],
+    "type" : "illegal_argument_exception",
+    "reason" : "No feature for name [marvel]"
+  },
+  "status" : 400
+}
 ```
