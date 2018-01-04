@@ -56,6 +56,8 @@ Elastic的底层是开源库Lucene（全文搜索引擎）。但是用户无法�
 Elastic是Lucene的封装，提供了REST API 的操作接口，并且开箱即用!...
 Elastic是接近实时的搜索平台。这意味着从索引一个文档直到这个文档能够被搜索到仅有一个轻微的延迟（通常是1s）
 Elastic天生就是分布式的，并且在设计时屏蔽了分布式的复杂性!（ES尽可能地屏蔽了分布式系统的复杂性）...
+    服务默认端口：      9300 
+    Web管理平台端口：   9200
 
 这里列举了一些Elasticsearch在后台自动执行的操作：
     分配文档到不同的容器或分片中，文档可储存在一或多个节点内
@@ -157,16 +159,29 @@ Elastic集群内节点的状态：
         - 扩展你的搜索量/吞吐量，因为搜索可以在所有的复制上并行运行
 
 Elastic的主要文件：
-[root@node2 ~]# rpm -ql elasticsearch | grep -e bin -e etc
+[root@node2 ~]# rpm -ql elasticsearch | grep -e bin -e etc -e 'usr/share/elasticsearch/plugins'
 /etc/elasticsearch
-/etc/elasticsearch/elasticsearch.yml
+/etc/elasticsearch/elasticsearch.yml                #主配置文件
 /etc/elasticsearch/logging.yml
 /etc/elasticsearch/scripts
-/etc/init.d/elasticsearch
+/etc/init.d/elasticsearch                           #启动脚本
 /etc/sysconfig/elasticsearch
 /usr/share/elasticsearch/bin
 /usr/share/elasticsearch/bin/elasticsearch
 /usr/share/elasticsearch/bin/elasticsearch-systemd-pre-exec
 /usr/share/elasticsearch/bin/elasticsearch.in.sh
-/usr/share/elasticsearch/bin/plugin
+/usr/share/elasticsearch/bin/plugin                 #插件安装程序
+/usr/share/elasticsearch/plugins                    #插件存放目录，可手动直接存放插件
+
+#Plugin...
+[root@node2 ~]# /usr/share/elasticsearch/bin/plugin install mobz/elasticsearch-head     #从默认源安装插件
+-> Installing mobz/elasticsearch-head...
+Trying https://github.com/mobz/elasticsearch-head/archive/master.zip ...
+Downloading .......(略)....................DONE
+Verifying https://github.com/mobz/elasticsearch-head/archive/master.zip checksums if available ...
+NOTE: Unable to verify checksum for downloaded plugin (unable to find .sha1 or .md5 file to verify)
+Installed head into /usr/share/elasticsearch/plugins/head
+[root@node2 ~]# /usr/share/elasticsearch/bin/plugin list                                #列出安装的插件
+Installed plugins in /usr/share/elasticsearch/plugins:
+    - head
 ```
