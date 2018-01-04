@@ -11,7 +11,7 @@
 any_node ~]# yum -y install java-1.8.0-openjdk
 any_node ~]# yum -y install java-1.8.0-openjdk-devel.x86_64
 any_node ~]# echo "export JAVA_HOME=/usr" > /etc/profile.d/java.sh && . /etc/profile
-any_node ~]# yum -y install elasticsearch-6.1.1.rpm  #本地安装
+any_node ~]# yum -y install elasticsearch-2.4.0.rpm  #本地安装
 
 any_node ~]# vim /etc/elasticsearch/elasticsearch.yml 
 cluster.name: elasticsearch             #加入的集群名称（组播协议中依此设置加入集群）
