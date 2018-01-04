@@ -181,7 +181,10 @@ Downloading .......(略)....................DONE
 Verifying https://github.com/mobz/elasticsearch-head/archive/master.zip checksums if available ...
 NOTE: Unable to verify checksum for downloaded plugin (unable to find .sha1 or .md5 file to verify)
 Installed head into /usr/share/elasticsearch/plugins/head
-[root@node2 ~]# /usr/share/elasticsearch/bin/plugin list                                #列出安装的插件
-Installed plugins in /usr/share/elasticsearch/plugins:
-    - head
+[root@node2 ~]# /usr/share/elasticsearch/bin/plugin list                                #列出安装的插件
+Installed plugins in /usr/share/elasticsearch/plugins:                                  #以下都是常用的...
+    - head
+    - kopf
+    - bigdesk
+    - marvel-agent
 ```
