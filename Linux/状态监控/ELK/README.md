@@ -188,7 +188,7 @@ Installed plugins in /usr/share/elasticsearch/plugins:                 �
     - bigdesk                               #ES集群的监控工具
     - marvel-agent                          #Marvel能够让你通过Kibana非常容易的监视ES
 
-#站点类型的插件访问方式：
+#站点类型的插件访问方式：【在浏览器中通过: http://address:9200/_plugin/<插件名>/ 的方式访问】
 [root@node2 bigdesk]# curl http://192.168.0.6:9200/_site/marvel/?pretty
 {
   "error" : {
