@@ -10,7 +10,8 @@
 #分别在各Node节点执行如下：
 any_node ~]# yum -y install java-1.8.0-openjdk
 any_node ~]# yum -y install java-1.8.0-openjdk-devel.x86_64
-any_node ~]# echo "export JAVA_HOME=/usr" > /etc/profile.d/java.sh && . /etc/profile
+any_node ~]# echo "export JAVA_HOME=/usr" > /etc/profile.d/java.sh   #要保证环境变量JAVA_HOME正确设置
+any_node ~]# . /etc/profile                                          #Elastic需要Java与Java-devel环境...
 any_node ~]# yum -y install elasticsearch-2.4.0.rpm  #本地安装
 
 any_node ~]# vim /etc/elasticsearch/elasticsearch.yml 
