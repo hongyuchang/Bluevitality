@@ -22,4 +22,12 @@
  
 #Bigdesk为Elastic集群提供动态的图表与统计数据（部署过程有问题...）
 [root@node1 ~]# 2.4.0版本下安装请参考：https://www.cnblogs.com/wangxiaoqiangs/p/6430354.html
+
+#列出已经安装的插件：
+[root@node1 ~]# /usr/share/elasticsearch/bin/plugin list
+Installed plugins in /usr/share/elasticsearch/plugins:
+    - head
+    - kopf
+    - license
+    - marvel-agent
 ```
