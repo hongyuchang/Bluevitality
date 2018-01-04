@@ -17,8 +17,8 @@
 
 #Marvel是Elasticsearch的管理和监控工具，在开发环境下免费使用
 #它包含了一个叫做Sense的交互式控制台，使用户方便的通过浏览器直接与Elasticsearch进行交互
-[root@node1 ~]# /usr/share/elasticsearch/bin/plugin install install license 
-[root@node1 ~]# /usr/share/elasticsearch/bin/plugin install install marvel-agent 
+[root@node1 ~]# /usr/share/elasticsearch/bin/plugin install license 
+[root@node1 ~]# /usr/share/elasticsearch/bin/plugin install marvel-agent 
  
 #Bigdesk为Elastic集群提供动态的图表与统计数据（部署过程有问题...）
 [root@node1 ~]# 2.4.0版本下安装请参考：https://www.cnblogs.com/wangxiaoqiangs/p/6430354.html
