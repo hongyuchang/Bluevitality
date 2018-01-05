@@ -4,7 +4,7 @@
 │   ├── History Memo
 │   ├── Vim
 │   │   └── Setup
-│   └── 资料（备忘）
+│   └── 摘录汇总
 ├── Linux
 │   ├── Cluster
 │   │   ├── Corosync + Pacemaker
