@@ -2,7 +2,7 @@
 
 - [ ] BASH 与 Python 的不断完善 （ 完善VIM的IDE环境 ）
 - [ ] 各项目的README与sh的不断完善与修改，维护，书签更迭，抽时间快速复习.....
-- [ ] sed/awk的大纲笔记，Git备忘优化排版，优化例子，echars的常用demo(模板)
+- [ ] sed/awk的MD修改，Git的MD修改，echars的常用的demo(模板)
 - [ ] GRUB2，U盘版编译内核+BusyBox的Linux，CentOS7启动流程不断归纳细化的md
 - [ ] ~~LVM~~, ~~LVM的镜像~~/条带 ~~mdadm的README~~
 - [x] ~~Quota的配置流程记录（加注释）~~
@@ -38,7 +38,7 @@
 - [x] ~~docker的swarm流程脚本，~~ ~~Jenkins~~
 - [x] ~~consul 分步骤按格式存储，修改RAEDME~~
 - [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
-- [ ] Openstack，kubernets，ELK，Openvswitch，ceph，KVM的NET模式demo
+- [ ] Openstack，kubernets，~~ELK~~，Openvswitch，ceph，KVM的NET模式demo
 - [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
