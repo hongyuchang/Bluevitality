@@ -8,6 +8,8 @@
 #在实验环境中前几次部署不成功，down掉了docker相关的网桥之后才好，有可能是docker0或swarm的overlay的网桥导致的...
 
 #分别在各Node节点执行如下：
+#elasticsearch的RPM包下载地址：https://pan.baidu.com/s/1pK9B51L 密码：481m
+
 any_node ~]# yum -y install java-1.8.0-openjdk
 any_node ~]# yum -y install java-1.8.0-openjdk-devel.x86_64
 any_node ~]# echo "export JAVA_HOME=/usr" > /etc/profile.d/java.sh   #要保证环境变量JAVA_HOME正确设置
