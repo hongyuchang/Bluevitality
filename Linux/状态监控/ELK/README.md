@@ -12,7 +12,7 @@ ELK不是软件，而是一整套解决方案! 它是三个软件产品的首字
 
 ---------------------------------------------------------------------------------------------------------------
 
-Elasticsearch：
+[Elasticsearch]
     是开源的实时分布式搜索引擎，提供全文搜索，结构化搜索及分析，是建立在全文搜索引擎 Apache Lucene 基础上的，由Java编写
     支持丰富的插件来扩展其功能
     主要特点：
@@ -23,7 +23,7 @@ Elasticsearch：
         接口友好：支持 JSON（restful风格接口）
         多数据源，自动搜索负载等...
 
-Logstash：
+[Logstash]
     是具有实时渠道能力的数据收集引擎。使用 JRuby 编写（需要JVM）。其作者是世界著名的运维工程师乔丹西塞 JordanSissel
     是实现对产生日志的服务器部署agent并对其产生的日志收集后通过统一的管道来集中存储在Elasticsearch上的组件...
     是server/agent的结构，agent将产生的日志信息收集后发送给logstash-server并默认以时间序列为基准合并为1和序列后发送...
@@ -46,7 +46,7 @@ Logstash：
         FILTER  实现过滤，如过滤特定字段，如web日志中的IP
         OUTPUT  实现输出，发送至Elasticsearch Cluster 或其他...
 
-Kibana：
+[Kibana]
     是基于Apache开源协议，使用 JavaScript (nodjs) 编写，为Elasticsearch提供分析和可视化的Web平台
     它可以在Elasticsearch的索引中查找，交互数据，并生成各种维度的表图进行展示...
     Kibana可以为Logstash和ElasticSearch提供日志分析友好的Web界面，可帮助用户汇总、分析和搜索重要数据日志及趋势展示...
