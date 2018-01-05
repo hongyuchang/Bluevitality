@@ -24,7 +24,9 @@ Elasticsearch：
 
 Logstash：
     是具有实时渠道能力的数据收集引擎。使用 JRuby 编写。其作者是世界著名的运维工程师乔丹西塞 (JordanSissel)
-    主要特点：
+    是实现对产生日志的服务器部署agent并对其产生的日志收集后通过统一的管道来集中存储在Elasticsearch上的组件...
+    是server/agent的结构，agent将产生的日志信息收集后发送给logstash-server并默认以时间序列为基准合并为1和序列后发送...
+    主要特点：
         几乎可访问任何数据
         可以和多种外部应用结合
         支持弹性扩展
@@ -36,9 +38,13 @@ Logstash：
         Indexer：    数据写入
 
 Kibana：
-    是基于Apache开源协议，使用JavaScript编写，为Elasticsearch提供分析和可视化的Web平台
+    是基于Apache开源协议，使用 JavaScript (nodjs) 编写，为Elasticsearch提供分析和可视化的Web平台
     它可以在Elasticsearch的索引中查找，交互数据，并生成各种维度的表图进行展示...
-    Kibana可以为Logstash和ElasticSearch提供日志分析友好的Web界面，可帮助用户汇总、分析和搜索重要数据日志...
+    Kibana可以为Logstash和ElasticSearch提供日志分析友好的Web界面，可帮助用户汇总、分析和搜索重要数据日志及趋势展示...
+    ES本身就是一个独立且完整的搜索引擎，而Kibana是为其构建的直观易用的接口，而Logstash只是数据收集器中的一种...
+    由于Logstash基于Jruby语言，因此其性能较慢（重量级）...
+    因此很多时候二次开发程序替代Logstash：自建Agent程序并发至消息队列（如Kafka），再由特定程序从MQ中取出存至Elastic!
+    注：Kafka是一种分布式消息队列，其性能非常强大...
 
 ---------------------------------------------------------------------------------------------------------------
 
