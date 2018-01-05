@@ -14,6 +14,7 @@ ELK不是软件，而是一整套解决方案! 它是三个软件产品的首字
 
 Elasticsearch：
     是开源的实时分布式搜索引擎，提供全文搜索，结构化搜索及分析，是建立在全文搜索引擎 Apache Lucene 基础上的，由Java编写
+    支持丰富的插件来扩展其功能
     主要特点：
         实时分析
         分布式，零配置的实时文件存储，其将每个字段都编入索引
@@ -23,19 +24,27 @@ Elasticsearch：
         多数据源，自动搜索负载等...
 
 Logstash：
-    是具有实时渠道能力的数据收集引擎。使用 JRuby 编写。其作者是世界著名的运维工程师乔丹西塞 (JordanSissel)
+    是具有实时渠道能力的数据收集引擎。使用 JRuby 编写（需要JVM）。其作者是世界著名的运维工程师乔丹西塞 JordanSissel
     是实现对产生日志的服务器部署agent并对其产生的日志收集后通过统一的管道来集中存储在Elasticsearch上的组件...
     是server/agent的结构，agent将产生的日志信息收集后发送给logstash-server并默认以时间序列为基准合并为1和序列后发送...
+    为了防止Agent发送大量数据压垮server端，通常在a/s之间创建一个消息队列，通常是是redis（使用其发布订阅，列表的功能）
+    Logstash也能实现索引的构建，但现在仅使用其执行日志的收集而已...其严重依赖插件，使用插件完成数据的输入，过滤，输出...
     主要特点：
-        几乎可访问任何数据
-        可以和多种外部应用结合
+        几乎可访问任何数据，支持多种数据获取机制，如：TCP/UDP，syslog，windows，Eventlog，STDIN....
+        对日志进行收集、过滤、修改等操作并将其存储供以后使用
+        可以和多种外部应用结合
         支持弹性扩展
-        对日志进行收集、过滤，并将其存储供以后使用
-    
+
     它由三个主要部分组成：
-        Shipper：    发送日志数据
+        Shipper：    在Agent端，负责收集和发送日志数据
         Broker：     收集数据，缺省内置 Redis
-        Indexer：    数据写入
+        Indexer：    在server端，可按固定的格式条件清洗数据并将其发送至Elasticsearch Cluster
+        
+    Plugins：
+        INPUT   实现输入，即从哪里取得Agent端收集的数据（redis）
+        CODEC   实现编码（非必须）
+        FILTER  实现过滤，如过滤特定字段，如web日志中的IP
+        OUTPUT  实现输出，发送至Elasticsearch Cluster 或其他...
 
 Kibana：
     是基于Apache开源协议，使用 JavaScript (nodjs) 编写，为Elasticsearch提供分析和可视化的Web平台
