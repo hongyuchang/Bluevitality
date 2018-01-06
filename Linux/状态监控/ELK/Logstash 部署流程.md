@@ -216,4 +216,50 @@ output {
     }
 }
 ```
-#### output 插件：
+#### 关于 Logstash 的架构
+```
+Logstash Agent 发送数据时的两种方式：
+
+    直接发往elasticsearch
+    [Logstash-Agent] ---> [Elasticsearch-Cluster]
+
+    先交给logstatsh-server
+    [Logstash-Agent] ---> [Logstash-server] ---> [Elasticsearch-Cluster]
+    其主要目的是实现数据流的整合，如：Serevr将收到的各个event数据依时间戳"排列好"之后再发往ES
+    并且其可减轻agent对es的负载，还可以只让agent进行收集任务，而grok与filter交给server进行...
+    Logstash-server与Logstash-Agent并没有什么区别，只不过是其input与outpt的次序不同而已...
+    注：Logstash-server与Logstash-Agent的版本最好保持一致~！
+
+其他形式的Logstash架构：
+    [Logstash-Agent] ---> [redis/kafka] ---> [Logstash-server] ---> [Elasticsearch-Cluster]
+    当有多个Agent时由Redis做队列缓冲，并由server统一收集并进行filter之后再送给ES集群
+```
+#### output 插件：redis 与 elasticsearch
+```bash
+#Logstash-server端配置的Demo：
+
+input {
+    redis {                         #从redis获取数据（Agnt端output到redis）
+        batch_count => 1            #返回的事件数量，此属性仅在list模式下起作用。
+        data_type => "list"         #logstash redis插件工作方式
+        key => "logstash-test-list" #监听的键值（即Logstash-Agent存储在redis中时的list或channel的名字）
+        host => "127.0.0.1"         #redis地址
+        port => 6379                #redis端口号
+        password => "123qwe"        #如果有安全认证，此项为密码
+        db => 0                     #redis数据库的编号
+        threads => 1                #启用线程数量
+    }
+}
+
+filter {
+    ....（若其接收输入数据在Agent端已经被grok过滤则Server端可省略此步骤）
+}
+
+output {
+    elasticsearch {                                           #ES插件
+        hosts => ["192.168.0.5","192.168.0.6","192.168.0.7"]  #ES主机集群的列表（不同Logstash版本配置方式不同）
+        index => "tomcat"                                     #存储到ES的哪个索引当中（若不存在会创建）
+        #index => "tomcat-{+yyy.mm.dd}"                       #按天创建索引   
+    }
+}
+```
