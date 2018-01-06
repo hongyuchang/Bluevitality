@@ -162,3 +162,58 @@ filter {  
     1.(?<field_name> 这里写正则表达式 )  <--- 其中的"<field_name>"可省略
     2.模式又引用模式： NEW_PATTERN_NAME ${PATTERN_NAME}
 ```
+```bash
+input {
+    file {
+		codec => multiline {
+			 pattern => "^\s"
+			 what => "previous"
+		}
+        path => "/usr/local/tomcat8/logs/catalina.out"
+        start_position => "beginning"
+    }
+}
+
+filter {
+    grok {
+        patterns_dir => "/usr/local/elk/logstash-patterns"
+        match => {
+            "message" => "%{MYLOG}"
+        }
+        add_field => [ "log_ip", "192.168.1.81" ]
+    }
+ 
+}
+
+output {
+    elasticsearch {                                                   #ES插件
+      hosts => ["192.168.1.81","192.168.1.82","192.168.1.83"]         #ES主机集群的列表
+        index => "tomcat"                                             #存储到ES的哪个索引当中（若不存在会创建）
+        #index => "tomcat-{+yyy.mm.dd}"                               #按天创建索引   
+    }
+}
+
+output {
+    redis{
+        batch => false              #若启用则一次可PUSH多个事件，即通过发一条push命令存储一批的数据，默认为false
+        batch_events => 50          #一次rpush多少条
+        batch_timeout => 5          #一次rpush最多消耗多少s（默认5s）
+        codec => plain              #
+        congestion_interval => 1    #每多长时间进行一次拥塞检查，默认1s，若为0则对每个PUSH都进行检测
+        congestion_threshold => 0   #Redis的list中最多可存在多少item数据，默认0，表示禁用拥塞检测，
+                                    #当list中的数据量达到congestion_threshold，会阻塞直到有其他消费者消费list中的数据
+        data_type => list           #存储到redis时的数据类型（主要有：list列表或：channel频道（实现发布订阅））
+                                    #使用列表时生产者不断对特定数据库（0~15中）进行LPUSH追加到，消费者不断的RPOP取出..
+        db => 0                     #使用redis的数据库，默认使用0号（0~15）
+        host => ["127.0.0.1:6379"]  #主机
+        key => xxx                  #指定存储在redis中时的list或channel的名字
+        password => xxx             #密码
+        port => 6379                #端口
+        reconnect_interval => 1     #
+        shuffle_hosts => true       #
+        timeout => 5                #超时时间
+        workers => 1                #线程数
+    }
+}
+```
+#### output 插件：
