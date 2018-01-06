@@ -263,3 +263,11 @@ output {
     }
 }
 ```
+###### Logstash 的 FileWatch 说明...
+![img](资料/FileWatch.png)
+###### 条件判断 demo 1
+![img](资料/Logstash-条件判断.png)
+###### 条件判断 demo 2
+![img](资料/Logstash-条件判断2.png)
+###### Grok中的数据类型转换
+![img](资料/Grok中的SEMANTIC的数据类型.png)
