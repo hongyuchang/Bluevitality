@@ -125,4 +125,40 @@ any_node conf.d]# logstash -f /etc/logstash/conf.d/from_message.conf            
           "type" => "system"
 }
 ```
+#### filter 插件：grok
+```txt
+filter插件主要实现的功能是将event通过output发出之前对其实现某事先的些处理功能，其比较著名的处理插件是grok
+grok也是logstash最重要的插件之一，并且也是从web服务器读取日志后在处理时必然用到的插件
+用于分析并结构化文本数据，如给web日志的IP或method方法从文本中通过正则拆出并为它们赋予Key：METHOD，ADDRESS之类，供分析...
+它也是将一大段非结构化的日志文本数据转化为结构化可查询数据的不二之选~!
 
+默认情况下logstash已经提供了120种grok模式，这些模式定义在patterns目录下的grok-patterns文件中，每个模式都有个唯一的名称：
+    any_node  ~]# rpm -ql logstash | grep patterns$
+    /opt/logstash/vendor/bundle/jruby/1.9/gems/logstash-patterns-core-0.3.0/patterns/grok-patterns       
+    /opt/logstash/vendor/bundle/jruby/1.9/gems/logstash-patterns-core-0.3.0/patterns/mcollective-patterns
+    #上面的第一行是grok的模式文件，里面是事先定义的正则表达式和对表达式的嵌套引用，其使用的元字符与sed/awk/grep的差别不大
+
+grok语法格式：
+    %{SYNTAX:SEMANTIC}
+        SYNTAX -> 表示预定义的模式名称（即grok已经有的模式的名称，通常是grok-patterns文件中各行开头的模式名）
+                  形如：SYSLOGBASE  %{SYSLOGTIMESTAMP:timestamp}  (?:%{SYSLOGFACILITY} )?  ..... (略)
+        SEMANTIC -> 指定预定义模式所匹配的文本的自定义标识符...
+
+Example：
+     --> 192.168.0.1 GET /index.html 2048 12.30
+     --> ${IP:clientIP}  ${WORD:method} ${URIPATHPARAM:request} ${NUMBER:bytes}  ${NUMBER:time}
+     正则说明：对通过IP模式匹配到的数据取一个名叫clientIP，相当于将匹配的数据赋值给变量clientIP ..... (略)
+     
+
+插件 Demo：
+filter {  
+    grok{
+        patterns_dir => "./patterns"
+        match => { "message" => "%{IP:client}/%{USER:auth}/%{WORD:method}/%{NOTSPACE:request}"}  
+    }                           #定义消息如何匹配并拆解....
+} 
+
+自定义模式：（较少用）
+    1.(?<field_name> 这里写正则表达式 )  <--- 其中的"<field_name>"可省略
+    2.模式又引用模式： NEW_PATTERN_NAME ${PATTERN_NAME}
+```
