@@ -442,3 +442,5 @@ GET /[INDEX]/_validate/query?explain&pretty -d '{
   }
 }
 ```
+#### 使用 Elastic 的 HEAD 插件生成查询
+![img](资料/使用HEAD插件生成查询.png)
