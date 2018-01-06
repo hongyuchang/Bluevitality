@@ -161,6 +161,8 @@ filter {  
 自定义模式：（较少用）
     1.(?<field_name> 这里写正则表达式 )  <--- 其中的"<field_name>"可省略
     2.模式又引用模式： NEW_PATTERN_NAME ${PATTERN_NAME}
+
+注：当原始messages信息已经grok被拆分后，可以不存储在ES Cluster中，因此可在filter中对"messages"进行隐藏...
 ```
 ```bash
 input {
