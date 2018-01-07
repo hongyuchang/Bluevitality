@@ -1,3 +1,5 @@
+# Logstash Version: 5.2.2
+
 input{
     file{
         path => ["/elk201710/ebs/ebs01.log"]
