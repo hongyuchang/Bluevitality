@@ -156,7 +156,9 @@ ssh-keygen -t rsa -C "youremail@example.com"
     git reset --hard 578IF734F
 
 撤销刚才的提交：   
-    git reset --soft HEAD^  
+    git reset --soft HEAD^
+    注：使用 --soft 时，index和working directory中的内容不作任何改变，仅仅把HEAD指向 <commit>。
+    这个模式的效果是，执行后，自<commit>以来的所有改变都会显示在git status的"Changes to be committed"中。 
 
 模拟amend提交（覆盖上一次的提交）：   
     git reset --soft HEAD^ ; git -a -m "amend...." 
