@@ -48,11 +48,11 @@
 `git add --all` 或： `git add -A`   
 对文件改名：（相当于执行 mv .. .. ; git rm .. ; git add ..）  
 `git mv oldname newname`  
-删除文件：（若要删除已修改并提交到暂存区的文件则需要再添加 "-f" 参数）  
-`git rm filename`  
-将指定文件从暂存区删除，即 "untage"，用于停止对特定文件追踪：  
+删除文件：（若要删除已修改并提交到暂存区的文件则需要再添加 "-f" 参数）  
+`git rm filename`  
+将指定文件从暂存区删除，即 "untage"，用于停止对特定文件追踪：  
 `git rm --cached filename`  
-恢复误删的文件：（若修改后还未执行add则将指定文件返回至版本库的最新状态，若已添加至暂存区后又进行了   则将其回退至add时最初的暂存区保存的状态，即让文件回退至最近的一次commit或add后的状态）  
+恢复误删的文件：（若修改后还未执行add则将指定文件返回至版本库的最新状态，若已添加至暂存区后又进行了则将其回退至add时最初的暂存区保存的状态，即让文件回退至最近的一次commit或add后的状态）  
 `git checkout -- filename`  
 用HEAD所指向的分支的全部或部分文件来替换暂存区和工作区：  
 `git checkout HEAD [. | filename]`  
