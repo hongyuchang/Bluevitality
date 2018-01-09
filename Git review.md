@@ -231,6 +231,9 @@ ssh-keygen -t rsa -C "youremail@example.com"
     origin/master  
     origin/b1
     git checkout b1
+
+将本地的状态回退到和远程的一样：
+    git reset –hard origin/master
 ```
 #### Tag
 ```txt
