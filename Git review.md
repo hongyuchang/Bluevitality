@@ -18,14 +18,14 @@ ssh-keygen -t rsa -C "youremail@example.com"
     
 环境设置：    
     选项 
-        --global：   用户全局
-        --system：   系统全局
-        --local：    仅针对当前项目
+        --global：   用户全局，配置信息位于  ~/.gitconfig
+        --system：   系统全局，配置信息位于 /etc/gitconfig
+        --local：    仅当前项目生效，配置信息位于 .git/conf
     
 跳过命令设置的方式对特定作用范围的配置文件直接进行编辑：   
     git config -e [--global | --system | --local]
 
-设置用户信息：（用户信息位于 ~/.gitconfig，若 --system 则位于 /etc/gitconfig，工作目录的 .git/conf 仅对当前项目生效）  
+设置用户信息：  
     git config --global user.name  "bluevitality"
     git config --global user.email "inmoonlight@163.com"
     
