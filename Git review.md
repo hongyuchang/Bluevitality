@@ -151,31 +151,31 @@ ssh-keygen -t rsa -C "youremail@example.com"
 
 回退到之前的第100个版本：   
     git reset --hard HEAD~100
-  
+
 回退到指定的提交：   
     git reset --hard 578IF734F
-   
+
 撤销刚才的提交：   
     git reset --soft HEAD^  
 
 模拟amend提交（覆盖上一次的提交）：   
     git reset --soft HEAD^ ; git -a -m "amend...." 
-      
-查看尚未暂存的文件的改变：
-    git diff
-    
-查看已暂存的文件与上次提交的差异：     
-    git diff --cached
-    
-查看本地版本库最后一次提交与工作目录间的差异   
-    git diff HEAD
-    
+
+查看尚未暂存的文件的改变：（本地与暂存区之间的差异）
+    git diff
+
+查看已暂存的文件与上次提交的差异：（暂存区与仓库之间的差异）
+    git diff --cached
+
+查看本地版本库最后一次提交与工作目录间的差异：（本地工作区与仓库之间的差异）
+    git diff HEAD
+
 查看版本库中最新的文件与工作区的文件的区别：（HEAD指针永远指向当前分支的最后一次提交）     
     git diff HEAD -- filename
 
 查看哪些文件/目录将被删除：   
     git clean -nd
-    
+
 清除工作区中未加入版本库的文件/目录：   
     git clean -fd
 ```
@@ -269,3 +269,5 @@ ssh-keygen -t rsa -C "youremail@example.com"
 对标签详细设置其名字及说明以便区分：     
     git tag -a v3.0 -m "tag info..." 3a1f237 
 ```
+#### 附
+![img](Tmp/Git.png)
