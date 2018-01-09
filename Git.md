@@ -48,15 +48,15 @@
 `git add --all` 或： `git add -A`   
 对文件改名：（相当于执行 mv .. .. ; git rm .. ; git add ..）  
 `git mv oldname newname`  
-删除文件：（若要删除已修改并提交到暂存区的文件则去添加参数 -f）  
-`git rm filename`  
-删除暂存区的文件用于停止对其跟踪：  
+删除文件：（若要删除已修改并提交到暂存区的文件则需要再添加 "-f" 参数）  
+`git rm filename`  
+将指定文件从暂存区删除，即 "untage"，用于停止对特定文件追踪：  
 `git rm --cached filename`  
 恢复误删的文件：（若修改后还未执行add则将指定文件返回至版本库的最新状态，若已添加至暂存区后又进行了   则将其回退至add时最初的暂存区保存的状态，即让文件回退至最近的一次commit或add后的状态）  
 `git checkout -- filename`  
 用HEAD所指向的分支的全部或部分文件来替换暂存区和工作区：  
 `git checkout HEAD [. | filename]`  
-与git add命令合并为一条命令并提交到本地仓库：    
+与 "git add" 命令与 "git commit" 合为一条命令提交到本地的仓库：    
 `git commit -a -m "commit info.."`    
 将当前本暂存区要提交的信息与上一次的提交并为**1**个提交（若暂存区未发生改变则相当于重写了提交信息）     
 `git commit --amend -m "add fix ...."`    
@@ -130,14 +130,14 @@
 
 用版本库中的文件替换暂存区中的文件：   
 `git reset HEAD -- filename`   
+撤销暂存区中的修改，回退到工作区：     
+`git reset HEAD filename`   
 版本库，暂存区，工作区全部一致，撤回到某个提交点：   
 `git reset --hard 578IF734F`   
 清空添加到暂存区的内容：   
 `git reset .`或：`git reset HEAD`   
 撤出暂存区中指定的文件：（相当于git add的反操作）   
 `git reset filename`或：`git reset HEAD filename`   
-撤销暂存区中的修改，回退到工作区：     
-`git reset HEAD filename`   
 回退到最新的提交版本：   
 `git reset --hard HEAD`   
 回退到之前的第二个版本：     
