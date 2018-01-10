@@ -1,0 +1,24 @@
+- name: copy jdk and elasticsearch package to cluster nodes
+  copy: src={{ es }} dest=/tmp/
+- name: install jdk and elasticsearch on cluster nodes
+  yum: name=/tmp/{{ es }} state=present
+- name: generate es config file
+  template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  tags: esconf
+  notify:
+  - restart elasticsearch
+- name: start elasticsearch service
+  service: name=elasticsearch state=started enabled=yes
+- name: copy plugins to cluster nodes
+  copy: src=plugins dest=/tmp/
+  tags: instplug
+  when: instplug == "yes"
+- name: install marvel, bigdesk and head plugins on cluster nodes
+  shell: "/usr/share/elasticsearch/bin/plugin -i {{ item.name }} -u file:///tmp/plugins/{{ item.plug }}"
+  tags: instplug
+  with_items:
+  - { name: 'marvel', plug: "{{ marvel }}" }
+  - { name: 'bigdesk', plug: "{{ bigdesk }}" }
+  - { name: 'head', plug: "{{ head }}" }
+  when: instplug == "yes"
+  ignore_errors: yes

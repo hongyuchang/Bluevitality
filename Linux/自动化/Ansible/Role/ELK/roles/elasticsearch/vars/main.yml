@@ -1,0 +1,5 @@
+es: elasticsearch-1.7.2.noarch.rpm
+instplug: "yes"
+bigdesk: bigdesk-latest.zip
+marvel: marvel-latest.zip
+head: elasticsearch-head-latest.zip

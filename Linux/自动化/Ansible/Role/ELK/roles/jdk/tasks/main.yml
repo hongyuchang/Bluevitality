@@ -1,0 +1,6 @@
+- name: copy jdk and elasticsearch package to cluster nodes
+  copy: src={{ jdk }} dest=/tmp/
+- name: install jdk
+  yum: name=/tmp/{{ jdk }} state=present
+- name: set java environment
+  copy: src=java.sh dest=/etc/profile.d/

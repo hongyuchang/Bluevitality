@@ -1,0 +1,4 @@
+- hosts: 172.16.100.67
+  roles:
+  - jdk
+  - elasticsearch
