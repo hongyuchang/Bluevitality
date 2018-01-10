@@ -37,8 +37,8 @@
 - [x] ~~expect~~
 - [x] ~~docker的swarm流程脚本，~~ ~~Jenkins~~
 - [x] ~~consul 分步骤按格式存储，修改RAEDME~~
-- [ ] hadoop，storm，spark，zookeeper，Kafka，reducemap，hdfs
-- [ ] Openstack，kubernets，~~ELK~~，Openvswitch，ceph，KVM的NET模式demo
+- [ ] ReduceMap，HDFS，hadoop，storm，zookeeper
+- [ ] Openstack，kubernets，~~ELK~~，Openvswitch，KVM的NET模式demo
 - [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
@@ -47,8 +47,8 @@
 #### 以后补充
 ```txt
 kubernetes
-rabbitmq
+rabbitmq，Kafka，zookeeper
 stunnel，OpenVPN，IPsec + L2TP
-zookeeper，Kafka
 ceph
+Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 ```
