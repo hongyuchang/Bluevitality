@@ -37,7 +37,6 @@
 - [x] ~~expect~~
 - [x] ~~docker的swarm流程脚本，~~ ~~Jenkins~~
 - [x] ~~consul 分步骤按格式存储，修改RAEDME~~
-- [ ] ReduceMap，HDFS，hadoop，storm，zookeeper
 - [ ] Openstack，kubernets，~~ELK~~，Openvswitch，KVM的NET模式demo
 - [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
 - [X] ~~VNC~~ & ~~NTP~~
