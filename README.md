@@ -46,9 +46,9 @@
 
 #### 以后补充
 ```txt
-kubernetes
 rabbitmq，Kafka，zookeeper
-stunnel，OpenVPN，IPsec + L2TP
-ceph
+kubernetes
+stunnel，OpenVPN，IPsec + L2TP，PPTP的测试
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
+ceph
 ```
