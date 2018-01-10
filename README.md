@@ -50,5 +50,5 @@ rabbitmq，Kafka，zookeeper
 kubernetes
 stunnel，OpenVPN，IPsec + L2TP，PPTP的测试
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
-ceph，flume，Celery
+ceph，flume，Celery，grafana
 ```
