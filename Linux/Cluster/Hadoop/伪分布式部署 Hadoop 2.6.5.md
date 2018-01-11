@@ -173,7 +173,8 @@ export HADOOP_YARN_HOME=${HADOOP_PREFIX}                        #...
 <configuration>
 
 [root@localhost hadoop]# vim etc/hadoop/slaves  
-#存储了当前集群所有slave节点的列表，对于伪分布式来说其内容仅为一个localhost
+# 存储了当前集群所有slave节点的列表 (即NN所管辖的所有DN列表)，对伪分布式模型来说此文件仅为一个localhost
+# 生产环境中HDFS的DN节点可能会上百上千个 (一般情况下DN有副本及恢复机制，所以官方不建议使用磁盘阵列)......
 
 #确保配置正确dfs.namenode.name.dir属性并设置好其对应的权限后，以hdfs用户的身份执行如下操作：
 [root@localhost hadoop]# su - hdfs
@@ -196,10 +197,14 @@ SHUTDOWN_MSG: Shutting down NameNode at localhost/127.0.0.1
 drwxr-xr-x. 2 hdfs hadoop 4096 1月  11 01:04 current
 [hdfs@localhost ~]$ ll /data/hadoop/hdfs/nn/current/
 总用量 16
--rw-r--r--. 1 hdfs hadoop 351 1月  11 01:04 fsimage_0000000000000000000      #此处即HDFS中NN的映像文件（
+-rw-r--r--. 1 hdfs hadoop 351 1月  11 01:04 fsimage_0000000000000000000      #fsimage是NN的映像文件（崩溃恢复用
 -rw-r--r--. 1 hdfs hadoop  62 1月  11 01:04 fsimage_0000000000000000000.md5  #即将内存中的元数据周期性写入持久存储）
 -rw-r--r--. 1 hdfs hadoop   2 1月  11 01:04 seen_txid                        #
 -rw-r--r--. 1 hdfs hadoop 201 1月  11 01:04 VERSION                          #版本
+
+# 注：
+# HDFS崩溃恢复时根据fsimage"映像文件"的数据载入到内存中，另外 fsimage相关的editlog记录变化的数据
+# SNN在平时不断的从NN获取fsimage与editlog并将二者合并（SNN有checkpoint"检查点"用于记录其每次的合并在哪个位置）
 ```
 #### HDFS 参数
 ```txt
@@ -240,41 +245,40 @@ Usage: hdfs [--config confdir] COMMAND
 Most commands print help when invoked w/o parameters.
 ```
 ```bash
-# Hadoop2的启动等操作可通过其位于sbin下的专用脚本进行：
+# Hadoop2的启/停等操作可通过其位于sbin下的专用脚本进行（本文档已经将下面的各脚本加入到了PATH中）：
 # NameNode：           hadoop-daemon.sh  (start|stop) namenode
 # DataNode：           hadoop-daemon.sh  (start|stop) datanode
 # Secondary NameNode： hadoop-daemon.sh  (start|stop) secondarynamenode
-# ResourceManager：    yarn-daemon.sh  (start|stop)  resourcemanager
-# NodeManager：        yarn-daemon.sh  (start|stop)  nodemanager
+# ResourceManager：    yarn-daemon.sh  (start|stop)  resourcemanager     
+# NodeManager：        yarn-daemon.sh  (start|stop)  nodemanager
 
 [root@localhost hadoop]# su - hdfs -c "hadoop-daemon.sh start namenode"                     #启动NN
 starting namenode, logging to /hadoop/logs/hadoop-hdfs-namenode-localhost.localdomain.out   #日志位置，其真实后缀为.log
 [root@localhost hadoop]# su - hdfs -c "hadoop-daemon.sh start secondarynamenode"            #启动SNN
 starting secondarynamenode, logging to /hadoop/logs/hadoop-hdfs-secondarynamenode-localhost.localdomain.out
 [root@localhost hadoop]# su - hdfs -c "hadoop-daemon.sh start datanode"                     #启动DN
-starting datanode, logging to /hadoop/logs/hadoop-hdfs-datanode-localhost.localdomain.out
+starting datanode, ......(略)
 
-[root@localhost hadoop]# hdfs dfs -mkdir /test      #测试HDFS的命令
+[root@localhost hadoop]# hdfs dfs -mkdir /test          #测试HDFS的命令
 18/01/11 01:29:30 WARN fs.FileSystem: "localhost:8020" is a deprecated filesystem name. \
-Use "hdfs://localhost:8020/" instead.               #告警可以忽略，提示为需修改其配置格式为hdfs开头...
-
-[root@localhost hadoop]# hdfs dfs -ls /             #查看HDFS的/下是否存在test目录
-Found 1 items
+Use "hdfs://localhost:8020/" instead.                   #告警可以忽略，提示为需修改其配置格式为hdfs开头...
+[root@localhost hadoop]# hdfs dfs -ls /                 #查看HDFS的/下是否存在test目录
 drwxr-xr-x   - root supergroup          0 2018-01-11 01:29 /test
 
 [root@localhost hadoop]# hdfs dfs -put /etc/fstab /test/   
 
 #注，在宿主机中使用Ls看到的HDFS数据目录是乱码文件，必须要使用HDFS的dfs子命令（接口）进行查看及操作
-[root@localhost hadoop]# hdfs dfs -ls /test       
-Found 1 items
+[root@localhost hadoop]# hdfs dfs -ls /test
 -rw-r--r--   1 root supergroup        465 2018-01-11 01:32 /test/fstab
 
-#启动YARN的resourcemanager(其在分布式场景中运行在主节点中)
-[root@localhost hadoop]# su - yarn -c "yarn-daemon.sh start resourcemanager"        
-starting resourcemanager, logging to /hadoop/logs/yarn-hdfs-resourcemanager-localhost.localdomain.out
-[root@localhost hadoop]# su - yarn -c "yarn-daemon.sh start nodemanager"  
+#启动YARN的resourcemanager (其在分布式场景中运行在主节点之上)
+[root@localhost hadoop]# su - yarn -c "yarn-daemon.sh start resourcemanager"   #在集群模式下其将自动寻找所有DN节点
+[root@localhost hadoop]# su - yarn -c "yarn-daemon.sh start nodemanager"       #并且自动将所有DN节点启动起来......
 
-#注：
+# 注：
+# 在集群环境下，由于YARN的RN启动时会自动连接至各DN（即NodeManager）及SNN，因此要建立基于SSH密钥的连接方式实现免交互登陆
+# 为实现高可用，在集群环境下SN与NN需要各自独立部署在不同的服务器上
+# Hadoop 2.0+ 版本在使用YARN之后，MarpReduce便成为了Hadoop众多作业模型中的一种（各插件都基于YARN而不是MarpReduce）...
 # HDFS和YARN ResourceManager 各自提供了一个WEB接口，通过这些接口可检查HDFS集群以及YARN集群的相关状态：
 # HDFS-NameNode:          http://<NameNode_Host>:50070/
 # YARN-ResourceManager:   http://<ResourceManager_host>:8088/
