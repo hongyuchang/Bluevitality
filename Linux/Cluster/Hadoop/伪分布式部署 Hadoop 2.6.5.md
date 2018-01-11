@@ -420,8 +420,8 @@ ation_1511134917246_0001/
         File Output Format Counters 
                 Bytes Written=1247
 ```
-##### 首次部署后使用官方自带的MapReduce测试jar分词统计失败 (修改core-site.xml文件后成功...)
-##### 以下是成功执行yarn上的MapReduce测试程序后的输出信息
+##### 首次部署后使用官方自带的MapReduce测试jar单词统计失败 ( 修改core-site.xml文件后成功... )
+##### 以下是成功执行yarn上的MapReduce测试程序 "wordcount" 后的单词统计输出信息
 ```bash
 [hdfs@localhost ~]$ hdfs dfs -cat /test/passwd.out/part-r-00000
 Bus     1
