@@ -65,7 +65,7 @@ export HADOOP_YARN_HOME=${HADOOP_PREFIX}                        #...
     <!--指定NameNode的地址，即HDFS的服务端口-->
     <property>
         <name>fs.defaultFS</name>                #关键字
-        <value>localhost:8020</value>             #值
+        <value>hdfs://localhost:8020/</value>    #值
         <final>true</final>
     </property>
     
@@ -350,21 +350,125 @@ wordcount /test/passwd /test/passwd.out
 
 #查看统计信息：
 [hdfs@localhost ~]$ hdfs dfs -cat /test/passwd.out/part-r-000000
-....(略)
+17/11/20 07:42:08 INFO client.RMProxy: Connecting to ResourceManager at localhost/127.0.0.1:8032
+17/11/20 07:42:09 INFO input.FileInputFormat: Total input paths to process : 1
+17/11/20 07:42:09 INFO mapreduce.JobSubmitter: number of splits:1
+17/11/20 07:42:09 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1511134917246_0001
+17/11/20 07:42:10 INFO impl.YarnClientImpl: Submitted application application_1511134917246_0001
+17/11/20 07:42:10 INFO mapreduce.Job: The url to track the job: http://localhost:8088/proxy/applic\
+ation_1511134917246_0001/
+17/11/20 07:42:10 INFO mapreduce.Job: Running job: job_1511134917246_0001
+17/11/20 07:42:17 INFO mapreduce.Job: Job job_1511134917246_0001 running in uber mode : false
+17/11/20 07:42:17 INFO mapreduce.Job:  map 0% reduce 0%
+17/11/20 07:42:22 INFO mapreduce.Job:  map 100% reduce 0%
+17/11/20 07:42:27 INFO mapreduce.Job:  map 100% reduce 100%
+17/11/20 07:42:27 INFO mapreduce.Job: Job job_1511134917246_0001 completed successfully
+17/11/20 07:42:27 INFO mapreduce.Job: Counters: 49
+        File System Counters
+                FILE: Number of bytes read=1433
+                FILE: Number of bytes written=217725
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=1259
+                HDFS: Number of bytes written=1247
+                HDFS: Number of read operations=6
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+        Job Counters 
+                Launched map tasks=1
+                Launched reduce tasks=1
+                Data-local map tasks=1
+                Total time spent by all maps in occupied slots (ms)=3057
+                Total time spent by all reduces in occupied slots (ms)=2771
+                Total time spent by all map tasks (ms)=3057
+                Total time spent by all reduce tasks (ms)=2771
+                Total vcore-milliseconds taken by all map tasks=3057
+                Total vcore-milliseconds taken by all reduce tasks=2771
+                Total megabyte-milliseconds taken by all map tasks=3130368
+                Total megabyte-milliseconds taken by all reduce tasks=2837504
+        Map-Reduce Framework
+                Map input records=24
+                Map output records=46
+                Map output bytes=1345
+                Map output materialized bytes=1433
+                Input split bytes=98
+                Combine input records=46
+                Combine output records=45
+                Reduce input groups=45
+                Reduce shuffle bytes=1433
+                Reduce input records=45
+                Reduce output records=45
+                Spilled Records=90
+                Shuffled Maps =1
+                Failed Shuffles=0
+                Merged Map outputs=1
+                GC time elapsed (ms)=63
+                CPU time spent (ms)=1690
+                Physical memory (bytes) snapshot=442707968
+                Virtual memory (bytes) snapshot=2118053888
+                Total committed heap usage (bytes)=277348352
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters 
+                Bytes Read=1161
+        File Output Format Counters 
+                Bytes Written=1247
 ```
-#### 本次部署后使用官方自带的MapReduce测试jar分词统计失败(暂时找不到原因)....
+##### 首次部署后使用官方自带的MapReduce测试jar分词统计失败 (修改core-site.xml文件后成功...)
+##### 以下是成功执行yarn上的MapReduce测试程序后的输出信息
+```bash
+[hdfs@localhost ~]$ hdfs dfs -cat /test/passwd.out/part-r-00000
+Bus     1
+IPv4LL  1
+Management:/:/sbin/nologin      1
+Network 1
+Proxy:/:/sbin/nologin   1
+SSH:/var/empty/sshd:/sbin/nologin       1
+Stack:/var/lib/avahi-autoipd:/sbin/nologin      1
+User:/var/ftp:/sbin/nologin     1
+adm:x:3:4:adm:/var/adm:/sbin/nologin    1
+avahi-autoipd:x:170:170:Avahi   1
+bin:x:1:1:bin:/bin:/sbin/nologin        1
+bus:/:/sbin/nologin     1
+by      1
+daemon:/dev/null:/sbin/nologin  1
+daemon:x:2:2:daemon:/sbin:/sbin/nologin 1
+dbus:x:81:81:System     1
+for     1
+ftp:x:14:50:FTP 1
+games:x:12:100:games:/usr/games:/sbin/nologin   1
+halt:x:7:0:halt:/sbin:/sbin/halt        1
+hdfs:x:1001:1000::/home/hdfs:/bin/bash  1
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin        1
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin  1
+mapred:x:1002:1000::/home/mapred:/bin/bash      1
+message 1
+nobody:x:99:99:Nobody:/:/sbin/nologin   1
+operator:x:11:0:operator:/root:/sbin/nologin    1
+package 1
+polkitd:/:/sbin/nologin 1
+polkitd:x:997:995:User  1
+postfix:x:89:89::/var/spool/postfix:/sbin/nologin       1
+root:x:0:0:root:/root:/bin/bash 1
+sandbox 1
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown    1
+sshd:x:74:74:Privilege-separated        1
+sync:x:5:0:sync:/sbin:/bin/sync 1
+systemd-bus-proxy:x:999:997:systemd     1
+systemd-network:x:998:996:systemd       1
+tcsd    1
+the     2
+to      1
+trousers        1
+tss:x:59:59:Account     1
+used    1
+yarn:x:1000:1000::/home/yarn:/bin/bash  1
+```
+##### 以下是失败的例子
 ![img](资料/Faile-demo.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
