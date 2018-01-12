@@ -3,7 +3,7 @@
 │   ├── Dialog
 │   ├── History Memo
 │   ├── Vim
-│   │   └── Setup
+│   │   └── Setup Plugin -  nerdtree
 │   └── 摘录汇总
 ├── Linux
 │   ├── Cluster
