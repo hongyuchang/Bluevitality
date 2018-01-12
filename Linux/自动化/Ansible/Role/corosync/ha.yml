@@ -1,0 +1,7 @@
+- name: install and config corosync
+  remote_user: root
+  hosts: hbhosts
+  roles:
+  - common
+  - ha
+  - crmsh

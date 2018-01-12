@@ -1,0 +1,4 @@
+- name: hosts file
+  copy: src=hosts dest=/etc/hosts
+- name: sync time
+  cron: name="sync time" minute="*/3" job="/usr/sbin/ntpdate 172.16.0.1 &> /dev/null"
