@@ -32,16 +32,14 @@
 - [ ] Rsyslog的模板规则及模块 & Rsyslog+LogAnalyzer+MySQL & ~~logrotate~~，gfs2+clvm@coroync，~~corosyc + Pacemaker~~ crmsh的md更改
 - [ ] demo（模板改用新版本形式：https://www.cnblogs.com/itcomputer/p/6241421.html ） Rsyslog调用日志并使用模板处理
 - [ ] ~~nodejs~~和mqtt的安装及相关设置，~~包括https，pm2，npm~~
-- [ ] DNS下增加rndc，demo改版
+- [ ] DNS下增加rndc
 - [ ] ~~ISCSI~~ ~~& gfs & clvm~~（仅流程）命令创建target的脚本并伴随注释，ISCSI的多路径冗余和负载均衡，tcpcopy & ipref 的README与sh
-- [x] ~~expect~~
 - [x] ~~docker的swarm流程脚本，~~ ~~Jenkins~~
 - [x] ~~consul 分步骤按格式存储，修改RAEDME~~
 - [ ] Openstack，kubernets，~~ELK~~，Openvswitch，KVM的NET模式demo
 - [ ] 分布式系统的 CAP （强弱一致性，最终一致性）与 DTP 的README
 - [X] ~~VNC~~ & ~~NTP~~
 - [ ] RabbitMQ，~~ActiveMQ~~
-- [x] ~~Zxarps~~
 
 #### 以后补充
 ```txt
