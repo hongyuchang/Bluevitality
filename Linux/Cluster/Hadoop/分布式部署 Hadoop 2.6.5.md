@@ -170,6 +170,7 @@ eof
 ```
 #### 在Hadoop集群中的Master节点将配置文件使用hadoop用户推送到集群中的各节点
 ```bash
+[root@node1 hadoop]# su - hadoop 
 [hadoop@node1 ~]$ cd /hadoop/etc/hadoop
 [hadoop@node1 ~]$ for n in {1..4};do scp core-site.xml  hadoop@node${nd}::/hadoop/etc/hadoop/core-site.xml ;done   
 [hadoop@node1 ~]$ for n in {1..4};do scp yarn-site.xml  hadoop@node${nd}::/hadoop/etc/hadoop/yarn-site.xml ;done 
