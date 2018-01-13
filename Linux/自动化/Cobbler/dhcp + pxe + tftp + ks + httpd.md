@@ -1,3 +1,4 @@
+###### 注：系统版本为 CentOS Linux release 7.2.1511 (Core) 
 #### 配置DHCP提供给PXE端引导文件的TFTP服务地址，及TFTP服务器上的PXE文件名
 ```bash
 # PXE：预引导执行环境（允许客户端启动后通过网络对DHCP指定的TFTP地址进行引导文件的加载）
