@@ -85,7 +85,8 @@ MENU TITLE CentOS7 PXE Menu
 
 LABEL ks
     KERNEL vmlinuz
-    APPEND initrd=initrd.img ks=http://192.168.5.1:80/Centos7/ks.cfg  inst.repo=ftp://192.168.5.1/Centos7/ ip=dhcp quiet
+    APPEND initrd=initrd.img inst.ks=http://192.168.5.1:80/Centos7/ks.cfg \     #此处与下方的字段在文件中是1行
+    inst.repo=ftp://192.168.5.1/Centos7 ip=dhcp quiet
 [root@localhost ~]# chmod 644 /var/lib/tftpboot/pxelinux.cfg/default
 ```
 #### Client端
