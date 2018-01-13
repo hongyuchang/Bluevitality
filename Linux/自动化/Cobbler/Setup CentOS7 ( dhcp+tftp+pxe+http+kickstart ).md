@@ -1,20 +1,17 @@
-#### 配置 DHCP 提供 PXE 引导文件地址...
+#### 配置DHCP服务器提供给PXE端引导文件的TFTP服务器地址及对应的PXE文件名
 ```bash
 # PXE：预引导执行环境（允许客户端启动后通过网络对DHCP指定的TFTP地址进行引导文件的加载）
 # 注： DHCP服务器上的网卡地址需要手工修改网卡配置文件来指定（固定，不要用vmware的NET8，新建一个NET并取消DHCP）...
 
-[root@localhost ~]# setenforce  0
-[root@localhost ~]# cat /etc/sysconfig/selinux | grep SELINUX=
-SELINUX=disabled
+[root@localhost ~]# setenforce 0 && systemctl stop firewalld 
 [root@localhost ~]# yum -y install dhcp
-[root@localhost ~]# systemctl stop firewalld && systemctl disable firewalld
 [root@localhost ~]# cat /etc/dhcp/dhcpd.conf
 option domain-name              "danlab.local";
 option domain-name-servers      127.0.0.1;
 default-lease-time 86400;
 max-lease-time 86400;
 
-filename="pxelinux.0";              #引导文件（它由syslinux提供：yum install syslinux）
+filename "pxelinux.0";              #引导文件（它由syslinux提供：yum install syslinux）
 next-server 192.168.0.2;            #引导文件所在服务器地址
 
 subnet 192.168.0.0 netmask 255.255.255.0 {
@@ -28,7 +25,7 @@ udp        0      0 0.0.0.0:67              0.0.0.0:*                           
 udp        0      0 0.0.0.0:19992           0.0.0.0:*                           1563/dhcpd          
 udp6       0      0 :::36907                :::*                                1563/dhcpd
 ```
-#### Server端设置
+#### Server 端设置
 ```bash
 [root@localhost ~]# yum -y install xinetd tftp-server syslinux system-config-kickstart httpd
 [root@localhost ~]# cat /etc/xinetd.d/tftp
