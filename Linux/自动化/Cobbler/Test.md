@@ -76,17 +76,17 @@ drwxr-xr-x.  2  root  root         6 1月   14 08:01  pxelinux.cfg
 
 #验证ks文件正确性（此处没有ks.cfg的文档，请参考本URL下的：Kickstart.cfg，务必在/var/www/html/下放置ks.cfg..）
 [root@localhost ~]# ksvalidator /var/www/html/Centos7/ks.cfg
-[root@localhost ~]# cp /var/lib/tftpboot/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
-[root@localhost ~]# vim /var/lib/tftpboot/pxelinux.cfg/default
-default ks
-prompt 0
-timeout 30
-MENU TITLE CentOS7 PXE Menu
+[root@localhost ~]# # cp /var/lib/tftpboot/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default  #此步骤跳过（BUG）
+[root@localhost ~]# vim /var/lib/tftpboot/pxelinux.cfg/default    #直接编辑如下信息，指定ks文件地址...
+default linux
+prompt 1
+timeout 20
+display boot.msg
+label linux
+  kernel vmlinuz
+  append initrd=initrd.img text ks=http://192.168.5.1:80/Centos7/ks.cfg
+    
 
-LABEL ks
-    KERNEL vmlinuz
-    APPEND initrd=initrd.img inst.ks=http://192.168.5.1:80/Centos7/ks.cfg \     #此处与下方的字段在文件中是1行
-    inst.repo=http://192.168.5.1/Centos7 ip=dhcp quiet
 [root@localhost ~]# chmod 644 /var/lib/tftpboot/pxelinux.cfg/default
 ```
 #### Client端
