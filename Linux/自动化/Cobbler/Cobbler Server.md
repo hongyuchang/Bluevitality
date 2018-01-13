@@ -16,7 +16,7 @@
 [root@node ~]# yum -y install syslinux         #提供pxelinux.0
 [root@node ~]# yum -y install dhcp tftp-server
 
-#若基于cobbler进行部署，则DHCP中除分配网段外其next-server无需再设置(但filename需要) cobbler其会自动指定next-server
+#若基于cobbler进行部署，则DHCP中除分配网段外其next-server无需再设置(但filename需要) cobbler将自动指定next-server
 [root@node ~]# ip address add 192.168.5.1/24 dev ens38 #负责分配网段的网卡（生产环境不需要，仅使用其默认）
 [root@node ~]# cat /etc/dhcp/dhcpd.conf
 subnet 192.168.5.0 netmask 255.255.255.0 {
