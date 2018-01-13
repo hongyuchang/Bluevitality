@@ -61,7 +61,7 @@ Password:
 $1$07f29696$GSHjtVsrUp6HE2OjCFbwO/
 [root@node ~]# sed -Ei 's|(default_password_crypted: ).*|\1\"$1$07f29696$GSHjtVsrUp6HE2OjCFbwO/\"|g' \
 /etc/cobbler/settings   
-[root@node ~]# cat /etc/cobbler/settings | grep default_password_crypted                                                  
+[root@node ~]# cat /etc/cobbler/settings | grep default_password_crypted
 default_password_crypted: "$1$07f29696$GSHjtVsrUp6HE2OjCFbwO/"
 
 [root@node ~]# systemctl restart cobblerd httpd    #重新启动后再进行检查
