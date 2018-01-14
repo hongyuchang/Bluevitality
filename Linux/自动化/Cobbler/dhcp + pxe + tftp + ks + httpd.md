@@ -11,7 +11,7 @@ subnet 192.168.5.0 netmask 255.255.255.0 {
   range 192.168.5.2 192.168.5.250;
   default-lease-time 600;
   max-lease-time 7200;
-  filename "pxelinux.0";            #引导文件（它由syslinux提供：yum install syslinux）
+  filename "pxelinux.0";            #引导文件（它由syslinux提供：yum install syslinux 此文件仅针对其所在平台）
   next-server 192.168.5.1;          #引导文件所在服务器地址
 }
 [root@localhost ~]# systemctl start dhcpd && systemctl enable dhcpd
