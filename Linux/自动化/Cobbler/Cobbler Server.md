@@ -13,7 +13,7 @@
 [root@node ~]# yum -y install debmirror             #cobbler的依赖
 [root@node ~]# yum -y install pykickstart           #KS文件的语法验证程序
 [root@node ~]# yum -y install httpd                 #提供安装源
-[root@node ~]# yum -y install syslinux              #提供pxelinux.0
+[root@node ~]# yum -y install syslinux              #提供引导文件"pxelinux.0"
 [root@node ~]# yum -y install dhcp tftp-server
 
 #若基于cobbler进行部署，则DHCP中除分配网段外其next-server无需再设置(但filename需要) cobbler将自动指定next-server
