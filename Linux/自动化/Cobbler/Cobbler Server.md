@@ -23,8 +23,8 @@ subnet 192.168.5.0 netmask 255.255.255.0 {
   range 192.168.5.2 192.168.5.250;
   default-lease-time 600;
   max-lease-time 7200;
-  filename "pxelinux.0";                            #引导文件（它由syslinux提供：yum install syslinux）
-  next-server 192.168.5.1;                          #引导文件所在服务器地址
+  filename "pxelinux.0";                            #引导文件（pxelinux.0由syslinux提供：yum install syslinux）
+  next-server 192.168.5.1;                          #引导文件所在tftp地址（此配置可略过，由cobbler处理，建议添加）
 }
 [root@node ~]# systemctl start dhcpd
 [root@node ~]# systemctl start tftp
@@ -238,10 +238,10 @@ MENU end
 ```bash
 [root@node ~]# vim /etc/cobbler/modules.conf
 [authentication]
-module = authn_configfile
+module = authn_configfile   #使用 /etc/cobbler/users.digest 进行基本认证的方式
 
 [authorization]
-module = authz_allowall
+module = authz_allowall     #对认证允许所有访问
 
 [root@node ~]# htdigest /etc/cobbler/users.digest "Cobbler" cobbler     #添加账号备注及生成账号/密码
 Changing password for user cobbler in realm Cobbler
