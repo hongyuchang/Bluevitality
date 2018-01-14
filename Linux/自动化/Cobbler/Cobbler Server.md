@@ -9,11 +9,11 @@
 [root@node ~]# yum -y install epel-release
 [root@node ~]# yum -y install xinetd
 [root@node ~]# yum -y install cobbler
-[root@node ~]# yum -y install cobbler-web      #WEB-GUI也可不安装
-[root@node ~]# yum -y install debmirror        #cobbler的依赖
-[root@node ~]# yum -y install pykickstart      #KS文件的语法验证程序
-[root@node ~]# yum -y install httpd            #提供安装源
-[root@node ~]# yum -y install syslinux         #提供pxelinux.0
+[root@node ~]# yum -y install cobbler-web           #WEB-GUI也可不安装
+[root@node ~]# yum -y install debmirror             #cobbler的依赖
+[root@node ~]# yum -y install pykickstart           #KS文件的语法验证程序
+[root@node ~]# yum -y install httpd                 #提供安装源
+[root@node ~]# yum -y install syslinux              #提供pxelinux.0
 [root@node ~]# yum -y install dhcp tftp-server
 
 #若基于cobbler进行部署，则DHCP中除分配网段外其next-server无需再设置(但filename需要) cobbler将自动指定next-server
@@ -47,14 +47,14 @@ The following are potential configuration items that you may want to fix:
 Restart cobblerd and then run 'cobbler sync' to apply changes.
 
 [root@node ~]# vim /etc/cobbler/settings
-server: 192.168.5.1                                #本机地址（cobbler的主机地址）
-next_server: 192.168.5.1                           #通过cobbler设置dhcp中的tftp地址
-manage_dhcp: 0                                     #是否自动管理DHCP服务，此处不需要（之前需要先启动DHCP）
-manage_tftp: 0                                     #是否自动管理TFTP服务，此处不需要
-......
-
-[root@node ~]# systemctl start rsyncd              #
-[root@node ~]# systemctl enable rsyncd             #相当于将xinetd中rsyncd服务的disable改为No
+server: 192.168.5.1                                 #本机地址（cobbler的主机地址）
+next_server: 192.168.5.1                            #通过cobbler设置dhcp中的tftp地址
+manage_dhcp: 0                                      #是否自动管理DHCP服务，此处不需要（之前需要先启动DHCP）
+manage_tftp: 0                                      #是否自动管理TFTP服务，此处不需要
+......  
+    
+[root@node ~]# systemctl start rsyncd               #
+[root@node ~]# systemctl enable rsyncd              #相当于将xinetd中rsyncd服务的disable改为No
 [root@node ~]# systemctl restart xinetd
 [root@node ~]# openssl passwd -1 -salt `openssl rand -hex 4`  #修改cobbler默认加密密码，使用此命令生成
 Password: 
@@ -64,12 +64,13 @@ $1$07f29696$GSHjtVsrUp6HE2OjCFbwO/
 [root@node ~]# cat /etc/cobbler/settings | grep default_password_crypted
 default_password_crypted: "$1$07f29696$GSHjtVsrUp6HE2OjCFbwO/"
 
-[root@node ~]# systemctl restart cobblerd httpd    #重新启动后再进行检查
+[root@node ~]# systemctl restart cobblerd httpd     #重新启动后再进行检查
 [root@node ~]# cobbler check
 [root@node ~]# sed -i "s/@dists/#&/"  /etc/debmirror.conf
 [root@node ~]# sed -i "s/@arches/#&/" /etc/debmirror.conf
 [root@node ~]# cp /usr/share/syslinux/{pxelinux.0,meminfo.c32} /var/lib/cobbler/loaders/
-[root@node ~]# cobbler sync                        #执行同步
+[root@node ~]# # cp /usr/share/syslinux/* /var/lib/cobbler/loaders/   #建议用此步骤替代上面的cp命令，全拷过去..
+[root@node ~]# cobbler sync                         #执行同步
 task started: 2018-01-14_101743_sync
 task started (id=Sync, time=Sun Jan 14 10:17:43 2018)
 running pre-sync triggers
@@ -95,7 +96,7 @@ running python trigger cobbler.modules.scm_track
 running shell triggers from /var/lib/cobbler/triggers/change/*
 *** TASK COMPLETE ***
 
-[root@node ~]# ll /var/lib/tftpboot/           #此时会发现cobbler自动同步的一堆文件
+[root@node ~]# ll /var/lib/tftpboot/                #此时会发现cobbler自动同步的一堆文件
 总用量 112
 drwxr-xr-x. 3 root root    17 1月  14 10:17 boot
 drwxr-xr-x. 2 root root     6 9月  18 23:16 etc
@@ -110,15 +111,15 @@ drwxr-xr-x. 2 root root    20 1月  14 10:17 pxelinux.cfg
 drwxr-xr-x. 2 root root    25 1月  14 10:17 s390x
 
 #子命令介绍
-# cobbler check         #检查cobbler配置
-# cobbler sync          #同步配置到dhcp pxe和数据目录
-# cobbler list          #列出所有的cobbler元素
-# cobbler import        #导入安装的系统光盘镜像
-# cobbler report        #列出各元素的详细信息
-# cobbler distro        #查看导入的发行版系统信息
-# cobbler profile       #查看配置信息
-# cobbler system        #查看添加的系统信息
-# cobbler reposync      #同步yum仓库到本地
+# cobbler check                 #检查cobbler配置
+# cobbler sync                  #同步配置到dhcp pxe和数据目录
+# cobbler list                  #列出所有的cobbler元素
+# cobbler import                #导入安装的系统光盘镜像
+# cobbler report                #列出各元素的详细信息
+# cobbler distro                #查看导入的发行版系统信息
+# cobbler profile               #查看配置信息
+# cobbler system                #查看添加的系统信息
+# cobbler reposync              #同步yum仓库到本地
 
 [root@node ~]# cobbler repo help   #仓库相关命令
 usage
