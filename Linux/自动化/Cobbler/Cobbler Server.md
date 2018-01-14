@@ -233,7 +233,7 @@ LABEL CentOS_7.2-x86_64-basic
 MENU end
 ```
 #### 此时客户端可以通过PXE启动了（目前在启动时使用 CentOS_7.2-x86_64-basic 会报与 --hostname 相关的问题）
-![img](资料/cobbler-client.png)
+![img](资料/Cobbler-client.png)
 #### conbbler web-ui
 ```bash
 [root@node ~]# vim /etc/cobbler/modules.conf
