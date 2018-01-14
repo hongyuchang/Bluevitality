@@ -6,6 +6,11 @@
 #主从ID标识
 server_id = 1
 
+#建议开启Inodb的独立表空间
+skip_resolve_name=1
+
+skip_resolve_name=1
+
 #使用全局事务唯一标识来进行同步（以下任一参数不开启都会报错）
 gtid-mode=on
 #强制保证GTID的一致性
@@ -77,6 +82,11 @@ MySQL> show master status;
 
 #主从ID标识
 server-id = 2
+
+#建议开启Inodb的独立表空间
+skip_resolve_name=1
+
+skip_resolve_name=1
 
 #强制只读，命令行方式修改： Mysql [(none)] > SET @@global.read_only = ON;
 #read_only = on
