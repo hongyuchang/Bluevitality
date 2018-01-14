@@ -7,7 +7,7 @@
 server_id = 1
 
 #建议开启Inodb的独立表空间
-skip_resolve_name=1
+innodb_file_per_table=1 
 
 skip_resolve_name=1
 
@@ -84,7 +84,7 @@ MySQL> show master status;
 server-id = 2
 
 #建议开启Inodb的独立表空间
-skip_resolve_name=1
+innodb_file_per_table=1 
 
 skip_resolve_name=1
 
