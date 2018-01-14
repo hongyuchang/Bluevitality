@@ -81,7 +81,7 @@ drwxr-xr-x.  2  root  root         6 1月   14 08:01  pxelinux.cfg
 [root@localhost ~]# vim /var/lib/tftpboot/pxelinux.cfg/default    #直接编辑如下信息，指定ks文件地址...
 default linux
 prompt 1
-timeout 20
+timeout 10
 display boot.msg
 label linux
   kernel vmlinuz
