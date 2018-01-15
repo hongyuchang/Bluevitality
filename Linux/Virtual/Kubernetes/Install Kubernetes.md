@@ -155,9 +155,12 @@ KUBELET_ARGS=""
 
 [root@node2 ~]# systemctl start flanneld
 [root@node2 ~]# systemctl start kube-proxy
-[root@node2 ~]# systemctl start kubelet
+[root@node2 ~]# systemctl start kubelet                         #通常kubelet在启动时向master注册自己并创建Node资源...
 [root@node2 ~]# systemctl start docker
+
+#注：为了管理Pod，每个Node节点上至少要运行 container runtime（如docker或rkt）、kubelet、kube-proxy
 ```
+#### kuberctl 测试 ......
 ```bash
 [root@node1 ~]# kubectl cluster-info                                    #查看集群信息
 Kubernetes master is running at http://localhost:8080
