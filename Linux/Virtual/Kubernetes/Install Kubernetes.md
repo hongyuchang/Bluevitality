@@ -183,7 +183,7 @@ metadata:
 spec:
   containers:
     - name: private-reg-container
-      image: <your-private-image>
-  imagePullSecrets:
+      image: <your-private-image>                     #指定其使用的私有镜像地址
+  imagePullSecrets:
     - name: regsecret
 ```
