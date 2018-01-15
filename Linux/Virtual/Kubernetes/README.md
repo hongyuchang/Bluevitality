@@ -42,6 +42,10 @@ Label :         一个label是一个被附加到资源上的键/值对，譬
 selector        是一个通过匹配labels来定义资源之间关系得表达式，例如为一个负载均衡的service指定所目标Pod.
 Replication Controller :    replication controller 是为了保证一定数量被指定的Pod的复制品在任何时间都能正常工作.
                             它不仅允许复制的系统易于扩展，还会处理当pod在机器在重启或发生故障的时候再次创建一个
+                            和直接创建的pod不同的是，Replication Controller会替换掉那些删除的或者被终止的pod
+                            不管删除的原因是什么（维护，更新，RC都不关心）基于此，建议即使是只创建1个pod也要用RC...
+                            Replication Controller像是进程管理器，监管不同node上的多个pod,而不仅是监控1个node的pod
+                            "RC"只对那些RestartPolicy=Always的Pod的生效，RestartPolicy的默认值就是Always
 Service :       一个service定义了访问pod的方式，就像单个固定的IP地址和与其相对应的DNS名之间的关系。
 Volume:         一个volume是一个目录，可能会被容器作为未见系统的一部分来访问。（了解Volume详情）
 Kubernetes volume           构建在Docker Volumes之上,并且支持添加和配置volume目录或者其他存储设备。
