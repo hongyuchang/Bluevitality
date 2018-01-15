@@ -29,9 +29,9 @@ kubelet     负责维护容器的生命周期，同时也负责Volume（CVI）�
 ```txt
 Cluster :       集群是指由Kubernetes使用一系列的物理机、虚拟机和其他基础资源来运行你的应用程序。
 Node :          一个node就是一个运行着Kubernetes的物理机或虚拟机，并且pod可以在其上面被调度。.
-Pod :           一个pod对应一个由相关容器和卷组成的容器组 （了解Pod详情）
+Pod :           一个pod对应一个由相关容器和卷组成的容器组
 Label :         一个label是一个被附加到资源上的键/值对，譬如附加到一个Pod上，为它传递一个用户自定的并且可识别的属性.
-                Label还可以被应用来组织和选择子网中的资源（了解Label详情）
+                Label还可以被应用来组织和选择子网中的资源
 selector        是一个通过匹配labels来定义资源之间关系得表达式，例如为一个负载均衡的service指定所目标Pod.
 Replication Controller :    replication controller 是为了保证一定数量被指定的Pod的复制品在任何时间都能正常工作.
                             它不仅允许复制的系统易于扩展，还会处理当pod在机器在重启或发生故障的时候再次创建一个
