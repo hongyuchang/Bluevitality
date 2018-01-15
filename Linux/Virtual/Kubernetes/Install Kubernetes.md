@@ -75,6 +75,9 @@ KUBE_CONTROLLER_MANAGER_ARGS=""
 [root@node1 ~]# cat /etc/kubernetes/scheduler                   #配置kube-scheduler配置文件
 KUBE_SCHEDULER_ARGS="--address-0.0.0.0"
 
+#取消账户认证，否则要设置TLS/CA之类的，之前测试这里卡住了，生产环境需要做证书和HA....
+[root@node1 ~]# sed -i '/KUBE_ADMISSION_CONTROL/{s/ServiceAccount,//g}' /etc/kubernetes/apiserver 
+
 [root@node1 ~]# systemctl enable kube-apiserver kube-scheduler kube-controller-manager
 [root@node1 ~]# systemctl start  kube-apiserver kube-scheduler kube-controller-manager
 ```
