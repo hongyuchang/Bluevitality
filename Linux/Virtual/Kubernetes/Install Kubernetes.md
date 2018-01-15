@@ -73,7 +73,7 @@ KUBE_API_ARGS=""
 KUBE_CONTROLLER_MANAGER_ARGS=""
 
 [root@node1 ~]# cat /etc/kubernetes/scheduler                   #配置kube-scheduler配置文件
-KUBE_SCHEDULER_ARGS="--address=0.0.0.0"
+KUBE_SCHEDULER_ARGS="--address-0.0.0.0"
 
 [root@node1 ~]# systemctl enable kube-apiserver kube-scheduler kube-controller-manager
 [root@node1 ~]# systemctl start  kube-apiserver kube-scheduler kube-controller-manager
@@ -100,7 +100,7 @@ KUBE_ALLOW_PRIV="--allow-privileged=false"
 KUBE_MASTER="--master=http://192.168.0.3:8080"
 
 [root@node1 ~]# grep -v '^#' /etc/kubernetes/proxy                  
-KUBE_PROXY_ARGS="--bind=address=0.0.0.0"
+KUBE_PROXY_ARGS="--bind-address=0.0.0.0"
 
 [root@node1 ~]# cat /etc/kubernetes/kubelet                     #配置node1 kubelet
 KUBELET_ADDRESS="--address=0.0.0.0"                             #绑定的地址
