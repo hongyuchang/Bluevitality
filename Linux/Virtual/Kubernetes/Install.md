@@ -43,9 +43,12 @@ ETCD_ADVERTISE_CLIENT_URLS="http://localhost:2379,http://192.168.0.3:2379"    
 [root@node1 ~]# etcdctl member list                 #检查etcd集群成员列表，这里只有一台
 8e9e05c52164694d: name=default peerURLs=http://localhost:2380 clientURLs=http://192.168.0.3:2379,\
 http://localhost:2379 isLeader=true
-[root@node1 ~]# etcdctl set /k8s/network/config '{"Network": "192.168.0.0/16"}' #配置etcd（曾用/24出故障)
+
+#配置etcd（曾用/24出故障） 此处为配置kubernetes中集群成员（容器）使用的网络地址...
+[root@node1 ~]# etcdctl set /k8s/network/config '{"Network": "192.168.0.0/16"}' 
 {"Network": "192.168.0.0/16"}
-[root@node1 ~]# etcdctl get /k8s/network/config
+
+[root@node1 ~]# etcdctl get /k8s/network/config     #查看KV设置
 {"Network": "192.168.0.0/16"}
 ```
 #### 部署 Master 
