@@ -1,30 +1,33 @@
 apiVersion: v1              #指定api版本，此值必须在kubectl apiversion中  
 kind: Pod                   #指定创建资源的角色/类型  
-metadata:                   #资源的元数据/属性  
-  name: web04-pod           #资源的名字，在同一个namespace中必须唯一  
-  labels:                   #设定资源的标签，详情请见http://blog.csdn.net/liyingke112/article/details/77482384
+metadata:                   #资源（即Pod）的元数据/属性  
+  name: web04-pod           #Pod的名字，在同一个namespace中必须唯一
+  namespace: String         #pod的命名空间
+  labels:                   #资源标签列表
     k8s-app: apache  
     version: v1  
     kubernetes.io/cluster-service: "true"  
   annotations:              #自定义注解列表  
     - name: String          #自定义注解名字  
-spec:                       #specification of the resource content 指定该资源的内容  
-  restartPolicy: Always     #表明该容器一直运行，默认k8s的策略，在此容器退出后，会立即创建一个相同的容器  
+spec:                       #specification of the resource content，pod中容器的详细定义
+  restartPolicy: Always     #表明该容器一直运行，默认的策略，在此容器退出后会立即创建一个相同的容器  
   nodeSelector:             #节点选择，先给主机打标签kubectl label nodes kube-node1 zone=node1  
     zone: node1  
-  containers:  
+  containers:               #pod中的容器列表，可以有多个容器
   - name: web04-pod         #容器的名字  
-    image: web:apache       #容器使用的镜像地址  
+    image: web:apache       #容器使用的镜像地址
+    hostNetwork: false      #是否使用主机网络模式，默认否
     imagePullPolicy: Never  #三个选择Always、Never、IfNotPresent，每次启动时检查和更新（从registery）images的策略，
-                            # Always，每次都检查
-                            # Never，每次都不检查（不管本地是否有）
-                            # IfNotPresent，如果本地有就不检查，如果没有就拉取
-    command: ['sh']         #启动容器的运行命令，将覆盖容器中的Entrypoint,对应Dockefile中的ENTRYPOINT  
-    args: ["$(str)"]        #启动容器的命令参数，对应Dockerfile中CMD参数  
+                            # Always 每次都检查
+                            # Never 每次都不检查（不管本地是否有）
+                            # IfNotPresent 如果本地有就不检查，如果没有就拉取
+    command: ['sh']         #启动容器的命令，将覆盖容Entrypoint，不配置的话还是使用镜像内部的命令
+    args: ["$(str)"]        #启动容器的命令参数，对应Dockerfile中CMD参数
+    workingDir: /           #容器的工作目录
     env:                    #指定容器中的环境变量  
-    - name: str             #变量的名字  
-      value: "/etc/run.sh"  #变量的值  
-    resources:              #资源管理，请求请见http://blog.csdn.net/liyingke112/article/details/77452630
+    - name: str             #变量名  
+      value: "/etc/run.sh"  #变量值  
+    resources:              #硬件资源管理
       requests:             #容器运行时，最低资源需求，也就是说最少需要多少资源容器才能正常运行  
         cpu: 0.1            #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
         memory: 32Mi        #内存使用量  
@@ -35,14 +38,19 @@ spec:                       #specification of the resource content 指定该资�
     - containerPort: 80     #容器开发对外的端口
       name: httpd           #名称
       protocol: TCP  
+      hostPort: 80          #容器所在主机监听的端口（容器暴露端口映射到宿主机的端口）
     livenessProbe:          #pod内容器健康检查的设置
       httpGet:              #通过httpget检查健康，返回200-399之间，则认为容器正常  
         path: /             #URI地址  
         port: 80  
         #host: 127.0.0.1    #主机地址  
-        scheme: HTTP  
-      initialDelaySeconds: 180  #表明第一次检测在容器启动后多长时间后开始  
-      timeoutSeconds: 5         #检测的超时时间  
+        scheme: HTTP
+      exec:
+        command: xxxxxxx    #使用SHELL方式检查
+      tcpSocket:
+        port: 80            #通过TCP方式检查
+      initialDelaySeconds: 180  #第一次检测在容器启动后多长时间后开始  
+      timeoutSeconds: 5         #检测超时时间  
       periodSeconds: 15         #检查间隔时间 
       
       #也可以用这种方法  
@@ -63,12 +71,12 @@ spec:                       #specification of the resource content 指定该资�
       preStop:              #容器关闭之前运行的任务  
         exec:  
           command: ['service httpd stop']  
-    volumeMounts:           #详情请见http://blog.csdn.net/liyingke112/article/details/76577520
+    volumeMounts:           #挂载到到容器内部的存储卷设置 （针对的是单个容器）
     - name: volume          #挂载设备的名字，与volumes[*].name 需要对应    
       mountPath: /data      #挂载到容器的某个路径下  
       readOnly: True  
-  volumes:                  #定义一组挂载设备  
-  - name: volume            #定义一个挂载设备的名字  
+  volumes:                  #定义一组挂载设备（在该pod上定义共享存储卷）
+  - name: volume            #定义挂载设备的名字  
     #meptyDir: {}  
     hostPath:  
       path: /opt            #挂载设备类型为hostPath，路径为宿主机下的/opt,这里设备类型支持很多种  
