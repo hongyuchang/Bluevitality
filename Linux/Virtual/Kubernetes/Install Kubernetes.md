@@ -165,3 +165,25 @@ node2     NotReady   8s
 NAME         CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
 kubernetes   192.168.0.1   <none>        443/TCP   22m
 ```
+#### 在k8s集群内使用私有的镜像服务器
+```bash
+#创建docker registry secret
+[root@node1 ~]# kubectl create secret docker-registry regsecret 
+--docker-server=<your-registry-server> \
+--docker-username=<your-name> \
+--docker-password=<your-pword> \
+--docker-email=<your-email>
+
+#容器中引用该secret：
+[root@node1 ~]# cat xxx.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-reg
+spec:
+  containers:
+    - name: private-reg-container
+      image: <your-private-image>
+  imagePullSecrets:
+    - name: regsecret
+```
