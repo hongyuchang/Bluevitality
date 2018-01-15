@@ -160,4 +160,8 @@ KUBELET_ARGS=""
 NAME      STATUS     AGE
 node1     Ready      9m
 node2     NotReady   8s
+
+[root@node1 ~]# kubectl get service
+NAME         CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+kubernetes   192.168.0.1   <none>        443/TCP   22m
 ```
