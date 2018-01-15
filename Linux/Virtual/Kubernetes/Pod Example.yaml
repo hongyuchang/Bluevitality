@@ -40,6 +40,9 @@ spec:                       #specification of the resource content，pod中容�
       protocol: TCP  
       hostPort: 80          #容器所在主机监听的端口（容器暴露端口映射到宿主机的端口）
     livenessProbe:          #pod内容器健康检查的设置
+      initialDelaySeconds: 180  #第一次检测在容器启动后多长时间后开始  
+      timeoutSeconds: 5         #检测超时时间  
+      periodSeconds: 15         #检查间隔时间   
       httpGet:              #通过httpget检查健康，返回200-399之间，则认为容器正常  
         path: /             #URI地址  
         port: 80  
@@ -49,19 +52,12 @@ spec:                       #specification of the resource content，pod中容�
         command: xxxxxxx    #使用SHELL方式检查
       tcpSocket:
         port: 80            #通过TCP方式检查
-      initialDelaySeconds: 180  #第一次检测在容器启动后多长时间后开始  
-      timeoutSeconds: 5         #检测超时时间  
-      periodSeconds: 15         #检查间隔时间 
       
       #也可以用这种方法  
-      #exec: 执行命令的方法进行监测，如果其退出码不为0，则认为容器正常  
+      #exec:                #执行命令的方法进行监测，如果其退出码不为0，则认为容器正常  
       #  command:  
       #    - cat  
       #    - /tmp/health  
-      #也可以用这种方法  
-      #tcpSocket: //通过tcpSocket检查健康   
-      #  port: number   
-      
     lifecycle:              #生命周期管理  
       postStart:            #容器运行之前运行的任务  
         exec:  
