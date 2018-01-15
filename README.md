@@ -26,7 +26,7 @@
 ```txt
 rabbitmq，Kafka，zookeeper
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
-kubernetes，Mesos，grafana
+kubernetes，Mesos(了解)，grafana
 stunnel，OpenVPN，IPsec + L2TP，PPTP的测试
 ceph，flume，Celery
 ```
