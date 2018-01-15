@@ -116,7 +116,7 @@ KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.
 KUBELET_ARGS=""
 
 [root@node1 ~]# systemctl start flanneld                        #overlay网络相关 (提供 xlan 网络)
-[root@node1 ~]# systemctl start kube-proxy                      #提供网络相关功能，如LB...
+[root@node1 ~]# systemctl start kube-proxy                      #提供网络相关功能，如随机开启1个本机端口做映射
 [root@node1 ~]# systemctl start kubelet                         #Pod中Node节点的manager...
 [root@node1 ~]# systemctl start docker                          #
 ```
