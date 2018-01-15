@@ -2,11 +2,12 @@ apiVersion: v1              #指定api版本，此值必须在kubectl apiversion
 kind: Pod                   #指定创建资源的角色/类型  
 metadata:                   #资源（即Pod）的元数据/属性  
   name: web04-pod           #Pod的名字，在同一个namespace中必须唯一
-  namespace: String         #pod的命名空间
+  namespace: blue           #pod的所在的Namespace，是对一组资源/对象的抽象集合，如将系统内部的对象划为不同的项目/用户组
+                            #Namespace常用来隔离不同的用户，如Kubernetes自带的服务一般运行在kube-system namespace中
   labels:                   #资源标签列表
-    k8s-app: apache  
-    version: v1  
-    kubernetes.io/cluster-service: "true"  
+    k8s-app: apache         #使用Kubectl过滤标签：kubectl get pods -l k8s-app=apache,version=v1,k=v,...
+    version: v1             #使用Kubectl过滤标签：kubectl get pods -l 'k8s-app in (apache, String1,String2)'
+    kubernetes.io/cluster-service: "true"   #若标签带前缀"/"左半部分，若使用此方式那么前缀必须是一个DNS子域
   annotations:              #自定义注解列表
     - name: String          #自定义注解名字
     kubernetes.io/ingress-bandwidth: 3M #限制Pod的网络带宽 
