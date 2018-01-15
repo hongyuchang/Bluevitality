@@ -98,7 +98,6 @@
 │   │   ├── Openssl  demo
 │   │   └── Setup PKI
 │   ├── 数据库
-│   │   ├── Mariadb
 │   │   ├── Memcache
 │   │   │   └── Setup 1.4.24
 │   │   ├── Mongodb
@@ -274,4 +273,4 @@
     │   └── Improve
     └── Tools
 
-274 directories
+273 directories
