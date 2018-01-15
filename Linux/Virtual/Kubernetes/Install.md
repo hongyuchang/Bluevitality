@@ -6,22 +6,19 @@
                |                       |
             192.168.0.3              192.168.0.4
 ```
-#### k8s安装流程
+#### k8s 部署流程
 ```bash
 [root@node1 ~]# yum -y install kubernetes* ntp flannel etcd docker  #在所有节点执行安装...
 [root@node* ~]# yum -y install kubernetes* ntp flannel etcd docker  #
 [root@node1 ~]# setenforce 0 && systemctl stop firewalld
 [root@node2 ~]# setenforce 0 && systemctl stop firewalld
-[root@node1 ~]# cat /etc/hosts
+[root@node* ~]# cat >> /etc/hosts <<eof
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 192.168.0.3 node1
 192.168.0.4 node2
-[root@node2 ~]# cat /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.0.3 node1
-192.168.0.4 node2
+eof
+
 [root@node1 ~]# ntpdate ntp1.aliyun.com
 [root@node2 ~]# ntpdate ntp1.aliyun.com
 ```
