@@ -51,3 +51,48 @@ kubectl scale – 为replication controller设置新的副本数。
 kubectl stop – （已停用）通过资源名或控制台输入安全删除资源。
 kubectl version – 输出服务端和客户端的版本信息。
 ```
+```txt
+# 查看集群信息
+kubectl cluster-info
+
+# 查看各组件信息
+kubectl -s http://localhost:8080 get componentstatuses
+
+# 查看pods所在的运行节点
+kubectl get pods -o wide
+
+# 查看pods定义的详细信息
+kubectl get pods -o yaml
+
+# 查看Replication Controller信息
+kubectl get rc
+
+# 查看service的信息
+kubectl get service
+
+# 查看节点信息
+kubectl get nodes
+
+# 按selector名来查找pod
+kubectl get pod --selector name=redis
+
+
+# 查看运行的pod的环境变量
+kubectl exec pod名 env
+
+2 操作类命令
+
+# 创建
+kubectl create -f 文件名
+
+# 重建
+kubectl replace -f 文件名  [--force]
+
+# 删除
+kubectl delete -f 文件名
+kubectl delete pod pod名
+kubectl delete rc rc名
+kubectl delete service service名
+kubectl delete pod --all
+
+```
