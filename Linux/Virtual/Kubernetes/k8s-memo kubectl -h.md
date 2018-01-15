@@ -1,5 +1,5 @@
+###### kubectl --help 
 ```txt
-kubectl --help 
 --alsologtostderr[=false]: 同时输出日志到标准错误控制台和文件。
 --api-version="": 和服务端交互使用的API版本。
 --certificate-authority="": 用以进行认证授权的.cert文件路径。
@@ -75,7 +75,6 @@ kubectl get nodes
 
 # 按selector名来查找pod
 kubectl get pod --selector name=redis
-
 
 # 查看运行的pod的环境变量
 kubectl exec pod名 env
