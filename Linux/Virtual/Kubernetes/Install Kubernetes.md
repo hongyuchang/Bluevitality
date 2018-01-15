@@ -111,8 +111,8 @@ KUBELET_PORT="--port=10250"                                   �
 KUBELET_HOSTNAME="--hostname-override=node1"                    #汇报的本机名称
 KUBELET_API_SERVER="--api-servers=http://192.168.0.3:8080"      #要访问的APISERVER(Master地址)
 KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest"
-#kubenet服务的启动要依赖pause这个镜像, 默认kubenet从google镜像服务下载, 而由于GFW原因会不成功，这里我们指定为docker的镜像
-#手动方式镜像下载: docker pull docker.io/kubernetes/pause
+#kubenet服务的启动要依赖pause这个镜像, 默认kubenet从google镜像服务下载，但GFW原因会不成功（建议使用阿里云镜像）
+#这里我们指定为docker的镜像，手动方式镜像下载: docker pull docker.io/kubernetes/pause
 KUBELET_ARGS=""
 
 [root@node1 ~]# systemctl start flanneld                        #overlay网络相关 (提供 xlan 网络)
