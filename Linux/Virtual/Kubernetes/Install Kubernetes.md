@@ -156,6 +156,15 @@ KUBELET_ARGS=""
 [root@node2 ~]# systemctl start docker
 ```
 ```bash
+[root@node1 ~]# kubectl cluster-info                                    #查看集群信息
+Kubernetes master is running at http://localhost:8080
+
+[root@node1 ~]# kubectl -s http://localhost:8080 get componentstatuses  #查看各组件信息
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok                   
+scheduler            Healthy   ok                   
+etcd-0               Healthy   {"health": "true"}
+
 [root@node1 ~]# kubectl get nodes                               #至此，整个Kubernetes集群搭建完毕    
 NAME      STATUS     AGE
 node1     Ready      9m
