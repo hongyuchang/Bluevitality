@@ -6,21 +6,17 @@
                |                       |
             192.168.0.3              192.168.0.4
 ```
-#### 集群内的相关软件安装
+#### 在集群内的所有节点先安装如下软件
 ```bash
-[root@node1 ~]# yum -y install kubernetes* ntp flannel etcd docker  #在所有节点执行安装...
-[root@node* ~]# yum -y install kubernetes* ntp flannel etcd docker  #
-[root@node1 ~]# setenforce 0 && systemctl stop firewalld
-[root@node2 ~]# setenforce 0 && systemctl stop firewalld
-[root@node* ~]# cat >> /etc/hosts <<eof                             #在所有节点的/etc/hosts内加入master与node映射
+[root@nodeX ~]# yum -y install kubernetes* ntp flannel etcd docker  #在所有节点执行安装...
+[root@nodeX ~]# setenforce 0 && systemctl stop firewalld
+[root@nodeX ~]# ntpdate ntp1.aliyun.com
+[root@nodeX ~]# cat >> /etc/hosts <<eof                             #在所有节点/etc/hosts内加入主机名映射
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 192.168.0.3 node1
 192.168.0.4 node2
 eof
-
-[root@node1 ~]# ntpdate ntp1.aliyun.com
-[root@node2 ~]# ntpdate ntp1.aliyun.com
 ```
 #### 部署 etcd 
 ```bash
@@ -53,11 +49,11 @@ http://localhost:2379 isLeader=true
 ```
 #### 部署 Master 
 ```bash
-[root@node1 ~]# cat /etc/kubernetes/config        #配置master服务器
+[root@node1 ~]# cat /etc/kubernetes/config          #配置master服务器
 KUBE_LOGTOSTDERR="--logtostderr=true"
 KUBE_LOG_LEVEL="--v=0"
 KUBE_ALLOW_PRIV="--allow-privileged=false"
-KUBE_MASTER="--master=http://192.168.0.3:8080"    #APISERVER在什么地方运行
+KUBE_MASTER="--master=http://192.168.0.3:8080"      #APISERVER在什么地方运行
 
 [root@node1 ~]# cat /etc/kubernetes/apiserver    
 KUBE_API_ADDRESS="--insecure-bind-address=0.0.0.0"              #KUBE_API的绑定地址
@@ -75,7 +71,7 @@ KUBE_CONTROLLER_MANAGER_ARGS=""
 [root@node1 ~]# cat /etc/kubernetes/scheduler                   #配置kube-scheduler配置文件
 KUBE_SCHEDULER_ARGS="--address-0.0.0.0"
 
-#取消账户认证，否则要设置TLS/CA之类的，之前测试这里卡住了，生产环境需要做证书和HA....
+#取消账户认证，否则要部署CA并设置TLS证书，之前的测试环境在这里卡住了，注意生产环境需要做数字证书认证和HA!....
 [root@node1 ~]# sed -i '/KUBE_ADMISSION_CONTROL/{s/ServiceAccount,//g}' /etc/kubernetes/apiserver 
 
 [root@node1 ~]# systemctl enable kube-apiserver kube-scheduler kube-controller-manager
@@ -83,14 +79,14 @@ KUBE_SCHEDULER_ARGS="--address-0.0.0.0"
 ```
 #### Node 1
 ```bash
-[root@node1 ~]# vim /etc/sysconfig/docker                       #配置Docker配置文件，使其允许从registry中拉取镜像
+[root@node1 ~]# vim /etc/sysconfig/docker                       #配置Docker使其允许从私有的registry中拉取镜像
 OPTIONS='--selinux-enabled --log-driver=journald --signature-verification=false'
 if [ -z "${DOCKER_CERT_PATH}" ]; then
     DOCKER_CERT_PATH=/etc/docker
 fi
-OPTIONS='--insecure-registry registry:5000'                     #....
+OPTIONS='--insecure-registry registry:5000'                     #
 
-#配置node1网络，本实例采用flannel方式来配置，如需其他方式，请参考Kubernetes官网
+#配置网络，本环境采用flannel的方式，如需其他overlay方案请参考K8s官网
 [root@node1 ~]# cat /etc/sysconfig/flanneld    
 FLANNEL_ETCD_ENDPOINTS="http://192.168.0.3:2379"                #告知etcd服务所在地址和端口
 FLANNEL_ETCD_PREFIX="/k8s/network"                              #获取etcd中的网络配置（etcdctl set时的"URL"key）
@@ -111,8 +107,8 @@ KUBELET_PORT="--port=10250"                                   �
 KUBELET_HOSTNAME="--hostname-override=node1"                    #汇报的本机名称
 KUBELET_API_SERVER="--api-servers=http://192.168.0.3:8080"      #要访问的APISERVER(Master地址)
 KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest"
-#kubenet服务的启动要依赖pause这个镜像, 默认kubenet从google镜像服务下载，但GFW原因会不成功（建议使用阿里云镜像）
-#这里我们指定为docker的镜像，手动方式镜像下载: docker pull docker.io/kubernetes/pause
+# kubenet服务的启动需依赖名为"pause"的镜像，默认k8s将从google镜像服务下载，由于GFW原因不会成功，因此需指定其他镜像源地址!
+# 使用手动方式镜像下载: "docker pull docker.io/kubernetes/pause"
 KUBELET_ARGS=""
 
 [root@node1 ~]# systemctl start flanneld                        #overlay网络相关 (提供 xlan 网络)
@@ -122,14 +118,13 @@ KUBELET_ARGS=""
 ```
 #### Node 2
 ```bash
-[root@node1 ~]# vim /etc/sysconfig/docker                       #配置Docker配置文件，使其允许从registry中拉取镜像
+[root@node1 ~]# vim /etc/sysconfig/docker                       #配置Docker
 OPTIONS='--selinux-enabled --log-driver=journald --signature-verification=false'
 if [ -z "${DOCKER_CERT_PATH}" ]; then
     DOCKER_CERT_PATH=/etc/docker
 fi
-OPTIONS='--insecure-registry registry:5000'                     #
+OPTIONS='--insecure-registry registry:5000'
 
-#配置node2网络，本实例采用flannel方式来配置，如需其他方式，请参考Kubernetes官网
 [root@node2 ~]# cat /etc/sysconfig/flanneld    
 FLANNEL_ETCD_ENDPOINTS="http://192.168.0.3:2379"                #告知etcd服务所在地址和端口
 FLANNEL_ETCD_PREFIX="/k8s/network"                              #获取etcd中的网络配置（etcdctl set时的"URL"key）
@@ -162,16 +157,16 @@ KUBELET_ARGS=""
 ```
 #### kuberctl 测试 ......
 ```bash
-[root@node1 ~]# kubectl cluster-info                                    #查看集群信息
+[root@node1 ~]# kubectl cluster-info                                            #查看集群信息
 Kubernetes master is running at http://localhost:8080
 
-[root@node1 ~]# kubectl -s http://localhost:8080 get componentstatuses  #查看各组件信息
+[root@node1 ~]# kubectl -s http://localhost:8080 get componentstatuses          #查看各组件信息
 NAME                 STATUS    MESSAGE              ERROR
 controller-manager   Healthy   ok                   
 scheduler            Healthy   ok                   
 etcd-0               Healthy   {"health": "true"}
 
-[root@node1 ~]# kubectl get nodes                               #至此，整个Kubernetes集群搭建完毕    
+[root@node1 ~]# kubectl get nodes               #至此，整个Kubernetes集群搭建完毕    
 NAME      STATUS     AGE
 node1     Ready      9m
 node2     NotReady   8s
@@ -198,7 +193,7 @@ metadata:
 spec:
   containers:
     - name: private-reg-container
-      image: <your-private-image>                     #指定其使用的私有镜像地址
+      image: <your-private-image>               #指定其使用的私有镜像地址
   imagePullSecrets:
     - name: regsecret
 ```
