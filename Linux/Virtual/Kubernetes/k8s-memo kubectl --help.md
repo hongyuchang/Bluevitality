@@ -1,29 +1,5 @@
 ###### kubectl --help 
 ```txt
---alsologtostderr[=false]: 同时输出日志到标准错误控制台和文件。
---api-version="": 和服务端交互使用的API版本。
---certificate-authority="": 用以进行认证授权的.cert文件路径。
---client-certificate="": TLS使用的客户端证书路径。
---client-key="": TLS使用的客户端密钥路径。
---cluster="": 指定使用的kubeconfig配置文件中的集群名。
---context="": 指定使用的kubeconfig配置文件中的环境名。
---insecure-skip-tls-verify[=false]: 如果为true，将不会检查服务器凭证的有效性，这会导致你的HTTPS链接变得不安全。
---kubeconfig="": 命令行请求使用的配置文件路径。
---log-backtrace-at=:0: 当日志长度超过定义的行数时，忽略堆栈信息。
---log-dir="": 如果不为空，将日志文件写入此目录。
---log-flush-frequency=5s: 刷新日志的最大时间间隔。
---logtostderr[=true]: 输出日志到标准错误控制台，不输出到文件。
---match-server-version[=false]: 要求服务端和客户端版本匹配。
---namespace="": 如果不为空，命令将使用此namespace。
---password="": API Server进行简单认证使用的密码。
--s, --server="": Kubernetes API Server的地址和端口号。
---stderrthreshold=2: 高于此级别的日志将被输出到错误控制台。
---token="": 认证到API Server使用的令牌。
---user="": 指定使用的kubeconfig配置文件中的用户名。
---username="": API Server进行简单认证使用的用户名。
---v=0: 指定输出日志的级别。
---vmodule=: 指定输出日志的模块，格式如下：pattern=N，使用逗号分隔。
-
 kubectl annotate – 更新资源的注解。
 kubectl api-versions – 以“组/版本”的格式输出服务端支持的API版本。
 kubectl apply – 通过文件名或控制台输入，对资源进行配置。
@@ -89,6 +65,30 @@ kubectl label pod redis-master-1033017107-q47hh role=backend --overwrite #修改
 kubectl rolling-update redis-master -f redis-master-controller-v2.yaml #配置文件滚动升级
 kubectl rolling-update redis-master --image=redis-master:2.0 #命令升级
 kubectl rolling-update redis-master --image=redis-master:1.0 --rollback #pod版本回滚
+
+--alsologtostderr[=false]: 同时输出日志到标准错误控制台和文件。
+--api-version="": 和服务端交互使用的API版本。
+--certificate-authority="": 用以进行认证授权的.cert文件路径。
+--client-certificate="": TLS使用的客户端证书路径。
+--client-key="": TLS使用的客户端密钥路径。
+--cluster="": 指定使用的kubeconfig配置文件中的集群名。
+--context="": 指定使用的kubeconfig配置文件中的环境名。
+--insecure-skip-tls-verify[=false]: 如果为true，将不会检查服务器凭证的有效性，这会导致你的HTTPS链接变得不安全。
+--kubeconfig="": 命令行请求使用的配置文件路径。
+--log-backtrace-at=:0: 当日志长度超过定义的行数时，忽略堆栈信息。
+--log-dir="": 如果不为空，将日志文件写入此目录。
+--log-flush-frequency=5s: 刷新日志的最大时间间隔。
+--logtostderr[=true]: 输出日志到标准错误控制台，不输出到文件。
+--match-server-version[=false]: 要求服务端和客户端版本匹配。
+--namespace="": 如果不为空，命令将使用此namespace。
+--password="": API Server进行简单认证使用的密码。
+-s, --server="": Kubernetes API Server的地址和端口号。
+--stderrthreshold=2: 高于此级别的日志将被输出到错误控制台。
+--token="": 认证到API Server使用的令牌。
+--user="": 指定使用的kubeconfig配置文件中的用户名。
+--username="": API Server进行简单认证使用的用户名。
+--v=0: 指定输出日志的级别。
+--vmodule=: 指定输出日志的模块，格式如下：pattern=N，使用逗号分隔。
 ```
 ```txt
 # 查看集群信息
@@ -124,8 +124,6 @@ kubectl get pod --selector name=redis
 # 查看运行的pod的环境变量
 kubectl exec pod名 env
 
-2 操作类命令
-
 # 创建
 kubectl create -f 文件名
 
@@ -133,12 +131,91 @@ kubectl create -f 文件名
 kubectl replace -f 文件名  [--force]
 
 # 删除
-kubectl delete -f 文件名
-kubectl delete pod pod名
-kubectl delete rc rc名
-kubectl delete service service名
+kubectl delete -f  <文件名>
+kubectl delete pod <pod名》
+kubectl delete rc  <rc名>
+kubectl delete service <service名>
 kubectl delete pod --all
+```
+#### 部分子命令说明
+```txt
+replace：
+    用于对已有资源进行更新、替换。如前面create中创建的nginx
+    当需更新resource的属性时，如修改副本数，增加、修改label，更改image版本，端口等都可直接修改原yaml然后执行replace 
+    需要注意的是名字不能被更新。另外若是更新label则原有标签的pod将会与更新label后的rc断开联系!
+    有新label的rc将会创建指定副本数的新的pod但默认并不会删除原来的pod。所以此时如果使用get pods将会发现pod数翻倍
+    进一步check会发现原来的pod已不会被新rc控制，此处只介绍命令不详谈此问题。 
+    [root@node1 ~]# kubectl replace -f rc-nginx.yaml
 
+patch：
+    若1个容器已经在运行，此时需对一些容器属性进行修改又不想删除容器，或不方便通过replace的方式进行更新。
+    k8s还提供了一种在容器运行时直接对容器进行修改的方式，就是patch... 
+    假如创建pod的label是app=nginx-2，如果在运行过程中需要把其label改为app=nginx-3这patch命令如下： 
+    [root@node1 ~]# kubectl patch pod nginx -p '{"metadata":{"labels":{"app":"nginx-3"}}}'  
+
+edit：
+    edit提供了另1种更新resource源的操作，通过edit能灵活的在1个common的resource基础上发展出更多的significant resource
+    例如，使用edit直接更新前面创建的pod的命令为： 
+    [root@node1 ~]# kubectl edit po rc-nginx-btv4j   
+    上面命令的效果等效于： 
+    [root@node1 ~]# kubectl get po rc-nginx-btv4j -o yaml >> /tmp/nginx-tmp.yaml   
+    [root@node1 ~]# vim /tmp/nginx-tmp.yaml
+    [root@node1 ~]# kubectl replace -f /tmp/nginx-tmp.yaml   
+            
+Delete：
+    根据resource名或label删除resource
+    [root@node1 ~]# kubectl delete -f rc-nginx.yaml   
+    [root@node1 ~]# kubectl delete po rc-nginx-btv4j   
+    [root@node1 ~]# kubectl delete po -lapp=nginx-2 
+
+apply：
+    apply命令提供了比patch，edit等更严格的更新resource的方式
+    通过它可以将resource的configuration使用source control的方式维护在版本库中...
+    每次有更新时，将配置文件push到server然后使用kubectl apply将更新应用到resource
+    k8s在引用更新前将当前配置文件同已应用的配置比较并只更新更改的部分而不会主动更改任何用户未指定的部分 
+    apply的使用方式同replace相同，不同的是apply不会删除原有resource然后创建新的
+    apply直接在原有resource基础上进行更新，同时还会在resource中添加1条注释，标记当前的apply。类似于git操作
+
+logs：
+    用于显示pod运行中，容器内程序输出到标准输出的内容。与docker的logs类似。如果要获得tail -f的方式则也可以使用"-f" 
+    [root@node1 ~]# kubectl logs nginx
+        
+rolling-update：
+    是非常重要的命令，它对已经部署并正在运行的业务提供了不中断业务的更新方式。
+    rolling-update每次起1个新的pod，等新pod完全起来后删除1个旧的pod，然后再起1个新的pod替换旧的，直到替换掉所有pod 
+    需注意的是，rolling-update需确保新的版本有不同的name，Version和label，否则会报错
+    rolling-update还有很多其他选项提供丰富的功能，如—update-period指定间隔周期，使用时可以使用-h查看help信息 
+    [root@node1 ~]# kubectl rolling-update nginx-2 -f nginx.yaml   
+    如果在升级过程中，发现有问题还可以中途停止update并回滚到之前的版本: 
+    [root@node1 ~]# kubectl rolling-update nginx-2 —rollback   
+
+scale：    
+    用于程序在负载加重或缩小时副本进行扩容或缩小，如前面创建的nginx有两个副本，可轻松的使用其对副本数进行扩容/缩容 
+    扩展副本数到4：
+    [root@node1 ~]# kubectl scale rc nginx-3 —replicas=4  
+    重新缩减副本数到2：
+    [root@node1 ~]# kubectl scale rc rc-nginx-3 —replicas=2 
+
+autoscale：
+    scale虽然能够很方便的对副本数进行扩展或缩小，但仍然需人工介入。不能实时自动根据系统负载对副本数进行扩容/缩容
+    autoscale提供了自动根据pod负载对其副本进行扩缩的功能。 
+    autoscale会给1个rc指定1个副本数的范围，在实际运行中根据pod中运行程序的负载自动在指定的范围内对pod进行扩容/缩容
+    如前面创建的nginx，可以用如下命令指定副本范围在1~4 
+    [root@node1 ~]# kubectl autoscale rc nginx-3 —min=1 —max=4   
+
+exec：
+    类似于docker的exec命令，为在已经运行的容器中执行一条shell命令
+    如果一个pod容器中有多个容器，需要使用-c选项指定容器 
+
+port-forward：
+    转发一个本地端口到容器端口，作者一般都是使用yaml方式编排容器，所以基本不使用此命令
+
+label：
+     为k8s集群的resource打标签，如前面实例中提到的为rc打标签对rc分组。还可对nodes打标签
+     这样在编排容器时可以为容器指定nodeSelector将容器调度到指定lable的机器上
+     如果集群中有IO密集型，计算密集型的机器分组，可以将不同的机器打上不同标签，然后将不同特征的容器调度到不同分组上
+     在1.2之前的版本中，使用kubectl get nodes则可以列出所有节点的信息，包括节点标签
+     在1.2版本之后不再列出节点的标签信息，如果需要查看节点被打了哪些标签，需要使用describe查看节点的信息
 ```
 ###### kubectl --help
 ```txt
