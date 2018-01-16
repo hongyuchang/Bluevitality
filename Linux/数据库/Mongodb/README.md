@@ -90,7 +90,7 @@ fork = true
 auth = true
 ```
 #### 数据库下的账户创建/认证/更新密码
-```javascript
+```bash
 # 验证：mongo -u mongo_admin -p mongo_passowrd --authenticationDatabase <db_name>
 > use admin								#切换到需添加用户的db
 > db.createUser( 
