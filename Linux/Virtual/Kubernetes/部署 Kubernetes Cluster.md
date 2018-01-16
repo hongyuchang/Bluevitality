@@ -106,10 +106,11 @@ KUBELET_ADDRESS="--address=0.0.0.0"                             #绑定的地址
 KUBELET_PORT="--port=10250"                                     #node监听端口，需与Master的KUBELET_PORT保持一致
 KUBELET_HOSTNAME="--hostname-override=node1"                    #汇报的本机名称
 KUBELET_API_SERVER="--api-servers=http://192.168.0.3:8080"      #要访问的APISERVER(Master地址)
+KUBELET_ARGS=""
 KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest"
 # kubenet服务的启动需依赖名为"pause"的镜像，默认k8s将从google镜像服务下载，由于GFW原因不会成功，因此需指定其他镜像源地址!
+# 本目录的软件文件夹内已经包含了pause的镜像文件，在所有节点手动载入："docker load < gopause.tar"
 # 使用手动方式镜像下载: "docker pull docker.io/kubernetes/pause"
-KUBELET_ARGS=""
 
 [root@node1 ~]# systemctl start flanneld                        #overlay网络相关 (提供 xlan 网络)
 [root@node1 ~]# systemctl start kube-proxy                      #提供网络相关功能，如随机开启1个本机端口做映射
