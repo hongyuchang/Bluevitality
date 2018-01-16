@@ -28,8 +28,8 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 --logpath arg   		# 指定MongoDB日志文件，注意是指定文件不是目录
 --logappend     		# 使用追加的方式写日志
 --keyFile arg   		# 集群的私钥的完整路径，只对于Replica Set 架构有效
---unixSocketPrefix arg  # UNIX域套接字替代目录（默认 /tmp）禁用Unix套接字监听：--nounixsocket
---pidfilepath arg       # PID File 的完整路径，如果没有设置，则没有PID文件
+--unixSocketPrefix arg  	# UNIX域套接字替代目录（默认 /tmp）禁用Unix套接字监听：--nounixsocket
+--pidfilepath arg       	# PID File 的完整路径，如果没有设置，则没有PID文件
 --fork          		# 以守护进程的方式运行MongoDB （运行在后台）
 --auth          		# 启用验证（不启用验证 --noauth ）
 --cpu           		# 定期显示CPU的CPU利用率和iowait
@@ -41,7 +41,7 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 --noprealloc    		# 禁用数据文件预分配(往往影响性能)
 --noscripting   		# 禁用脚本引擎
 --notablescan   		# 不允许表扫描
---nssize arg (=16)  	# 设置信数据库.ns文件大小(MB)
+--nssize arg (=16)  		# 设置信数据库.ns文件大小(MB)
 --objcheck      		# 在收到客户数据，检查的有效性
 --profile arg   		# 档案参数 0=off 1=slow, 2=all
 --quota         		# 限制每个数据库的文件数，设置默认为8
@@ -50,14 +50,14 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 --smallfiles    		# 使用较小的默认文件
 --sysinfo       		# 打印一些诊断系统信息
 --upgrade       		# 如果需要升级数据库
---syncdelay arg (=60)   # 数据写入磁盘的时间秒数(0=never,不推荐)
---journal           	# 启用日志选项，MongoDB的数据操作将会写入到journal文件夹的文件里
---journalOptions arg    # 启用日志诊断选项
---repairpath arg    	# 修复库生成的文件的目录,默认为目录名称dbpath
---slowms arg (=100) 	# 定义超过多长时间的命令成为慢查询 value of slow for profile and console log
---quotaFiles arg    	# number of files allower per db, requires --quota
---nohttpinterface   	# 关闭http接口，默认关闭27018端口访问
---directoryperdb    	# 设置每个数据库将被保存在一个单独的目录
+--syncdelay arg (=60)   	# 数据写入磁盘的时间秒数(0=never,不推荐)
+--journal           		# 启用日志选项，MongoDB的数据操作将会写入到journal文件夹的文件里
+--journalOptions arg    	# 启用日志诊断选项
+--repairpath arg    		# 修复库生成的文件的目录,默认为目录名称dbpath
+--slowms arg (=100) 		# 定义超过多长时间的命令成为慢查询 value of slow for profile and console log
+--quotaFiles arg    		# number of files allower per db, requires --quota
+--nohttpinterface   		# 关闭http接口，默认关闭27018端口访问
+--directoryperdb    		# 设置每个数据库将被保存在一个单独的目录
 --ipv6          		# 启用IPv6选项
 
 ******************************** Replicaton **************************************************
@@ -70,15 +70,15 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 --slave         		# 从库模式
 --source arg    		# 从库 端口号
 --only arg      		# 指定单一的数据库复制
---slavedelay arg    	# 设置从库同步主库的延迟时间
+--slavedelay arg    		# 设置从库同步主库的延迟时间
 
 ********************************* Replica set(副本集)选项 ************************************
 --replSet arg   		# 设置副本集名称
 
 ******************************** Sharding(分片)选项 ******************************************
---configsvr         	# 声明这是一个集群的config服务,默认端口27019，默认目录/data/configdb
---shardsvr          	# 声明这是一个集群的分片,默认端口27018
---noMoveParanoia    	# 关闭偏执为moveChunk数据保存
+--configsvr         		# 声明这是一个集群的config服务,默认端口27019，默认目录/data/configdb
+--shardsvr          		# 声明这是一个集群的分片,默认端口27018
+--noMoveParanoia    		# 关闭偏执为moveChunk数据保存
 
 ********************************************************************************************
 # 上述参数都可写入 mongod.conf 配置档，如：
@@ -92,15 +92,15 @@ auth = true
 #### 数据库下的账户创建/认证/更新密码
 ```javascript
 # 验证：mongo -u mongo_admin -p mongo_passowrd --authenticationDatabase <db_name>
-> use admin										  				#切换到需添加用户的db
+> use admin									#切换到需添加用户的db
 > db.createUser( 
 		{ 
 				"user": "mongo_admin",                       	#创建用户
-				"pwd": "mongo_passowrd", 						#
+				"pwd": "mongo_passowrd", 			#
 				"customData" : { "any information": 12345 },  	#用户自定义信息
 				"roles" : [ 
 					{ role: "root", db: "admin" },"readWrite"
-				]												#
+				]						#
 		}
 )
 
@@ -184,14 +184,14 @@ db.exam.drop();                                 #删除此表
 db.exam.remove({});                             #清空exam 表中的所有数据  
 db.createCollection("event");                   #建立 event 表        
 
-> db.集合名.save({a:1});			       #插入
+> db.集合名.save({a:1});			      #插入
 > show dbs;                             	#显示所有库及其容量
 > show tables;                          	#查看表（集合）
 > db.dropDatabase();                    	#删除当前库
 > use runoob;                           	#连到指定库（若不存在则创建，若库内无键值则不予显示需向其中插入数据后查看）
 > db                                    	#显示当前库对象或集合
 > db.集合名.insert({"n":"1"})
-> db.集合名.insert(                     	        #插入文档（若集合不存在则直接创建）
+> db.集合名.insert(                     	      #插入文档（若集合不存在则直接创建）
 {	title: 'MongoDB 教程', 	
 	description: 'MongoDB是一个Nosql数据库，此段信息存储在runoob库的col集合中',
 	by: '菜鸟教程',
