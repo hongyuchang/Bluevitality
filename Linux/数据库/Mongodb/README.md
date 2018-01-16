@@ -122,16 +122,13 @@ auth = true
 #    7. 内部角色：__system
 ```
 #### mongo shell 命令行常用命令举例
-```javascript
-
+```txt
 > db.version()
 2.6.12
 > show dbs                                  #查看所有数据库
 admin  (empty)              
 local  0.078GB              
 > use admin;                                #使用特定数据库
-switched to db admin
-> use admin;
 switched to db admin
 > show collections;                         #显示当前数据库中的集合
 system.indexes      
@@ -199,8 +196,8 @@ db.createCollection("event");                   #建立 event 表
 	tags: ['mongodb', 'database', 'NoSQL'],
 	likes: 100
 });
-> 变量名=({title: 'MongoDB 教程'});                          #也可将数据定义为变量
-> db.集合.insert(变量名)                                     #执行变量插入操作
+> 变量名=({title: 'MongoDB 教程'});		    #也可将数据定义为变量
+> db.集合.insert(变量名)           		    #执行变量插入操作
 > db.集合.insert({_id:1,name:wy});					#增一篇
 > db.集合.insert([{_id:2,name:wy1},{_id:3,name:wy2},{_id:4,name=wy3}]);   #增多篇（使用数组的形式）
 > db.集合.insert({_id:1,name:wy,经历:[小学，初中，高中，大学]});            #增嵌套（文档可任意深度）
