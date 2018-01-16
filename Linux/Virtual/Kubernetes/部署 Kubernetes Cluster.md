@@ -178,7 +178,7 @@ kubernetes   192.168.0.1   <none>        443/TCP   22m
 #### 在k8s集群内使用私有的镜像服务器
 ```bash
 #创建docker registry secret
-[root@node1 ~]# kubectl create secret docker-registry regsecret 
+[root@node1 ~]# kubectl create secret docker-registry regsecret \
 --docker-server=<your-registry-server> \
 --docker-username=<your-name> \
 --docker-password=<your-pword> \
