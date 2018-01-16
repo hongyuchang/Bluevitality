@@ -1,4 +1,3 @@
-
 [root@node1 ~]# docker images
 REPOSITORY                             TAG                 IMAGE ID            CREATED             SIZE
 docker.io/nginx                        latest              3f8a4339aadd        2 weeks ago         108.5 MB
