@@ -22,34 +22,34 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 #### mongod 服务启动时参数
 ```bash
 ************************************* 基本配置 *********************************************
---quiet         	# 安静输出
---port arg      	# 指定服务端口号，默认端口27017
---bind_ip arg   	# 绑定服务IP，若绑定127.0.0.1，则只能本机访问，不指定默认本地所有IP
---logpath arg   	# 指定MongoDB日志文件，注意是指定文件不是目录
---logappend     	# 使用追加的方式写日志
---keyFile arg   	# 集群的私钥的完整路径，只对于Replica Set 架构有效
+--quiet         		# 安静输出
+--port arg      		# 指定服务端口号，默认端口27017
+--bind_ip arg   		# 绑定服务IP，若绑定127.0.0.1，则只能本机访问，不指定默认本地所有IP
+--logpath arg   		# 指定MongoDB日志文件，注意是指定文件不是目录
+--logappend     		# 使用追加的方式写日志
+--keyFile arg   		# 集群的私钥的完整路径，只对于Replica Set 架构有效
 --unixSocketPrefix arg  # UNIX域套接字替代目录（默认 /tmp）禁用Unix套接字监听：--nounixsocket
 --pidfilepath arg       # PID File 的完整路径，如果没有设置，则没有PID文件
---fork          	# 以守护进程的方式运行MongoDB （运行在后台）
---auth          	# 启用验证（不启用验证 --noauth ）
---cpu           	# 定期显示CPU的CPU利用率和iowait
---dbpath arg    	# 指定数据库路径
---diaglog arg   	# diaglog选项 0=off 1=W 2=R 3=both 7=W+some reads
---maxConns arg  	# 最大并发连接数 默认2000
---httpinterface		# 启用HTTP接口（提供使用 restful API 的方式来监控服务的运行状态）
---jsonp         	# 允许JSONP形式通过HTTP访问（有安全影响）
---noprealloc    	# 禁用数据文件预分配(往往影响性能)
---noscripting   	# 禁用脚本引擎
---notablescan   	# 不允许表扫描
+--fork          		# 以守护进程的方式运行MongoDB （运行在后台）
+--auth          		# 启用验证（不启用验证 --noauth ）
+--cpu           		# 定期显示CPU的CPU利用率和iowait
+--dbpath arg    		# 指定数据库路径
+--diaglog arg   		# diaglog选项 0=off 1=W 2=R 3=both 7=W+some reads
+--maxConns arg  		# 最大并发连接数 默认2000
+--httpinterface			# 启用HTTP接口（提供使用 restful API 的方式来监控服务的运行状态）
+--jsonp         		# 允许JSONP形式通过HTTP访问（有安全影响）
+--noprealloc    		# 禁用数据文件预分配(往往影响性能)
+--noscripting   		# 禁用脚本引擎
+--notablescan   		# 不允许表扫描
 --nssize arg (=16)  	# 设置信数据库.ns文件大小(MB)
---objcheck      	# 在收到客户数据，检查的有效性
---profile arg   	# 档案参数 0=off 1=slow, 2=all
---quota         	# 限制每个数据库的文件数，设置默认为8
---rest          	# 开启简单的rest API
---repair        	# 修复所有数据库run repair on all dbs
---smallfiles    	# 使用较小的默认文件
---sysinfo       	# 打印一些诊断系统信息
---upgrade       	# 如果需要升级数据库
+--objcheck      		# 在收到客户数据，检查的有效性
+--profile arg   		# 档案参数 0=off 1=slow, 2=all
+--quota         		# 限制每个数据库的文件数，设置默认为8
+--rest          		# 开启简单的rest API
+--repair        		# 修复所有数据库run repair on all dbs
+--smallfiles    		# 使用较小的默认文件
+--sysinfo       		# 打印一些诊断系统信息
+--upgrade       		# 如果需要升级数据库
 --syncdelay arg (=60)   # 数据写入磁盘的时间秒数(0=never,不推荐)
 --journal           	# 启用日志选项，MongoDB的数据操作将会写入到journal文件夹的文件里
 --journalOptions arg    # 启用日志诊断选项
@@ -58,22 +58,22 @@ MongoDB将数据存储为"文档"，数据结构由 key:value 组成，"文档"�
 --quotaFiles arg    	# number of files allower per db, requires --quota
 --nohttpinterface   	# 关闭http接口，默认关闭27018端口访问
 --directoryperdb    	# 设置每个数据库将被保存在一个单独的目录
---ipv6          	# 启用IPv6选项
+--ipv6          		# 启用IPv6选项
 
 ******************************** Replicaton **************************************************
---fastsync      	# 从一个dbpath里启用从库复制服务，该dbpath的数据库是主库的快照，可用于快速启用同步
---autoresync    	# 如果从库与主库同步数据差得多，自动重新同步，
---oplogSize arg 	# 设置oplog的大小(MB)
+--fastsync      		# 从一个dbpath里启用从库复制服务，该dbpath的数据库是主库的快照，可用于快速启用同步
+--autoresync    		# 如果从库与主库同步数据差得多，自动重新同步，
+--oplogSize arg 		# 设置oplog的大小(MB)
 
 ******************************** 主/从参数 ****************************************************
---master        	# 主库模式
---slave         	# 从库模式
---source arg    	# 从库 端口号
---only arg      	# 指定单一的数据库复制
+--master        		# 主库模式
+--slave         		# 从库模式
+--source arg    		# 从库 端口号
+--only arg      		# 指定单一的数据库复制
 --slavedelay arg    	# 设置从库同步主库的延迟时间
 
 ********************************* Replica set(副本集)选项 ************************************
---replSet arg   	# 设置副本集名称
+--replSet arg   		# 设置副本集名称
 
 ******************************** Sharding(分片)选项 ******************************************
 --configsvr         	# 声明这是一个集群的config服务,默认端口27019，默认目录/data/configdb
@@ -89,32 +89,37 @@ port = 27017
 fork = true
 auth = true
 ```
-#### 数据库账户的创建与认证
+#### 数据库下的账户创建/认证/更新密码
 ```javascript
-#验证：mongo -u mongo_admin -p mongo_passowrd --authenticationDatabase <db_name>
-> db.createUser( { "user": "mongo_admin",                                                 #创建用户
-...                "pwd": "mongo_passowrd", "customData" : { employeeId: 12345 },         #
-...                "roles" : [ { role: "root", db: "admin" },"readWrite" ] } )            #
-Successfully added user: {
-        "user" : "mongo_admin",
-        "customData" : {
-                "employeeId" : 12345
-        },
-        "roles" : [
-                {
-                        "role" : "root",
-                        "db" : "admin"
-                },
-                "readWrite"
-        ]
-}
+# 验证：mongo -u mongo_admin -p mongo_passowrd --authenticationDatabase <db_name>
+> use admin										  				#切换到需添加用户的db
+> db.createUser( 
+		{ 
+				"user": "mongo_admin",                       	#创建用户
+				"pwd": "mongo_passowrd", 						#
+				"customData" : { "any information": 12345 },  	#用户自定义信息
+				"roles" : [ 
+					{ role: "root", db: "admin" },"readWrite"
+				]												#
+		}
+)
 
-> use admin                                       #
-switched to db admin                              #
-> db.auth("mongo_admin","mongo_passowrd")         #入库认证
+> use admin                                       #入库认证
+> db.auth("mongo_admin","mongo_passowrd")         #
 1                                                 #
-                                                  #
 
+> use admin
+> db.changeUserPassword("username","newpassword") #更新密码
+> db.getUser("username")						  #查看用户信息
+
+# Built-In Roles（内置角色）：
+#    1. 数据库用户角色：read、readWrite
+#    2. 数据库管理角色：dbAdmin、dbOwner、userAdmin
+#    3. 集群管理角色：clusterAdmin、clusterManager、clusterMonitor、hostManager
+#    4. 备份恢复角色：backup、restore
+#    5. 所有数据库角色：readAnyDatabase、readWriteAnyDatabase、userAdminAnyDatabase、dbAdminAnyDatabase
+#    6. 超级用户角色：root  
+#    7. 内部角色：__system
 ```
 #### mongo shell 命令行常用命令举例
 ```javascript
