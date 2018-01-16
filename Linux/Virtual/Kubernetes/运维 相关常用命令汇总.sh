@@ -1,5 +1,4 @@
-#### 启动容器
-```bash
+
 [root@node1 ~]# docker images
 REPOSITORY                             TAG                 IMAGE ID            CREATED             SIZE
 docker.io/nginx                        latest              3f8a4339aadd        2 weeks ago         108.5 MB
@@ -85,4 +84,4 @@ Events:
   54s           54s             1       {kubelet node1}         spec.containers{nginx}  Normal          Pulled                  Successfully pulled image "nginx:latest"
   54s           54s             1       {kubelet node1}         spec.containers{nginx}  Normal          Created                 Created container with docker id f16329408b30; Security:[seccomp=unconfined]
   54s           54s             1       {kubelet node1}         spec.containers{nginx}  Normal          Started                 Started container with docker id f16329408b30
-```
+
