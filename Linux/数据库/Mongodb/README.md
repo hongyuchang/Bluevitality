@@ -92,16 +92,16 @@ auth = true
 #### 数据库下的账户创建/认证/更新密码
 ```javascript
 # 验证：mongo -u mongo_admin -p mongo_passowrd --authenticationDatabase <db_name>
-> use admin									#切换到需添加用户的db
+> use admin								#切换到需添加用户的db
 > db.createUser( 
-		{ 
-				"user": "mongo_admin",                       	#创建用户
-				"pwd": "mongo_passowrd", 			#
-				"customData" : { "any information": 12345 },  	#用户自定义信息
-				"roles" : [ 
-					{ role: "root", db: "admin" },"readWrite"
-				]						#
-		}
+	{ 
+		"user": "mongo_admin",                       		#创建用户
+		"pwd": "mongo_passowrd", 				#
+		"customData" : { "any information": 12345 },  		#用户自定义信息
+		"roles" : [ 
+			{ role: "root", db: "admin" },"readWrite"
+		]							#
+	}
 )
 
 > use admin                                       #入库认证
