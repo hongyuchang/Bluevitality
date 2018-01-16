@@ -100,6 +100,12 @@ kubectl -s http://localhost:8080 get componentstatuses
 # 查看pods所在的运行节点
 kubectl get pods -o wide
 
+# 创建带有端口映射的pod
+kubectl run mynginx --image=nginx --port=80 --hostport=8000
+
+# 创建带有终端的pod：
+kubectl run -i --tty busybox --image=busybox
+
 # 查看pods定义的详细信息
 kubectl get pods -o yaml
 
@@ -133,4 +139,136 @@ kubectl delete rc rc名
 kubectl delete service service名
 kubectl delete pod --all
 
+```
+###### kubectl --help
+```txt
+[root@node1 ~]# kubectl --version
+Kubernetes v1.5.2
+
+[root@node1 ~]# kubectl
+kubectl controls the Kubernetes cluster manager. 
+
+Find more information at https://github.com/kubernetes/kubernetes.
+
+Basic Commands (Beginner):
+  create         Create a resource by filename or stdin
+  expose         Take a replication controller, service, deployment or pod and expose it as a new Kubernetes Service
+  run            Run a particular image on the cluster
+  set            Set specific features on objects
+
+Basic Commands (Intermediate):
+  get            Display one or many resources
+  explain        Documentation of resources
+  edit           Edit a resource on the server
+  delete         Delete resources by filenames, stdin, resources and names, or by resources and label selector
+
+Deploy Commands:
+  rollout        Manage a deployment rollout
+  rolling-update Perform a rolling update of the given ReplicationController
+  scale          Set a new size for a Deployment, ReplicaSet, Replication Controller, or Job
+  autoscale      Auto-scale a Deployment, ReplicaSet, or ReplicationController
+
+Cluster Management Commands:
+  certificate    Modify certificate resources.
+  cluster-info   Display cluster info
+  top            Display Resource (CPU/Memory/Storage) usage
+  cordon         Mark node as unschedulable
+  uncordon       Mark node as schedulable
+  drain          Drain node in preparation for maintenance
+  taint          Update the taints on one or more nodes
+
+Troubleshooting and Debugging Commands:
+  describe       Show details of a specific resource or group of resources
+  logs           Print the logs for a container in a pod
+  attach         Attach to a running container
+  exec           Execute a command in a container
+  port-forward   Forward one or more local ports to a pod
+  proxy          Run a proxy to the Kubernetes API server
+  cp             Copy files and directories to and from containers.
+
+Advanced Commands:
+  apply          Apply a configuration to a resource by filename or stdin
+  patch          Update field(s) of a resource using strategic merge patch
+  replace        Replace a resource by filename or stdin
+  convert        Convert config files between different API versions
+
+Settings Commands:
+  label          Update the labels on a resource
+  annotate       Update the annotations on a resource
+  completion     Output shell completion code for the given shell (bash or zsh)
+
+Other Commands:
+  api-versions   Print the supported API versions on the server, in the form of "group/version"
+  config         Modify kubeconfig files
+  help           Help about any command
+  version        Print the client and server version information
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+
+[root@node1 ~]# kubectl --help
+Kubernetes command line client
+
+Usage:
+  Kubernetes command line client [flags]
+
+Available Flags:
+      --allow-verification-with-non-compliant-keys   Allow a SignatureVerifier to use keys which are technically non-compliant with RFC6962.
+      --alsologtostderr                              log to standard error as well as files
+      --application-metrics-count-limit int          Max number of application metrics to store (per container) (default 100)
+      --as string                                    Username to impersonate for the operation
+      --azure-container-registry-config string       Path to the file container Azure container registry configuration information.
+      --boot-id-file string                          Comma-separated list of files to check for boot-id. Use the first one that exists. (default "/proc/sys/kernel/random/boot_id")
+      --certificate-authority string                 Path to a cert. file for the certificate authority
+      --client-certificate string                    Path to a client certificate file for TLS
+      --client-key string                            Path to a client key file for TLS
+      --cluster string                               The name of the kubeconfig cluster to use
+      --container-hints string                       location of the container hints file (default "/etc/cadvisor/container_hints.json")
+      --context string                               The name of the kubeconfig context to use
+      --docker string                                docker endpoint (default "unix:///var/run/docker.sock")
+      --docker-env-metadata-whitelist string         a comma-separated list of environment variable keys that needs to be collected for docker containers
+      --docker-only                                  Only report docker containers in addition to root stats
+      --docker-root string                           DEPRECATED: docker root is read from docker info (this is a fallback, default: /var/lib/docker) (default "/var/lib/docker")
+      --enable-load-reader                           Whether to enable cpu load reader
+      --event-storage-age-limit string               Max length of time for which to store events (per type). Value is a comma separated list of key values, where the keys are event types (e.g.: creation, oom) or "default" and the value is a duration. Default is applied to all non-specified event types (default "default=0")
+      --event-storage-event-limit string             Max number of events to store (per type). Value is a comma separated list of key values, where the keys are event types (e.g.: creation, oom) or "default" and the value is an integer. Default is applied to all non-specified event types (default "default=0")
+      --global-housekeeping-interval duration        Interval between global housekeepings (default 1m0s)
+      --google-json-key string                       The Google Cloud Platform Service Account JSON Key to use for authentication.
+  -h, --help                                         help for hyperkube
+      --housekeeping-interval duration               Interval between container housekeepings (default 10s)
+      --insecure-skip-tls-verify                     If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+      --ir-data-source string                        Data source used by InitialResources. Supported options: influxdb, gcm. (default "influxdb")
+      --ir-dbname string                             InfluxDB database name which contains metrics required by InitialResources (default "k8s")
+      --ir-hawkular string                           Hawkular configuration URL
+      --ir-influxdb-host string                      Address of InfluxDB which contains metrics required by InitialResources (default "localhost:8080/api/v1/proxy/namespaces/kube-system/services/monitoring-influxdb:api")
+      --ir-namespace-only                            Whether the estimation should be made only based on data from the same namespace.
+      --ir-password string                           Password used for connecting to InfluxDB (default "root")
+      --ir-percentile int                            Which percentile of samples should InitialResources use when estimating resources. For experiment purposes. (default 90)
+      --ir-user string                               User used for connecting to InfluxDB (default "root")
+      --kubeconfig string                            Path to the kubeconfig file to use for CLI requests.
+      --log-backtrace-at traceLocation               when logging hits line file:N, emit a stack trace (default :0)
+      --log-cadvisor-usage                           Whether to log the usage of the cAdvisor container
+      --log-dir string                               If non-empty, write log files in this directory
+      --log-flush-frequency duration                 Maximum number of seconds between log flushes (default 5s)
+      --logtostderr                                  log to standard error instead of files (default true)
+      --machine-id-file string                       Comma-separated list of files to check for machine-id. Use the first one that exists. (default "/etc/machine-id,/var/lib/dbus/machine-id")
+      --match-server-version                         Require server version to match client version
+  -n, --namespace string                             If present, the namespace scope for this CLI request
+      --password string                              Password for basic authentication to the API server
+      --request-timeout string                       The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests. (default "0")
+  -s, --server string                                The address and port of the Kubernetes API server
+      --stderrthreshold severity                     logs at or above this threshold go to stderr (default 2)
+      --storage-driver-buffer-duration duration      Writes in the storage driver will be buffered for this duration, and committed to the non memory backends as a single transaction (default 1m0s)
+      --storage-driver-db string                     database name (default "cadvisor")
+      --storage-driver-host string                   database host:port (default "localhost:8086")
+      --storage-driver-password string               database password (default "root")
+      --storage-driver-secure                        use secure connection with database
+      --storage-driver-table string                  table name (default "stats")
+      --storage-driver-user string                   database username (default "root")
+      --token string                                 Bearer token for authentication to the API server
+      --user string                                  The name of the kubeconfig user to use
+      --username string                              Username for basic authentication to the API server
+  -v, --v Level                                      log level for V logs
+      --version version[=true]                       Print version information and quit
+      --vmodule moduleSpec                           comma-separated list of pattern=N settings for file-filtered logging
 ```
