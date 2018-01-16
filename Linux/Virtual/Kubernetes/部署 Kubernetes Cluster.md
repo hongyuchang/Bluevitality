@@ -1,4 +1,4 @@
-#### 实验环境
+#### 实验环境 Centos 7.2
 ```txt
          etcd    master                  node
              \   /                      /
