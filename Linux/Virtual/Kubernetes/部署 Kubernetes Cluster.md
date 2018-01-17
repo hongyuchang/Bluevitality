@@ -113,10 +113,10 @@ KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=registry.access.redhat.
 # KUBELET_POD_INFRA_CONTAINER="--pod-infra-container-image=gcr.io/google_containers/pause-amd64:3.0"
 # 使用手动方式镜像下载: "docker pull docker.io/kubernetes/pause"
 
-[root@node1 ~]# systemctl start flanneld                        #overlay网络相关 (提供 xlan 网络)
-[root@node1 ~]# systemctl start kube-proxy                      #提供网络相关功能，如随机开启1个本机端口做映射
-[root@node1 ~]# systemctl start kubelet                         #Pod中Node节点的manager...
-[root@node1 ~]# systemctl start docker                          #
+[root@node1 ~]# systemctl start flanneld         #overlay网络相关 (提供 xlan 网络)
+[root@node1 ~]# systemctl start kube-proxy       #是工作节点上运行的网络代理，其监听每个服务端点创建/删除
+[root@node1 ~]# systemctl start kubelet          #它是Pod中Node节点的manager，是与主节点通信的代理
+[root@node1 ~]# systemctl start docker           #
 ```
 #### Node 2
 ```bash
