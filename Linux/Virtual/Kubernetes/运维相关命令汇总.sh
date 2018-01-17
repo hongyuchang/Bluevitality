@@ -83,4 +83,6 @@ Events:
   54s           54s             1       {kubelet node1}         spec.containers{nginx}  Normal          Pulled                  Successfully pulled image "nginx:latest"
   54s           54s             1       {kubelet node1}         spec.containers{nginx}  Normal          Created                 Created container with docker id f16329408b30; Security:[seccomp=unconfined]
   54s           54s             1       {kubelet node1}         spec.containers{nginx}  Normal          Started                 Started container with docker id f16329408b30
-
+[root@node1 ~]# etcdctl ls /k8s/network/subnets #查看已分配的 Pod 子网段列表
+/k8s/network/subnets/192.168.58.0-24
+/k8s/network/subnets/192.168.76.0-24
