@@ -18,7 +18,7 @@
 - [ ] Openstack，kubernets，Openvswitch，KVM的NET模式demo
 - [ ] 分布式系统的 CAP（强弱一致性，最终一致性）与 DTP 的README
 
-#### 以后补充
+#### 补充
 ```txt
 rabbitmq，Kafka，zookeeper
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
