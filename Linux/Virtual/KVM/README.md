@@ -1,13 +1,12 @@
-#### Install
+#### 安装KVM模块及libvirtd
 ```bash
-#检测硬件是否支持虚拟化
-#如果含有vmx或者svm字样则表示支持CPU虚拟化，Intel是vmx，AMD是svm
-#也需要检测是否有kvm_xxx模块，如果装载不成功可能是没有开启硬件虚拟化,需要bios中开启
-[root@wy ~]# egrep '(vmx|svm)' --color=always /proc/cpuinfo     
+#检测硬件是否支持虚拟化，若含有vmx或者svm字样则表示支持CPU虚拟化，Intel是：vmx，AMD是：svm
+#同时也需要检测是否有kvm_xxx模块，若装载不成功可能是未开启硬件虚拟化，需从bios中开启 "VT-d" 及 "Virtual Technology"
+[root@wy ~]# egrep '(vmx|svm)' --color=always /proc/cpuinfo      
 [root@wy ~]# modprobe kvm     
 [root@wy ~]# modprobe kvm_intel || modprobe kvm_amd
 
-#安装rpm包，并启动服务
+#安装rpm包并启动"libvirtd"服务
 [root@wy ~]# yum -y install kvm  python-virtinst libvirt tunctl bridge-utils virt-manager \
 qemu-kvm-tools virt-viewer virt-v2v libguestfs-tools 
 [root@wy ~]# systemctl start libvirtd
@@ -41,20 +40,20 @@ IPADDR="192.168.2.149"
 NETMASK="255.255.255.0"     
 GATEWAY="192.168.2.2"     
 
-systemctl restart network
+[root@wy ~]# systemctl restart network
 ```
 ## 部署安装虚拟机
 #### 建立磁盘文件
 ```bash
-#如果使用的是raw格式就不需要了，kvm虚拟机默认使用raw格式的镜像格式，性能最好，速度最快
-#它的缺点就是不支持一些新的功能，如支持快照镜像,zlib磁盘压缩,AES加密等。这里使用qcow2格式
+#如果使用的是raw格式就不需要了，kvm虚拟机默认使用raw格式的镜像格式，其性能最好，速度最快
+#它的缺点就是不支持一些新的功能如快照镜像，zlib磁盘压缩，AES加密等。这里使用qcow2格式...
 [root@wy ~]# mkdir /opt/vms
 [root@wy ~]# qemu-img create -f qcow2 /opt/vms/centos63-webtest.img 40G
 ```
-####  建立虚拟机
+#### 建立虚拟机
 下面展示多种方式建立虚拟机
 ```bash
-########### 使用使用iso来安装 ###########     
+########### 使用iso安装 ###########     
 [root@wy ~]# virt-install \     
 --name=centos5 \     
 --os-variant=RHEL5 \     
@@ -68,7 +67,7 @@ systemctl restart network
 --network bridge=br0,model=virtio \     
 --noautoconsole
 
-########### 使用使用nat模式网络###########     
+########### 使用nat模式网络###########     
 [root@wy ~]# virt-install \     
 --name=centos5 \     
 --os-variant=RHEL5 \     
@@ -115,24 +114,29 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 --noautoconsole
 
 # 参数说明：     
-# --name指定虚拟机名称     
-# --ram分配内存大小。     
-# --vcpus分配CPU核心数，最大与实体机CPU核心数相同     
-# --disk指定虚拟机镜像，size指定分配大小单位为G。     
-# --network网络类型，此处用的是默认，一般用的应该是bridge桥接。可以指定两次也就是两块网卡     
-# --accelerate加速     
-# --cdrom指定安装镜像iso     
-# --location 从ftp,http,nfs启动     
-# --vnc启用VNC远程管理     
-# --vncport指定VNC监控端口，默认端口为5900，端口不能重复。     
-# --vnclisten指定VNC绑定IP，默认绑定127.0.0.1，这里改为0.0.0.0。     
-# --os-type=linux,windows     
-# --extra-args指定额外的安装参数     
-# --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]     
-# --force 如果有yes或者no的交互式，自动yes     
+# --name 指定虚拟机名称     
+# --ram 分配内存大小
+# --vcpus 分配CPU核心数，最大与实体机CPU核心数相同
+# --vcpus 2,cpuset=1,2  将虚拟机的CPU绑定在物理机的哪个核心上，避免多核CPU的核心之间资源漂移的开销
+# --disk 指定虚拟机镜像，其size子参数指定分配大小单位为G 
+# --network 网络类型，此处用的是默认，一般用的应该是bridge桥接。可以指定两次也就是两块网卡
+# --metadata 用户自定义的元数据文本信息
+# --accelerate 加速 
+# --cdrom 指定安装镜像iso
+# --pxe 从网卡启动
+# --boot 指定启动顺序，如：--boot hd,cdrom
+# --import 从已经存在的磁盘镜像中创建
+# --location 从ftp,http,nfs启动 
+# --vnc 启用VNC远程管理     
+# --vncport 指定VNC监控端口，默认端口为5900，端口不能重复
+# --vnclisten 指定VNC绑定IP，默认绑定127.0.0.1，这里改为0.0.0.0
+# --os-type=linux,windows
+# --extra-args 指定额外的安装参数
+# --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]
+# --force 如果有yes或者no的交互式，自动yes
 ```
 #### 安装系统
-安装系统 有三种方式，通过VNC安装， 通过virt-manager安装 ， 通过console配合ks安装
+安装系统 有三种方式，通过VNC， 通过virt-manager ， 通过console配合ks
 ```bash
 #通过VNC来安装
 #下载TightVNC连接上vnc安装，只需TightVNC Client即可。如果使用RealVNC就设置ColourLevel=rgb222才能连接
