@@ -6,7 +6,6 @@
 - [ ] GRUB2，U盘版编译内核+BusyBox的Linux，CentOS7启动流程不断归纳细化的md
 - [ ] LVM 条带，lvm快照备份db脚本
 - [ ] heartbeat(安装部分不完善)，heartbeat研究
-- [ ] grafana * zabbix
 - [ ] tomcat的MSM会话共享md测试有问题, Mysql的MHA标准流程MD
 - [ ] nfs的权限映射相关及autofs
 - [ ] 实验完善：stunel，PPTP
