@@ -37,7 +37,7 @@ CREDITS       .gitignore              .mailmap  security
 ```
 #### 修改内核配置文件
 ```bash
-#使用文本图形界面编辑配置文件（将加载上一步中拷贝的./config中的内容，这一步是在它的基础上做一些修改）
+#使用文本图形界面编辑配置文件（将加载上面拷贝的./config中的内容，此步骤是在其基础上做修改），修改当前目录的 ./config
 [root@localhost linux]# make mennuconfig
 
 # 注：
