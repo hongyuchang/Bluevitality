@@ -10,6 +10,9 @@
 [root@wy ~]# yum -y install epel-release
 [root@wy ~]# yum -y install kvm qemu-kvm-tools qemu-img libvirt libvirt-client libvirt-python libguestfs-tools \
 virt-v2v virt-manager virt-viewer virt-top bridge-utils
+[root@wy ~]# ln -sv /usr/libexec/qemu-kvm /usr/sbin/
+"/usr/sbin/qemu-kvm" -> "/usr/libexec/qemu-kvm"
+
 [root@wy ~]# systemctl start libvirtd
 
 #检查是否有kvm模块，若有则继续
