@@ -1,8 +1,9 @@
-#### 安装Kvm模块与libvirtd
+#### 安装Kvm模块与Libvirtd
 ```bash
 #检测硬件是否支持虚拟化，若含有vmx或svm字样则表示支持CPU虚拟化，Intel是：vmx，AMD是：svm （KVM依赖硬件虚拟化技术的支持）
-#同时也需要检测是否有kvm_xxx模块，若装载不成功可能是未开启硬件虚拟化，需从bios中开启 "VT-d" 及 "Virtual Technology"
-[root@wy ~]# egrep '(vmx|svm)' --color=always /proc/cpuinfo      
+#同时也需要检测是否有kvm_xxx模块，若装载不成功可能是未开启硬件虚拟化，需从bios中开启 "VT-d" 与 "Virtual Technology"
+#注：字符设备："/dev/kvm" 是linux的Kvm模块的调用接口，若需要创建虚拟机等操作，仅需向其发起调用即可!...
+[root@wy ~]# egrep '(vmx|svm)' --color=always /proc/cpuinfo      
 [root@wy ~]# modprobe kvm     
 [root@wy ~]# modprobe kvm_intel || modprobe kvm_amd
 
@@ -12,7 +13,7 @@ virt-v2v virt-manager virt-viewer libvirt-client
 [root@wy ~]# systemctl start libvirtd
 
 #检查是否有kvm模块,如果有则继续
-[root@wy ~]# lsmod | grep kvm     
+[root@wy ~]# lsmod | grep kvm
 kvm_intel       52570  30      
 kvm             314739 1 kvm_intel    
 ```
@@ -136,7 +137,7 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 # --force 如果有yes或者no的交互式，自动yes
 ```
 #### 安装系统
-安装系统 有三种方式，通过VNC， 通过virt-manager ， 通过console配合ks
+安装系统有三种方式，通过：VNC，virt-manager，console配合ks
 ```bash
 #通过VNC来安装
 #下载TightVNC连接上vnc安装，只需TightVNC Client即可。如果使用RealVNC就设置ColourLevel=rgb222才能连接
