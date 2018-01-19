@@ -80,7 +80,7 @@ GATEWAY="192.168.2.2"
 --cdrom /data/iso/CentOS5.iso \     
 --vnc --vncport=5910 \     
 --vnclisten=0.0.0.0 \     
---network bridge=br0,model=virtio \     
+--network bridge=br0,model=virtio \     #此处的网卡即使用了之前在宿主机创建的br0
 --noautoconsole
 
 ########### 使用nat模式网络###########     
