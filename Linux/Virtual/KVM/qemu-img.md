@@ -24,6 +24,17 @@ dd if=/dev/zero of=FILENAME bs=1024k count=4096  # 4G Image
 ```
 qemu-img convert -O TYPE SRC_IMG_NAME DEST_IMG_NAME
 ```
+查看磁盘映像信息
+```bash
+[root@node1 ~]# qemu-img info cirros-0.3.5-i386-disk.img 
+image: cirros-0.3.5-i386-disk.img
+file format: qcow2
+virtual size: 39M (41126400 bytes)
+disk size: 12M
+cluster_size: 65536
+Format specific information:
+    compat: 0.10
+```
 ###### qemu-img Supported formats ......
 ```txt
 Supported formats: vvfat vpc vmdk vhdx vdi ssh sheepdog rbd raw host_cdrom host_floppy host_device file qed 
