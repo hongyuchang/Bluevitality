@@ -84,7 +84,46 @@ qemu-nbd -d /dev/nbd0
 ```
 #### 使用qemu-kvm工具启动磁盘映像
 ```bash
-[root@node1 ~]# qemu-kvm -m 128 -smp 2 --name "Test" -hda  cirros-0.3.5-i386-disk.img               
+[root@node1 ~]# qemu-kvm -cpu Broadwell -m 128 -smp 2 --name "Test" -hda  cirros-0.3.5-i386-disk.img               
 VNC server running on  ::1:5900'	#提示使用VNC连接其终端，此处监听在了本地回环接口...
 ```
 ![img](资料/qemu-kvm-ps.png)
+#### qemu-kvm支持的CPU类型
+```bash
+[root@node1 ~]# qemu-kvm -cpu ?
+x86           qemu64  QEMU Virtual CPU version 1.5.3                  
+x86           phenom  AMD Phenom(tm) 9550 Quad-Core Processor         
+x86         core2duo  Intel(R) Core(TM)2 Duo CPU     T7700  @ 2.40GHz 
+x86            kvm64  Common KVM processor                            
+x86           qemu32  QEMU Virtual CPU version 1.5.3                  
+x86            kvm32  Common 32-bit KVM processor                     
+x86          coreduo  Genuine Intel(R) CPU           T2600  @ 2.16GHz 
+x86              486                                                  
+x86          pentium                                                  
+x86         pentium2                                                  
+x86         pentium3                                                  
+x86           athlon  QEMU Virtual CPU version 1.5.3                  
+x86             n270  Intel(R) Atom(TM) CPU N270   @ 1.60GHz          
+x86      cpu64-rhel6  QEMU Virtual CPU version (cpu64-rhel6)          
+x86           Conroe  Intel Celeron_4x0 (Conroe/Merom Class Core 2)   
+x86           Penryn  Intel Core 2 Duo P9xxx (Penryn Class Core 2)    
+x86          Nehalem  Intel Core i7 9xx (Nehalem Class Core i7)       
+x86     Nehalem-IBRS  Intel Core i7 9xx (Nehalem Core i7, IBRS update)x86          
+x86    Westmere-IBRS  Westmere E56xx/L56xx/X56xx (IBRS update)        
+x86      SandyBridge  Intel Xeon E312xx (Sandy Bridge)                
+x86 SandyBridge-IBRS  Intel Xeon E312xx (Sandy Bridge, IBRS update)   
+x86        IvyBridge  Intel Xeon E3-12xx v2 (Ivy Bridge)              
+x86   IvyBridge-IBRS  Intel Xeon E3-12xx v2 (Ivy Bridge, IBRS)        
+x86          Haswell  Intel Core Processor (Haswell)                  
+x86     Haswell-IBRS  Intel Core Processor (Haswell, IBRS)            
+x86        Broadwell  Intel Core Processor (Broadwell)                
+x86   Broadwell-IBRS  Intel Core Processor (Broadwell, IBRS)          
+x86   Skylake-Client  Intel Core Processor (Skylake)                  
+x86 Skylake-Client-IBRS  Intel Core Processor (Skylake, IBRS)            
+x86       Opteron_G1  AMD Opteron 240 (Gen 1 Class Opteron)           
+x86       Opteron_G2  AMD Opteron 22xx (Gen 2 Class Opteron)          
+x86       Opteron_G3  AMD Opteron 23xx (Gen 3 Class Opteron)          
+x86       Opteron_G4  AMD Opteron 62xx class CPU    
+x86       Opteron_G5  AMD Opteron 63xx class CPU                      
+x86             host  KVM processor with all supported host features (only available in KVM mode)
+```
