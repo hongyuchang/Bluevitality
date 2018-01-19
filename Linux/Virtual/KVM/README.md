@@ -2,20 +2,24 @@
 ```bash
 #检测硬件是否支持虚拟化，若含有vmx或svm字样则表示支持CPU虚拟化，Intel是：vmx，AMD是：svm （KVM依赖硬件虚拟化技术的支持）
 #同时也需要检测是否有kvm_xxx模块，若装载不成功可能是未开启硬件虚拟化，需从bios中开启 "VT-d" 与 "Virtual Technology"
-#注：字符设备："/dev/kvm" 是linux的Kvm模块的调用接口，若需要创建虚拟机等操作，仅需向其发起调用即可!...
 [root@wy ~]# egrep '(vmx|svm)' --color=always /proc/cpuinfo      
 [root@wy ~]# modprobe kvm     
 [root@wy ~]# modprobe kvm_intel || modprobe kvm_amd
 
-#安装rpm包并启动"libvirtd"服务，KVM需要Qemu的某些功能，如I/O设备的模拟/管理等...
-[root@wy ~]# yum -y install kvm qemu-kvm-tools libvirt bridge-utils tunctl libguestfs-tools python-virtinst \
-virt-v2v virt-manager virt-viewer libvirt-client
+#安装rpm包并启动"libvirtd"服务，注：KVM依赖于Qemu的某些功能，如I/O设备的模拟/管理等...
+[root@wy ~]# yum -y install epel-release
+[root@wy ~]# yum -y install kvm qemu-kvm-tools qemu-img libvirt libvirt-client libvirt-python libguestfs-tools \
+virt-v2v virt-manager virt-viewer virt-top bridge-utils
 [root@wy ~]# systemctl start libvirtd
 
-#检查是否有kvm模块,如果有则继续
+#检查是否有kvm模块，若有则继续
 [root@wy ~]# lsmod | grep kvm
 kvm_intel       52570  30      
-kvm             314739 1 kvm_intel    
+kvm             314739 1 kvm_intel
+
+#建议使用此方式进行验证。字符设备："/dev/kvm" 是linux的Kvm模块调用接口，若需创建虚拟机等操作，仅需向其发起调用即可!...
+[root@wy ~]# ll /dev/kvm 
+crw-------. 1 root root 10, 232 1月  20 11:19 /dev/kvm
 ```
 
 #### 配置桥接网络 br0 ，使虚拟机使用宿主机的物理网卡
