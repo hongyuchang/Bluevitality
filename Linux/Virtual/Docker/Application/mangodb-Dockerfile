@@ -1,0 +1,19 @@
+FROM ubuntu:zach
+MAINTAINER zach.wang
+#docker build -t zach_mango:3.0 .
+#复制配置文件到/docker/mongo
+#docker run -p 9999:22 -p 30000:30000 -t -i -v /docker/mongo:/zach/mongo zach_mango:3.0
+
+COPY supervisord/mongo.ini /etc/supervisor/conf.d/mongo.ini
+
+ENV MONGO_HOME /zach/mongodb
+ENV LC_ALL C
+
+ADD mongodb /zach/mongodb
+
+VOLUME ["/zach/mongodb"]
+
+# 容器需要开放Mongo 30000端口
+EXPOSE 30000
+
+CMD ["/usr/bin/supervisord"]
