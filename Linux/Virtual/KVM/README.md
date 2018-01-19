@@ -8,7 +8,7 @@
 
 #安装rpm包并启动"libvirtd"服务
 [root@wy ~]# yum -y install kvm qemu-kvm-tools libvirt bridge-utils tunctl libguestfs-tools python-virtinst \
-virt-v2v virt-manager virt-viewer 
+virt-v2v virt-manager virt-viewer libvirt-client
 [root@wy ~]# systemctl start libvirtd
 
 #检查是否有kvm模块,如果有则继续
@@ -197,7 +197,8 @@ xorg-x11-xauth xorg-x11-drv-ati-firmware  xorg-x11-xinit
 #### 快照
 ```bash
 #kvm虚拟机默认使用raw格式的镜像格式，性能最好，速度最快
-#它的缺点是不支持一些新功能，如支持镜像,zlib磁盘压缩,AES加密等。要使用镜像功能则磁盘格式必须为qcow2
+#它的缺点是不支持一些新功能，如支持镜像，zlib磁盘压缩，AES加密等。要使用镜像功能则磁盘格式必须为qcow2
+#快照相关的主要命令：snapshot-create , snapshot-revert , snapshot-delete
 
 #查看磁盘格式
 [root@wy ~]# qemu-img info /opt/vms/centos63-119.22.img      
@@ -207,11 +208,11 @@ virtual size: 40G (42949672960 bytes)
 disk size: 136K     
 cluster_size: 65536 
 
-#如果不是qcow2需要关机转换磁盘格式，如果是请跳过
+#若不是qcow2格式则需要关机后转换磁盘格式，若是则跳过
 [root@wy ~]# cp centos63-119.22.img centos63-119.22.raw     
 [root@wy ~]# qemu-img convert -f raw -O qcow2 centos63-119.22.raw  centos63-119.22.img
 
-启动vm, 建立快照，以后可以恢复 (快照配置文件在/var/lib/libvirt/qemu/snapshot/实例名/..)
+#启动vm, 建立快照，以后可以恢复 (快照配置文件在/var/lib/libvirt/qemu/snapshot/实例名/..)
 [root@wy ~]# virsh start centos63-119.22     
 [root@wy ~]# virsh snapshot-create centos63-119.22 
 
@@ -228,21 +229,21 @@ cluster_size: 65536
 
 #### 添加网卡
 ```bash
-#线上服务器是双网卡，一个走内网一个走外网。但初始虚拟机时没有指定两个网卡,这样需要添加网卡了
+#线上服务器是双网卡，一个走内网一个走外网。但初始虚拟机时没有指定两个网卡，这样需要添加网卡了
 #比如已经将br1桥接到em2了，如果不会见刚开始br0桥接em1
 
-#通过virt-manager来添加
-#简单说一下：选中虚拟机 -- Open -- Details – AddHardware 选择网卡模式，mac不要重复，确定即可
+#方式一.通过virt-manager添加
+#简单描述：选中虚拟机 -- Open -- Details – AddHardware 选择网卡模式，mac不要重复，确定即可
 
-#通过命令来添加
-#1.使用virsh attach-interface 为虚拟机添加网卡
+#方式二.通过命令来添加
+#1.使用命令"virsh attach-interface"为虚拟机添加网卡
 [root@wy ~]# virsh attach-interface centos63-119.23 --type bridge --source br1 --model virtio
-#2.导入配置文件并覆盖原来的， 因为attach-interface添加后，只是在虚拟机中生效了，配置文件并没有改变
+#2.导出运行配置并覆盖原来的配置文件，因为attach-interface添加后次网卡只是在运行中的虚拟机内部生效了，但配置文件并未改变
 [root@wy ~]# cd /etc/libvirt/qemu
 [root@wy ~]# virsh dumpxml centos63-119.23 > centos63-119.23.xml
-#3.修改GuestOS中网卡配置文件，为另一个网卡配置IP
+#3.修改GuestOS中的网卡配置文件，为另一个网卡配置IP
 [root@wy ~]# cd /etc/sysconfig/network-scripts  
-略
+略...
 ```
 #### 硬盘扩容
 ```bash
@@ -254,21 +255,21 @@ cluster_size: 65536
     #1. 建立磁盘，并附加到虚拟机中
     [root@wy ~]# qemu-img create -f raw 10G.img 10G     
     [root@wy ~]# virsh attach-disk centos-1.2 /opt/kvm/5G.img vdb  
-    #添加qcow2磁盘
+    #2. 添加qcow2磁盘
     [root@wy ~]# qemu-img create -f qcow2 10G.img 10G     
     [root@wy ~]# virsh attach-disk centos-1.2 /opt/kvm/5G.img vdb --cache=none --subdriver=qcow2 
     #说明:       
-    #centos-1.2       虚拟机的名称     
+    #centos-1.2         虚拟机名称     
     #/opt/kvm/5G.img    附加的磁盘     
     #vdb                添加为哪个磁盘, 也就是在guestos中的名字
-    #2. 导出并覆盖原来的配置文件，和网卡一样，attach后只是在虚拟机中生效
+    #3. 导出并覆盖原来的配置文件，和网卡一样，attach后只是在虚拟机中生效
     [root@wy ~]# virsh dumpxml centos-1.2 > centos63-119.23.xml
-    #3. 使用lvm在线扩容，详见 http://www.cnblogs.com/cmsd/p/3964118.html
+    #4. 使用lvm在线扩容，详见 http://www.cnblogs.com/cmsd/p/3964118.html
     
 #二. 分区不是lvm格式，该分区不是扩展分区, 需要关机离线扩展
     1.  新建一个磁盘，大于原来的容量，比如原来是40G，你想对某个分区扩容20G那么
     [root@wy ~]# qemu-img create -f qcow2 60G.img 60G
-    2. 备份原来的磁盘，以防三长两短
+    2. 备份原来的磁盘以防三长两短
     [root@wy ~]# cp centos63-119.27.img centos63-119.27.img.bak
     3. 查看原来的磁盘决定扩容哪一个分区
     [root@wy ~]# virt-filesystems --partitions --long -a centos63-119.27.img     
