@@ -1,4 +1,4 @@
-#### 安装KVM模块及libvirtd
+#### 安装Kvm模块与libvirtd
 ```bash
 #检测硬件是否支持虚拟化，若含有vmx或者svm字样则表示支持CPU虚拟化，Intel是：vmx，AMD是：svm
 #同时也需要检测是否有kvm_xxx模块，若装载不成功可能是未开启硬件虚拟化，需从bios中开启 "VT-d" 及 "Virtual Technology"
@@ -17,7 +17,7 @@ kvm_intel       52570  30
 kvm             314739 1 kvm_intel    
 ```
 
-#### 配置桥接网络 br0
+#### 配置桥接网络 br0 ，使虚拟机使用宿主机的物理网卡
 ```bash
 [root@wy ~]# cd /etc/sysconfig/network-scripts/
 [root@wy ~]# cp ifcfg-eth0 ifcfg-br0
