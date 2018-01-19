@@ -87,4 +87,3 @@ qemu-nbd -d /dev/nbd0
 [root@node1 ~]# qemu-kvm -m 128 -smp 2 --name "Test" -hda  cirros-0.3.5-i386-disk.img               
 VNC server running on `::1:5900'	#提示使用VNC连接其终端，此处监听在了本地回环接口...
 ```
-![img](资料/Qemu-kvm-vnc-login.png)
