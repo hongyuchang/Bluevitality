@@ -61,7 +61,7 @@ GATEWAY="192.168.2.2"
 #### 建立虚拟机
 下面展示多种方式建立虚拟机
 ```bash
-# KVM对I/O设备同时支持全虚拟化和半虚拟化!，其半虚拟化的组件叫做"virtio"，它是一种通用的半虚拟化驱动，是Linux内核中的模块
+# KVM对I/O设备同时支持全虚拟化和半虚拟化!，其半虚拟化组件叫做"virtio"，它是一种通用的半虚拟化驱动，是Linux内核中的模块
 # I/O设备的虚拟模式有三种：1.模拟,2.半虚拟化,3.透传
 # virtio-blk      块设备的半虚拟化，使用磁盘的版虚拟化时其性能接近物理机的85%
 # virtio-net      网络设备的半虚拟化
@@ -115,7 +115,7 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 --force \     
 --noautoconsole
 
-########## 安装windows ######## (不能使用virtio，因为默认windows没有virtio的硬盘和网卡驱动)
+########## 安装windows ######## (不能用virtio，因为默认windows没有virtio的硬盘和网卡驱动，即windows不支持半虚拟化)
 [root@wy ~]# virt-install \     
 --name=win7-test \     
 --os-variant=win7 \     
