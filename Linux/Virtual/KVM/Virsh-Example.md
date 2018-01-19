@@ -1,7 +1,8 @@
 #### 查看所有虚拟机
 `virsh list --all`
 #### 查看运行的虚拟机
-`virsh list`  
+`virsh list`
+
 虚拟机的状态有 8 种  
 * runing  运行状态     
 * idel    空闲状态   
