@@ -7,8 +7,8 @@
 [root@wy ~]# modprobe kvm_intel || modprobe kvm_amd
 
 #安装rpm包并启动"libvirtd"服务
-[root@wy ~]# yum -y install kvm  python-virtinst libvirt tunctl bridge-utils virt-manager \
-qemu-kvm-tools virt-viewer virt-v2v libguestfs-tools 
+[root@wy ~]# yum -y install kvm qemu-kvm-tools python-virtinst libvirt bridge-utils tunctl libguestfs-tools \
+virt-v2v virt-manager virt-viewer 
 [root@wy ~]# systemctl start libvirtd
 
 #检查是否有kvm模块,如果有则继续
