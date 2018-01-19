@@ -7,7 +7,7 @@
 [root@wy ~]# modprobe kvm     
 [root@wy ~]# modprobe kvm_intel || modprobe kvm_amd
 
-#安装rpm包并启动"libvirtd"服务
+#安装rpm包并启动"libvirtd"服务，KVM需要Qemu的某些功能，如I/O设备的模拟/管理等...
 [root@wy ~]# yum -y install kvm qemu-kvm-tools libvirt bridge-utils tunctl libguestfs-tools python-virtinst \
 virt-v2v virt-manager virt-viewer libvirt-client
 [root@wy ~]# systemctl start libvirtd
@@ -54,7 +54,15 @@ GATEWAY="192.168.2.2"
 #### 建立虚拟机
 下面展示多种方式建立虚拟机
 ```bash
-########### 使用iso安装 ###########     
+# KVM对I/O设备同时支持全虚拟化和半虚拟化!，其半虚拟化的组件叫做"virtio"，它是一种通用的半虚拟化驱动，是Linux内核中的模块
+# I/O设备的虚拟模式有三种：1.模拟,2.半虚拟化,3.透传
+# virtio-blk      块设备的半虚拟化，使用磁盘的版虚拟化时其性能接近物理机的85%
+# virtio-net      网络设备的半虚拟化
+# virtio-pci      PCI设备的半虚拟化（注！显卡设备不支持版虚拟化）
+# virtio-console  控制台的半虚拟化
+# virtio-ballon   内存的动态扩展/缩容
+
+########### 使用iso安装 ###########     
 [root@wy ~]# virt-install \     
 --name=centos5 \     
 --os-variant=RHEL5 \     
@@ -286,8 +294,9 @@ cluster_size: 65536
    [root@wy ~]# virsh start centos63-119.27
    #virt-resize其实就是将原来磁盘中的文件复制到新的文件中，将想要扩大的分区扩大了
 ```
-#### 动态迁移
-```
-参考：
-https://www.chenyudong.com/archives/virsh-kvm-live-migration-with-libvirt.html
+#### 动态（实时）迁移
+```bash
+# 进行实时迁移时，KVM的GuestOS物理镜像必须在共享存储之上，且cpu型号和时钟相同，等等....
+# 参考：
+# https://www.chenyudong.com/archives/virsh-kvm-live-migration-with-libvirt.html
 ```
