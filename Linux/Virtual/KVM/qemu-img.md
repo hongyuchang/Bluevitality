@@ -11,6 +11,10 @@ qemu-img create -f TYPE FILENAME SIZE
 		TYPE :  qcow2, raw
 		FILENAME : 文件名
 		SIZE : 文件大小，例如`1G`（稀疏格式）
+
+或:
+qemu-img create -f qcow2 -o size=20G,preallocation=metadata /img/winxp.qcow2	#稀疏格式（仅预分配磁盘元数据空间）
+
 ```
 
 用`dd`命令也可以创建`raw`格式的镜像文件，用如下命令：
@@ -18,7 +22,6 @@ qemu-img create -f TYPE FILENAME SIZE
 ```
 dd if=/dev/zero of=FILENAME bs=1024k count=4096  # 4G Image
 ```
-
 用如下命令转换镜像文件格式：
 
 ```
@@ -35,6 +38,7 @@ cluster_size: 65536
 Format specific information:
     compat: 0.10
 ```
+
 ###### qemu-img Supported formats ......
 ```txt
 Supported formats: vvfat vpc vmdk vhdx vdi ssh sheepdog rbd raw host_cdrom host_floppy host_device file qed 
