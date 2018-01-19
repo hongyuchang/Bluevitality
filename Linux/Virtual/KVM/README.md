@@ -155,7 +155,7 @@ xorg-x11-xauth xorg-x11-drv-ati-firmware  xorg-x11-xinit
 [root@wy ~]# yum -y install virt-viewer xorg-x11-font* virt-viewer centos63-webtest 
 ```
 
-## KVM管理
+## 管理KVM虚拟机
 #### virsh 常见命令
 ```bash
 1.virsh进入交互模式，在该交互模式下有命令补全。
