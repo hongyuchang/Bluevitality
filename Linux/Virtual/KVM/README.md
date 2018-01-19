@@ -75,8 +75,8 @@ GATEWAY="192.168.2.2"
 --os-variant=RHEL5 \     
 --ram=512 \     
 --vcpus=1 \     
---disk path=/opt/vms/centos63-webtest.img,format=qcow2,size=7,bus=virtio \     
---accelerate \     
+--disk path=/opt/vms/centos63-webtest.img,format=qcow2,size=7,bus=virtio \  #virtio是其接口类型，即半虚拟化技术
+--accelerate \     
 --cdrom /data/iso/CentOS5.iso \     
 --vnc --vncport=5910 \     
 --vnclisten=0.0.0.0 \     
