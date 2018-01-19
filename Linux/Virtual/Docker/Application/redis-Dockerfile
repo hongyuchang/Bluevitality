@@ -1,0 +1,19 @@
+FROM ubuntu:zach
+MAINTAINER zach.wang
+#docker build -t zach_redis:3.0 .
+#复制redis配置文件到/docker/redis
+#docker run -p 9999:22 -p 6379:6379 -t -i -v /docker/redis:/zach/redis zach_redis:3.0
+
+COPY supervisord/redis.ini /etc/supervisor/conf.d/redis.ini
+
+ENV REDIS_HOME /zach/redis
+ENV LC_ALL C
+
+ADD redis /zach/redis
+
+# 挂载/redis目录
+VOLUME ["/zach/redis"]
+
+EXPOSE 6379
+
+CMD ["/usr/bin/supervisord"]
