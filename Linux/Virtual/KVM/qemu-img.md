@@ -1,6 +1,6 @@
 # 镜像工具 qemu-img
 
-主要的镜像工具`qemu-img`。
+主要的镜像工具`qemu-img`
 
 ## 创建镜像文件
 
@@ -24,7 +24,11 @@ dd if=/dev/zero of=FILENAME bs=1024k count=4096  # 4G Image
 ```
 qemu-img convert -O TYPE SRC_IMG_NAME DEST_IMG_NAME
 ```
-
+###### qemu-img Supported formats ......
+```txt
+Supported formats: vvfat vpc vmdk vhdx vdi ssh sheepdog rbd raw host_cdrom host_floppy host_device file qed 
+qcow2 qcow parallels nbd iscsi gluster dmg tftp ftps ftp https http cloop bochs blkverify blkdebug
+```
 ## 加载镜像文件
 
 #### 加载raw格式的镜像文件
