@@ -43,6 +43,7 @@
 │   │   │   ├── Swarm
 │   │   │   └── 企业仓库 - Harbor
 │   │   ├── Kubernetes
+│   │   │   ├── yaml.conf
 │   │   │   ├── 资料
 │   │   │   └── 软件
 │   │   ├── KVM
@@ -99,7 +100,7 @@
 │   │   ├── CFSSL
 │   │   │   └── 软件
 │   │   ├── Openssl  demo
-│   │   └── Setup PKI
+│   │   └── Setup
 │   ├── 数据库
 │   │   ├── Memcache
 │   │   │   └── Setup 1.4.24
@@ -239,7 +240,7 @@
 │   │   │   ├── static
 │   │   │   └── templates
 │   │   ├── Little Example
-│   │   ├── Mine
+│   │   ├── My
 │   │   │   ├── web_show
 │   │   │   └── web_ show 随机
 │   │   ├── O'Reilly - Flask Web Development
@@ -266,15 +267,15 @@
 │   │   │   └── templates
 │   │   └── 简单的爬虫 demo（带注释）
 │   ├── SqlAlchemy
-│   ├── 常用库及第三方包的笔记（摘）
+│   ├── 常用库及第三方包（摘）
 │   │   └── packages
 │   │       ├── imgs
 │   │       └── scikit_learn
-│   └── 爬虫项目
+│   └── 爬虫
 └── Tmp
     ├── Chrome Bookmarks
     ├── English
     │   └── Improve
     └── Tools
 
-277 directories
+278 directories
