@@ -151,7 +151,7 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 # --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]
 # --force 如果有yes或者no的交互式，自动yes
 
-# 当用户自定义虚拟机的xml配置文件时对各类型的*.xml进行验证的例子：
+# 当用户自定义虚拟机的xml配置文件时，对各类型的*.xml进行验证的例子：
 [root@wy ~]# virt-xml-validate /etc/libvirt/qemu/networks/default.xml 
 /etc/libvirt/qemu/networks/default.xml validates
 ```
