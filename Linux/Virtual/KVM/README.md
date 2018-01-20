@@ -13,7 +13,7 @@ virt-v2v virt-install virt-manager virt-viewer virt-top bridge-utils
 [root@wy ~]# ln -sv /usr/libexec/qemu-kvm /usr/sbin/
 "/usr/sbin/qemu-kvm" -> "/usr/libexec/qemu-kvm"
 
-[root@wy ~]# systemctl start libvirtd
+[root@wy ~]# systemctl start libvirtd   #云环境中其相当于Agent,virsh远程访问时以qemu:///host:port/systems的形式访问
 
 #检查是否有kvm模块，若有则继续
 [root@wy ~]# lsmod | grep kvm
