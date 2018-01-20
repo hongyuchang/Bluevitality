@@ -55,7 +55,7 @@ commands:
 #              \veth1@br0            /veth0@br0
 #                 [ Host - veth2@br0 ]
 #                            |
-#                          veth3 -------> Internet
+#                           veth3，eno16777736 -------> Internet
 #
 
 [root@node1 ~]# ip link add veth2 type veth peer veth3
@@ -79,4 +79,5 @@ virbr0          8000.52540055c3f3       yes             virbr0-nic
 [root@virtual-host ~]# route add default gw 192.168.2.254               #对虚机设置GW指向宿主机veth2后其可访问外网
 
 # 注：此环境下若不使用Iptables做NAT则虚机内的数据包能出去但回不来...
+[root@node1 ~]# iptables -t nat -A POSTROUTING -s 192.168.2.0/24 -j SNAT --to-source <eno16777736_address>
 ```
