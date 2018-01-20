@@ -42,7 +42,7 @@ or other application using the libvirt API.
 <network>
   <name>default</name>
   <uuid>2238313d-75bd-4b02-af54-938a0dd09b63</uuid>
-  <forward mode='nat'/>                                         <!-- 默认使用NAT模式 -->
+  <forward mode='nat'/>                                        <!-- 其默认的桥"virbr0"工作于NAT模式 -->
   <bridge name='virbr0' stp='on' delay='0'/>
   <mac address='52:54:00:34:6d:d8'/>
   <ip address='192.168.122.1' netmask='255.255.255.0'>
@@ -53,7 +53,7 @@ or other application using the libvirt API.
 </network>
 ```
 
-#### 配置桥接网络 br0 ，使虚拟机使用宿主机的物理网卡
+#### 配置桥接网络 br0 ，使虚拟机直接使用宿主机的物理网卡（物理网络）
 ```bash
 # 即创建网桥设备并将物理网卡的地址转移到桥设备上，然后再将物理网卡加入到桥设备中
 
