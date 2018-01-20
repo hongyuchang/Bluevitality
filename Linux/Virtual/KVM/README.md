@@ -99,7 +99,7 @@ GATEWAY="192.168.2.2"
 # virtio-console  控制台的半虚拟化
 # virtio-ballon   内存的动态扩展/缩容
 
-########### 使用iso安装 ###########     
+############# 使用iso安装 ############# 
 [root@wy ~]# virt-install \     
 --name=centos5 \     
 --os-variant=RHEL5 \     
@@ -113,7 +113,7 @@ GATEWAY="192.168.2.2"
 --network bridge=br0,model=virtio \     #此处的网卡即使用了之前在宿主机创建的br0
 --noautoconsole
 
-########### 使用nat模式网络###########     
+############# 使用nat模式网络 ############# 
 [root@wy ~]# virt-install \     
 --name=centos5 \     
 --os-variant=RHEL5 \     
@@ -126,7 +126,7 @@ GATEWAY="192.168.2.2"
 --network network=default,model=virtio \     
 --noautoconsole
 
-########## 从http安装，使用ks, 双网卡, 启用console ########     
+############# 从http安装，使用ks, 双网卡, 启用console ############# 
 [root@wy ~]# virt-install \     
 --name=centos63-webtest \     
 --os-variant=RHEL6 \     
@@ -138,7 +138,7 @@ GATEWAY="192.168.2.2"
 --location http://111.205.130.4/centos63 \     
 --extra-args "linux ip=59.151.73.22 netmask=255.255.255.224 gateway=59.151.73.1 \ 
 ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
---vnclisten=0.0.0.0 --vnc --vncport=5910 \     
+--vnc --vnclisten=0.0.0.0 --vncport=5910 \     
 --network bridge=br0,model=virtio \     
 --network bridge=br1,model=virtio \     
 --force \     
@@ -159,27 +159,34 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 --noautoconsole
 
 # 参数说明：     
-# --name 指定虚拟机名称     
+# --name 指定虚拟机名称，全局唯一
 # --ram 分配内存大小
-# --vcpus 分配CPU核心数，最大与实体机CPU核心数相同
-# --vcpus 2,cpuset=1,2  将虚拟机的CPU绑定在物理机的哪个核心上，避免多核CPU的核心之间资源漂移的开销
-# --disk 指定虚拟机镜像，其size子参数指定分配大小单位为G 
-# --network 网络类型，此处用的是默认，一般用的应该是bridge桥接。可以指定两次也就是两块网卡
+# --vcpus 2,cpuset=1,2 分配CPU核心数，最大与物理CPU核数相同，以及将虚机CPU绑定在物理机的哪个核心，避免CPU资源漂移的开销
+# --vcpus=VCPUS[,maxvcpus=MAX][,sockets=#][,cores=#][,threads=#] VCPU个数及相关配置
+# --cpu 指定CPU模式及特性，如coreduo等；可使用 qemu-kvm -cpu ?来获取支持的CPU模式
+# --disk 指定虚拟机镜像，其size子参数指定分配大小单位为G，其sparse关键字参数指明工作于稀疏格式
+# --network 网络类型，常用的是bridge桥接。其可指定多次，其子参数model的值建议使用virtio，子参数mac指定MAC地址
 # --metadata 用户自定义的元数据文本信息
-# --accelerate 加速 
-# --cdrom 指定安装镜像iso
+# --accelerate 加速
+# --pxe 基于PXE完成安装
+# --cdrom 指定安装镜像
 # --pxe 从网卡启动
 # --boot 指定启动顺序，如：--boot hd,cdrom
 # --import 从已经存在的磁盘镜像中创建
-# --location 从ftp,http,nfs启动 
-# --vnc 启用VNC远程管理     
-# --vncport 指定VNC监控端口，默认端口5900，端口不能重复
+# --location 安装源URL，支持FTP、HTTP及NFS等，如ftp://172.16.0.1/pub
+# --vnc 启用VNC远程管理
 # --vnclisten 指定VNC绑定IP，默认绑定127.0.0.1
-# --os-type=linux,windows
-# --extra-args 指定额外的安装参数
-# --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]
-# --force 如果有yes或者no的交互式，自动yes
+# --vncport 指定VNC监控端口，默认端口5900，端口不能重复
+# --os-type 操作系统类型，如linux、unix或windows等
+# --extra-args 用于安装时传递给内核的额外选项，如指定ks文件位置，--extra-args "ks=http://172.16.0.1/class.cfg"
+# --os-variant  [win7 vista winxp win2k8 rhel6 rhel5]
+# --force 如果有yes或者no的交互式，自动yes，即禁止命令进入交互式模式
+# --autostart 虚拟机是否在物理启动后自动启动（开机自启）
+# --noautoconsole 禁止自动连接至虚拟机的控制台
+# --nodisks 不使用本地磁盘，在LiveCD模式中常用
+# --connect qemu:///system 指明需要连接到的VMM的URL信息，其中的"qemu:///system"即本机
 
+# 当虚拟机创建后其配置信息保存在"/etc/libvirt/qemu/"中
 # 当用户自定义虚拟机的xml配置文件时，对各类型的*.xml进行验证的例子：
 [root@wy ~]# virt-xml-validate /etc/libvirt/qemu/networks/default.xml 
 /etc/libvirt/qemu/networks/default.xml validates
