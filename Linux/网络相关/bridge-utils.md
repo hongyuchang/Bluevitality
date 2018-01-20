@@ -47,3 +47,16 @@ commands:
         showstp         <bridge>                        show bridge stp info            
         stp             <bridge> {on|off}               turn stp on/off                 #启用生成树
 ```
+#### 添加一对虚拟网卡(逻辑上是1个)，并且将其中一个添加到宿主机内的网桥设备中
+```bash
+[root@node1 ~]# ip link add veth2 type veth peer veth3
+[root@node1 ~]# ip link set veth2 up
+[root@node1 ~]# ip link set veth3 up
+[root@node1 ~]# brctl addbr br0
+[root@node1 ~]# brctl addif br0 veth2
+[root@node1 ~]# brctl show
+bridge name     bridge id               STP enabled     interfaces
+br0             8000.a62f5a8e91ba       no              veth2           # <------
+docker0         8000.0242859adf2e       no
+virbr0          8000.52540055c3f3       yes             virbr0-nic
+```
