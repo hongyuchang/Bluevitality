@@ -63,7 +63,11 @@ virsh undefine 实例名 --remove-all-storage     彻底删除虚拟机
 ```
 #### 子机随宿主主机（母机）启动而启动
 `virsh autostart 实例名`  
-`virsh auotstart --disable 实例名`  取消自启 
+`virsh auotstart --disable 实例名`  取消自启
+#### 进入虚拟机的终端
+```
+virsh console 实例名
+```
 #### virsh --help
 ```txt
 [root@node1 ~]# virsh --help
