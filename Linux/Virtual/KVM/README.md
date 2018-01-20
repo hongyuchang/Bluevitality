@@ -24,7 +24,7 @@ kvm             314739 1 kvm_intel
 [root@wy ~]# ll /dev/kvm 
 crw-------. 1 root root 10, 232 1月  20 11:19 /dev/kvm
 ```
-####  libvirtd 的配置目录： /etc/libvirt/
+####  libvirtd 的配置目录：/etc/libvirt/
 ```bash
 [root@node1 ~]# cat /etc/libvirt/libvirtd.conf
 #listen_tcp = 1
