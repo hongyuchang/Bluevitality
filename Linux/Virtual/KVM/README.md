@@ -170,7 +170,6 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 # --accelerate 加速
 # --pxe 基于PXE完成安装
 # --cdrom 指定安装镜像
-# --pxe 从网卡启动
 # --boot 指定启动顺序，如：--boot hd,cdrom
 # --import 从已经存在的磁盘镜像中创建
 # --location 安装源URL，支持FTP、HTTP及NFS等，如ftp://172.16.0.1/pub
