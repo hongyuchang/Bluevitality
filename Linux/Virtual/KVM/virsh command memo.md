@@ -23,15 +23,15 @@ vnet0      bridge     br0      virtio      52:54:10:e6:c9:02
 vnet1      bridge     br1      virtio      52:54:10:f5:c5:6c  
 ```
 #### 新增一个网口
-`virsh attach-interface 实例名 --type bridge --source br1 --model virtio --config `         下次启动生效    
-`virsh attach-interface 实例名 --type bridge --source br1 --model virtio --current`         立即生效    
-`virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --config     `         下次启动生效    
-`virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --current    `         立即生效    
-
+```
+virsh attach-interface 实例名 --type bridge --source br1 --model virtio --config         下次启动生效    
+virsh attach-interface 实例名 --type bridge --source br1 --model virtio --current        立即生效    
+virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --config             下次启动生效    
+virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --current            立即生效    
+```
 #### 关闭或打开某个网口
-`virsh domif-setlink 实例名 vnet0 down`    
-`virsh domif-setlink 实例名 vnet0 up`  
- 
+`virsh domif-setlink 实例名 vnet0 down/up`    
+
 #### 获取某个网口状态  
 `virsh domif-getlink 实例名 vnet1`  
  
@@ -39,24 +39,30 @@ vnet1      bridge     br1      virtio      52:54:10:f5:c5:6c
 `virsh autostart 实例名`  
  
 #### 虚拟机的启动，关闭，重启，创建，查看VNC，链接虚拟机，启动并进入虚拟机
-`virsh start 实例名`  
-`virsh shutdown 实例名`  
-`virsh reboot 实例名`
-`virsh define demo.xml`  
-`virsh vncdisplay 实例名`
-`virsh console 实例名` 退出虚拟机用 ：ctrl+]  
-`virsh start 实例名 --console`
+```
+virsh start 实例名 
+virsh shutdown 实例名
+virsh reboot 实例名
+virsh define demo.xml 
+virsh vncdisplay 实例名
+virsh console 实例名 
+virsh start 实例名 --console
 
+退出虚拟机用 ：ctrl+] 
+```
 #### 虚拟机的挂起和恢复
-`virsh suspend 实例名`  
-`virsh resume 实例名`  
+```
+virsh suspend 实例名 
+virsh resume 实例名
+```
 #### 删除虚拟机
-`virsh destroy 实例名` 虚拟机断电
-`virsh undefine 实例名` 取消定义，将其由持久转为临时
-`virsh undefine 实例名 --remove-all-storage` 彻底删除虚拟机
-
+```
+virsh destroy 实例名       虚拟机断电
+virsh undefine 实例名      取消定义，将其由持久转为临时
+virsh undefine 实例名 --remove-all-storage     彻底删除虚拟机
+```
 #### 子机随宿主主机（母机）启动而启动
-`virsh autostart 实例名`
+`virsh autostart 实例名`  
 `virsh auotstart --disable 实例名`  取消自启 
 #### virsh --help
 ```txt
