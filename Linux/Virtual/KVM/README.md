@@ -27,9 +27,7 @@ crw-------. 1 root root 10, 232 1月  20 11:19 /dev/kvm
 
 #### 配置桥接网络 br0 ，使虚拟机使用宿主机的物理网卡
 ```bash
-[root@wy ~]# cd /etc/sysconfig/network-scripts/
-[root@wy ~]# cp ifcfg-eth0 ifcfg-br0
-
+[root@wy ~]# cd /etc/sysconfig/network-scripts/ && cp ifcfg-eth0 ifcfg-br0
 [root@wy ~]# vim ifcfg-eth0:     
 DEVICE=eth0     
 TYPE=Ethernet     
@@ -92,8 +90,7 @@ GATEWAY="192.168.2.2"
 --disk path=/opt/vms/centos63-webtest.img,format=qcow2,size=7,bus=virtio \     
 --accelerate \     
 --cdrom /data/iso/CentOS5.iso \     
---vnc --vncport=5910 \     
---vnclisten=0.0.0.0 \     
+--vnclisten=0.0.0.0 --vnc --vncport=5910 \     
 --network network=default,model=virtio \     
 --noautoconsole
 
@@ -109,7 +106,7 @@ GATEWAY="192.168.2.2"
 --location http://111.205.130.4/centos63 \     
 --extra-args "linux ip=59.151.73.22 netmask=255.255.255.224 gateway=59.151.73.1 \ 
 ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
---vnc --vncport=5910 --vnclisten=0.0.0.0 \     
+--vnclisten=0.0.0.0 --vnc --vncport=5910 \     
 --network bridge=br0,model=virtio \     
 --network bridge=br1,model=virtio \     
 --force \     
@@ -124,9 +121,9 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 --disk path=/opt/vms/centos63-webtest.img,size=100 \     
 --accelerate  \     
 --cdrom=/opt/iso/win7.iso       
---vnc --vncport=5910 --vnclisten=0.0.0.0 \     
+--vnclisten=0.0.0.0 --vnc --vncport=5910 \     
 --network bridge=br0 \       
---force \     
+--force \
 --noautoconsole
 
 # 参数说明：     
@@ -144,12 +141,20 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 # --import 从已经存在的磁盘镜像中创建
 # --location 从ftp,http,nfs启动 
 # --vnc 启用VNC远程管理     
-# --vncport 指定VNC监控端口，默认端口为5900，端口不能重复
-# --vnclisten 指定VNC绑定IP，默认绑定127.0.0.1，这里改为0.0.0.0
+# --vncport 指定VNC监控端口，默认端口5900，端口不能重复
+# --vnclisten 指定VNC绑定IP，默认绑定127.0.0.1
 # --os-type=linux,windows
 # --extra-args 指定额外的安装参数
 # --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]
 # --force 如果有yes或者no的交互式，自动yes
+```
+#### 关于KVM的四种简单网络模型
+```txt
+1. 隔离模式：    虚拟机之间组建网络，该模式无法与宿主机通信，无法与其他网络通信，相当于虚拟机只是连接到一台交换机上
+2. 路由模式：    相当于虚拟机连接到一台路由器上，由路由器(物理网卡)，统一转发，但是不会改变源地址。
+3. NAT模式：     在路由模式中会出现虚拟机可以访问其他主机但其他主机的报文无法到达虚拟机
+                而NAT模式则将源地址转换为路由器(物理网卡)地址，这样其他主机也知道报文来自哪个主机，docker中常被使用
+4. 桥接模式：    在宿主机中创建一张虚拟网卡作为宿主机的网卡，而物理网卡则作为交换机
 ```
 #### 安装系统
 安装系统有三种方式，通过：VNC，virt-manager，console配合ks
