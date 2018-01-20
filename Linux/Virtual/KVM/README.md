@@ -150,6 +150,10 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 # --extra-args 指定额外的安装参数
 # --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]
 # --force 如果有yes或者no的交互式，自动yes
+
+# 当用户自定义虚拟机的xml配置文件时对各类型的*.xml进行验证的例子：
+[root@wy ~]# virt-xml-validate /etc/libvirt/qemu/networks/default.xml 
+/etc/libvirt/qemu/networks/default.xml validates
 ```
 ![img](资料/virt-install+vnc.gif)
 #### 关于KVM的四种简单网络模型
