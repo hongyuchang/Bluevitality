@@ -24,6 +24,34 @@ kvm             314739 1 kvm_intel
 [root@wy ~]# ll /dev/kvm 
 crw-------. 1 root root 10, 232 1月  20 11:19 /dev/kvm
 ```
+####  配置文件 /etc/libvirt/
+```bash
+[root@node1 ~]# cat /etc/libvirt/libvirtd.conf
+#listen_tcp = 1
+#listen_addr = "192.168.0.1"
+#tcp_port = "16509"
+#此外还有关于TLS加密通讯，unix.socket的配置...
+
+[root@node1 ~]# cat /etc/libvirt/qemu/networks/default.xml    #启动libvirtd服务后其根据此配置创建桥设备及DHCP
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit default
+or other application using the libvirt API.
+-->
+<network>
+  <name>default</name>
+  <uuid>2238313d-75bd-4b02-af54-938a0dd09b63</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:34:6d:d8'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+    </dhcp>
+  </ip>
+</network>
+```
 
 #### 配置桥接网络 br0 ，使虚拟机使用宿主机的物理网卡
 ```bash
