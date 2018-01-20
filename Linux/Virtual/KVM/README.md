@@ -57,16 +57,17 @@ or other application using the libvirt API.
 ```bash
 # 即创建网桥设备并将物理网卡的地址转移到桥设备上，然后再将物理网卡加入到桥设备中
 
-[root@wy ~]# cd /etc/sysconfig/network-scripts/ && cp ifcfg-eth0 ifcfg-br0
-[root@wy ~]# vim ifcfg-eth0:     
-DEVICE=eth0     
+[root@wy ~]# cd /etc/sysconfig/network-scripts/ && cp ifcfg-eno16777736 ifcfg-br0
+[root@wy ~]# vim ifcfg-eno16777736
+DEVICE=eno16777736
 TYPE=Ethernet     
 ONBOOT=yes     
 NM_CONTROLLED=no                # NetworkManager服务不支持桥接，所以原则上建议设为"no"
 BRIDGE="br0"                    # 将本设备桥接到哪个设备 --> br0 (此配置下eth0与br0逻辑上称为1个网卡且MAC相同)
-#BOOTPROTO=static               # 或者把br0当交换机，将eth0当接入设备
+#BOOTPROTO=static               # 此段注释，相当于把br0当交换机，将eth0当接入设备
 
-[root@wy ~]# vim ifcfg-br0:
+[root@wy ~]# vim ifcfg-br0
+NAME=br0
 DEVICE=br0                      # 网桥名字
 TYPE=Bridge                     # 网桥名字
 ONBOOT=yes     
