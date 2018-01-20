@@ -69,7 +69,7 @@ BRIDGE="br0"                    # 将本设备桥接到哪个设备 -->
 [root@wy ~]# vim ifcfg-br0
 NAME=br0
 DEVICE=br0                      # 网桥名字
-TYPE=Bridge                     # 网桥名字
+TYPE=Bridge                     # 
 ONBOOT=yes     
 NM_CONTROLLED=yes     
 BOOTPROTO=static     
