@@ -47,7 +47,7 @@ commands:
         showstp         <bridge>                        show bridge stp info            
         stp             <bridge> {on|off}               turn stp on/off                 #启用生成树
 ```
-#### 添加一对虚拟网卡(逻辑上是1个)，并且将其中一个添加到宿主机内的网桥设备中
+##### 添加一对虚拟网卡(逻辑上是1个)，并且将其中一个添加到宿主机内的网桥设备中【本内容仅参考，生产中直接对br0内的veth2配置IP即可】
 ```bash
 # 虚机1/2的eth0的下半段分别在宿主机br0的veth0/1上，宿主机的veth2在br0内，并且下半段在veth3接口
 # 例：
