@@ -255,27 +255,26 @@
 │   │       └── images
 │   ├── Paramiko
 │   ├── Request
-│   ├── Spider！
-│   │   ├── 其他人的 Spider
-│   │   │   ├── DouBan
-│   │   │   ├── LaGou
-│   │   │   ├── TouTiao
-│   │   │   ├── XiaoHua
-│   │   │   ├── XiaoHua2
-│   │   │   └── ZhiHu1
-│   │   ├── 基金爬虫
-│   │   │   └── templates
-│   │   └── 简单的爬虫 demo（带注释）
 │   ├── SqlAlchemy
 │   ├── 常用库及第三方包（摘）
 │   │   └── packages
 │   │       ├── imgs
 │   │       └── scikit_learn
 │   └── 爬虫
+│       ├── 其他人的 Spider
+│       │   ├── DouBan
+│       │   ├── LaGou
+│       │   ├── TouTiao
+│       │   ├── XiaoHua
+│       │   ├── XiaoHua2
+│       │   └── ZhiHu1
+│       ├── 基金爬虫
+│       │   └── templates
+│       └── 简单的爬虫 demo（带注释）
 └── Tmp
     ├── Chrome Bookmarks
     ├── English
     │   └── Improve
     └── Tools
 
-278 directories
+277 directories
