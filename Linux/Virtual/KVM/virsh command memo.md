@@ -1,7 +1,5 @@
-#### 查看所有虚拟机
+#### 查看所有虚拟机，包括未运行的
 `virsh list --all`
-#### 查看运行的虚拟机
-`virsh list`
 
 虚拟机的状态有 8 种  
 * runing  运行状态     
@@ -25,10 +23,10 @@ vnet0      bridge     br0      virtio      52:54:10:e6:c9:02
 vnet1      bridge     br1      virtio      52:54:10:f5:c5:6c  
 ```
 #### 新增一个网口
-`virsh attach-interface 实例名 --type bridge --source br1 --model virtio --config `         // 下次启动生效    
-`virsh attach-interface 实例名 --type bridge --source br1 --model virtio --current`         // 立即生效    
-`virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --config     `         // 下次启动生效    
-`virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --current    `         // 立即生效    
+`virsh attach-interface 实例名 --type bridge --source br1 --model virtio --config `         下次启动生效    
+`virsh attach-interface 实例名 --type bridge --source br1 --model virtio --current`         立即生效    
+`virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --config     `         下次启动生效    
+`virsh detach-interface 实例名 --type bridge --mac 52:54:10:f5:c5:6c --current    `         立即生效    
 
 #### 关闭或打开某个网口
 `virsh domif-setlink 实例名 vnet0 down`    
@@ -52,13 +50,14 @@ vnet1      bridge     br1      virtio      52:54:10:f5:c5:6c
 #### 虚拟机的挂起和恢复
 `virsh suspend 实例名`  
 `virsh resume 实例名`  
-#### 彻底删除虚拟机
-`virsh destroy 实例名` 删除虚拟机  
-`virsh undefine 实例名` 解除标记  
+#### 删除虚拟机
+`virsh destroy 实例名` 虚拟机断电
+`virsh undefine 实例名` 取消定义，将其由持久转为临时
+`virsh undefine 实例名 --remove-all-storage` 彻底删除虚拟机
 
 #### 子机随宿主主机（母机）启动而启动
 `virsh autostart 实例名`
-`virsh auotstart --disable 实例名`  取消自启  
+`virsh auotstart --disable 实例名`  取消自启 
 #### virsh --help
 ```txt
 [root@node1 ~]# virsh --help
@@ -199,7 +198,7 @@ virsh [options]... <command> [args...]
     domstate                       域状态
     domstats                       get statistics about one or multiple domains
     domtime                        domain time
-    list                           列出域
+    list                           列出域，--all 显示所有
 
  Host and Hypervisor (help keyword 'host')
     allocpages                     Manipulate pages pool size
