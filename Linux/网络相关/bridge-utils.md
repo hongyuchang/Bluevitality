@@ -58,7 +58,7 @@ commands:
 #                           veth3，eno16777736 -------> Internet
 #
 
-[root@node1 ~]# ip link add veth2 type veth peer veth3
+[root@node1 ~]# ip link add veth2 type veth peer name veth3
 [root@node1 ~]# ip link set veth2 up
 [root@node1 ~]# ip link set veth3 up
 [root@node1 ~]# brctl addbr br0
