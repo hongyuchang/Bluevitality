@@ -77,4 +77,6 @@ virbr0          8000.52540055c3f3       yes             virbr0-nic
 
 [root@node1 ~]# echo 1 > /proc/sys/net/ipv4/ip_forward                  #开启宿主机路由转发功能
 [root@virtual-host ~]# route add default gw 192.168.2.254               #对虚机设置GW指向宿主机veth2后其可访问外网
+
+# 注：此环境下若不使用Iptables做NAT则虚机内的数据包能出去但回不来...
 ```
