@@ -151,6 +151,7 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 # --os-variant= [win7 vista winxp win2k8 rhel6 rhel5]
 # --force 如果有yes或者no的交互式，自动yes
 ```
+![img](资料/virt-install+vnc.gif)
 #### 关于KVM的四种简单网络模型
 ```txt
 1. 隔离模式：    虚机之间组建网络，该模式无法与宿主机通信，无法与其他网络通信，相当于虚机都连接到了独立的交换机上
