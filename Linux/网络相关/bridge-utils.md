@@ -49,14 +49,32 @@ commands:
 ```
 #### 添加一对虚拟网卡(逻辑上是1个)，并且将其中一个添加到宿主机内的网桥设备中
 ```bash
+# 虚机1/2的eth0的下半段分别在宿主机br0的veth0/1上，宿主机的veth2在br0内，并且下半段在veth3接口
+# 例：
+#          [virtual-1]               [virtual-2]
+#              \veth1@br0            /veth0@br0
+#                 [ Host - veth2@br0 ]
+#                            |
+#                          veth3 -------> Internet
+#
+
 [root@node1 ~]# ip link add veth2 type veth peer veth3
 [root@node1 ~]# ip link set veth2 up
 [root@node1 ~]# ip link set veth3 up
 [root@node1 ~]# brctl addbr br0
-[root@node1 ~]# brctl addif br0 veth2
+[root@node1 ~]# brctl addif br0 veth2              #宿主机内的其他虚拟机均通过其本机网卡接入此桥设备
 [root@node1 ~]# brctl show
 bridge name     bridge id               STP enabled     interfaces
 br0             8000.a62f5a8e91ba       no              veth2           # <------
+                                                        ...（略）
 docker0         8000.0242859adf2e       no
 virbr0          8000.52540055c3f3       yes             virbr0-nic
+[root@node1 ~]# ip address add 192.168.2.254/24 dev veth3               #对宿主机中的veth设备添加地址
+
+[root@virtual-host ~]# ping 192.168.2.254
+64 bytes from 192.168.2.254: icmp_seq=1 ttl=128 time=0.1 ms
+64 bytes from 192.168.2.254: icmp_seq=2 ttl=128 time=0.7 ms
+
+[root@node1 ~]# echo 1 > /proc/sys/net/ipv4/ip_forward                  #开启宿主机路由转发功能
+[root@virtual-host ~]# route add default gw 192.168.2.254               #对虚机设置GW指向宿主机veth2后其可访问外网
 ```
