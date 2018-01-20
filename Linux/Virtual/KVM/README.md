@@ -42,7 +42,7 @@ or other application using the libvirt API.
 <network>
   <name>default</name>
   <uuid>2238313d-75bd-4b02-af54-938a0dd09b63</uuid>
-  <forward mode='nat'/>
+  <forward mode='nat'/>                                         <!-- 默认使用NAT模式 -->
   <bridge name='virbr0' stp='on' delay='0'/>
   <mac address='52:54:00:34:6d:d8'/>
   <ip address='192.168.122.1' netmask='255.255.255.0'>
