@@ -15,7 +15,7 @@
 │   │   │   ├── 资料
 │   │   │   └── 软件
 │   │   ├── Hadoop
-│   │   │   ├── XML
+│   │   │   ├── xml
 │   │   │   └── 资料
 │   │   ├── HAproxy
 │   │   │   ├── conf
@@ -93,6 +93,7 @@
 │   │   │   └── Setup
 │   │   ├── Rsync + Sersync
 │   │   ├── Samba
+│   │   │   └── 资料
 │   │   ├── Vsftp
 │   │   │   └── config-ftp
 │   │   └── 分区脚本
@@ -277,4 +278,4 @@
     │   └── Improve
     └── Tools
 
-277 directories
+278 directories
