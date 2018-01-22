@@ -65,3 +65,20 @@ OpenvSwitch中有多个命令，分别有不同的作用：
 [root@node1 ~]# ovs−vsctl set port eth0 other_config:stp-path-cost=10       #设置Cost
 [root@node1 ~]# ovs−vsctl clear bridge ovs-br other_config                  #移除STP设置
 ```
+#### Trunk - IEEE 802.1Q
+```bash
+[root@node1 ~]# modinfo 8021q       #Linux默认加载了支持Dot1q的模块
+filename:       /lib/modules/3.10.0-327.el7.x86_64/kernel/net/8021q/8021q.ko
+version:        1.8
+license:        GPL
+alias:          rtnl-link-vlan
+rhelversion:    7.2
+srcversion:     2E63BD725D9DC11C7DA6190
+depends:        mrp,garp
+intree:         Y
+vermagic:       3.10.0-327.el7.x86_64 SMP mod_unload modversions 
+signer:         CentOS Linux kernel signing key
+sig_key:        79:AD:88:6A:11:3C:A0:22:35:26:33:6C:0F:82:5B:8A:94:29:6A:B3
+sig_hashalgo:   sha256
+
+```
