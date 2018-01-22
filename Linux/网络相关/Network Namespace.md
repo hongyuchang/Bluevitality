@@ -1,4 +1,4 @@
-#### Nerwork Namespace
+#### Network Namespace
 ```txt
 虚拟机KVM-dom*内网卡后半段接入网桥"br internal"，此桥又接入宿主机内独立的网络名称空间，此空间内实现了DHCP及路由器功能
 此名称空间内的路由器接口的后半段又接入了宿主机的br0网桥，br0内部桥接了宿主机网卡及Net-Namespace内路由器的后半段网卡...
