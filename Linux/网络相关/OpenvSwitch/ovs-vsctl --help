@@ -1,0 +1,107 @@
+[root@node2 ~]# ovs-vsctl --help
+ovs-vsctl: ovs-vswitchd management utility
+usage: ovs-vsctl [OPTIONS] COMMAND [ARG...]
+
+Open vSwitch commands:
+  init                        initialize database, if not yet initialized
+  show                        print overview of database contents
+  emer-reset                  reset configuration to clean state
+
+Bridge commands:
+  add-br BRIDGE               create a new bridge named BRIDGE
+  add-br BRIDGE PARENT VLAN   create new fake BRIDGE in PARENT on VLAN
+  del-br BRIDGE               delete BRIDGE and all of its ports
+  list-br                     print the names of all the bridges
+  br-exists BRIDGE            exit 2 if BRIDGE does not exist
+  br-to-vlan BRIDGE           print the VLAN which BRIDGE is on
+  br-to-parent BRIDGE         print the parent of BRIDGE
+  br-set-external-id BRIDGE KEY VALUE  set KEY on BRIDGE to VALUE
+  br-set-external-id BRIDGE KEY  unset KEY on BRIDGE
+  br-get-external-id BRIDGE KEY  print value of KEY on BRIDGE
+  br-get-external-id BRIDGE  list key-value pairs on BRIDGE
+
+Port commands (a bond is considered to be a single port):
+  list-ports BRIDGE           print the names of all the ports on BRIDGE
+  add-port BRIDGE PORT        add network device PORT to BRIDGE
+  add-bond BRIDGE PORT IFACE...  add bonded port PORT in BRIDGE from IFACES
+  del-port [BRIDGE] PORT      delete PORT (which may be bonded) from BRIDGE
+  port-to-br PORT             print name of bridge that contains PORT
+
+Interface commands (a bond consists of multiple interfaces):
+  list-ifaces BRIDGE          print the names of all interfaces on BRIDGE
+  iface-to-br IFACE           print name of bridge that contains IFACE
+
+Controller commands:
+  get-controller BRIDGE      print the controllers for BRIDGE
+  del-controller BRIDGE      delete the controllers for BRIDGE
+  set-controller BRIDGE TARGET...  set the controllers for BRIDGE
+  get-fail-mode BRIDGE       print the fail-mode for BRIDGE
+  del-fail-mode BRIDGE       delete the fail-mode for BRIDGE
+  set-fail-mode BRIDGE MODE  set the fail-mode for BRIDGE to MODE
+
+Manager commands:
+  get-manager                print the managers
+  del-manager                delete the managers
+  set-manager TARGET...      set the list of managers to TARGET...
+
+SSL commands:
+  get-ssl                     print the SSL configuration
+  del-ssl                     delete the SSL configuration
+  set-ssl PRIV-KEY CERT CA-CERT  set the SSL configuration
+
+Auto Attach commands:
+  add-aa-mapping BRIDGE I-SID VLAN   add Auto Attach mapping to BRIDGE
+  del-aa-mapping BRIDGE I-SID VLAN   delete Auto Attach mapping VLAN from BRIDGE
+  get-aa-mapping BRIDGE              get Auto Attach mappings from BRIDGE
+
+Switch commands:
+  emer-reset                  reset switch to known good state
+
+Database commands:
+  list TBL [REC]              list RECord (or all records) in TBL
+  find TBL CONDITION...       list records satisfying CONDITION in TBL
+  get TBL REC COL[:KEY]       print values of COLumns in RECord in TBL
+  set TBL REC COL[:KEY]=VALUE set COLumn values in RECord in TBL
+  add TBL REC COL [KEY=]VALUE add (KEY=)VALUE to COLumn in RECord in TBL
+  remove TBL REC COL [KEY=]VALUE  remove (KEY=)VALUE from COLumn
+  clear TBL REC COL           clear values from COLumn in RECord in TBL
+  create TBL COL[:KEY]=VALUE  create and initialize new record
+  destroy TBL REC             delete RECord from TBL
+  wait-until TBL REC [COL[:KEY]=VALUE]  wait until condition is true
+Potentially unsafe database commands require --force option.
+
+Options:
+  --db=DATABASE               connect to DATABASE
+                              (default: unix:/var/run/openvswitch/db.sock)
+  --no-wait                   do not wait for ovs-vswitchd to reconfigure
+  --retry                     keep trying to connect to server forever
+  -t, --timeout=SECS          wait at most SECS seconds for ovs-vswitchd
+  --dry-run                   do not commit changes to database
+  --oneline                   print exactly one line of output per command
+
+Logging options:
+  -vSPEC, --verbose=SPEC   set logging levels
+  -v, --verbose            set maximum verbosity level
+  --log-file[=FILE]        enable logging to specified FILE
+                           (default: /var/log/openvswitch/ovs-vsctl.log)
+  --syslog-method=(libc|unix:file|udp:ip:port)
+                           specify how to send messages to syslog daemon
+  --syslog-target=HOST:PORT  also send syslog msgs to HOST:PORT via UDP
+  --no-syslog             equivalent to --verbose=vsctl:syslog:warn
+
+Active database connection methods:
+  tcp:IP:PORT             PORT at remote IP
+  ssl:IP:PORT             SSL PORT at remote IP
+  unix:FILE               Unix domain socket named FILE
+Passive database connection methods:
+  ptcp:PORT[:IP]          listen to TCP PORT on IP
+  pssl:PORT[:IP]          listen for SSL on PORT on IP
+  punix:FILE              listen on Unix domain socket FILE
+PKI configuration (required to use SSL):
+  -p, --private-key=FILE  file with private key
+  -c, --certificate=FILE  file with certificate for private key
+  -C, --ca-cert=FILE      file with peer CA certificate
+
+Other options:
+  -h, --help                  display this help message
+  -V, --version               display version information
