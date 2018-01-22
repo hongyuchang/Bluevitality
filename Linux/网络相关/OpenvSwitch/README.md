@@ -26,15 +26,31 @@ openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec
 ```txt
 OpenvSwitch简称OVS，是虚拟交换软件，主要用于虚拟机VM环境
 作为一个虚拟交换机，支持Xen/XenServer, KVM, and VirtualBox多种虚拟化技术。OpenvSwitch还支持多个物理机的分布式环境
+在网络中换机和桥都是同一个概念，OVS实现了一个虚拟机的以太交换机，换句话说OVS也就是实现了一个以太桥
+在OVS中给一个交换机或者说一个桥，用了一个专业的名词叫做：DataPath
 
-在网络中换机和桥都是同一个概念，OVS实现了一个虚拟机的以太交换机，换句话说OVS也就是实现了一个以太桥。
-那么在OVS中，给一个交换机或者说一个桥，用了一个专业的名词叫做：DataPath！
+OpenVSwitch 的核心组件
+    ovsdb-server：
+          轻量级的数据库，用于整个OVS的配置信息，包括接口，交换内容，VLAN等。
+          ovs-vswitchd根据数据库中的配置工作，ovs-vswitchd与ovsdb-server通信使用OVSDB协议
+    ovs-vswitchd：    
+          是OVS核心，实现交换，和Linux内核兼容模块通过netlink通信并一起实现基于流的交换：flow-based switching
+          和上层controller通信遵从OPENFLOW协议，支持多个独立datapath（网桥）通过更改flow table实现绑定和VLAN等功能...
+    ovs kernel module：
+          内核模块实现多个数据路径：DataPath（类似交换机）每个都可有多个：vports，类似交换端口。
+          每个数据路径也通过关联流表"flow table"操纵
 
-OpenvSwitch中有多个命令，分别有不同的作用：
-    ovs-vsctl   用于控制ovs db
-    ovs-ofctl   用于管理OpenFlow switch 的 flow
+OpenVSwitc Tools
+    ovs-dpctl   用于配置交换机内核模块，可控制转发的规则
+    ovs-vsctl   获取或更改ovs-vswitchd配置，此工具操作时更新ovsdb-server
+    ovs-controller  简单的OpenFlow流控工具
+    ovs-ofctl   用来控制OVS作为OpenFlow交换机工作时的流表内容。
+    ovs-pki  OpenFlow交换机创建和管理公钥框架
+    ovs-tcpundump   tcpdump的补丁（解析OpenFlow消息）
+    ovs-appctl   一般不用（主要向OVS守护进程发送命令），用于查询和管理ovs daemon
     ovs-dpctl   用于管理ovs的datapath
-    ovs-appctl  用于查询和管理ovs daemon
+    brocompat.ko    Linux bridge compatibility module
+    openvswitch.ko  Open vSwitch switching datapath
 ```
 #### Demo
 ```bash
