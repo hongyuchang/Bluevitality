@@ -2,8 +2,8 @@
 ```txt
 虚拟机KVM-dom*内网卡后半段接入网桥"br internal"，此桥又接入宿主机内独立的网络名称空间，此空间内实现了DHCP及路由器功能
 此名称空间内的路由器接口的后半段又接入了宿主机的br0网桥，br0内部桥接了宿主机网卡及Net-Namespace内路由器的后半段网卡...
-相当于此"internal桥"通过路由器直接接入了物理网络，相当于KVM-dom1借助宿主机的Namespace功能实现了独立于宿主机的网络
-并且其直接接入了宿主机所在的物理网络。
+相当于此"internal桥"通过路由器直接接入了物理网络，即KVM-dom1借助宿主机的Namespace实现了独立于宿主机的网络
+相当于虚机绕开宿主机直接接入了宿主机所在的物理网络...
 注：下面拓扑中：[br internal]与[Host br0]是宿主机上的桥设备，此处"Net-Namespace"即名为"Instance1"的网络名称空间
     "Instance1"扮演了路由器的角色，所有dom的gateway均指向其加入Instance的接口地址"veth1.5"
     [Host br0]与[br internal]逻辑上成为了使用路由器隔离出来的网络（即：Instance1与宿主机无任何联系）
