@@ -8,7 +8,7 @@
     "Instance1"扮演了路由器的角色，所有dom的gateway均指向其加入Instance的接口地址"veth1.5"
     [Host br0]与[br internal]逻辑上成为了使用路由器隔离出来的网络（即：Instance1与宿主机无任何联系）
 
-|Node1: 
+|   Node1: 
 |                                                                                   |
 |       [KVM-dom1]          [KVM-dom1]         .                                    |
 |           \'veth1.2'       /                 .                                    |
