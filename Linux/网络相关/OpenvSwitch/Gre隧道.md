@@ -10,7 +10,7 @@
 ```bash
 [root@node1 ~]# ovs-vsctl add-br obr0                                               #创建网桥：0br0
 [root@node1 ~]# ovs-vsctl add-port obr0 gre0                                        #添加接口gre0到网桥obr0
-[root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4 #启用GRE并设置对端外网IP
+[root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4 #启用Gre设备并设置对端外网IP
 [root@node1 ~]# ovs-vsctl show
 286c02ff-a812-42ab-ac8a-cd342aeb6275
     Bridge "obr0"
