@@ -21,7 +21,7 @@
 |                 ↓192.168.1.1                 .                    ↓               |
 |             【Net-Namespace】'veth1.6'    --------->  'veth1.7'[Host br0] -----> Internat  :-)
 |                   |          192.168.1.254   .                                    |
-|              (DHCP,Route)                    .                                    |                                      .                   
+|              (DHCP,Route)                    .                                    | 
 ```
 
 ```bash
