@@ -15,11 +15,11 @@
 286c02ff-a812-42ab-ac8a-cd342aeb6275
     Bridge "obr0"
         Port "gre0"
-            Interface "gre0"
-                type: gre
+            Interface "gre0"                                    #
+                type: gre
                 options: {remote_ip="192.168.0.4"}
         Port "obr0"
-            Interface "obr0"
+            Interface "obr0"                                    #端口内可配置多个接口
                 type: internal
     ovs_version: "2.7.0"
 [root@node1 ~]# yum -y install bridge-utils
