@@ -35,14 +35,12 @@ OpenVSwitc Tools
 -rw-r--r--. 1 root root 6149523 12月 30 02:33 openvswitch-2.7.0.tar.gz   #下载源码并创建rpm包
 [root@node1 ~]# setenforce 0
 [root@node1 ~]# mkdir -p ~/rpmbuild/SOURCES
-[root@node1 ~]# tar -zxf openvswitch-2.7.0.tar.gz 
-[root@node1 ~]# cp openvswitch-2.7.0.tar.gz ~/rpmbuild/SOURCES/
+[root@node1 ~]# tar -zxf openvswitch-2.7.0.tar.gz && cp openvswitch-2.7.0.tar.gz ~/rpmbuild/SOURCES/
 [root@node1 ~]# sed 's/openvswitch-kmod, //g' openvswitch-2.7.0/rhel/openvswitch.spec > \
 openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec  
 [root@node1 ~]# rpmbuild -bb --nocheck openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec
 
-#创建ovs配置目录并安装制作好的rpm包
-[root@node1 ~]# mkdir /etc/openvswitch
+[root@node1 ~]# mkdir /etc/openvswitch                      #创建ovs配置目录并安装制作好的rpm包
 [root@node1 ~]# yum -y localinstall rpmbuild/RPMS/x86_64/openvswitch-2.7.0-1.x86_64.rpm
 
 #启动服务
@@ -54,21 +52,35 @@ openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec
 #### Demo
 ```bash
 [root@node1 ~]# ovs-vsctl add-br br0                        #新建网桥设备
-[root@node1 ~]# ovs-vsctl set bridge br0 stp_enable=true    #启用生成树协议
+[root@node1 ~]# ovs-vsctl add-br br0 parent VLAN            #新建网桥设备的同时指定其所属VLAN
+[root@node1 ~]# ovs-vsctl del-br ...                        #删除指定桥
+[root@node1 ~]# ovs-vsctl del-port ... ...                  #删除特定桥的指定端口 
+[root@node1 ~]# ovs-vsctl set bridge br0 stp_enable=true    #对指定的交换机启用生成树
 [root@node1 ~]# ovs-vsctl add-port br0 eth0                 #添加接口到网桥（网桥中加入的物理接口不可以有IP地址）
 [root@node1 ~]# ovs-vsctl add-port br0 eth1                 #
 [root@node1 ~]# ovs-vsctl add-bond br0 bond0 eth2 eth3      #多网卡绑定 add-bond <bridge> <port> <iface...>
-[root@node1 ~]# ifconfig br0 192.168.128.5 netmask 255.255.255.0     #为网桥设置IP (internal port 可配IP地址)
-[root@node1 ~]# ovs-vsctl list-ports br0                    #列出br0上的端口（不包括internal port）
+[root@node1 ~]# ifconfig br0 192.168.128.5/24               #为网桥设置IP (internal port 可配IP地址)
+[root@node1 ~]# ovs-vsctl list-br                           #列出所有桥
+[root@node1 ~]# ovs-vsctl list-ports br0                    #列出br0上的端口（不包括internal port）
+[root@node1 ~]# ovs-vsctl list-ifaces br0                   #列出br0上的所有接口（端口内包含多个接口，类似物理拓扑）
 [root@node1 ~]# ovs-vsctl list interface eth8               #列出OVS中端口eth1的详细数据
-[root@node1 ~]# ovs-vsctl list-br                           #列出网桥
 [root@node1 ~]# ovs-vsctl port-to-br xxx                    #列出挂载某网络接口的所有网桥
-[root@node1 ~]# ovs-vsctl show                              #查看全部信息
+[root@node1 ~]# ovs-vsctl show                              #查看全部信息，信息来自于ovsdb-server
 
 #VLAN
 [root@node1 ~]# ovs-vsctl set port eth0 tag=10              #设置br0中的端口eth0为VLAN 10
 [root@node1 ~]# ovs-svctl add-port br0 eth1 tag=10          #添加eth1到指定bridge br0并将其置成VLAN 10
 [root@node1 ~]# ovs-vsctl add-port br0 eth1 trunk=9,10,11   #在br0上添加port eth1为VLAN 9,10,11的trunk
+[root@node1 ~]# ovs-vsctl remove port eth0 tag=10           #移除VLAN_ID
+
+#在同一个宿主机内将两台虚拟交换机建立连接
+[root@node1 ~]# ovs-vsctl add-br br0 
+[root@node1 ~]# ovs-vsctl add-br br1
+[root@node1 ~]# ip link add veth1.1 type veth peer name veth1.2
+[root@node1 ~]# ip link set veth1.1 up
+[root@node1 ~]# ip link set veth1.2 up
+[root@node1 ~]# ovs-vsctl add-port br0 veth1.1
+[root@node1 ~]# ovs-vsctl add-port br1 veth1.2
 
 #GRE
 [root@node1 ~]# ovs-vsctl add-port br0 br0-gre -- set interface br0-gre type=gre options:remote_ip=1.2.3.4
