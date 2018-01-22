@@ -82,7 +82,7 @@ openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec
 [root@node1 ~]# ovs-vsctl add-port br0 veth1.1
 [root@node1 ~]# ovs-vsctl add-port br1 veth1.2
 
-#GRE
+#GRE tunnel
 [root@node1 ~]# ovs-vsctl add-port br0 br0-gre -- set interface br0-gre type=gre options:remote_ip=1.2.3.4
 
 #STP
@@ -91,6 +91,16 @@ openvswitch-2.7.0/rhel/openvswitch_no_kmod.spec
 [root@node1 ~]# ovs−vsctl set bridge br0 other_config:stp-priority=0x7800   #设置Priority
 [root@node1 ~]# ovs−vsctl set port eth0 other_config:stp-path-cost=10       #设置Cost
 [root@node1 ~]# ovs−vsctl clear bridge ovs-br other_config                  #移除STP设置
+
+#创建 internal port
+#internal port 可配置IP，普通port上配置的IP是不起作用的。
+[root@node1 ~]# ovs-vsctl add-br br0 in0 -- set interface in0 type=internal #在br0创建internal port: in0
+[root@node1 ~]# ip addr add 10.10.10.10/24 dev in0
+
+#创建 Bond
+[root@node1 ~]# ovs-vsctl add-br ovsbr1
+[root@node1 ~]# ovs-vsctl add-bond ovsbr1 bond0 eth1 eth3 [lacp=active]
+[root@node1 ~]# ovs-vsctl set port bond0 lacp=active                        #modify the properties
 ```
 #### Trunk - IEEE 802.1Q
 ```bash
