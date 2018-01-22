@@ -63,3 +63,71 @@ OPTIONS
 
               ptcp:port[:ip]
                      Listen on the given TCP port for a connection.  By default, connection
+
+
+
+ovs-vsctl（8）打开vSwitch手册ovs-vsctl（8）
+
+
+
+名称
+       ovs-vsctl - 用于查询和配置ovs-vswitchd的工具
+
+概要
+       ovs-vsctl [options] - [options]命令[args] [ - [options] command [args]] ...
+
+描述
+       ovs-vsctl程序通过为其配置数据库提供一个高级接口来配置ovs-vswitchd（8）。请参阅ovs-vswitchd.conf.db（5）以了解comprehen-
+       数据库模式的简单文档。
+
+       ovs-vsctl连接到维护Open vSwitch配置数据库的ovsdb-server进程。使用这个连接，它查询并可能应用
+       根据提供的命令对数据库进行更改。然后，如果它应用了任何更改，默认情况下它会等待，直到ovs-vswitchd完成reconfigur-
+       在它退出之前自己。 （如果在ovs-vswitchd未运行时使用ovs-vsctl，请使用--no-wait。）
+
+       ovs-vsctl可以在一次运行中执行任意数量的命令，作为针对数据库的单个原子事务来实现。
+
+       ovs-vsctl命令行以全局选项开始（有关详细信息，请参阅下面的“选项”）。全局选项后跟一个或多个命令。每个命令
+       应该从本身作为命令行参数开始，将其与以下命令分开。 （在第一个命令之前是可选的）
+       命令本身以特定于命令的选项（如果有的话）开头，后跟命令名称和任何参数。有关语法示例，请参阅下面的示例。
+
+   Linux VLAN桥接兼容性
+       ovs-vsctl程序支持由Open vSwitch实现的网桥模型，其中一个网桥支持多个VLAN上的端口。在这个模型中，
+       网桥上的每个端口都是一个中继端口，可能会传递标记有指定VLAN的802.1Q标头的数据包，或者它被分配一个
+       隐式VLAN，永远不会使用802.1Q标头进行标记。
+
+       为了与为Linux网桥设计的软件兼容，ovs-vsctl也支持一种模型，其中与给定的802.1Q VLAN相关联的流量是segre-
+       门控进入一个单独的桥梁。 add-br命令的特殊形式（见下文）在Open vSwitch桥中创建一个“假桥”来模拟这种行为 - 
+       IOR。当这样一个“假桥”被激活的时候，ovs-vsctl会把它看作是一个独立于它的“父桥”的桥梁，但是实际的实现在
+       打开vSwitch只使用一个网桥，虚假网桥上的端口分配了它们所属假桥的隐含VLAN。 （假桥梁
+       对于VLAN 0接收没有802.1Q标记的数据包或使用VLAN 0的标记）
+
+OPTIONS
+       以下选项会影响ovs-vsctl整体的行为。一些个人命令也接受自己的选择，
+       命令名称。如果命令行中的第一个命令有选项，则这些选项必须与全局选项分开 - 。
+
+       --db =服务器
+              将服务器设置为ovs-vsctl联系人查询或修改配置的数据库服务器。默认是unix：/var/run/openvswitch/db.sock。服务器
+              必须采取以下形式之一：
+
+              SSL：IP：端口
+                     指定的ip上的主机上指定的SSL端口，必须表示为IPv4或IPv6地址格式的IP地址（而不是DNS名称）。如果
+                     ip是一个IPv6地址，然后用方括号包住ip，例如：ssl：[:: 1]：6640。 --private-key，--certificate和--ca-cert选项是
+                     当使用这种形式时是强制性的。
+
+              TCP：IP：端口
+                     连接到ip上给定的TCP端口，其中ip可以是IPv4或IPv6地址。如果ip是一个IPv6地址，那么用方括号包住ip，例如：
+                     TCP：[:: 1]：6640。
+
+              UNIX：文件
+                     在POSIX上，连接到名为file的Unix域服务器套接字。
+
+                     在Windows上，连接到由路径文件中创建的文件表示的本地命名管道，以模拟Unix域套接字的行为。
+
+              PSSL：端口[：IP]
+                     在给定的SSL端口上监听连接。默认情况下，连接没有绑定到特定的本地IP地址，它只侦听
+                     IPv4（但不是IPv6）地址，但指定ip限制与给定ip（IPv4或IPv6地址）的连接。如果ip是一个IPv6
+                     地址，然后用方括号包住ip，例如：pssl：6640：[:: 1]。 --private-key，--certificate和--ca-cert选项是必需的
+                     这个表格被使用。
+
+              PTCP：端口[：IP]
+                     在给定的TCP端口上监听连接。默认情况下，连接
