@@ -1,15 +1,15 @@
 #### 环境
 ```txt
-    容器网段：10.1.0.0/24        10.2.0.0/24
-             |                      |
-            [Host1]   <------>  [Host2]
-             /                       \
-    主机IP:192.168.0.3            主机IP:192.168.0.4
+            容器网段：10.1.0.0/24        10.2.0.0/24
+                     |                      |
+                    [Host1]   <------>  [Host2]
+                     /                       \
+            主机IP:192.168.0.3            主机IP:192.168.0.4
 ```
 #### 部署流程 @ Host1
 ```bash
 [root@node1 ~]# ovs-vsctl add-br obr0                                               #创建网桥：0br0
-[root@node1 ~]# ovs-vsctl add-port obr0 gre0                                        #添加网桥接口gre0到网桥obr0
+[root@node1 ~]# ovs-vsctl add-port obr0 gre0                                        #添加接口gre0到网桥obr0
 [root@node1 ~]# ovs-vsctl set interface gre0 type=gre options:remote_ip=192.168.0.4 #启用GRE并设置对端外网IP
 [root@node1 ~]# ovs-vsctl show
 286c02ff-a812-42ab-ac8a-cd342aeb6275
