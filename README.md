@@ -1,8 +1,8 @@
 # Memo
 
-- [ ] BASH 与 Python 的不断完善 （ 完善VIM的IDE环境 ）
-- [ ] 各项目的README与sh的不断完善与修改，维护，书签更迭，抽时间快速复习.....
-- [ ] sed/awk的MD修改，Git的MD修改，echars的常用的demo(模板)
+- [ ] BASH 与 Python 的完善 （ VIM的IDE环境 ）
+- [ ] 项目的README与sh的完善，维护，复习.....
+- [ ] sed/awk/Git的MD修改，echars的常用的模板
 - [ ] GRUB2，U盘版编译内核+BusyBox的Linux，CentOS7启动流程不断归纳细化的md
 - [ ] LVM 条带，lvm快照备份db脚本
 - [ ] heartbeat(安装部分不完善)，heartbeat研究
