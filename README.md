@@ -15,7 +15,7 @@
 - [ ] mqtt的安装及相关设置
 - [ ] DNS的rndc
 - [ ] ISCSI的多路径冗余和负载均衡，tcpcopy 的README与sh
-- [ ] Openstack，kubernets，Openvswitch，KVM的NET模式demo
+- [ ] Openstack，kubernets
 - [ ] 分布式系统的 CAP（强弱一致性，最终一致性）与 DTP 的README
 
 #### 补充
