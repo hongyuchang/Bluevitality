@@ -37,7 +37,7 @@
 │   │       └── conf
 │   ├── Linux Kernel
 │   │   └── Images
-│   ├── Virtual
+│   ├── Virtualization
 │   │   ├── Docker
 │   │   │   ├── Application
 │   │   │   ├── Swarm
@@ -50,7 +50,7 @@
 │   │   │   └── 资料
 │   │   └── OpenStack
 │   │       └── 资料
-│   ├── Web Service
+│   ├── Web
 │   │   ├── Apache
 │   │   │   ├── Configs
 │   │   │   ├── Setup 2.4.25
