@@ -1,7 +1,7 @@
 #!/bin/bash
 # Environment CentOS 7.3
 # Author: inmoonlight@163.com
-# RPM包下载地址：https://pan.baidu.com/s/1pK9B51L 密码：481m
+# RPM包下载地址：https://pan.baidu.com/s/1eUaqdhg
 
 #定义...
 USERNAME="string"
