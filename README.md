@@ -14,7 +14,6 @@
 - [ ] demo（模板改用新版本形式：https://www.cnblogs.com/itcomputer/p/6241421.html ） Rsyslog调用日志并使用模板处理
 - [ ] mqtt的安装及相关设置
 - [ ] DNS的rndc
-- [ ] ISCSI的多路径冗余和负载均衡，tcpcopy的README与sh
 - [ ] Openstack，kubernets
 - [ ] 分布式系统的 CAP（强弱一致性，最终一致性）与 DTP 的README
 
@@ -23,6 +22,6 @@
 rabbitmq，Kafka，zookeeper
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 kubernetes，Saltstack，grafana
-stunnel，OpenVPN，IPsec + L2TP，PPTP
+stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
 ceph，flume，Celery
 ```
