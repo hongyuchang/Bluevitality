@@ -142,8 +142,8 @@
 │   │   ├── ActiveMQ
 │   │   │   ├── Setup 5.6.0
 │   │   │   └── 资料
-│   │   ├── Kafka
-│   │   └── RabbitMQ
+│   │   ├── Kafka - 空
+│   │   └── RabbitMQ - 空
 │   ├── 网络相关
 │   │   ├── DHCP
 │   │   ├── GRE
