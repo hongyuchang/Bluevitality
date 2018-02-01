@@ -10,7 +10,6 @@ import argparse
 import platform
 import time
 
-
 def open_file(filename="null"):
     if filename == "null":
         for i in os.listdir(os.getcwd()):       #没指定文件名的时候遍历当前目录以txt结尾的文件
