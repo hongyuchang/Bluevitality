@@ -1,4 +1,4 @@
-# 镜像工具 qemu-img
+## 镜像工具 qemu-img
 
 主要的镜像管理工具：`qemu-img`
 
@@ -14,13 +14,12 @@ qemu-img create -f TYPE FILENAME SIZE
 qemu-img create -f qcow2 -o size=20G,preallocation=metadata /img/winxp.qcow2	#稀疏格式（仅预分配磁盘元数据空间）
 
 ```
-
-用`dd`命令也可以创建`raw`格式的镜像文件，用如下命令：
-
+用`dd`命令也可以创建`raw`格式的镜像文件，用如下命令
 ```
 dd if=/dev/zero of=FILENAME bs=1024k count=4096  # 4G Image
 ```
-使用convert子参数完成镜像文件格式的转换：
+
+使用convert子参数完成镜像文件格式的转换
 ```
 qemu-img convert -O TYPE SRC_IMG_NAME DEST_IMG_NAME
 
