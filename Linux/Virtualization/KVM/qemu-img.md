@@ -63,7 +63,7 @@ qcow2 qcow parallels nbd iscsi gluster dmg tftp ftps ftp https http cloop bochs 
 ```
 [root@node ~]# qemu-img create -f raw test.img 3G
 [root@node ~]# fdisk -lu test.img
-[root@node ~]# fdisk test.img  			# 对镜像分区
+[root@node ~]# fdisk test.img  				# 对镜像分区
 [root@node ~]# kpartx -avs test.img  			# 会在/dev/mapper目录下，生成与分区对应的loopXpY文件
 [root@node ~]# mkfs.ext4 /dev/mapper/loop0p1
 [root@node ~]# mount /dev/mapper/loop0p1 /PATH
@@ -76,7 +76,7 @@ qcow2 qcow parallels nbd iscsi gluster dmg tftp ftps ftp https http cloop bochs 
 ```
 [root@node ~]# modprobe nbd				# 加载NBD模块
 
-[root@node ~]# qemu-img create -f qcow2 test.qcow2 2G  # 创建镜像
+[root@node ~]# qemu-img create -f qcow2 test.qcow2 2G   # 创建镜像
 
 [root@node ~]# qemu-nbd -c /dev/nbd0 test.qcow2
 [root@node ~]# kpartx -avs /dev/nbd0
@@ -89,7 +89,7 @@ qcow2 qcow parallels nbd iscsi gluster dmg tftp ftps ftp https http cloop bochs 
 #### 使用qemu-kvm的方式启动磁盘映像
 ```bash
 [root@node ~]# qemu-kvm -cpu Broadwell -m 128 -smp 2 --name "Test" -hda  cirros-0.3.5-i386-disk.img               
-VNC server running on  ::1:5900		# 提示使用VNC连接其终端，此处监听在了本地回环接口...
+VNC server running on  ::1:5900				# 提示使用VNC连接其终端，此处监听在了本地回环接口...
 ```
 ![img](资料/qemu-kvm-ps.png)
 #### 快照 (建议先关机)
