@@ -64,7 +64,7 @@ INFO: pidfile created : '/usr/local/apache-activemq-5.6.0/data/activemq-localhos
             <managementContext createConnector="false"/>
         </managementContext>
 
-        <!-- 调整持久性存储策略 -- >
+        <!-- 调整持久性存储策略 -->
         <persistenceAdapter>    
             <kahaDB directory="${activemq.data}/kahadb"
             enableJournalDiskSyncs="false"
