@@ -1,4 +1,4 @@
-#### 安装Kvm模块与Libvirtd
+#### 安装Kvm,kvm_intel模块及Libvirtd
 ```bash
 #检测硬件是否支持虚拟化，若含有vmx或svm字样则表示支持CPU虚拟化，Intel是：vmx，AMD是：svm （KVM依赖硬件虚拟化技术的支持）
 #同时也需要检测是否有kvm_xxx模块，若装载不成功可能是未开启硬件虚拟化，需从bios中开启 "VT-d" 与 "Virtual Technology"
@@ -24,7 +24,7 @@ kvm             314739 1 kvm_intel
 [root@wy ~]# ll /dev/kvm 
 crw-------. 1 root root 10, 232 1月  20 11:19 /dev/kvm
 ```
-####  libvirtd 的配置目录：/etc/libvirt/ 与 /etc/libvirt/qemu/
+####  libvirtd 配置目录：/etc/libvirt/ 与 /etc/libvirt/qemu/
 ```bash
 [root@node1 ~]# cat /etc/libvirt/libvirtd.conf
 #listen_tcp = 1
@@ -32,22 +32,25 @@ crw-------. 1 root root 10, 232 1月  20 11:19 /dev/kvm
 #tcp_port = "16509"
 #此外还有关于TLS加密通讯，unix.socket的配置...
 
+[root@node1 ~]# echo 1 > /proc/sys/net/ipv4/ip_forward
 [root@node1 ~]# cat /etc/libvirt/qemu/networks/default.xml    #启动libvirtd服务后其根据此配置创建桥设备及DHCP
 <!--
 WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
 OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
-  virsh net-edit default
+  virsh net-edit default  <--- 设置KVM的默认网络
+  virsh net-define default <--- 读取并定义新的网络配置
+  virsh net-start default <--- 启用自定义网络
 or other application using the libvirt API.
 -->
 <network>
   <name>default</name>
   <uuid>2238313d-75bd-4b02-af54-938a0dd09b63</uuid>
   <forward mode='nat'/>                                        <!-- 其默认的桥"virbr0"工作于NAT模式 -->
-  <bridge name='virbr0' stp='on' delay='0'/>
+  <bridge name='virbr0' stp='on' delay='0'/>                   <!-- 其使用的网桥设备及细节设置 -->
   <mac address='52:54:00:34:6d:d8'/>
-  <ip address='192.168.122.1' netmask='255.255.255.0'>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>         <!-- 桥设备的IP地址 -->
     <dhcp>
-      <range start='192.168.122.2' end='192.168.122.254'/>
+      <range start='192.168.122.2' end='192.168.122.254'/>     <!-- 分配的地址范围 -->
     </dhcp>
   </ip>
 </network>
