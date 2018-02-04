@@ -33,7 +33,7 @@ kubelet             负责维护容器的生命周期，同时也负责Volume（
     Ingress Controller      为服务提供外网入口
     Fluentd-elasticsearch   提供集群日志采集、存储与查询
 ```
-#### 概念指南
+#### 概念
 ```txt
 Cluster:       
     是指由Kubernetes使用一系列的物理机/虚拟机和其他基础资源来运行你的应用程序
