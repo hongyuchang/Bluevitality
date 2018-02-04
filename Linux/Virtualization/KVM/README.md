@@ -203,8 +203,9 @@ ks=http://111.205.130.4/ks/xen63.ks console=ttyS0  serial" \
 ```
 ![img](资料/virt-install+vnc.gif)
 #### 安装系统
-安装系统有三种方式，通过：VNC，virt-manager，console配合ks
 ```bash
+#安装系统有三种方式，通过：VNC，virt-manager，console配合ks
+
 #通过VNC来安装
 #下载TightVNC连接上vnc安装，只需TightVNC Client即可。如果使用RealVNC就设置ColourLevel=rgb222才能连接
 #端口号是安装时指定的，以后的安装流程和普通的是一样的
@@ -223,7 +224,7 @@ xorg-x11-xauth xorg-x11-drv-ati-firmware  xorg-x11-xinit
 ```
 
 ## 管理KVM虚拟机
-#### virsh 常见命令
+#### virsh command ...
 ```bash
 1.virsh进入交互模式，在该交互模式下有命令补全。
    virsh # help list   #详细帮助     
@@ -357,7 +358,6 @@ cluster_size: 65536
 # 进行实时迁移时，KVM的GuestOS物理镜像必须在共享存储之上，且cpu型号和时钟相同，等等....
 # 参考：
 # https://www.chenyudong.com/archives/virsh-kvm-live-migration-with-libvirt.html
-
 
 # 动态迁移需要让虚机工作于各节点使用同一个共享存储的环境下
 # 在共享存储的基础上将虚机特定时间的内存页执行复制操作即可（复制期间变更的内存数据执行异步的复制传输）...
