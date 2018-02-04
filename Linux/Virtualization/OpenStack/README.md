@@ -6,6 +6,10 @@ NOVA	        Compute	                计算*
 NEUTRON	        Networking	        网络*
 CINDER	        Block Storage	        块存储
 SWIFT	        Object Storage	        对象存储
+Horizon	        Dashboard	        面板*
+Heat	        Orchestration	        编排
+Ceilometer	Telemetry	        监控
+Sahara	        Elastic Map Reduce	大数据部署
 ----------------------------------------------------------------
 Service	Code Name	        Description
 Identity Service	        Keystone	User Management
