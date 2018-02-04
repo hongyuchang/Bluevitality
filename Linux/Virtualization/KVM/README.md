@@ -357,4 +357,19 @@ cluster_size: 65536
 # 进行实时迁移时，KVM的GuestOS物理镜像必须在共享存储之上，且cpu型号和时钟相同，等等....
 # 参考：
 # https://www.chenyudong.com/archives/virsh-kvm-live-migration-with-libvirt.html
+
+
+# 动态迁移需要让虚机工作于各节点使用同一个共享存储的环境下
+# 在共享存储的基础上将虚机特定时间的内存页执行复制操作即可（复制期间变更的内存数据执行异步的复制传输）...
+# 在保证虚机正常运行的同时将对应磁盘数据和内存数据移动至第二台虚机上
+
+[root@wy ~]# systemctl stop firewalld
+[root@wy ~]# setenforce 0
+[root@wy ~]# mount ..... /mnt/doms/...
+
+#导出虚机配置文件到另一节点的/etc，必要时还有 networks/default.xml
+[root@wy ~]# virsh dumpxml Centos7 > ./Centos7.xml
+
+#执行
+[root@wy ~]# virsh migrate --live --verbose Centos7 qemu+ssh://172.16.x.x/system --unsafe
 ```
