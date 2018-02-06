@@ -59,5 +59,5 @@ export OS_AUTH_URL=http://120.122.83.251:5000/v2.0
 export PS1='[\u@\h \W(keystone_admin)]\$ '
 #dashborad访问
 http://120.122.83.251/dashboard
-
+```
 ![img](资料/Openstack.PNG)
