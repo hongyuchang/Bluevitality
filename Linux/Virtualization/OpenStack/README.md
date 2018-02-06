@@ -1,11 +1,11 @@
 ```txt
 NAME	        SERVICE
-KEYSTONE	Identity	        认证*
-GLANCE	        Image	                镜像*
-NOVA	        Compute	                计算*
-NEUTRON	        Networking	        网络*
-CINDER	        Block Storage	        块存储
-SWIFT	        Object Storage	        对象存储
+Keystone	Identity	        认证*
+Glance	        Image	                镜像*
+Nova	        Compute	                计算*
+Neutron	        Networking	        网络*
+Cinder	        Block Storage	        块存储
+Swift	        Object Storage	        对象存储
 Horizon	        Dashboard	        面板*
 Heat	        Orchestration	        编排
 Ceilometer	Telemetry	        监控
