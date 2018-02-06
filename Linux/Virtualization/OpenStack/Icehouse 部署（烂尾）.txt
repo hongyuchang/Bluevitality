@@ -1,0 +1,131 @@
+
+ 管理网络\ 172.16.0.x/24
+ ------------------------------------
+    |               |               |
+ [controller]    [KVM-dom1]      [ Neutron ]--------|-外部网络接口
+    |            [KVM-dom2]         |               |
+    |            [KVM-dom3]         |               |
+    |            [KVM-dom*]         |               |
+    |               |               |               |
+    |               |隧道接口\      |               |
+    |               -----------------               |
+    |-----------------------------------------------|        
+
+
+
+实验环境：
+    此处实验中的
+        管理网络：仅主机模式vmnet1
+        外部网络：桥接模式
+        隧道网络：vmnat2
+
+vmware环境中:
+    controller使用一个接口：
+        管理网络（内网管理）- 172.16.0.128
+        注：通常应该有一个链接到外部网络的接口，实现通过互联网调用 - 192.168.1.117
+    Neutron使用三个接口：
+        管理网络（内网管理）- 172.16.0.130
+        隧道接口（实现Neutron与实例间构建隧道及通信）
+        外部接口（实现与外部网络的通信,提供外部用户的访问）- 192.168.0.3
+    Node使用2块接口：
+        管理网络（内网管理）- 172.16.0.129            临时外网用： 192.168.0.14
+        隧道接口（实现Neutron与实例间构建隧道及通信）
+
+        
+
+--------------------------------------------------------------------------------------------- controller
+[root@localhost ~]# hostname controller
+[root@localhost ~]# echo "HOSTNAME=controller" >> /etc/sysconfig/network 
+[root@controller ~]# systemctl stop firewalld && systemctl disable firewalld && setenforce 0
+[root@controller ~]# systemctl stop NetworkManager && systemctl disable NetworkManager
+[root@controller ~]# systemctl start network && systemctl enable network
+[root@controller ~]# yum -y install ntp
+[root@controller ~]# ntpdate 0.asia.pool.ntp.org                    #NTP
+[root@controller ~]# crontab  -l
+*/3 * * * * /usr/sbin/ntpdate 0.asia.pool.ntp.org &> /dev/null
+[root@controller ~]# cat /etc/hosts                                 #解析
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+172.16.0.128    controller
+172.16.0.129    neutron
+172.16.0.130    node1
+[root@controller ~]# scp /etc/hosts root@172.16.0.129:/etc/hosts    #Neutron
+[root@controller ~]# scp /etc/hosts root@172.16.0.130:/etc/hosts    #Node
+
+
+[root@controller ~]# yum -y install mariadb-server                  #数据库支持
+[root@controller ~]# vim /etc/my.conf
+......
+innodb_file_per_table = on
+skip_name_resolve = on
+character-set-server = utf8
+default-storage-engine = innodb
+collation-server = utf8_general_ci
+......
+[root@controller ~]# systemctl start mariadb && systemctl enable mariadb
+
+
+#安装Icehouse的源
+[root@controller ~]# yum install https://raw.githubusercontent.com/naototty/centos7-rdo-icehouse/master/rdo-release-icehouse-4.noarch.rpm
+
+
+--------------------------------------------------------------------------------------------- Neutron
+[root@localhost ~]# hostname Neutron
+[root@localhost ~]# echo "HOSTNAME=Neutron" >> /etc/sysconfig/network 
+[root@Neutron ~]# systemctl stop firewalld && systemctl disable firewalld && setenforce 0
+[root@Neutron ~]# systemctl stop NetworkManager && systemctl disable NetworkManager
+[root@Neutron ~]# systemctl start network && systemctl enable network
+[root@Neutron ~]# yum -y install ntp
+[root@Neutron ~]# ntpdate 0.asia.pool.ntp.org
+[root@Neutron ~]# crontab  -l
+*/3 * * * * /usr/sbin/ntpdate 0.asia.pool.ntp.org &> /dev/null
+[root@Neutron ~]# echo 1 > /proc/sys/net/ipv4/ip_forward
+[root@Neutron ~]# echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf 
+[root@Neutron ~]# sysctl -p
+
+
+
+
+--------------------------------------------------------------------------------------------- Node
+[root@localhost ~]# hostname Node1
+[root@localhost ~]# echo "HOSTNAME=Node1" >> /etc/sysconfig/network 
+[root@Node1 ~]# systemctl stop firewalld && systemctl disable firewalld && setenforce 0
+[root@Node1 ~]# systemctl stop NetworkManager && systemctl disable NetworkManager
+[root@Node1 ~]# systemctl start network && systemctl enable network
+[root@Node1 ~]# yum -y install ntp
+[root@Node1 ~]# ntpdate 0.asia.pool.ntp.org
+[root@Node1 ~]# crontab  -l
+*/3 * * * * /usr/sbin/ntpdate 0.asia.pool.ntp.org &> /dev/null
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
