@@ -19,9 +19,9 @@
 
 #### 补充
 ```txt
-rabbitmq，Kafka，zookeeper
+rabbitmq，kubernetes，Kafka，zookeeper，ceph
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
-kubernetes，Saltstack，grafana
+Saltstack，grafana
 stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
-ceph，flume，Celery
+flume，Celery
 ```
