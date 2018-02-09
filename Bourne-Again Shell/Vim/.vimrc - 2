@@ -1,0 +1,471 @@
+" liujinjia Vim Config Author: Cano
+" Email: liujinjia@testerlife.com
+"
+" This config is lightweight, but smart development environment
+" for Web front-end(HTML, CSS, JavaScript), python languages.
+"
+" You should install all tools of the list before use this config.
+" List: git, curl, ctags, jedi, ipykernel, jupyter_client
+
+" Enviroment initialization (compatible with neovim)
+let g:VIM_HOME = expand('~/.vim')
+if has('nvim')
+    let g:VIM_HOME = expand('~/.config/nvim')
+endif
+" Vim-plug installation
+" if vim-plug file (by default, it's VIM_HOME/autoload/plug.vim) is
+" not exist, then download and install it from github.
+let s:vim_plug_path = g:VIM_HOME.'/autoload/plug.vim'
+if !filereadable(s:vim_plug_path)
+    echo "Installing Vim-plug ..."
+    echo ""
+    let s:vim_plug_git = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+" liujinjia Vim Config Author: Cano
+" Email: liujinjia@testerlife.com
+"
+" This config is lightweight, but smart development environment
+" for Web front-end(HTML, CSS, JavaScript), python languages.
+"
+" You should install all tools of the list before use this config.
+" List: git, curl, ctags, jedi, ipykernel, jupyter_client
+
+" Enviroment initialization (compatible with neovim)
+let g:VIM_HOME = expand('~/.vim')
+if has('nvim')
+    let g:VIM_HOME = expand('~/.config/nvim')
+endif
+" Vim-plug installation
+" if vim-plug file (by default, it's VIM_HOME/autoload/plug.vim) is
+" not exist, then download and install it from github.
+let s:vim_plug_path = g:VIM_HOME.'/autoload/plug.vim'
+if !filereadable(s:vim_plug_path)
+    echo "Installing Vim-plug ..."
+    echo ""
+    let s:vim_plug_git = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    execute "!curl -fLo ".s:vim_plug_path." --create-dirs ".s:vim_plug_git
+endif
+let s:vim_plugged_path = g:VIM_HOME.'/plugged'
+" Plugins Table
+call plug#begin(s:vim_plugged_path)
+
+set guifont=Monaco:h14 " 字体 && 字号
+" code browser
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdtree'
+" Plug 'nvie/vim-flake8'
+" fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'mattn/emmet-vim'
+
+" python code completion
+Plug 'davidhalter/jedi-vim', {'for': 'python'}
+
+" ipython for nvim
+
+Plug 'ivanov/vim-ipython', {'for': 'python'}
+Plug 'scrooloose/nerdcommenter'
+
+" Syntax Checker
+Plug 'neomake/neomake'
+
+" command fuzzy finder
+Plug 'fisadev/vim-ctrlp-cmdpalette'
+Plug 'morhetz/gruvbox'
+Plug 'mhinz/vim-startify'
+" colorscheme
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'hzchirs/vim-material'
+Plug 'jistr/vim-nerdtree-tabs'
+
+call plug#end()
+
+" Automatic installation.
+function! s:is_need_install()
+    for l:plug_name in g:plugs_order
+        let l:plug_path = s:vim_plugged_path.'/'.l:plug_name
+        if !isdirectory(l:plug_path)
+            return 1
+        endif
+    endfor
+endfunction
+
+
+
+
+if s:is_need_install()
+    echom "Found new plugin(s) need to install."
+    :PlugInstall
+endif
+
+" No vi-compatible
+set nocompatible
+
+" Allow plugins by file type
+filetype plugin on
+filetype indent on
+
+" Use fisa colorscheme
+set t_Co=256
+syntax enable
+set background=dark
+colorscheme gruvbox
+
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='gruvbox'
+" Show line numbers
+set nu
+
+" Keep 3 lines when scrolling
+set scrolloff=8
+
+" Syntax highlight on
+syntax on
+
+" Always show status bar
+set ls=2
+
+" Incremental search
+set incsearch
+set hlsearch
+
+" Tabs and spaces handling
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+" Tab length for different file type.
+autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType css setlocal shiftwidth=4 tabstop=4 softtabstop=4
+autocmd FileType javascript setlocal shiftwidth=4 tabstop=4 softtabstop=4
+
+" Key Mappings {
+let mapleader=' '
+
+" set escape to jk
+imap jk <ESC>
+
+" better command
+nnoremap <silent> <leader><leader>cmd :CtrlPCmdPalette<CR>
+
+" mouse
+set clipboard=unnamed
+
+set mouse=a
+let mouseFlag =1
+function! SetMouse()
+    if g:mouseFlag == 1
+        let g:mouseFlag=0
+        set mouse=
+        echo "mouse off"
+    else
+        let g:mouseFlag =1
+        set mouse=a
+        echo "mouse on"
+    endif
+endfunction
+map <C-x> :call SetMouse() <CR>
+
+func! RunPython()
+    exec "W"
+    if &filetype == 'python'
+        exec "!time python3 %"
+    endif
+endfunc
+
+" general
+nnoremap <silent> <leader>gq :xa<CR>
+nnoremap <silent> <leader>q :q!<CR>
+nnoremap <silent> <leader>ge :edit $MYVIMRC<CR>
+nnoremap <silent> <leader>gr :source $MYVIMRC<CR>
+nnoremap <silent> <leader>vs :vs<CR>
+nnoremap <silent> <leader>rn :%!python3 %<CR>
+" file
+nnoremap <silent> <leader>fs :w<CR>
+nnoremap <silent> <leader>ff :CtrlP<CR>
+nnoremap <silent> <leader>fb :NERDTreeToggle<CR>
+" buffer
+nnoremap <silent> <leader>bf :CtrlPBuffer<CR>
+
+" window
+nnoremap <C-h> <C-w><C-h>
+nnoremap <C-j> <C-w><C-j>
+nnoremap <C-k> <C-w><C-k> 
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-c> <C-w><C-c>
+" nnoremap <C-o> <C-w><C-o>
+nnoremap <silent> <leader>jf :%!python3 -m json.tool<CR>
+" coda
+nnoremap <silent> <leader>tg :TagbarToggle<CR>
+
+
+" NERDTree
+
+" automatic open nerdtree when start up vim with a directory.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+
+" automatic close nerdtree when only nerdtree window.
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Jedi
+let s:assist_leader = ","
+
+let g:jedi#goto_command = s:assist_leader."g"
+let g:jedi#documentation_command = s:assist_leader."d"
+let g:jedi#usages_command = s:assist_leader."n"
+
+inoremap ' ''<ESC>i
+inoremap " ""<ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+
+set nohlsearch
+set backspace=indent,eol,start
+
+
+" PEP8
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set textwidth=99
+set expandtab
+set autoindent
+" set fileformat=unix
+" When writing a buffer.
+call neomake#configure#automake('w')
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing.
+call neomake#configure#automake('rw', 1000)
+
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+    execute "!curl -fLo ".s:vim_plug_path." --create-dirs ".s:vim_plug_git
+endif
+let s:vim_plugged_path = g:VIM_HOME.'/plugged'
+
+" Plugins Table
+call plug#begin(s:vim_plugged_path)
+
+set guifont=monaco:h13 " 字体 && 字号
+
+
+" code browser
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdtree'
+" Plug 'nvie/vim-flake8'
+" fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'mattn/emmet-vim'
+" python code completion
+Plug 'davidhalter/jedi-vim', {'for': 'python'}
+
+" ipython for nvim
+
+Plug 'ivanov/vim-ipython', {'for': 'python'}
+Plug 'scrooloose/nerdcommenter'
+
+" Syntax Checker
+Plug 'neomake/neomake'
+
+" command fuzzy finder
+Plug 'fisadev/vim-ctrlp-cmdpalette'
+Plug 'morhetz/gruvbox'
+Plug 'mhinz/vim-startify'
+
+" colorscheme
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'mattn/emmet-vim'
+call plug#end()
+
+" Automatic installation.
+function! s:is_need_install()
+    for l:plug_name in g:plugs_order
+        let l:plug_path = s:vim_plugged_path.'/'.l:plug_name
+        if !isdirectory(l:plug_path)
+            return 1
+        endif
+    endfor
+endfunction
+
+
+
+
+if s:is_need_install()
+    echom "Found new plugin(s) need to install."
+    :PlugInstall
+endif
+
+" No vi-compatible
+set nocompatible
+
+" Allow plugins by file type
+filetype plugin on
+filetype indent on
+
+" Use fisa colorscheme
+set t_Co=256
+syntax enable
+set background=dark
+colorscheme gruvbox
+
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='gruvbox'
+" Show line numbers
+set nu
+
+" Keep 3 lines when scrolling
+set scrolloff=8
+
+" Syntax highlight on
+syntax on
+
+" Always show status bar
+set ls=2
+
+" Incremental search
+set incsearch
+set hlsearch
+
+" Tabs and spaces handling
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+" Tab length for different file type.
+autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType css setlocal shiftwidth=4 tabstop=4 softtabstop=4
+autocmd FileType javascript setlocal shiftwidth=4 tabstop=4 softtabstop=4
+
+" Key Mappings {
+let mapleader=' '
+
+" set escape to jk
+imap jk <ESC>
+
+" better command
+nnoremap <silent> <leader><leader>cmd :CtrlPCmdPalette<CR>
+
+" mouse
+set clipboard=unnamed
+
+set mouse=a
+let mouseFlag =1
+function! SetMouse()
+    if g:mouseFlag == 1
+        let g:mouseFlag=0
+        set mouse=
+        echo "mouse off"
+    else
+        let g:mouseFlag =1
+        set mouse=a
+        echo "mouse on"
+    endif
+endfunction
+map <C-x> :call SetMouse() <CR>
+map <C-r> :%!python3 %<CR>
+" general
+nnoremap <silent> <leader>gq :xa<CR>
+nnoremap <silent> <leader>q :q!<CR>
+nnoremap <silent> <leader>ge :edit $MYVIMRC<CR>
+nnoremap <silent> <leader>gr :source $MYVIMRC<CR>
+nnoremap <silent> <leader>vs :vs<CR>
+" file
+nnoremap <silent> <leader>fs :w<CR>
+nnoremap <silent> <leader>ff :CtrlP<CR>
+nnoremap <silent> <leader>fb :NERDTreeToggle<CR>
+" buffer
+nnoremap <silent> <leader>bf :CtrlPBuffer<CR>
+
+" window
+nnoremap <C-h> <C-w><C-h>
+nnoremap <C-j> <C-w><C-j>
+nnoremap <C-k> <C-w><C-k> 
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-c> <C-w><C-c>
+" nnoremap <C-o> <C-w><C-o>
+nnoremap <silent> <leader>jf :%!python3 -m json.tool<CR>
+" coda
+nnoremap <silent> <leader>tg :TagbarToggle<CR>
+
+
+" NERDTree
+
+" automatic open nerdtree when start up vim with a directory.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+
+" automatic close nerdtree when only nerdtree window.
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Jedi
+let s:assist_leader = ","
+
+let g:jedi#goto_command = s:assist_leader."g"
+let g:jedi#documentation_command = s:assist_leader."d"
+let g:jedi#usages_command = s:assist_leader."n"
+
+inoremap ' ''<ESC>i
+inoremap " ""<ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+
+set nohlsearch
+set backspace=indent,eol,start
+
+
+" PEP8
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set textwidth=99
+set expandtab
+set autoindent
+" set fileformat=unix
+" When writing a buffer.
+call neomake#configure#automake('w')
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing.
+call neomake#configure#automake('rw', 1000)
+
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+
+if has("gui_running")
+  " GUI is running or is about to start.
+  " Maximize gvim window (for an alternative on Windows, see simalt below).
+  set lines=999 columns=999
+else
+  " This is console Vim.
+  if exists("+lines")
+    set lines=50
+  endif
+  if exists("+columns")
+    set columns=100
+  endif
+endif
+
+
+set guioptions-=r " 隐藏右侧滚动条
+set guioptions-=b " 隐藏底部滚动条
+set guioptions-=L " 隐藏左侧滚动条
+
