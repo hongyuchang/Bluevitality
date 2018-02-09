@@ -3,8 +3,18 @@
 Consul是支持多数据中心分布式高可用的服务发现和配置共享的服务软件，由 HashiCorp 公司用 Go 语言开发
 基于 Mozilla Public License 2.0 的协议进行开源. 支持健康检查并允许 HTTP 和 DNS 协议调用 API 存储键值对
 完成安装后所有节点必须运行agent! agent可分为：server、client...
+Server和Client的角色和Cluster上运行的应用服务无关, 是基于Consul层面的一种角色划分
 每个数据中心至少须有1台consul -server ( 会成为集群中的Leader )
 集群中其他agent运行为client。它是轻量级进程，主要负责注册服务、健康检查、转发对server的查询...
+多个数据中心间基于gossip protocol协议来通讯， 使用Raft算法实现一致性
+
+Consul Server
+	用于维护Consul Cluster的状态信息，实现数据一致性，响应RPC请求。
+	官方建议至少运行3个或以上的Consul Server。多个server之中需要选举一个leader, 选举过程基于Raft协议实现
+	多个Server节点上的Consul数据信息保持强一致性。在局域网内与本地客户端通讯，通过广域网与其他数据中心通讯
+
+Consul Client
+	只维护自身的状态, 并将HTTP和DNS接口请求转发给服务端
 ```
 #### 环境
 ```txt
