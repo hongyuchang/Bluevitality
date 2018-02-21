@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 unzip nerdtree.zip
 mkdir -p ~/.vim/{plugin,doc}
 
