@@ -18,8 +18,10 @@ def createdb(name):
         conn = sqlite3.connect(name)
         conn.execute('''CREATE TABLE record(Name CHAR(10),Value CHAR(50),nTime CHAR(50));''')
         conn.close()
-    except: print "already exists %s file..." %(name)
-    else:   print "DB name: \t %s" %(str(os.getcwd())+'\\'+name)
+    except: 
+        print "already exists %s file..." %(name)
+    else:
+        print "DB name: \t %s" %(str(os.getcwd())+'\\'+name)
 
 def html_info(url,name,times=300):
     while True:
