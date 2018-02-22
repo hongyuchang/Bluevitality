@@ -10,7 +10,7 @@
 
 |   Node1: 
 |                                                                                   |
-|       [KVM-dom1]          [KVM-dom1]         .                                    |
+|       [KVM-dom1]          [KVM-dom2]         .                                    |
 |           \'veth1.2'       /                 .                                    |
 |            \              /                  .                                    |
 |             \'veth1.1'   /'veth1.*'          .                                    |
