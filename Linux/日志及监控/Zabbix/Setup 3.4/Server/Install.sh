@@ -14,9 +14,9 @@ if [ $(id -u) != "0" ]; then
 fi
 
 #依赖
-yum -y install net-snmp net-snmp-devel php-common php-devel perl-DBI php-gd php-xml php-bcmath fping OpenIPMI-devel php-mbstring unixODBC-devel \
+yum -y install net-snmp net-snmp-devel php-common php-devel perl-DBI php-gd php-xml php-bcmath fping OpenIPMI-devel php-mbstring  \
 php-xmlrpc php-mhash patch unzip httpd mariadb mariadb-devel php php-mysql zlib-devel glibc-devel curl curl-devel gcc automake \
-libidn-devel openssl-devel rpm-devel php-odbc php-pear 
+libidn-devel openssl-devel rpm-devel php-odbc php-pear unixODBC-devel
 yum -y install httpd-devel mysql mysql-devel java-devel wget unzip libxml2 libxml2-devel ncurses-devel \
 unixODBC* libssh2-devel libevent-devel java-1.7.0-openjdk-devel mariadb-server ntpdate 
 
@@ -158,3 +158,4 @@ chmod a+x /etc/rc.local
 echo -e "\nScript Execution Time： \033[32m${SECONDS}s\033[0m"
 
 exit 0
+
