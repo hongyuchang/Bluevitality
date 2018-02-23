@@ -72,29 +72,4 @@ function firewall_set() {
 
 firewall_set &> /dev/null
 
-
 exit 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
