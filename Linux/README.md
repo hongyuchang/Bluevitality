@@ -1,3 +1,3 @@
 #### Notice
-- 各类的 "Setup \<version\>" 文件夹含当前服务类型的安装脚本 'Install.sh' 与相关的软件源码包
+- 各类的 "Setup \<version\>" 目录含当前服务类型的"Install.sh"安装脚本与相关的软件源码包
 - 各类下 "RADEME" 含软件/项目的大致描述，保持更新...
