@@ -1,2 +1,1 @@
-# Bluevitality
-:octocat:  a snail ......
+:octocat:
