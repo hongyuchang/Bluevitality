@@ -28,6 +28,7 @@ IP-IP：
 ```
 
 #### DR
+![DR-2Router](../资料/DR-2Router.png)
 ```bash
 yum install -y ipvsadm
 
