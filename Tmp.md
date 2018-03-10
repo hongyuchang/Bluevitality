@@ -48,6 +48,8 @@ https://www.w3cschool.cn/zookeeper/zookeeper_overview.html
 https://www.cnblogs.com/wuxl360/p/5817471.html
 https://www.cnblogs.com/felixzh/p/5869212.html
 https://www.zhihu.com/question/35139415
+https://www.cnblogs.com/likui360/p/5985588.html
+https://www.cnblogs.com/smail-bao/p/7009633.html
 ```
 #### Elasticsearch
 ```txt
