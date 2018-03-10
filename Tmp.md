@@ -1,5 +1,5 @@
 #### Gitlab + Jenkins + Ansible + kubernets + Docker + Tomcat
-```
+```txt
 Jenkins 参数化构建过程：
   https://www.cnblogs.com/meitian/p/5492457.html
   http://blog.csdn.net/jav_imba/article/details/51180822
