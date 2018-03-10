@@ -7,12 +7,19 @@ Jenkins 参数化构建过程：
   https://www.cnblogs.com/ceshi2016/p/6029286.html
   https://www.cnblogs.com/panpan0301/p/8066143.html
 
+groovy grammmer：
+  
+
 Demo 博客：
   https://www.centos.bz/2017/08/jenkins-ansible-tomcat-continuous-delivery/
   https://www.cnblogs.com/chenjiaxin--007/p/6807979.html
   http://blog.csdn.net/hengyunabc/article/details/44072065
   https://github.com/hengyunabc/jenkins-ansible-supervisor-deploy/blob/master/site.yml
-
+  http://www.showerlee.com/archives/1880
+  https://www.linuxidc.com/Linux/2017-03/141421.htm
+  https://segmentfault.com/a/1190000007837054
+  https://www.centos.bz/2017/08/jenkins-ansible-tomcat-continuous-delivery/
+  http://dockone.io/article/668
 
 Ansible Roles：
   http://www.showerlee.com/archives/1649
@@ -20,7 +27,7 @@ Ansible Roles：
   https://www.cnblogs.com/zhaojiankai/p/7655855.html
   http://blog.csdn.net/sl1248/article/details/51365395
   http://blog.51cto.com/lansgg/1747265
-  
+  http://blog.csdn.net/wn_hello/article/details/54091247
 ```
 # Memo
 
@@ -41,4 +48,5 @@ rabbitmq,Kafka,zookeeper,ceph,kubernetes
 Saltstack，stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume，Celery
+VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
 ```
