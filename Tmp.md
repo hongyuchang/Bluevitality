@@ -20,10 +20,14 @@ Demo 博客：
   http://www.showerlee.com/archives/1880
   https://www.linuxidc.com/Linux/2017-03/141421.htm
   https://segmentfault.com/a/1190000007837054
-  https://www.centos.bz/2017/08/jenkins-ansible-tomcat-continuous-delivery/
   http://dockone.io/article/668
   http://cloud.51cto.com/art/201510/494328.htm
-
+  Slave：
+    http://blog.csdn.net/zhu_tianwei/article/details/68277374
+    http://blog.csdn.net/henni_719/article/details/52535094
+    https://www.cnblogs.com/jsonhc/p/7372359.html
+    https://www.cnblogs.com/derekchen/p/5892286.html
+    
 Ansible Roles：
   http://blog.csdn.net/wn_hello/article/details/52892494
   http://blog.csdn.net/alphags/article/details/53334508
