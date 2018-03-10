@@ -71,7 +71,7 @@ http://www.cnblogs.com/Wolfmanlq/p/5984402.html
 
 #### 补充
 ```txt
-rabbitmq,Kafka,zookeeper,ceph,kubernetes
+rabbitmq,Kafka,zookeeper,dubbo,ceph,kubernetes
 stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume，Celery
