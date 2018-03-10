@@ -42,6 +42,13 @@ Ansible Roles：
   http://blog.csdn.net/TCXP_for_wife/article/details/41685695
   http://blog.csdn.net/wn_hello/article/details/54613588
 ```
+#### Zookepper
+```txt
+https://www.w3cschool.cn/zookeeper/zookeeper_overview.html
+https://www.cnblogs.com/wuxl360/p/5817471.html
+https://www.cnblogs.com/felixzh/p/5869212.html
+https://www.zhihu.com/question/35139415
+```
 #### Elasticsearch
 ```txt
 http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html
@@ -49,7 +56,6 @@ https://es.xiaoleilu.com/010_Intro/05_What_is_it.html
 https://www.cnblogs.com/ajianbeyourself/p/5529575.html
 http://www.cnblogs.com/Wolfmanlq/p/5984402.html
 ```
-
 # Memo
 
 - [ ] BASH 与 Python 的完善 （ VIM的IDE ）
