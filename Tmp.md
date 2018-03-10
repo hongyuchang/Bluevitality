@@ -1,30 +1,41 @@
-#### Gitlab + Jenkins + Ansible + kubernets + Docker + Tomcat
+#### Gitlab + Jenkins + meaven + Ansible + kubernets + Docker + Tomcat
 ```txt
 Jenkins 参数化构建过程：
+  http://blog.csdn.net/m0_37945193/article/details/71191529
   https://www.cnblogs.com/meitian/p/5492457.html
-  http://blog.csdn.net/jav_imba/article/details/51180822
   http://blog.csdn.net/zzy1078689276/article/details/77574596
   https://www.cnblogs.com/ceshi2016/p/6029286.html
   https://www.cnblogs.com/panpan0301/p/8066143.html
+  http://blog.csdn.net/tongtong0704/article/details/70140606  （使用URL远程触发参数构建）
+  http://blog.csdn.net/buaawp/article/details/50844469
+  
+Maven.pom.xml comment：
+  http://blog.csdn.net/v123411739/article/details/49511893
+  http://blog.csdn.net/oDeviloo/article/details/52050277
 
 Demo 博客：
   https://www.centos.bz/2017/08/jenkins-ansible-tomcat-continuous-delivery/
   https://www.cnblogs.com/chenjiaxin--007/p/6807979.html
   http://blog.csdn.net/hengyunabc/article/details/44072065
-  https://github.com/hengyunabc/jenkins-ansible-supervisor-deploy/blob/master/site.yml
   http://www.showerlee.com/archives/1880
   https://www.linuxidc.com/Linux/2017-03/141421.htm
   https://segmentfault.com/a/1190000007837054
   https://www.centos.bz/2017/08/jenkins-ansible-tomcat-continuous-delivery/
   http://dockone.io/article/668
+  http://cloud.51cto.com/art/201510/494328.htm
 
 Ansible Roles：
+  http://blog.csdn.net/wn_hello/article/details/52892494
+  http://blog.csdn.net/alphags/article/details/53334508
   http://www.showerlee.com/archives/1649
   http://blog.51cto.com/lxlxlx/1894385
   https://www.cnblogs.com/zhaojiankai/p/7655855.html
   http://blog.csdn.net/sl1248/article/details/51365395
   http://blog.51cto.com/lansgg/1747265
   http://blog.csdn.net/wn_hello/article/details/54091247
+
+Docker Runtime：
+
 ```
 # Memo
 
@@ -42,7 +53,7 @@ Ansible Roles：
 #### 补充
 ```txt
 rabbitmq,Kafka,zookeeper,ceph,kubernetes
-Saltstack，stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
+stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume，Celery
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
