@@ -57,6 +57,9 @@ http://blog.csdn.net/heihei36/article/details/70871074
     http://www.importnew.com/22003.html
     https://www.zhihu.com/question/25536695
     https://www.cnblogs.com/phpstudy2015-6/p/6850658.html
+    
+  有趣的帖子：
+    http://blog.csdn.net/zero_kill/article/details/51882679
 ```
 #### Elasticsearch
 ```txt
