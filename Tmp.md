@@ -40,6 +40,7 @@ Ansible Roles：
   http://blog.csdn.net/wn_hello/article/details/54091247
   http://blog.csdn.net/achuDk/article/details/74892903
   http://blog.csdn.net/TCXP_for_wife/article/details/41685695
+  http://blog.csdn.net/wn_hello/article/details/54613588
 ```
 #### Elasticsearch
 ```txt
