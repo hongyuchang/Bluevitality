@@ -1,3 +1,5 @@
+![img](资料/RocketMQ.png)
+
 #### 备忘
 ```txt
 NameServer: 
@@ -15,7 +17,7 @@ Consumer：
 Consumer 
     组成一个集群。
 ```
-![img](资料/RocketMQ.png)
+
 #### 部署
 ```bash
 
