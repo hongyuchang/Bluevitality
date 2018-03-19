@@ -145,7 +145,9 @@
 │   │   │   ├── Setup 5.6.0
 │   │   │   └── 资料
 │   │   ├── Kafka - 空
-│   │   └── RabbitMQ - 空
+│   │   ├── RabbitMQ - 空
+│   │   └── RocketMQ
+│   │       └── 资料
 │   ├── 网络相关
 │   │   ├── DHCP
 │   │   ├── GRE Tunnel
@@ -279,4 +281,4 @@
     │   └── Improve
     └── Tools
 
-279 directories
+281 directories
