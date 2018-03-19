@@ -54,20 +54,20 @@ dataDir=/home/smrz/wangyu/zookeeper-3.4.10/data
 #保存Zookeeper日志的路径，当此配置不存在时默认路径与dataDir一致
 dataLogDir=/home/smrz/wangyu/zookeeper-3.4.10/logs
 #客户端访问Zookeeper时使用的端口号
-clientPort=13331
+clientPort=21811
 #默认1000，当Server没有空闲来处理更多的客户端请求时，还是允许C端将请求提交到S以提高吞吐性能
 #为防止Server内存溢出，这个请求堆积数还是要限制一下  
 globalOutstandingLimit=1000
 
-#集群成员相关配置，单节点不需要
+#集群成员相关配置，单节点不需此配置
 server.1=192.168.220.128:2888:3888  #需要在此节点的Zookeeper/data目录下执行 echo '1' > /data/myid 来标明其ID号 
 server.2=192.168.220.128:4888:5888  #同上...
 server.3=192.168.220.128:6888:7888  #同上...
-# 格式说明：server.A=B:C:D
-# A是一个数字，标识其是第几号服务器
-# B是服务器的IP地址
-# C指明此节点与集群中的Leader服务器交换信息的端口
-# D标识的是万一集群中的Leader服务器挂了，需要一个端口来重新选出一个新的Leader，此即用来执行选举时服务器间的通信端口
+# 格式说明： server.N=B:C:D
+# N 是数字标识，指明其是第几号服务器
+# B 是集群中的ZK服务器IP地址
+# C 指明此节点与集群中的Leader服务器交换信息的端口
+# D 标识的是万一集群中的Leader服务器挂了，需要一个端口来重新选出一个新的Leader，此即用来执行选举时服务器间的通信端口
 
 #启动Zookeeper，在分布式环境中，下面的启动命令要尽量在同一时间内启动
 [root@localhost conf]# cd ../bin/
