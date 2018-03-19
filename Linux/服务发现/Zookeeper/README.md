@@ -1,23 +1,20 @@
-#### 备忘：
+#### 备忘
 ```
-集群角色
-    在ZooKeeper中，有三种角色：
-        Leader
-        Follower
-        Observer
-        一个ZooKeeper集群同一时刻只会有一个Leader，其他都是Follower或Observer。
+在ZooKeeper集群中有三种角色：
+    1.Leader
+    2.Follower
+    3.Observer
+    在ZooKeeper集群中同一时刻只有一个Leader，其他都是Follower或Observer。
 
-ZooKeeper配置很简单，每个节点的配置文件 zoo.cfg 都是一样的，只有myid文件不一样
+ZooKeeper配置简单，每个节点的配置文件 zoo.cfg 都是一样的，只有myid文件内的ID不一样
 
-Zookeeper类似集群工作的协调者 又可以作为最为集群中存放"全局"变量的角色（不适应存放大量）
-所有分布式的协商和一致都可以利用zk实现。可理解为一个分布式的带有订阅功能的小型元数据库。
-它是分布式，开源的分布式应用程序协调服务，它是集群的管理者，监视着集群中各节点状态根据节点提交的反馈进行下一步合理操作
+Zookeeper类似于集群工作中的协调者 又可作为一种集群中存放"全局"变量的角色（不适应存放大容量）
+它是分布式，开源的分布式应用程序协调服务，它是集群的管理者，监视着集群中各节点状态根据节点提交的反馈进行下一步合理操作。
+所有分布式协商和一致都可利用ZK实现。可理解为一个分布式的带有订阅功能的小型元数据库。
 ```
 #### 部署
 ```bash
 #解压
-[root@localhost ~]# ll zookeeper-3.4.10.tar.gz 
--rw-r--r--. 1 root root 35042811 3月  19 2018 zookeeper-3.4.10.tar.gz
 [root@localhost ~]# tar -zxf zookeeper-3.4.10.tar.gz -C /usr/local/
 [root@localhost ~]# cd /usr/local/zookeeper-3.4.10/
 [root@localhost zookeeper-3.4.10]# ls
@@ -29,7 +26,7 @@ dist-maven  LICENSE.txt      src
 
 #创建Zookeeper下的Data及日志目录，ID
 [root@localhost zookeeper-3.4.10]# mkdir -p {data,logs} ; touch data/myid
-[root@localhost zookeeper-3.4.10]# echo '<本节点ID号>' > data/myid
+[root@localhost zookeeper-3.4.10]# echo '<本节点的ID号>' > data/myid
 
 #设置环境变量
 [root@localhost zookeeper-3.4.10]# pwd -P
@@ -43,7 +40,7 @@ export PATH=$ZOOKEEPER_HOME/bin:$PATH
 export PATH
 [root@localhost zookeeper-3.4.10]# source /etc/profile
 
-#配置文件，注意！遇到了编码问题，生产环境中不要使用中文
+#配置文件，注意! 为了避免编码问题，生产环境不要使用中文的注释
 [root@localhost zookeeper-3.4.10]# cd conf
 [root@localhost conf]# vim zoo.cfg
 #心跳基本时间单位，C/S间交互的基本时间单元"ms"
@@ -73,8 +70,7 @@ server.3=192.168.220.128:6888:7888  #同上...
 # D标识的是万一集群中的Leader服务器挂了，需要一个端口来重新选出一个新的Leader，此即用来执行选举时服务器间的通信端口
 
 #启动Zookeeper，在分布式环境中，下面的启动命令要尽量在同一时间内启动
-[root@localhost conf]# cd ..
-[root@localhost zookeeper-3.4.10]# cd bin/
+[root@localhost conf]# cd ../bin/
 [root@localhost bin]# ./zkServer.sh start
 ZooKeeper JMX enabled by default
 Using config: /usr/local/zookeeper-3.4.10/bin/../conf/zoo.cfg
@@ -91,7 +87,7 @@ ZooKeeper JMX enabled by default
 Using config: /usr/local/zookeeper-3.4.10/bin/../conf/zoo.cfg
 Mode: standalone
 
-#连接服务端
+#使用客户端工具"zkClient.sh"连接ZK的服务端
 [root@localhost bin]# ./zkCli.sh –server 127.0.0.1:13331
 Connecting to localhost:2181
 2017-06-28 20:20:29,331 [myid:] - INFO  [main:Environment@100] - Client environment:zookeeper.version=3.4.10-39d3a4f269333c922ed3db283be479f9deacaa0f, built on 03/23/2017 10:13 GMT
