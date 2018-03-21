@@ -1,7 +1,7 @@
 #### 备忘
 ```txt
-Mycat使用Mysql的通讯协议将自身模拟为一个Mysql服务器并建立了完整的Schema、Table、User的逻辑模型
-并将这套逻辑模型映射到后端的存储节点DataNode (MySQL Instance) 的真实物理库中
+Mycat使用Mysql的通讯协议将自身模拟为Mysql服务器并建立了完整的Schema、Table、User的逻辑模型
+并将这套逻辑模型映射到后端存储节点DataNode（MySQL Instance）的真实物理库中
 这样一来所有能使用Mysql的客户端及编程语言都能将Mycat当成是Mysql-Server来使用而不必开发新的客户端协议
 
 当Mycat收到客户端发送的SQL请求时会先对SQL进行语法分析和检查，分析结果用于SQL路由：
@@ -10,15 +10,14 @@ Mycat使用Mysql的通讯协议将自身模拟为一个Mysql服务器并建立�
 
 DataNode是Mycat的逻辑数据节点，映射到后端的某一个物理数据库的一个Database：
 为了做到系统高可用每个DataNode可配置多个引用地址（DataSource）
-当主DataSource被检测为不可用时系统会自动切换到下一个可用的DataSource，这里的DataSource可理解为Mysql的主从服务器地址
+当主DataSource被检测为不可用时系统会自动切换到下一个可用的DataSource，这里的DataSource可理解为Mysql的主从地址
 
 与任何传统RDBMS相同，Mycat也提供了"数据库"的定义，并有用户授权的功能，下面是其逻辑库相关的概念：
-
 schema:
     即逻辑库，它与后端Mysql中的Database对应，一个逻辑库中定义了其中所包括的Table
     
 table：
-    即逻辑库中的表，即物理数据库中存储的某一张表，与传统数据库不同的是这里的表格要声明其所存储的逻辑数据节点DataNode
+    即逻辑库中的表，即物理数据库中存储的某张表，与传统数据库不同的是这里的表格要声明其所存储的逻辑数据节点DataNode
     这是通过表格的分片规则定义来实现的，table可以定义其所属的"子表(childTable)"，子表的分片依赖于与"父表"的具体分片地址
     简单说就是属于父表里某一条记录A的子表的所有记录都与A存储在同一个分片上。
         分片规则：
