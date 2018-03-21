@@ -123,6 +123,7 @@
 │   │   └── Redis
 │   │       ├── conf
 │   │       ├── Setup 3.2.11
+│   │       ├── Setup Cluster
 │   │       ├── 脚本
 │   │       └── 资料
 │   ├── 日志及监控
@@ -283,4 +284,4 @@
     │   └── Improve
     └── Tools
 
-283 directories
+284 directories
