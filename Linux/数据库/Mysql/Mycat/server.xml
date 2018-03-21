@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mycat:server SYSTEM "server.dtd">
+<mycat:server xmlns:mycat="http://org.opencloudb/">
+        <system>
+        <property name="defaultSqlParser">druidparser</property>
+        <property name="serverPort">20401</property>
+        <property name="managerPort">20402</property>
+        <!--<property name="sequnceHandleType">1</property>-->
+         <property name="processorBufferChunk">40960</property> 
+        <!-- 
+        <property name="processors">1</property> 
+        <property name="processorExecutor">32</property> 
+         -->
+
+        </system>
+
+        <!--生产数据库-->
+        <user name="Mycat-Username">
+                <property name="password">Mycat-Password</property>
+                <property name="schemas">DBName1,DBName2，DBName3</property>
+        </user>
+
+        <user name="Mycat-Username">
+                <property name="password">Mycat-Password</property>
+                <property name="schemas">DBName</property>
+        </user>
+
+</mycat:server>
