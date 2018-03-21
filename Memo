@@ -123,6 +123,7 @@
 │   │   └── Redis
 │   │       ├── conf
 │   │       ├── Setup 3.2.11
+│   │       ├── 脚本
 │   │       └── 资料
 │   ├── 日志及监控
 │   │   ├── ELK
@@ -147,6 +148,7 @@
 │   │   ├── Kafka - 空
 │   │   ├── RabbitMQ - 空
 │   │   └── RocketMQ
+│   │       ├── bin
 │   │       └── 资料
 │   ├── 网络相关
 │   │   ├── DHCP
@@ -281,4 +283,4 @@
     │   └── Improve
     └── Tools
 
-281 directories
+283 directories
