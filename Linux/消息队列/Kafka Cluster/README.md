@@ -112,4 +112,10 @@ bin/kafka-topics.sh –zookeeper 127.0.0.1:2181 –alter –partitions 20 –top
 
 #为topic增加副本
 bin/kafka-reassign-partitions.sh -zookeeper 127.0.0.1:2181 -reassignment-json-file json/partitions-to-move.json -execute
+
+#通过group_id查看当前详细的消费情况
+bin/kafka-consumer-groups.sh --group logstash --describe --zookeeper 127.0.0.1:2181
+输出说明：
+GROUP	TOPIC	PARTITION	CURRENT-OFFSET	LOG-END-OFFSET	LAG
+消费者组	话题id	分区id	当前已消费的条数	总条数	 未消费的条数
 ```
