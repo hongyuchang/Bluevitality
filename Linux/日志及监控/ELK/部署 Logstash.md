@@ -30,19 +30,18 @@ output {                                 #定义输出
         }                                
 }                                        
 
-any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf --configtest/-t  #测试配置是否正确
+any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf -t  #测试配置是否正确
 Configuration OK
-
-any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf               	#运行
+any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf
 Logstash startup completed
 
- kjfsdjfsdjfhskdhfskjd                                   #当前屏幕输入一堆数据
-{                                                        #
+ kjfsdjfsdjfhskdhfskjd                                   #从标准输入输入数据
+{
        "message" => " kjfsdjfsdjfhskdhfskjd",            #输入的数据（可使用过滤器对其进行过滤）
-      "@version" => "1",                                 #版本号，若没修改则通常为1
-    "@timestamp" => "2018-01-05T12:23:18.403Z",          #数据生成时间戳
-          "host" => "node1"                              #在哪个节点生成
-}                                                        #
+      "@version" => "1",                                 #版本号，若未修改则通常为1
+    "@timestamp" => "2018-01-05T12:23:18.403Z",          #自动附加的数据生成时间戳，如：用于Logstash对其排序
+          "host" => "node1"                              #在哪个节点生成
+}
 
 # --------------------------------- Logstash的配置文件内的配置框架 ------------------------------------------
 input {
@@ -68,7 +67,7 @@ output {
 #    Path：路径，表示FS路径
 #    String：字符串
 
-# 字段引用：使用中括号括起来 []
+# 对Logstash获取的字段引用时应使用中括号"[]"括住!
 # 条件判断：
 #    逻辑：==，!=，<，<=，>，>=，...
 #    匹配：=~, !~
@@ -82,12 +81,10 @@ any_node conf.d]# cat from_message.conf
 input {
     file {
         path => ["/var/log/messages"]       #键的值支持使用数组的方式
-        type => "system"                    #
+        type => "system"		    #指明其获取的数据类型，默认是string，（也可以随便取）
         start_position => "beginning"       #键值对，指明读取的起使位置
     }
-}
-        #上面的type字段说明：指明其获取的数据类型，默认是string，（也可以随便取）
-        #type可供logstash的server端收集时根据类型做额外的处理（这些都是file的相关参数，需要参考官方的文档）...
+}       #type可供logstash的server端收集时根据类型做额外的处理（这些都是file的相关参数，需要参考官方的文档）...
 
 output {
     stdout {
@@ -95,9 +92,9 @@ output {
     }
 }
 
-any_node conf.d]# logstash -f /etc/logstash/conf.d/from_message.conf --configtest    #验证配置
+any_node conf.d]# logstash -f /etc/logstash/conf.d/from_message.conf -t    	#验证配置
 Configuration OK
-any_node conf.d]# logstash -f /etc/logstash/conf.d/from_message.conf                 #启动
+any_node conf.d]# logstash -f /etc/logstash/conf.d/from_message.conf            #启动
 {
        "message" => "Jan  5 02:21:18 node1 elasticsearch: at org.elasticsearch.http.netty.HttpRequestHandler.exceptionCaught(HttpRequestHandler.java:67)",
       "@version" => "1",
@@ -114,38 +111,29 @@ any_node conf.d]# logstash -f /etc/logstash/conf.d/from_message.conf            
           "path" => "/var/log/messages",
           "type" => "system"
 }
-{
-       "message" => "Jan  5 02:21:18 node1 elasticsearch: at org.jboss.netty.channel.DefaultChannelPipeline.sendUpstream(DefaultChannelPipeline.java:564)",
-      "@version" => "1",
-    "@timestamp" => "2018-01-05T14:35:05.848Z",
-          "host" => "node1",
-          "path" => "/var/log/messages",
-          "type" => "system"
-}
 ```
 #### filter 插件：grok
 ```txt
-filter插件主要实现的功能是将event通过output发出之前对其实现某事先的些处理功能，其比较著名的处理插件是grok
+filter插件主要实现的功能是将event通过output段发出前对其实现事先的某些处理，其比较著名的处理插件是 grok
 grok也是logstash最重要的插件之一，并且也是从web服务器读取日志后在处理时必然用到的插件
-用于分析并结构化文本数据，如给web日志的IP或method方法从文本中通过正则拆出并为它们赋予Key：METHOD，ADDRESS之类，供分析...
-它也是将一大段非结构化的日志文本数据转化为结构化可查询数据的不二之选~!
+grok用于分析并结构化文本的数据，如给web日志的IP或method方法从文本中通过正则拆出并为其赋予KAY：METHOD，ADDRESS之类供分析
+它也是将一大段非结构化的日志文本数据转化为结构化可查询数据的不二之选
 
-默认情况下logstash已经提供了120种grok模式，这些模式定义在patterns目录下的grok-patterns文件中，每个模式都有个唯一的名称：
+默认情况下logstash已经提供了120种grok模式，这些模式定义在patterns目录下的grok-patterns文件中，每个模式都有唯一的名称
     any_node  ~]# rpm -ql logstash | grep patterns$
     /opt/logstash/vendor/bundle/jruby/1.9/gems/logstash-patterns-core-0.3.0/patterns/grok-patterns       
-    /opt/logstash/vendor/bundle/jruby/1.9/gems/logstash-patterns-core-0.3.0/patterns/mcollective-patterns
-    #上面的第一行是grok的模式文件，里面是事先定义的正则表达式和对表达式的嵌套引用，其使用的元字符与sed/awk/grep的差别不大
+    #其中的grok-patterns是grok的模式文件，里面是事先定义的正则表达式和对其的嵌套引用，其使用的元字符与sed/awk/grep类似
 
 grok语法格式：
     %{SYNTAX:SEMANTIC}
-        SYNTAX -> 表示预定义的模式名称（即grok已经有的模式的名称，通常是grok-patterns文件中各行开头的模式名）
-                  形如：SYSLOGBASE  %{SYSLOGTIMESTAMP:timestamp}  (?:%{SYSLOGFACILITY} )?  ..... (略)
-        SEMANTIC -> 指定预定义模式所匹配的文本的自定义标识符...
+        SYNTAX -> 预定义的模式的名称（即grok已经有的模式的名称，通常是grok-patterns文件中各行开头的模式名）
+                  形如：SYSLOGBASE  %{SYSLOGTIMESTAMP:timestamp}  (?:%{SYSLOGFACILITY} )?  .....
+        SEMANTIC -> 指定预定义模式所匹配的文本的自定义的标识符...
 
 Example：
      --> 192.168.0.1 GET /index.html 2048 12.30
      --> ${IP:clientIP}  ${WORD:method} ${URIPATHPARAM:request} ${NUMBER:bytes}  ${NUMBER:time}
-     正则说明：对通过IP模式匹配到的数据取一个名叫clientIP，相当于将匹配的数据赋值给变量clientIP ..... (略)
+     解释：对通过IP模式匹配到的数据取一个名叫clientIP，相当于将匹配的数据赋值给变量KEY键: clientIP .....
      
 
 插件 Demo：
@@ -153,22 +141,22 @@ filter {  
     grok{
         patterns_dir => "./patterns"
         match => { "message" => "%{IP:client}/%{USER:auth}/%{WORD:method}/%{NOTSPACE:request}"}  
-    }                           #定义消息如何匹配并拆解....
+    }   #定义消息如何匹配并拆解....
 } 
 
 自定义模式：（较少用）
-    1.(?<field_name> 这里写正则表达式 )  <--- 其中的"<field_name>"可省略
+    1.(?<field_name> 这里写入正则表达式 )  <--- 其中的"<field_name>"可省略
     2.模式又引用模式： NEW_PATTERN_NAME ${PATTERN_NAME}
 
-注：当原始messages信息已经grok被拆分后，可以不存储在ES Cluster中，因此可在filter中对"messages"进行隐藏...
+注：当原始messages信息经grok被拆分后，可以不存储在ES Cluster中，因此可在filter中对"messages"字段(KEY)进行隐藏...
 ```
 ```bash
 input {
     file {
-		codec => multiline {
-			 pattern => "^\s"
-			 what => "previous"
-		}
+	codec => multiline {
+		 pattern => "^\s"
+		 what => "previous"
+	}
         path => "/usr/local/tomcat8/logs/catalina.out"
         start_position => "beginning"
     }
