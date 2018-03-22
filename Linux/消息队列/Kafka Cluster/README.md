@@ -6,31 +6,31 @@ kafka是分布式、支持分区、多副本的，是一个基于zookeeper进行
 Zookeeper在kafka中的作用：
     无论kafka集群还是producer和consumer，都依赖于zookeeper来保证系统可用性集群保存一些meta信息
     Kafka使用zookeeper作为其分布式协调框架，很好的将消息生产、消息存储、消息消费的过程结合在一起
-    借助ZK，能将生产、消费者和broker在内的组件在无状态情况下建立起生产/消费者的订阅关系，并实现生产与消费的负载均衡。
+    借助ZK，能将生产、消费者和broker在内的组件在无状态情况下建立起生产/消费者的订阅关系，并实现生产与消费的负载均衡
 
-    1, 启动zookeeper的server
-    2, 启动kafka的server
-    3, Producer若生产了数据，会先通过ZK找到broker，然后将数据存放到broker
-    4, Consumer若要消费数据，会先通过ZK找对应的broker，然后消费。
+    1. 启动zookeeper的server
+    2. 启动kafka的server
+    3. Producer若生产了数据，会先通过ZK找到broker，然后将数据存放到broker
+    4. Consumer若要消费数据，会先通过ZK找对应的broker，然后消费。
     
 replication（副本）、partition（分区）: 
     一个topic能有非常多个副本，如果服务器配置足够好，可以配很多个
     副本的数量决定了有多少个broker来存放写入的数据；简单说副本是以partition为单位的
     存放副本也可以这样简单的理解，其用于备份若干partition、但仅有一个partition被选为Leader用于读写
     kafka中的producer能直接发送消息到Leader的partition，而producer能来实现将消息推送到哪些partition
-    kafka中同一个group的consumer不可以同时消费同一个partition
-    对同一个group的consumer，kafka就可认为是一个队列消息服务，各个consumer均衡的消费相应partition中的数据
+    kafka中同一group的consumer不可同时消费同一partition，在同一topic中同一partition同时只能由一个Consumer消费
+    对同一个group的consumer，kafka就可认为是一个队列消息服务，各个consumer均衡的消费相应partition中的数据
 ```
 #### 部署 Kafka
 ```bash
-# Kafka 依赖Java version >= 1.7
+# Kafka 依赖 Java version >= 1.7
 
-#部署 JAVA
+#部署JAVA
 [root@localhost ~]# tar -zxf jdk.tar.gz -C /home/ && mv /home/jdk1.8.0_101 /home/java
 [root@localhost ~]# cd /home/java && export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH
 [root@localhost ~]# echo "$PATH" >> ~/.bash_profile 
 
-#部署 Kafka
+#部署Kafka
 [root@localhost ~]# tar -zxf kafka_2.11-1.0.1.tgz -C /home/
 [root@localhost ~]# ln -sv /home/kafka_2.11-1.0.1 /home/kafka
 
@@ -51,11 +51,11 @@ replication（副本）、partition（分区）:
 -rw-r--r--. 1 root root 1032 2月  22 06:26 tools-log4j.properties
 -rw-r--r--. 1 root root 1023 2月  22 06:26 zookeeper.properties          #Zookeeper配置文件
 
-#使用的是Kafka自带的ZK，简单的Demo，实际生产中直接使用单独部署的ZK集群
-[root@localhost config]# vim /home/kafka/config/zookeeper.properties     
-dataDir=/tmp/zookeeper      #ZK的快照存储路径
-clientPort=2181             #客户端访问端口
-maxClientCnxns=0            #最大客户端连接数
+#这里使用的是Kafka自带的ZK，简单的Demo，实际生产中应使用ZK集群的方式
+[root@localhost config]# vim /home/kafka/config/zookeeper.properties     
+dataDir=/tmp/zookeeper                      #ZK的快照存储路径
+clientPort=2181                             #客户端访问端口
+maxClientCnxns=0                            #最大客户端连接数
 
 [root@localhost config]# vim /home/kafka/config/server.properties        #Kafka配置，需要在每个节点设置
 broker.id=0                                 #注意，在集群中不同节点不能重复
@@ -83,9 +83,12 @@ group.initial.rebalance.delay.ms=0
 
 #启停Kafka集群
 [root@localhost config]# cd /home/kafka/
-启动ZK：       bin/zookeeper-server-start.sh config/zookeeper.properties & 
-启动Kafka：    bin/kafka-server-start.sh -daemon config/server.properties
-停止Kafka：    bin/kafka-server-stop.sh
+#启动ZK：
+bin/zookeeper-server-start.sh config/zookeeper.properties & 
+#启动Kafka：
+bin/kafka-server-start.sh -daemon config/server.properties
+#停止Kafka：
+bin/kafka-server-stop.sh
 ```
 #### 运维相关命令
 ```bash
