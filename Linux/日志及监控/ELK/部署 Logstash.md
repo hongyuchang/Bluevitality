@@ -16,24 +16,24 @@ any_node ~]# rpm -ql logstash | grep -v opt
 /var/lib/logstash
 /var/log/logstash
 ```
-#### 配置举例 （ 使用 stdin 与 stdout 插件 ）
+#### 配置举例 （ stdin 与 stdout 插件 ）
 ```bash
 any_node ~]# cd /etc/logstash/conf.d     #此目录下所有的conf后缀都是配置文件                 
 any_node conf.d]# vim simple.conf        #一般用于定义使用的插件及参数，如：从哪里得到数据，从哪里输出数据...
 input {                                  #定义输入
         stdin {}                         #使用stdin插件实现从标准输入获取数据
-}                                        #
+}                                       
     
 output {                                 #定义输出
         stdout {                         #使用stdout插件实现输出到标准输出
                 codec => rubydebug       #定义编码插件，使用的编码是rubydebug（其中的 XXX "=>" XXX 即键与值）
-        }                                #
-}                                        #
+        }                                
+}                                        
 
-any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf --configtest  #测试配置是否正确
+any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf --configtest/-t  #测试配置是否正确
 Configuration OK
 
-any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf               #运行
+any_node conf.d]# logstash -f /etc/logstash/conf.d/simple.conf               	#运行
 Logstash startup completed
 
  kjfsdjfsdjfhskdhfskjd                                   #当前屏幕输入一堆数据
@@ -44,7 +44,7 @@ Logstash startup completed
           "host" => "node1"                              #在哪个节点生成
 }                                                        #
 
-# Logstash的配置文件内的配置框架 ---------------------------------------------------------------------------
+# --------------------------------- Logstash的配置文件内的配置框架 ------------------------------------------
 input {
     ...
 }
