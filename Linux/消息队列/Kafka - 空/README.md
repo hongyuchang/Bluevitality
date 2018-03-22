@@ -28,7 +28,7 @@ replication（副本）、partition（分区）:
 #部署 JAVA
 [root@localhost ~]# tar -zxf jdk.tar.gz -C /home/ && mv /home/jdk1.8.0_101 /home/java
 [root@localhost ~]# cd /home/java && export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH
-[root@localhost ~]# echo "PATH=$JAVA_HOME/bin:$PATH" >> ~/.bash_profile 
+[root@localhost ~]# echo "$PATH" >> ~/.bash_profile 
 
 #部署 Kafka
 [root@localhost ~]# tar -zxf kafka_2.11-1.0.1.tgz -C /home/
