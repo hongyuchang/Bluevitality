@@ -222,6 +222,18 @@ Logstash Agent 发送数据时的两种方式：
     [Logstash-Agent] ---> [redis/kafka] ---> [Logstash-server] ---> [Elasticsearch-Cluster]
     当有多个Agent时由Redis做队列缓冲，并由server统一收集并进行filter之后再送给ES集群
 ```
+```txt
+单个进程logstash可实现对数据的读取、解析和输出处理。
+但是生产环境中从每台应用服务器运行logstash并将数据直接送到Elasticsearch里，显然不是第一选择：
+	第一，过多的客户端连接对 Elasticsearch 是一种额外的压力
+	第二，网络抖动会影响到 logstash 进程，进而影响生产应用
+	第三，运维人员未必愿意在生产服务器上部署Java，或让logstash跟业务代码争夺Java资源
+
+所以在实际运用中，logstash进程会被分为两个不同的角色
+运行在应用服务器上的，尽量减轻运行压力，只做读取和转发，这个角色叫做shipper
+运行在独立服务器上，完成数据解析处理，负责写入Elasticsearch的角色，叫indexer
+```
+![circuit.png](资料/circuit.png)
 #### output 插件：redis 与 elasticsearch
 ```bash
 #Logstash-server端配置的Demo：
