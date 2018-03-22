@@ -6,9 +6,9 @@
     3.Observer
     在ZooKeeper集群中同一时刻只有一个Leader，其他都是Follower或Observer。
 
-ZooKeeper配置简单，每个节点的配置文件 zoo.cfg 都是一样的，只有myid文件内的ID不一样
+ZooKeeper配置简单，每个节点的配置文件 zoo.cfg 都是相同的，仅date/myid文件内的ID不一样
 
-Zookeeper类似于集群工作中的协调者 又可作为一种集群中存放"全局"变量的角色（不适应存放大容量）
+Zookeeper类似于集群工作中的协调者，又可作为一种集群中存放"全局"变量的角色（不适应存放大容量）
 它是分布式，开源的分布式应用程序协调服务，它是集群的管理者，监视着集群中各节点状态根据节点提交的反馈进行下一步合理操作。
 所有分布式协商和一致都可利用ZK实现。可理解为一个分布式的带有订阅功能的小型元数据库。
 ```
@@ -59,7 +59,7 @@ clientPort=21811
 globalOutstandingLimit=1000
 
 #集群成员相关配置，单节点不需此配置
-server.1=192.168.220.128:2888:3888  #需在节点的Zookeeper/data下执行 echo '1' > myid 来标明其ID号 
+server.1=192.168.220.128:2888:3888  #需在该节点的Zookeeper/data下 echo '1' > myid 来标明其ID号 
 server.2=192.168.220.128:4888:5888  #同上...
 server.3=192.168.220.128:6888:7888  #同上...
 # 格式说明： server.N=B:C:D
@@ -68,7 +68,7 @@ server.3=192.168.220.128:6888:7888  #同上...
 # C 指明此节点与集群中的Leader服务器交换信息的端口
 # D 标识的是万一集群中的Leader服务器挂了，需要一个端口来重新选出一个新的Leader，此即用来执行选举时服务器间的通信端口
 
-#启动Zookeeper，在分布式环境中，下面的启动命令要尽量同时启动
+#启动Zookeeper，在分布式环境中，下面的启动命令要尽量在各节点同时启动
 [root@localhost conf]# cd ../bin/
 [root@localhost bin]# ./zkServer.sh start
 ZooKeeper JMX enabled by default
