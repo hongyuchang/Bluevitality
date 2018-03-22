@@ -146,7 +146,7 @@
 │   │   ├── ActiveMQ
 │   │   │   ├── Setup 5.6.0
 │   │   │   └── 资料
-│   │   ├── Kafka - 空
+│   │   ├── Kafka Cluster
 │   │   ├── RabbitMQ - 空
 │   │   └── RocketMQ
 │   │       ├── bin
