@@ -3,10 +3,10 @@
 #### RocketMQ 术语
 ```txt
 Topic：
-    它表示消息的第一级类型，比如在电商系统中的消息可以分为：交易消息、物流消息…… 一条消息必须有一个Topic。
+    表示消息的第一级类型（对消息分类），如在电商系统中消息可分为：交易消息、物流消息等，1条消息必须属于1个Topic
 
 Tag：
-    它表示消息的第二级类型，比如交易消息中又可以分为：交易创建消息，交易完成消息...
+    表示消息的第二级类型，如交易消息中又可以分为交易创建消息，交易完成消息...
     一条消息可以没有Tag。RocketMQ提供2级消息分类，方便灵活的控制，如过滤...
 Queue 
     在一个Topic下可设置多个queue（消息队列）。当发送消息时必需指定此消息的topic
@@ -27,10 +27,14 @@ Broker:
 Producer与Producer Group： 
     是消息的生产者，拥有相同Producer Group的Producer组成1个集群。
     消息队列的本质就是实现了publish-subscribe（发布/订阅）模式，它一般是指业务系统。
-    
+    Producer与NameServer集群中的其中一个节点（随机选择）建立长连接
+    其定期从NameServer获取Topic的路由信息，并向提供Topic服务的Broker Master建立长连接且定时向Broker发心跳
+
 Consumer与Consumer Group 
     是消息的消费者，一般由后台系统异步消费消息，接收消息进行消费的实例
     Consumer Group是一类Consumer的集合名称，这类Consumer通常消费一类消息，且消费逻辑一致。
+    Producer只能将消息发到Broker master，但Consumer则不同，其同时和提供Topic服务的Master和Slave建立长连接
+    其既可从Broker Master订阅消息，也可以从Broker Slave订阅消息
 
 广播消费：
     一条消息被若干Consumer消费，即使它们属于相同Consumer Group，消息也会被Consumer Group中的每个Consumer消费1次
@@ -38,34 +42,29 @@ Consumer与Consumer Group
     
 集群消费： 
     一个Consumer Group中的Consumer实例平均分摊消费消息。
-    例如某个Topic有9条消息，其中一个Consumer Group有3个实例(可能是3个进程或3台机器)，那么每个实例只消费其中的3条消息。
+    例如某个Topic有9条消息，其中一个Consumer Group有3个实例(可能是3个进程或3台机器)，那么每个实例只消费其中的3条消息
 ```
 
-#### 部署双主环境
+#### 部署双主环境 conf/2m-noslave
 ```bash
-# 双主模型环境：
+# 双主模型环境：（双主环境中那个多个master节点组成集群，单个master节点宕机或重启对应用没影响）
 #    Master1 192.168.133.128  nameServer1,brokerServer1
 #    Master2 192.168.133.130  nameServer2,brokerServer1
     
-#部署JDK并
+#部署JDK
 mkdir jdk
 [root@localhost ~]# tar -zxf jdk.tar.gz -C /root/jdk && cd /root/jdk 
 [root@localhost ~]# mv jdk1.8.0_101 java
-[root@localhost ~]#
-[root@localhost ~]#
 
-#部署RocketMQ（先删除旧数据再创建数据存储路径）
+#部署RocketMQ
 [root@localhost ~]# tar -zxf alibaba-rocketmq-master3.tar.gz -C /root
-[root@localhost ~]# rm -rf /root/alibaba-rocketmq-master3/{store,logs}      
-[root@localhost ~]# mkdir -p /root/alibaba-rocketmq-master3/{store,logs}
+[root@localhost ~]# mkdir -p /root/alibaba-rocketmq-master3/{store,logs}  #内部的定制版本注意要先删除旧数据
 
-#设置环境变量: ROCKETMQ_HOME 和 JAVA_HOME
-[root@localhost alibaba-rocketmq-master3]# pwd -P
-/usr/local/alibaba-rocketmq-master3
+#设置环境变量: ROCKETMQ_HOME 和 JAVA_HOME（生产环境中注意要写入~/.bash_profile）
 [root@localhost alibaba-rocketmq-master3]# export ROCKETMQ_HOME=/root/alibaba-rocketmq-master3
 [root@localhost alibaba-rocketmq-master3]# export JAVA_HOME=/home/jdk/java
 
-#配置应用目录下 bin/setenv.sh 文件内的环境变量
+#配置应用目录下 bin/setenv.sh 内的环境变量
 [root@localhost alibaba-rocketmq-master3]# vim /root/alibaba-rocketmq-master3/bin/setenv.sh
 #!/bin/sh
 
@@ -73,7 +72,6 @@ export JAVA_HOME=/root/jdk/java
 export ROCKETMQ_HOME=/root/alibaba-rocketmq-master3
 
 #配置NameServer
-[root@localhost alibaba-rocketmq-master3]# cd ~
 [root@localhost ~]# vim /root/alibaba-rocketmq-master3/conf/mqnamesrv.properties  #注意! 在两个主节点都配置
 #NS监听地址
 listenPort=10401
@@ -89,7 +87,7 @@ serverSocketSndBufSize=2048
 serverSocketRcvBufSize=1024
 serverPooledByteBufAllocatorEnable=false
 
-# 注意！
+# 注意!
 # 当有多个节点时，相应的，在各节点的Broker的配置文件名字建议设为：broker-{b,c,d,N...}.properties
 # 因为有两个Master主节点，所以主节点1启动依赖broker-a.properties，主节点2启动依赖broker-b.properties ...
 
@@ -162,24 +160,15 @@ brokerRole=ASYNC_MASTER
 #### 服务的启停
 ```bash
 #启动RocketMQ，注意! 先分别在两个节点启动 mqnamesrv，然后再分别启动 mqbroker
-[NodeA@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
+[Any-Node@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
 nohup sh mqnamesrv -c /root/alibaba-rocketmq-master3/conf/mqnamesrv.properties &> &
 
-[NodeB@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
-nohup sh mqnamesrv -c /root/alibaba-rocketmq-master3/conf/mqnamesrv.properties &> &
-
-[NodeA@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
-nohup sh mqbroker -c /root/alibaba-rocketmq-master3/conf/2m-noslave/broker-a.properties  &> /dev/null &
-
-[NodeB@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
+[Any-Node@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
 nohup sh mqbroker -c /root/alibaba-rocketmq-master3/conf/2m-noslave/broker-a.properties  &> /dev/null &
 
 #关闭RocketMQ，注意! 先分别在两个节点关闭 mqbroker，然后再分别关闭 mqnamesrv
-[NodeA@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && sh mqshutdown broker
-[NodeB@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && sh mqshutdown broker
-
-[NodeA@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && sh mqshutdown namesrv
-[NodeB@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && sh mqshutdown namesrv
+[Any-Node@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && sh mqshutdown broker
+[Any-Node@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && sh mqshutdown namesrv
 ```
 #### mqadmin 命令参数说明
 ```txt
@@ -188,14 +177,14 @@ updateTopic：创建Topic，一般由应用自动创建，此处是手动方式
     -c  若-b为空则必填，cluster名称，表示topic建在该集群（集群可通过clusterList查询）
     -b  若-c为空则必填，broker地址，表示topic建在该broker
     -n  nameserve 服务地址列表，格式ip:port;ip:port;...
-    -p  指定新topic 的权限限制( W|R|WR )
+    -p  指定新topic 的权限限制 ( W|R|WR )
     -r  可读队列数（默认8）
     -w  可写队列数（默认8）
     -h  打印帮助
 
 updateSubGroup：创建（修订）订阅组
    -b   若-b为空则必填，broker地址，表示订阅组建在该broker
-   -c   若-c为空则必填，cluster名称，表示topic 建在该集群（集群可通过clusterList查询）
+   -c   若-c为空则必填，cluster名称，表示topic建在该集群（集群可通过clusterList查询）
    -d   是否容许广播方式消费
    -g   订阅组名 
    -i   从哪个broker 开始消费
@@ -222,7 +211,6 @@ sh mqadmin updateSubGroup -g TOPIC_ORDER_SNAPSHOT_Consumer_Group -s true -r 1 -b
 
 sh mqadmin updateTopic -c rocketmq-cluster -n 192.168.133.130:10401 -t TOPIC_TRANSACTION_LOG -r 8 -w 8
 
-
 # 创建消费组，必须在2个节点分别执行
 sh mqadmin updateSubGroup -g TOPIC_BUSI_LOG_Consumer_Group -s true -r 1 -b 192.168.133.130:10411  -n 192.168.133.128:10401
 sh mqadmin updateSubGroup -g TOPIC_TRANSACTION_LOG_Consumer_Group -s true -r 1 -b 192.168.133.128:10411 -n 192.168.133.128:10401
@@ -239,11 +227,16 @@ sh mqadmin topicStatus -t TOPIC_TRANSACTION_LOG -n 192.168.133.128:10401
 rocketmq-cluster  broker-a        0     192.168.133.128:10411  V3_2_6        0.00        0.00
 rocketmq-cluster  broker-b        0     192.168.133.130:10411  V3_2_6        0.00        0.00
 
-# 查看 topic 列表信息
+# 查看Topic列表信息
 sh mqadmin topicList -n 192.168.133.128:10401
 
+# 查看Topic路由信息
+sh mqadmin topicRoute  -t TOPIC_TRANSACTION_LOG -n NameServerIP:Port
 
 # 查看消费组状态（需要启动 mqconsumer）
 sh mqadmin consumerProgress -g TOPIC_BUSI_LOG_Consumer_Group -n 192.168.133.128:10401
 sh mqadmin consumerProgress -g TOPIC_BUSI_LOG_Consumer_Group -n 192.168.133.128:10401
+
+# 获取Consumer消费进度
+sh mqadmin getConsumerStatus -g 消费者属组 -t 主题 -i Consumer客户端ip -n NameServerIP:Port
 ```
