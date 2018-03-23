@@ -1,0 +1,29 @@
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: create tomcat path
+      file: state=directory path=/root/tomcat
+    - name: transfer tomcat file
+      copy: src=/root/tomcat/{{ item }} dest=/root/tomcat/{{ item }}
+      with_items:
+        - apache-tomcat-8.0.30.tar.gz
+        - Install.sh
+      notify:
+        - start Install tomcat
+    - name: create nginx path
+      file: state=directory path=/root/nginx
+    - name: transfer ngixn file
+      copy: src=/root/nginx/{{ item }} dest=/root/nginx/{{ item }}
+      with_items:
+        - Install.sh
+        - nginx
+        - nginx-1.12.1.tar.gz
+        - openssl-1.0.2l.tar.gz
+        - pcre-8.41.tar.gz
+      notify:
+        - start Install nginx
+  handlers:
+    - name: start Install tomcat
+      shell: cd /root/tomcat/ && bash Install.sh
+    - name: start Install nginx
+      shell: cd /root/nginx/ && bash Install.sh
