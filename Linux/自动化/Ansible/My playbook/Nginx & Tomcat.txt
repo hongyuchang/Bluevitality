@@ -4,7 +4,7 @@ yum -y install ansible
 
 #免密钥
 ssh-keygen -t rsa
-ssh-copy-id -i ~/.ssh/id_rsa root@192.168.133.132
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.133.132
 
 
 #添加主机组
