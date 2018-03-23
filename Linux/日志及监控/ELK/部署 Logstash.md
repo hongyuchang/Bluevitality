@@ -1,6 +1,6 @@
 #### 安装
 ```bash
-#分别在Logstash的各Node节点执行如下
+#分别在Logstash的各Node节点执行如下。Logstash requires Java 7 or later ...
 any_node ~]# yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel.x86_64
 any_node ~]# echo "export JAVA_HOME=/usr" > /etc/profile.d/java.sh && . /etc/profile
 any_node ~]# yum -y install logstash-1.5.4-1.noarch.rpm                 #本地安装
@@ -49,31 +49,31 @@ input {
 }
 
 filter {
-    ...
+    ...		#filter段可选，其进行数据的处理
 }
 
 output {
     ...
 }
 
-# 支持的数据类型：
-#    Array: [item1,item2,item3,...]
-#    Boolean: True/false
-#    Bytes:简单字符
-#    Codec:编码器，指明数据类型
-#    HASH:key: value
-#    Number: 数值，一般是正数或浮点数
-#    Password: 密码串，不会被记录到日志中，或显示为星号的字串
-#    Path：路径，表示FS路径
-#    String：字符串
+# 	支持的数据类型：
+# 	   Array: [item1,item2,item3,...]
+# 	   Boolean: True/false
+# 	   Bytes:简单字符
+# 	   Codec:编码器，指明数据类型
+# 	   HASH:key: value
+# 	   Number: 数值，一般是正数或浮点数
+# 	   Password: 密码串，不会被记录到日志中，或显示为星号的字串
+# 	   Path：路径，表示FS路径
+# 	   String：字符串
 
-# 对Logstash获取的字段引用时应使用中括号"[]"括住!
-# 条件判断：
-#    逻辑：==，!=，<，<=，>，>=，...
-#    匹配：=~, !~
-#    in，not in
-#    and，or
-#    复合语句：()
+# 	对Logstash获取的字段引用时应使用中括号"[]"括住!
+# 	条件判断：
+# 	   逻辑：==，!=，<，<=，>，>=，...
+# 	   匹配：=~, !~
+# 	   in，not in
+# 	   and，or
+# 	   复合语句：()
 ```
 ####  一个监听 /var/log/messages 的例子
 ```bash
@@ -169,8 +169,11 @@ filter {
             "message" => "%{MYLOG}"
         }
         add_field => [ "log_ip", "192.168.1.81" ]
-    }
- 
+	add_field => {"log_hostname" => "${HOSTNAME}"}	#使用了${HOSTNAME}，即本机环境变量
+    }							#若使用本机环境变量，需在启动命令上加 --alow-env
+    ruby {
+    	code => "event['daytag'] = event.timestamp.time.localtime.strftime('%Y-%m-%d')"
+    }	#执行ruby程序，上面是将日期转化为字符串赋予"daytag"
 }
 
 output {
@@ -186,48 +189,72 @@ output {
         batch => false              #若启用则一次可PUSH多个事件，即通过发一条push命令存储一批的数据，默认为false
         batch_events => 50          #一次rpush多少条
         batch_timeout => 5          #一次rpush最多消耗多少s（默认5s）
-        codec => plain              #
+        codec => plain
         congestion_interval => 1    #每多长时间进行一次拥塞检查，默认1s，若为0则对每个PUSH都进行检测
         congestion_threshold => 0   #Redis的list中最多可存在多少item数据，默认0，表示禁用拥塞检测，
                                     #当list中的数据量达到congestion_threshold，会阻塞直到有其他消费者消费list中的数据
         data_type => list           #存储到redis时的数据类型（主要有：list列表或：channel频道（实现发布订阅））
                                     #使用列表时生产者不断对特定数据库（0~15中）进行LPUSH追加到，消费者不断的RPOP取出..
         db => 0                     #使用redis的数据库，默认使用0号（0~15）
-        host => ["127.0.0.1:6379"]  #主机
+        host => ["127.0.0.1:6379"] 
         key => xxx                  #指定存储在redis中时的list或channel的名字
         password => xxx             #密码
         port => 6379                #端口
-        reconnect_interval => 1     #
-        shuffle_hosts => true       #
+        reconnect_interval => 1
+        shuffle_hosts => true
         timeout => 5                #超时时间
         workers => 1                #线程数
     }
+}
+```
+#### 例子
+```txt
+input {
+    file {
+        path => "/root/logstash/logstash-tutorial.log"
+        start_position => beginning 
+    }
+}
+
+filter {
+    grok {
+        match => { "message" => "%{COMBINEDAPACHELOG}"}
+    }
+    geoip {
+    	source => "clientip"
+    }
+}
+output {
+    elasticsearch {
+	hosts => "localhost:9200"
+    }
+    stdout {}
 }
 ```
 #### 关于 Logstash 的架构
 ```
 Logstash Agent 发送数据时的两种方式：
 
-    直接发往elasticsearch
+    直接发往elasticsearch:
     [Logstash-Agent] ---> [Elasticsearch-Cluster]
 
-    先交给logstatsh-server
+    先交给logstatsh-server:
     [Logstash-Agent] ---> [Logstash-server] ---> [Elasticsearch-Cluster]
     其主要目的是实现数据流的整合，如：Serevr将收到的各个event数据依时间戳"排列好"之后再发往ES
     并且其可减轻agent对es的负载，还可以只让agent进行收集任务，而grok与filter交给server进行...
     Logstash-server与Logstash-Agent并没有什么区别，只不过是其input与outpt的次序不同而已...
     注：Logstash-server与Logstash-Agent的版本最好保持一致~！
 
-其他形式的Logstash架构：
+其他形式的Logstash架构:
     [Logstash-Agent] ---> [redis/kafka] ---> [Logstash-server] ---> [Elasticsearch-Cluster]
     当有多个Agent时由Redis做队列缓冲，并由server统一收集并进行filter之后再送给ES集群
 ```
 ```txt
 单个进程logstash可实现对数据的读取、解析和输出处理。
 但是生产环境中从每台应用服务器运行logstash并将数据直接送到Elasticsearch里，显然不是第一选择：
-	第一，过多的客户端连接对 Elasticsearch 是一种额外的压力
-	第二，网络抖动会影响到 logstash 进程，进而影响生产应用
-	第三，运维人员未必愿意在生产服务器上部署Java，或让logstash跟业务代码争夺Java资源
+	第1，过多的客户端连接对 Elasticsearch 是一种额外的压力
+	第2，网络抖动会影响到 logstash 进程，进而影响生产应用
+	第3，运维人员未必愿意在生产服务器上部署Java，或让logstash跟业务代码争夺Java资源
 
 所以在实际运用中，logstash进程会被分为两个不同的角色
 运行在应用服务器上的，尽量减轻运行压力，只做读取和转发，这个角色叫做shipper
