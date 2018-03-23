@@ -34,7 +34,7 @@ tar -zxf kafka_2.11-1.0.1.tgz -C . && rm -rf kafka_2.11-1.0.1.tgz
 ln -s jdk1.8.0_101/ jdk
 
 #JAVA_HOME环境变量
-cd jdk && export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH && echo "$PATH" >> ~/.bash_profile
+cd jdk && export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH && echo "PATH=$PATH" >> ~/.bash_profile
 cd ..
 
 #部署kafka
@@ -42,7 +42,7 @@ ln -s kafka_2.11-1.0.1 kafka
 cd kafka/config/
 
 cat > zookeeper.properties <<eof
-dataDir=/tmp/zookeeper
+dataDir=/tmp/
 clientPort=2181
 maxClientCnxns=0
 eof
