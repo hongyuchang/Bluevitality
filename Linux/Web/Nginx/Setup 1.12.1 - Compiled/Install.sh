@@ -60,8 +60,9 @@ else
 fi
 make install
 
-#启动
+#不启动（需要root权限启动1024以内的端口，建议sed替换一下）
 chmod u+s ${NGINX_HOME}/sbin/nginx
 export PATH=${NGINX_HOME}/sbin/:$PATH
+#nginx
 
 exit 0
