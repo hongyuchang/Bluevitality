@@ -37,5 +37,5 @@
       file: path=/etc/{{ item }} mode=0600 owner=root
       with_items:
        - my.cnf
-     - shadow
+       - shadow
      - fstab
