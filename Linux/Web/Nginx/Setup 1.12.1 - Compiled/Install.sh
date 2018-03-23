@@ -63,6 +63,8 @@ make install
 #不启动（需要root权限启动1024以内的端口，建议sed替换一下）
 chmod u+s ${NGINX_HOME}/sbin/nginx
 export PATH=${NGINX_HOME}/sbin/:$PATH
+
+sed -i '36s/80/8080/' $NGINX_CONF
 #nginx
 
 exit 0
