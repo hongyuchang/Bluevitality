@@ -1,33 +1,35 @@
-- hosts: test
+[kafka]
+10.0.0.4 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa kafka_broker_id=1
+10.0.0.5 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa kafka_broker_id=2
+10.0.0.6 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa kafka_broker_id=3
+------------------------------------- Playbook ----------------------------------------------------- 
+- hosts: kafka
   remote_user: wangyu
   tasks:
     - name: create kafka path
       file: state=directory path=/home/wangyu/kafka
     - name: transfer kafka file
-      copy: src=/root/{{ item }} dest=/home/wangyu/kafka
+      copy: src=/home/wangyu/{{ item }} dest=/home/wangyu/kafka
       with_items:
         - jdk.tar.gz
         - kafka_2.11-1.0.1.tgz
-        - Install.sh
+    - name: edit kafka configure
+      template: src=/home/wangyu/Install.sh.j2 dest=/home/wangyu/kafka/Install.sh force=yes
       notify:
         - start Install kafka
   handlers:
     - name: start Install kafka
       shell: cd /home/wangyu/kafka && bash Install.sh
-
-------------------------------------- Install.sh ----------------------------------------------------- 
+----------------------------------------- 测试剧本 ----------------------------------------------------
+ansible-playbook -i ./hosts kafka.yaml  -e "zk_address=10.0.0.4 zk_port=2181 kafka_port=9092" --check
+------------------------------------- Install.sh.j2 --------------------------------------------------
 #!/bin/bash
 
 set -e
 set -x
 
-ZOOKEEPER_CONNECT="192.168.133.132:2181"
-BROKER_ID="0"
-HOST_NAME="192.168.133.132"
-KAFKA_PORT="9092"
-
-tar -zxf jdk.tar.gz -C .
-tar -zxf kafka_2.11-1.0.1.tgz -C .
+tar -zxf jdk.tar.gz -C . && rm -rf jdk.tar.gz
+tar -zxf kafka_2.11-1.0.1.tgz -C . && rm -rf kafka_2.11-1.0.1.tgz
 
 ln -s jdk1.8.0_101/ jdk
 
@@ -45,11 +47,10 @@ clientPort=2181
 maxClientCnxns=0
 eof
 
-
 cat > server.properties <<eof
-broker.id=${BROKER_ID}
-port=${KAFKA_PORT}
-host.name=${HOST_NAME}
+broker.id={{ kafka_broker_id }}
+port={{ kafka_port }}
+host.name={{ ansible_ens33["ipv4"]["address"] }}
 num.network.threads=3
 num.io.threads=8
 socket.send.buffer.bytes=102400
@@ -65,7 +66,7 @@ log.cleaner.enable=true
 offsets.topic.replication.factor=1
 transaction.state.log.replication.factor=1
 transaction.state.log.min.isr=1
-zookeeper.connect=${ZOOKEEPER_CONNECT}
+zookeeper.connect={{ zk_address }}:{{ zk_port }}
 zookeeper.connection.timeout.ms=6000
 delete.topic.enable=true
 group.initial.rebalance.delay.ms=0
@@ -74,10 +75,13 @@ eof
 cd ..
 
 #Zookeeper
-bin/zookeeper-server-start.sh config/zookeeper.properties & 
+nohup bin/zookeeper-server-start.sh config/zookeeper.properties &> /dev/null & 
 
 #Kafka
 bin/kafka-server-start.sh -daemon config/server.properties
 
-
 exit 0
+------------------------------------------ 验证--------------------------------------------------------
+./zookeeper-shell.sh 10.0.0.4:2181
+ls /brokers/ids
+[1, 2, 3]
