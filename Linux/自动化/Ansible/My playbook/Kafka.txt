@@ -1,0 +1,83 @@
+- hosts: test
+  remote_user: wangyu
+  tasks:
+    - name: create kafka path
+      file: state=directory path=/home/wangyu/kafka
+    - name: transfer kafka file
+      copy: src=/root/{{ item }} dest=/home/wangyu/kafka
+      with_items:
+        - jdk.tar.gz
+        - kafka_2.11-1.0.1.tgz
+        - Install.sh
+      notify:
+        - start Install kafka
+  handlers:
+    - name: start Install kafka
+      shell: cd /home/wangyu/kafka && bash Install.sh
+
+------------------------------------- Install.sh ----------------------------------------------------- 
+#!/bin/bash
+
+set -e
+set -x
+
+ZOOKEEPER_CONNECT="192.168.133.132:2181"
+BROKER_ID="0"
+HOST_NAME="192.168.133.132"
+KAFKA_PORT="9092"
+
+tar -zxf jdk.tar.gz -C .
+tar -zxf kafka_2.11-1.0.1.tgz -C .
+
+ln -s jdk1.8.0_101/ jdk
+
+#JAVA_HOME环境变量
+cd jdk && export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH && echo "$PATH" >> ~/.bash_profile
+cd ..
+
+#部署kafka
+ln -s kafka_2.11-1.0.1 kafka
+cd kafka/config/
+
+cat > zookeeper.properties <<eof
+dataDir=/tmp/zookeeper
+clientPort=2181
+maxClientCnxns=0
+eof
+
+
+cat > server.properties <<eof
+broker.id=${BROKER_ID}
+port=${KAFKA_PORT}
+host.name=${HOST_NAME}
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/tmp/kafka-logs
+#num.partitions=1
+log.segment.bytes=1073741824
+log.retention.hours=168
+num.recovery.threads.per.data.dir=1
+log.retention.check.interval.ms=300000
+log.cleaner.enable=true
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+zookeeper.connect=${ZOOKEEPER_CONNECT}
+zookeeper.connection.timeout.ms=6000
+delete.topic.enable=true
+group.initial.rebalance.delay.ms=0
+eof
+
+cd ..
+
+#Zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties & 
+
+#Kafka
+bin/kafka-server-start.sh -daemon config/server.properties
+
+
+exit 0
