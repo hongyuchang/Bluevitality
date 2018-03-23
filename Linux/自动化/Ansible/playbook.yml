@@ -30,13 +30,12 @@
     ignore_errors: True
     tags: 
       -docker                         #执行特定tag：ansible-playbook x.yml --tags="docker,xxx1,xxx2,..."
-sudo:yes                              #当remote_user不是root时，执行此步骤时使用sudo
   handlers:                           #与notify协调，满足特定条件时触发(与host同级)
-  - name: restart apache
-    service: name=httpd state=restarted
-  - name: transport file
-    file: path=/etc/{{ item }} mode=0600 owner=root
-    with_items:
-     - my.cnf
+    - name: restart apache
+      service: name=httpd state=restarted
+    - name: transport file
+      file: path=/etc/{{ item }} mode=0600 owner=root
+      with_items:
+       - my.cnf
      - shadow
      - fstab
