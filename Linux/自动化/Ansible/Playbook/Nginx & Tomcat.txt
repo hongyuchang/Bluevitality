@@ -1,3 +1,22 @@
+#安装Ansible
+yum -y install epel-release
+yum -y install ansible
+
+#免密钥
+ssh-keygen -t rsa
+ssh-copy-id -i ~/.ssh/id_rsa root@192.168.133.132
+
+
+#添加主机组
+vim hosts
+[test]
+192.168.133.132 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_private_key_file=/root/.ssh/id_rsa
+
+
+#执行命令
+ansible -i ./hosts test -m command -a 'ls -l'
+
+#Playbook
 - hosts: all
   remote_user: root
   tasks:
@@ -27,3 +46,11 @@
       shell: cd /root/tomcat/ && bash Install.sh
     - name: start Install nginx
       shell: cd /root/nginx/ && bash Install.sh
+
+#检查剧本
+ansible-playbook -i hosts playbook --check
+
+#Go
+ansible-playbook -i hosts playbook
+
+
