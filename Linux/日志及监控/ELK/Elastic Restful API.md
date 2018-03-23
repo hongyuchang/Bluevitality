@@ -69,10 +69,13 @@
 #节点相关信息
 [root@node2 ~]# curl -X GET http://localhost:9200/_nodes/node1,node2?pretty
 
-#查看有哪些索引
-[root@node1 ~]# curl -X GET "http://192.168.0.5:9200/_cat/indices?v"
-health status index    pri rep docs.count docs.deleted store.size pri.store.size 
-green  open   students   5   1          2            0       33kb         16.5kb 
+#查看ES中的索引信息
+[root@h102 ~]# curl localhost:9200/_cat/indices?v
+health status index               pri rep docs.count docs.deleted store.size pri.store.size 
+yellow open   filebeat-2015.12.24   5   1       3182            0        1mb            1mb 
+yellow open   logstash-2015.12.23   5   1        100            0    235.8kb        235.8kb 
+yellow open   logstash-2015.12.22   5   1         41            0    126.5kb        126.5kb 
+yellow open   .kibana               1   1         94            0    102.3kb        102.3kb 
 
 #删除索引
 [root@node1 ~]# curl -s -X DELETE "http://192.168.0.5:9200/students?pretty"
