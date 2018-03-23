@@ -29,7 +29,7 @@
     register: result                  #捕捉变量的输出结果，输出捕捉内容：command: echo {{ result }}
     ignore_errors: True
     tags: 
-      -docker                         #执行特定tag：ansible-playbook x.yml --tags="docker,xxx1,xxx2,..."
+      - docker                        #执行特定tag：ansible-playbook x.yml --tags="docker,xxx1,xxx2,..."
   handlers:                           #与notify协调，满足特定条件时触发(与host同级)
     - name: restart apache
       service: name=httpd state=restarted
@@ -38,4 +38,4 @@
       with_items:
        - my.cnf
        - shadow
-     - fstab
+       - fstab

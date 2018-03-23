@@ -59,6 +59,7 @@
 │   │   ├── Nginx
 │   │   │   ├── conf
 │   │   │   ├── Setup 1.12.1
+│   │   │   ├── Setup 1.12.1 - Compiled
 │   │   │   └── 资料
 │   │   ├── Nodejs
 │   │   │   └── Setup 8.1.4
@@ -195,7 +196,7 @@
 │   │   └── 银行网点终端巡检
 │   ├── 自动化
 │   │   ├── Ansible
-│   │   │   ├── Playbook
+│   │   │   ├── My playbook
 │   │   │   ├── Role
 │   │   │   └── 资料
 │   │   ├── Cobbler
@@ -285,4 +286,4 @@
     │   └── Improve
     └── Tools
 
-285 directories
+286 directories
