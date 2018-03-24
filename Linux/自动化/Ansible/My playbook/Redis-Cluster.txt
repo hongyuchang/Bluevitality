@@ -139,3 +139,6 @@ cd $p/redis/bin/
 sleep 3
 
 exit 0
+
+-------------------------- 启动集群报错：
+fatal: [10.0.0.4]: FAILED! => {"changed": true, "cmd": "cd /home/wangyu/redis/redis/bin/ && ./redis-trib.rb create --replicas 1 10.0.0.4:21301 10.0.0.5:21301 10.0.0.6:21301 10.0.0.7:21301 10.0.0.8:21301 10.0.0.9:21301", "delta": "0:00:00.008233", "end": "2018-03-24 06:48:00.501718", "msg": "non-zero return code", "rc": 127, "start": "2018-03-24 06:48:00.493485", "stderr": "/usr/bin/env: ruby: No such file or directory", "stderr_lines": ["/usr/bin/env: ruby: No such file or directory"], "stdout": "", "stdout_lines": []}
