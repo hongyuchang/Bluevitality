@@ -1,7 +1,6 @@
 #!/bin/bash
 # Environment CentOS 7.3
 # Author: inmoonlight@163.com
-# RPM包：https://pan.baidu.com/s/1eUaqdhg
 
 #定义...
 USERNAME="string"
