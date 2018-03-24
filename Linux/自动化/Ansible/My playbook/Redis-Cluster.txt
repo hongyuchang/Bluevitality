@@ -1,0 +1,141 @@
+[redis-cluster]
+10.0.0.4 redis_listen_address=10.0.0.4 start_redis_cluster="yes"
+10.0.0.5 redis_listen_address=10.0.0.5
+10.0.0.6 redis_listen_address=10.0.0.6
+10.0.0.7 redis_listen_address=10.0.0.7
+10.0.0.8 redis_listen_address=10.0.0.8
+10.0.0.9 redis_listen_address=10.0.0.9
+
+[redis-cluster:vars]
+ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa
+redis_port=21301
+redis_cluster_address="10.0.0.4:21301 10.0.0.5:21301 10.0.0.6:21301 10.0.0.7:21301 10.0.0.8:21301 10.0.0.9:21301"
+start_redis_cluster="no"
+------------------------------------------ Playbook ----------------------------------------------------- 
+- hosts: redis-cluster
+  remote_user: wangyu
+  vars:
+    replicas_num: 1
+  tasks:
+    - name: create redis path
+      file: state=directory path=/home/wangyu/redis
+    - name: transfer redis file
+      copy: src=/home/wangyu/{{ item }} dest=/home/wangyu/redis
+      with_items:
+        - redis-3.0.0.tar.gz
+        - redis-3.2.1.gem
+        - ruby-2.2.2.tar.gz
+        - rubygems-2.4.6.tgz
+    - name: edit redis configure
+      template: src=/home/wangyu/Install.sh.j2 dest=/home/wangyu/redis/Install.sh force=yes
+      notify:
+        - start Install redis and run
+        - start cluster
+  handlers:
+    - name: start Install redis and run
+      shell: cd /home/wangyu/redis && bash Install.sh || exit 1
+    - name: start cluster
+      when: start_redis_cluster == "yes"
+      shell: cd /home/wangyu/redis/redis/bin/ && ./redis-trib.rb create --replicas {{ replicas_num }} {{ redis_cluster_address }}
+-------------------------------------------- 测试剧本 ----------------------------------------------------
+ansible-playbook -i ./hosts redis-cluster.yaml --check
+----------------------------------------- Install.sh.j2 --------------------------------------------------
+#!/bin/bash
+
+set -e
+set -x
+
+p=$(pwd)
+
+#安装 Ruby + rubygems + redis.gem
+tar -zxf ruby-2.2.2.tar.gz -C . && rm -rf ruby-2.2.2.tar.gz
+cd ruby-2.2.2
+./configure --prefix=$p/ruby
+make && make install
+
+export PATH=$p/ruby/bin:$PATH && echo export "PATH=$PATH" >> ~/.bash_profile
+. ~/.bash_profile
+
+cd $p/ruby-2.2.2/ext/zlib
+ruby ./extconf.rb && make && make install
+ 
+cd $p && tar -zxf rubygems-2.4.6.tgz -C . && rm -rf rubygems-2.4.6.tgz
+cd rubygems-2.4.6 && ruby setup.rb
+
+cd $p && gem install -l redis-3.2.1.gem
+
+#安装 Redis
+tar -zxf redis-3.0.0.tar.gz -C . && rm -rf redis-3.0.0.tar.gz
+cd redis-3.0.0 && make && cd ..
+
+#创建实例的路径并拷贝数据
+cd $p && mkdir -p redis/{bin,config,data,log} && cp -p  $p/redis-3.0.0/src/*  $p/redis/bin
+rm -rf $p/redis-3.0.0
+
+#配置
+cat > $p/redis/config/redis-21301.conf <<eof
+daemonize yes
+pidfile $p/redis-master/redis.pid
+port {{ redis_port }}
+#绑定本机网卡IP地址（可多地址，中间空格分开），要确保集群中IP:PORT唯一
+bind {{ redis_listen_address }}
+cluster-enabled yes
+cluster-config-file nodes.conf   
+cluster-node-timeout 2000
+cluster-require-full-coverage no 
+aof-rewrite-incremental-fsync yes
+tcp-backlog 511
+timeout 0
+tcp-keepalive 0
+loglevel verbose
+logfile "$p/redis/log/21301.log"
+databases 16
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error no
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+dir ./
+slave-serve-stale-data yes
+slave-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+slave-priority 100
+appendonly yes
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+lua-time-limit 5000
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events ""
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+eof
+
+. ~/.bash_profile
+
+cd $p/redis/bin/
+./redis-server ../config/redis-21301.conf || exit 1
+
+sleep 3
+
+exit 0
