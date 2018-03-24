@@ -1,0 +1,88 @@
+[zookeeper]
+10.0.0.4 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa myid=1
+10.0.0.5 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa myid=2
+10.0.0.6 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa myid=3
+------------------------------------- Playbook -----------------------------------------------------
+- hosts: zookeeper
+  remote_user: wangyu
+  tasks:
+    - name: create zookeeper path
+      file: state=directory path=/home/wangyu/zookeeper
+    - name: transfer zookeeper file
+      copy: src=/home/wangyu/{{ item }} dest=/home/wangyu/zookeeper
+      with_items:
+        - jdk.tar.gz
+        - zookeeper-3.4.10.tar.gz
+    - name: edit zookeeper configure
+      template: src=/home/wangyu/Install.sh.j2 dest=/home/wangyu/zookeeper/Install.sh force=yes
+      notify:
+        - start Install zookeeper
+  handlers:
+    - name: start Install zookeeper
+      shell: cd /home/wangyu/zookeeper && bash Install.sh
+      tags:
+        - install
+----------------------------------------- 测试剧本 ---------------------------------------------------
+ansible-playbook -i ./hosts zookeeper.yaml  -e "zk_1=10.0.0.4:2888:3888 zk_2=10.0.0.5:4888:5888 zk_3=10.0.0.6:6888:7888" --skip-tags="install" --check
+------------------------------------- Install.sh.j2 --------------------------------------------------
+#!/bin/bash
+
+set -e
+set -x
+
+#JDK
+tar -zxf jdk.tar.gz -C . && rm -rf jdk.tar.gz
+ln -s jdk1.8.0_101/ jdk
+
+#JAVA_HOME
+cd jdk && export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH && echo "export PATH=$PATH" >> ~/.bash_profile
+cd ..
+
+#Zookeeper
+tar -zxf zookeeper-3.4.10.tar.gz -C . && rm -rf zookeeper-3.4.10.tar.gz
+ln -s zookeeper-3.4.10/ zookeeper
+cd zookeeper-3.4.10
+
+#ZOOKEEPER_HOME
+export ZOOKEEPER_HOME=$(pwd) && echo "export ZOOKEEPER_HOME=$ZOOKEEPER_HOME" >> ~/.bash_profile
+
+mkdir -p {data,logs} && touch data/myid && echo {{ myid }} > data/myid
+
+cd conf 
+
+cat > zoo.cfg <<eof
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=$(echo $(pwd) | sed -n 's/conf$//p')data
+dataLogDir=$(echo $(pwd) | sed -n 's/conf$//p')logs
+clientPort=21811
+globalOutstandingLimit=1000
+
+server.1={{ zk_1 }}
+server.2={{ zk_2 }}
+server.3={{ zk_3 }}
+eof
+
+cd ../bin/
+
+./zkServer.sh start
+
+if [ "$?" == "0" ]; then
+    exit 0
+else
+    exit 1
+fi
+
+------------------------------------------ 验证 ------------------------------------------------------
+echo stat | nc 127.0.0.1 21811   查看哪个节点被选择作为follower或者leader
+echo ruok | nc 127.0.0.1 21811   测试是否启动了该Server，若回复imok表示已经启动。
+echo dump | nc 127.0.0.1 21811   列出未经处理的会话和临时节点。
+echo kill | nc 127.0.0.1 21811   关掉server
+echo conf | nc 127.0.0.1 21811   输出相关服务配置的详细信息。
+echo cons | nc 127.0.0.1 21811   列出所有连接到服务器的客户端的完全的连接 / 会话的详细信息。
+echo envi | nc 127.0.0.1 21811   输出关于服务环境的详细信息（区别于conf命令）。
+echo reqs | nc 127.0.0.1 21811   列出未经处理的请求。
+echo wchs | nc 127.0.0.1 21811   列出服务器 watch 的详细信息。
+echo wchc | nc 127.0.0.1 21811   通过session列出服务器watch的详细信息，它的输出是一个与watch相关的会话的列表。
+echo wchp | nc 127.0.0.1 21811   通过路径列出服务器 watch 的详细信息。它输出一个与 session 相关的路径。
