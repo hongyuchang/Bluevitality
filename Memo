@@ -128,7 +128,8 @@
 │   │       ├── 脚本
 │   │       └── 资料
 │   ├── 日志及监控
-│   │   ├── ELK
+│   │   ├── Elasticsearch
+│   │   ├── ELK - Memo
 │   │   │   └── 资料
 │   │   ├── Logrotate
 │   │   ├── Mutt + Mstmp
@@ -286,4 +287,4 @@
     │   └── Improve
     └── Tools
 
-286 directories
+287 directories
