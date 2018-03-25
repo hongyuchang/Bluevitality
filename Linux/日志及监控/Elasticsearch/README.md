@@ -93,18 +93,18 @@ discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]  #所有节点地址组成�
 v8.1.4
 
 #由于head的代码还是2.6版本，有很多限制，如无法跨机器访问。因此要修改两个地方:
-[wangyu@localhost ~]$ cat > /home/wangyu/elasticsearch/head/Gruntfile.js <<
+[wangyu@localhost ~]$ cat > /home/wangyu/elasticsearch/head/Gruntfile.js <<EOF
 connect: {
     server: {
-    options: {
-    hostname: '*',
-    port: 9100,
-    base: '.',
-    keepalive: true
-    }
+        options: {
+            hostname: '*',
+            port: 9100,
+            base: '.',
+            keepalive: true
+        }
     }
 }
-
+EOF
 
 #注意! 必须开启root安装bzip2!
 [wangyu@localhost ~]# yum -y install bzip2
