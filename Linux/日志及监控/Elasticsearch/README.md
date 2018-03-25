@@ -109,9 +109,8 @@ EOF
 #注意! 必须开启root安装bzip2!
 [wangyu@localhost ~]# yum -y install bzip2
 [wangyu@localhost head]$ sed -i '4354s/localhost/10.0.0.4/' /home/wangyu/elasticsearch/head/_site/app.js 
-[wangyu@localhost head]$ npm install --registry https://registry.npm.taobao.org
-[wangyu@localhost head]$ cd /home/wangyu/elasticsearch/head && npm install
-[wangyu@localhost head]$ npm install grunt-cli
+[wangyu@localhost head]$ npm install -g cnpm --registry=https://registry.npm.taobao.org
+[wangyu@localhost head]$ cnpm install
 
 
 #启动ES：
