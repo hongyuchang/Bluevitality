@@ -28,7 +28,9 @@
 [wangyu@localhost ~]$ export "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
 #ES5对系统ulimit有要求，此操作要Root权限，并且对对安装elasticsearch的用户修改ulimit信息，最终使用非root账户启动
-cat >> /etc/security/limits.conf <<eof
+[wangyu@localhost ~]# yum -y install bzip2 git
+
+[wangyu@localhost ~]# cat >> /etc/security/limits.conf <<eof
 * soft nofile 65536
 * hard nofile 131072
 * soft nproc 2048
@@ -36,13 +38,13 @@ cat >> /etc/security/limits.conf <<eof
 eof
 
 #修改proc
-cat >> /etc/sysctl.conf <<eof
+[wangyu@localhost ~]# cat >> /etc/sysctl.conf <<eof
 fs.file-max = 1000000
 vm.max_map_count=262144
 vm.swappiness = 1
 eof
 
-sysctl -p
+[wangyu@localhost ~]# sysctl -p
 
 #ES的三个配置文件说明
 config/elasticsearch.yml   #主配置文件
@@ -77,8 +79,8 @@ discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]  #所有节点地址组成�
 
 
 #安装HEAD
-[wangyu@localhost ~]$ tar -zxf elasticsearch-head-master.tar.gz -C /home/wangyu/elasticsearch/
-[wangyu@localhost ~]$ mv ~/elasticsearch/elasticsearch-head-master ~/elasticsearch/head
+[wangyu@localhost ~]$ tar -zxf elasticsearch-head.tar.gz -C /home/wangyu/elasticsearch/
+[wangyu@localhost ~]$ mv ~/elasticsearch/elasticsearch-head ~/elasticsearch/head
 
 #安装Nodejs （Node是HEAD插件的依赖）#版本好像太旧
 [wangyu@localhost ~]$ cd ~ && tar -zxf node-v8.1.4-linux-x64.tar.gz -C /home/wangyu/elasticsearch/
@@ -107,7 +109,6 @@ connect: {
 EOF
 
 #注意! 必须开启root安装bzip2!
-[wangyu@localhost ~]# yum -y install bzip2
 [wangyu@localhost head]$ sed -i '4354s/localhost/10.0.0.4/' /home/wangyu/elasticsearch/head/_site/app.js 
 [wangyu@localhost head]$ npm install -g cnpm --registry=https://registry.npm.taobao.org
 [wangyu@localhost head]$ cnpm install
