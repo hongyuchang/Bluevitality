@@ -64,7 +64,7 @@ http.cors.allow-origin: "*"         #由head插件使用
 node.master: true
 discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]
 
-#部署elasticsearch DataNode/ClientNode
+#部署elasticsearch DataNode/ClientNode （在其他的节点）
 [wangyu@localhost ~]$ tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
 [wangyu@localhost ~]$ vim elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
 cluster.name: ES-Cluster
