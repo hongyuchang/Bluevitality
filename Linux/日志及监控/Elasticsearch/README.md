@@ -12,7 +12,7 @@
     x-pack
     ik
 ```
-#### 部署Elasticsearch
+#### 部署 Elasticsearch 5.5.0 
 ```bash
 #ES5.X依赖JAVA Version >= 1.8，注! ES不能运行在CentOS 7以下的Linux上
 #多机集群中的节点可以分为Master nodes和Data nodes
