@@ -19,6 +19,7 @@ ansible -i ./hosts test -m command -a 'ls -l'
 #Playbook
 - hosts: all
   remote_user: root
+  gather_facts: False
   tasks:
     - name: create tomcat path
       file: state=directory path=/root/tomcat
