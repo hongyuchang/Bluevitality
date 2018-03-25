@@ -24,8 +24,8 @@
 [wangyu@localhost ~]$ tar -zxf jdk.tar.gz -C /home/wangyu/elasticsearch
 [wangyu@localhost ~]$ ln -s /home/wangyu/elasticsearch/jdk1.8.0_101 /home/wangyu/elasticsearch/jdk
 [wangyu@localhost ~]$ cd /home/wangyu/elasticsearch/jdk
-[wangyu@localhost ~]$ export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH && export "PATH=$PATH" >> ~/.bash_profile
-[wangyu@localhost ~]$ . ~/.bash_profile
+[wangyu@localhost ~]$ export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH
+[wangyu@localhost ~]$ export "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
 #ES5对系统ulimit有要求，此操作要Root权限，并且对对安装elasticsearch的用户修改ulimit信息，最终使用非root账户启动
 cat >> /etc/security/limits.conf <<eof
@@ -51,7 +51,7 @@ cofnig/log4j2.properties   #日志配置
 
 #部署elasticsearch MasterNode
 [wangyu@localhost ~]$ cd ~ && tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
-[wangyu@localhost ~]$ vim ~/elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml          这里的配置要重新注释
+[wangyu@localhost ~]$ vim ~/elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
 cluster.name: ES-Cluster            #加入的集群名称
 node.name: "node1"                  #当前节点名称
 network.host: 192.168.133.130       #本节点与其他节点交互时使用的地址，即可访问本节点的路由地址
