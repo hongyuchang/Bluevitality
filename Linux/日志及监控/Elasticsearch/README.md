@@ -25,7 +25,7 @@
 [wangyu@localhost ~]$ ln -s /home/wangyu/elasticsearch/jdk1.8.0_101 /home/wangyu/elasticsearch/jdk
 [wangyu@localhost ~]$ cd /home/wangyu/elasticsearch/jdk
 [wangyu@localhost ~]$ export JAVA_HOME=$(pwd) && export PATH=$JAVA_HOME/bin:$PATH
-[wangyu@localhost ~]$ export "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
+[wangyu@localhost ~]$ echo "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
 #ES5对系统ulimit有要求，此操作要Root权限，并且对对安装elasticsearch的用户修改ulimit信息，最终使用非root账户启动
 [wangyu@localhost ~]# yum -y install bzip2 git
@@ -43,8 +43,9 @@ fs.file-max = 1000000
 vm.max_map_count=655360
 vm.swappiness = 1
 eof
+
 [wangyu@localhost ~]# vim /etc/security/limits.d/90-nproc.conf  #添加or修改如下参数
-* soft nproc 2048
+* soft nproc 102400
 
 [wangyu@localhost ~]# sysctl -p
 
@@ -60,13 +61,13 @@ path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
 path.logs: /home/wangyu/elasticsearch/elasticsearch-5.5.0/logs
 cluster.name: ES-Cluster            #加入的集群名称
 node.name: "node1"                  #当前节点名称
-network.host: 192.168.133.130       #本节点与其他节点交互时使用的地址，即可访问本节点的路由地址
+network.host: 10.0.0.3              #本节点与其他节点交互时使用的地址，即可访问本节点的路由地址
 transport.tcp.port: 19300           #参与集群事物的端口（使用9200端口接收用户请求）
 http.port: 9200                     #使用9200接收用户请求（路由地址端口）
 http.cors.enabled: true             #由head插件使用
 http.cors.allow-origin: "*"         #由head插件使用
 node.master: true
-discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]
+discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",...........]     #所有节点地址组成的一个列表
 
 #部署elasticsearch DataNode/ClientNode （在其他的节点）
 [wangyu@localhost ~]$ tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
@@ -75,29 +76,27 @@ path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
 path.logs: /home/wangyu/elasticsearch/elasticsearch-5.5.0/logs
 cluster.name: ES-Cluster
 node.name: "1node1"
-network.host: 10.0.0.3
+network.host: 10.0.0.4
 transport.tcp.port: 19300
 http.port: 9200
 #http.cors.enabled: true
 #http.cors.allow-origin: "*"
 node.master: true                   #该节点是否有资格被选举为master，默认true
-discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]  #所有节点地址组成的一个列表
+discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",..........]
 
 #安装HEAD
 [wangyu@localhost ~]$ tar -zxf elasticsearch-head.tar.gz -C /home/wangyu/elasticsearch/
-[wangyu@localhost ~]$ mv ~/elasticsearch/elasticsearch-head ~/elasticsearch/head
+[wangyu@localhost ~]$ ln -s ~/elasticsearch/elasticsearch-head ~/elasticsearch/head
 
 #安装Nodejs （Node是HEAD插件的依赖）#版本好像太旧
 [wangyu@localhost ~]$ cd ~ && tar -zxf node-v8.1.4-linux-x64.tar.gz -C /home/wangyu/elasticsearch/
 [wangyu@localhost ~]$ cd /home/wangyu/elasticsearch/node-v8.1.4-linux-x64/
-[wangyu@localhost node-v8.1.4-linux-x64]$ echo "export NODE_HOME=$(pwd)" >> ~/.bash_profile
-[wangyu@localhost node-v8.1.4-linux-x64]$ echo "export PATH=$NODE_HOME/bin:$PATH" >> ~/.bash_profile
+[wangyu@localhost node-v8.1.4-linux-x64]$ export NODE_HOME=$(pwd) >> ~/.bash_profile
+[wangyu@localhost node-v8.1.4-linux-x64]$ export PATH=$NODE_HOME/bin:$PATH && echo "PATH=$PATH" >> ~/.bash_profile
 [wangyu@localhost node-v8.1.4-linux-x64]$ . ~/.bash_profile
-[wangyu@localhost node-v8.1.4-linux-x64]$ cd ~
-[wangyu@localhost ~]$ npm -v
-5.0.3
-[wangyu@localhost ~]$ node -v
+[wangyu@localhost node-v8.1.4-linux-x64]$ cd ~ ; node -v && npm -v
 v8.1.4
+5.0.3
 
 #由于head的代码还是2.6版本，有很多限制，如无法跨机器访问。因此要修改两个地方:
 [wangyu@localhost ~]$ cat > /home/wangyu/elasticsearch/head/Gruntfile.js <<EOF
@@ -114,8 +113,9 @@ connect: {
 EOF
 
 #注意! 最小化安装的系统在执行如下命令前须开启root安装bzip2，npm下载文件时会使用其对文件进行解压
-[wangyu@localhost head]$ sed -i '4354s/localhost/10.0.0.4/' /home/wangyu/elasticsearch/head/_site/app.js 
-[wangyu@localhost head]$ npm install -g cnpm --registry=https://registry.npm.taobao.org
+[wangyu@localhost ~]$ sed -i '4354s/localhost/10.0.0.4/' /home/wangyu/elasticsearch/head/_site/app.js 
+[wangyu@localhost ~]$ npm install -g cnpm --registry=https://registry.npm.taobao.org  #若报错多执行几次
+[wangyu@localhost ~]$ cd ~/elasticsearch/head/
 [wangyu@localhost head]$ cnpm install
 
 #启动ES：
