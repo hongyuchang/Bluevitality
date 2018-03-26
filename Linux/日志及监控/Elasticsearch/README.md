@@ -16,7 +16,7 @@
 ```txt
    32M  elasticsearch-5.5.0.tar.gz
   812K  elasticsearch-head-master.tar.gz
-  3.2M  elasticsearch-analysis-ik-5.x.zip
+  3.2M  elasticsearch-analysis-ik-5.5.0.zip
   173M  jdk.tar.gz
    16M  node-v8.1.4-linux-x64.tar.gz
   153M  x-pack-5.5.0.zip
@@ -37,7 +37,7 @@
 [wangyu@localhost ~]$ echo "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
 #ES5对系统ulimit有要求，此操作要Root权限，并且对对安装elasticsearch的用户修改ulimit信息，最终使用非root账户启动
-[root@localhost ~]# yum -y install bzip2 git
+[root@localhost ~]# yum -y install bzip2 git unzip maven
 [root@localhost ~]# cat >> /etc/security/limits.conf <<eof
 * soft nofile 655350
 * hard nofile 655350
@@ -135,9 +135,14 @@ connect: {
 #   type: local
 #   index.name.time_format: YYYY.MM
 
+#安装IK分词，其版本必须与ES严格一致，IK地址：https://github.com/medcl/elasticsearch-analysis-ik/tree/5.x
+[wangyu@localhost bin]$ cd ~ && unzip elasticsearch-analysis-ik-5.5.0.zip -d ~/elasticsearch/
+[wangyu@localhost bin]$ cd ~/elasticsearch/elasticsearch-analysis-ik-5.5.0 ; mvn package  #内存较小的话比较耗时
+[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mkdir -p ~/elasticsearch/elasticsearch-5.5.0/plugins/ik
+[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ unzip -d ~/elasticsearch/elasticsearch-5.5.0/plugins/ik ./target/releases/elasticsearch-analysis-ik-5.5.0.zip
 
 #启动ES：
-[wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
+cd ~/elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
 
 #启动HEAD
 cd /home/wangyu/elasticsearch/head/node_modules/grunt/bin/ ; nohup ./grunt server &
