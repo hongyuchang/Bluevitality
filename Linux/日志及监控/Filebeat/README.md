@@ -11,7 +11,7 @@ filebeat由2个主要组件构成：prospector、harvesters：
 3、处理程序会集合这些事件，最后filebeat会发送集合的数据到你指定的地点
 ```
 #### 部署 fliebeat
-```txt
+```bash
 [wangyu@localhost filebeat-6.2.3-linux-x86_64]$ tar -zxf filebeat-6.2.3-linux-x86_64.tar.gz -C .
 [wangyu@localhost filebeat-6.2.3-linux-x86_64]$ cd filebeat-6.2.3-linux-x86_64
 
