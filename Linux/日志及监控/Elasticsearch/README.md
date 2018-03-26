@@ -99,18 +99,17 @@ v8.1.4
 5.0.3
 
 #由于head的代码还是2.6版本，有很多限制，如无法跨机器访问。因此要修改两个地方:
-[wangyu@localhost ~]$ cat > /home/wangyu/elasticsearch/head/Gruntfile.js <<EOF
+[wangyu@localhost ~]$ vim /home/wangyu/elasticsearch/head/Gruntfile.js
 connect: {
     server: {
-        options: {
-            hostname: '*',
+        options: {              #约92行附近，增加hostname字段如下
+            hostname: '*',      #
             port: 9100,
             base: '.',
             keepalive: true
         }
     }
 }
-EOF
 
 #注意! 最小化安装的系统在执行如下命令前须开启root安装bzip2，npm下载文件时会使用其对文件进行解压
 [wangyu@localhost ~]$ sed -i '4354s/localhost/10.0.0.4/' /home/wangyu/elasticsearch/head/_site/app.js 
