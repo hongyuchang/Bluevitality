@@ -7,10 +7,10 @@
 其他依赖或插件：
     Jdk1.8
     Nodejs   作为head插件的依赖被安装
-    Head
-    Kibana
+    Head     提供Node管理及可视化RestfulAPI接口
+    Kibana
     x-pack   注意! 必须运行与Elasticsearch版本相匹配的X-Pack版本!
-    ik       分词插件
+    ik       同上...
 ```
 #### 软件列表
 ```txt
