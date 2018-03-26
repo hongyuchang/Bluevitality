@@ -16,6 +16,7 @@
 ```txt
    32M  elasticsearch-5.5.0.tar.gz
   812K  elasticsearch-head-master.tar.gz
+  3.2M  elasticsearch-analysis-ik-5.x.zip
   173M  jdk.tar.gz
    16M  node-v8.1.4-linux-x64.tar.gz
   153M  x-pack-5.5.0.zip
