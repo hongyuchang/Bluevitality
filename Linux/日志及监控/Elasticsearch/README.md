@@ -31,10 +31,10 @@
 [wangyu@localhost ~]# yum -y install bzip2 git
 
 [wangyu@localhost ~]# cat >> /etc/security/limits.conf <<eof
-* soft nofile 102400
-* hard nofile 102400
-* soft nproc 102400
-* hard nproc 102400
+* soft nofile 655350
+* hard nofile 655350
+* soft nproc 655350
+* hard nproc 655350
 eof
 
 #修改proc
