@@ -124,7 +124,7 @@ connect: {
 [wangyu@localhost ~]$ cd ~/elasticsearch/head/
 [wangyu@localhost head]$ cnpm install
 
-#安装X-pack
+#安装X-pack，X-pack安装成功后需要修改elasticsearch配置才能使用head
 [wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
 [wangyu@localhost bin]$ ./elasticsearch-plugin install file:///home/wangyu/x-pack-5.5.0.zip  #根据提示输入yes
 
