@@ -74,7 +74,7 @@ output:
        logstash:
          hosts: ["10.1.5.65:5044"]
 ```
-#### 测试
+#### 测试-1 输出到文件
 ```yaml
 filebeat:
   prospectors:
@@ -86,6 +86,14 @@ filebeat:
 output.file:
       path: '/tmp/'
       filename: filebeat.txt
+      #rotate_every_kb: 10000
+      #number_of_files: 7
+```
+#### 测试-2 输出到终端
+```yaml
+output：
+  console:
+    pretty: true
 ```
 #### 启动
 ```bash
