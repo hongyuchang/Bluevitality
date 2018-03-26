@@ -12,7 +12,7 @@
     x-pack   注意! 必须运行与Elasticsearch版本相匹配的X-Pack版本!
     ik       分词插件
 ```
-#### 部署 Elasticsearch 5.5.0 
+#### 部署 Elasticsearch 5.5.0、head、x-pack、ik
 ```bash
 #ES5.X依赖JAVA Version >= 1.8，注! ES不能运行在CentOS 7以下的Linux上
 #多机集群中的节点可以分为Master nodes和Data nodes
