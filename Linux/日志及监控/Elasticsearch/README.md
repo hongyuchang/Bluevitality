@@ -99,7 +99,7 @@ discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",..........]
 #安装Nodejs （Node是HEAD插件的依赖）#版本好像太旧
 [wangyu@localhost ~]$ cd ~ && tar -zxf node-v8.1.4-linux-x64.tar.gz -C /home/wangyu/elasticsearch/
 [wangyu@localhost ~]$ cd /home/wangyu/elasticsearch/node-v8.1.4-linux-x64/
-[wangyu@localhost node-v8.1.4-linux-x64]$ export NODE_HOME=$(pwd) >> ~/.bash_profile
+[wangyu@localhost node-v8.1.4-linux-x64]$ export NODE_HOME=$(pwd)
 [wangyu@localhost node-v8.1.4-linux-x64]$ export PATH=$NODE_HOME/bin:$PATH && echo "PATH=$PATH" >> ~/.bash_profile
 [wangyu@localhost node-v8.1.4-linux-x64]$ . ~/.bash_profile
 [wangyu@localhost node-v8.1.4-linux-x64]$ cd ~ ; node -v && npm -v
