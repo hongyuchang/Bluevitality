@@ -137,8 +137,7 @@ connect: {
 
 
 #启动ES：
-[wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
-[wangyu@localhost bin]$ ./elasticsearch -d
+[wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
 
 #启动HEAD
 cd /home/wangyu/elasticsearch/head/node_modules/grunt/bin/ ; nohup ./grunt server &
