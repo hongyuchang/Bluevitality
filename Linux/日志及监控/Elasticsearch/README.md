@@ -138,8 +138,8 @@ connect: {
 #安装IK分词，其版本必须与ES严格一致，IK地址：https://github.com/medcl/elasticsearch-analysis-ik/tree/5.x
 [wangyu@localhost bin]$ cd ~ && unzip elasticsearch-analysis-ik-5.5.0.zip -d ~/elasticsearch/
 [wangyu@localhost bin]$ cd ~/elasticsearch/elasticsearch-analysis-ik-5.5.0 ; mvn package  #内存较小的话比较耗时
-[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mkdir -p ~/elasticsearch/elasticsearch-5.5.0/plugins/ik
-[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ unzip -d ~/elasticsearch/elasticsearch-5.5.0/plugins/ik ./target/releases/elasticsearch-analysis-ik-5.5.0.zip
+[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mkdir -p ~/elasticsearch/elasticsearch-5.5.0/plugins/ik && \
+unzip -d ~/elasticsearch/elasticsearch-5.5.0/plugins/ik ./target/releases/elasticsearch-analysis-ik-5.5.0.zip
 
 #启动ES：
 cd ~/elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
