@@ -124,9 +124,16 @@ connect: {
 [wangyu@localhost ~]$ cd ~/elasticsearch/head/
 [wangyu@localhost head]$ cnpm install
 
-#安装X-pack，X-pack安装成功后需要修改elasticsearch配置才能使用head
+#安装X-pack，X-pack安装成功后需要修改elasticsearch配置才能配合head插件来使用（暂时不安装，有问题）
 [wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
 [wangyu@localhost bin]$ ./elasticsearch-plugin install file:///home/wangyu/x-pack-5.5.0.zip  #根据提示输入yes
+# ES内的x-pack插件配置段如下：
+# http.cors.allow-headers: "Authorization"
+# xpack.security.enabled: false
+# xpack.monitoring.exporters.my_local:
+#   type: local
+#   index.name.time_format: YYYY.MM
+
 
 #启动ES：
 [wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
