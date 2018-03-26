@@ -79,6 +79,19 @@ output:
        logstash:
          hosts: ["10.1.5.65:5044"]
 ```
+#### 测试
+```yaml
+filebeat:
+  prospectors:
+    - 
+      paths:
+        - /var/log/messages
+      input_type: log
+      document_type: nginx
+output.file:
+      path: '/tmp/'
+      filename: filebeat.txt
+```
 #### 启动
 ```bash
 nohup ./filebeat -e -c filebeat.yml >/dev/null 2>&1 &
