@@ -71,7 +71,7 @@
 │   │   │   ├── Directory contents
 │   │   │   ├── Session - Redis
 │   │   │   ├── Setup 8.0.30
-│   │   │   ├── Setup JMX
+│   │   │   ├── Setup JMX And Optimization
 │   │   │   ├── Setup memcached-session-manager
 │   │   │   └── 资料
 │   │   └── Varnish
