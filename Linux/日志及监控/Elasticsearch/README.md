@@ -99,7 +99,7 @@ v8.1.4
 5.0.3
 
 #由于head的代码还是2.6版本，有很多限制，如无法跨机器访问。因此要修改两个地方:
-[wangyu@localhost ~]$ vim /home/wangyu/elasticsearch/head/Gruntfile.js
+[wangyu@localhost ~]$ vim +92 /home/wangyu/elasticsearch/head/Gruntfile.js
 connect: {
     server: {
         options: {              #约92行附近，增加hostname字段如下
