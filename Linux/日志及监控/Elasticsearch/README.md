@@ -85,7 +85,7 @@ node.master: true                   #该节点是否有资格被选举为master�
 discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",..........]
 
 #安装HEAD
-[wangyu@localhost ~]$ tar -zxf tar -zxf elasticsearch-head-master.tar.gz -C /home/wangyu/elasticsearch/
+[wangyu@localhost ~]$ tar -zxf elasticsearch-head-master.tar.gz -C /home/wangyu/elasticsearch/
 [wangyu@localhost ~]$ ln -s ~/elasticsearch/elasticsearch-head-master ~/elasticsearch/head
 
 #安装Nodejs （Node是HEAD插件的依赖）#版本好像太旧
