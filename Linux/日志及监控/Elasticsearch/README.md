@@ -12,6 +12,14 @@
     x-pack   注意! 必须运行与Elasticsearch版本相匹配的X-Pack版本!
     ik       分词插件
 ```
+#### 软件列表
+```txt
+   32M  elasticsearch-5.5.0.tar.gz
+  812K  elasticsearch-head-master.tar.gz
+  173M  jdk.tar.gz
+   16M  node-v8.1.4-linux-x64.tar.gz
+  153M  x-pack-5.5.0.zip
+```
 #### 部署 Elasticsearch 5.5.0、head、x-pack、ik
 ```bash
 #ES5.X依赖JAVA Version >= 1.8，注! ES不能运行在CentOS 7以下的Linux上
@@ -115,6 +123,10 @@ connect: {
 [wangyu@localhost ~]$ npm install -g cnpm --registry=https://registry.npm.taobao.org  #若报错多执行几次
 [wangyu@localhost ~]$ cd ~/elasticsearch/head/
 [wangyu@localhost head]$ cnpm install
+
+#安装X-pack
+[wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
+[wangyu@localhost bin]$ ./elasticsearch-plugin install file:///home/wangyu/x-pack-5.5.0.zip  #根据提示输入yes
 
 #启动ES：
 [wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
