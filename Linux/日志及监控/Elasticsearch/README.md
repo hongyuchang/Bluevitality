@@ -6,11 +6,11 @@
 版本：5.5.0
 其他依赖或插件：
     Jdk1.8
-    Nodejs
-    Head
+    Nodejs   作为head插件的依赖被安装
+    Head
     Kibana
-    x-pack
-    ik
+    x-pack   注意! 必须运行与Elasticsearch版本相匹配的X-Pack版本!
+    ik       分词插件
 ```
 #### 部署 Elasticsearch 5.5.0 
 ```bash
