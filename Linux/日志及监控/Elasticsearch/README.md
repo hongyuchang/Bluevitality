@@ -40,7 +40,7 @@ eof
 #修改proc
 [wangyu@localhost ~]# cat >> /etc/sysctl.conf <<eof
 fs.file-max = 1000000
-vm.max_map_count=655360
+vm.max_map_count=262144
 vm.swappiness = 1
 eof
 
