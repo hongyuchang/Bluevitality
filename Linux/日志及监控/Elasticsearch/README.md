@@ -1,7 +1,7 @@
 ```txt
-注意! 在5.1中，elasticsearch-head：
-    不能放在elasticsearch的 plugins、modules 目录下
-    不能使用 elasticsearch-plugin install
+注意! 在ES的5.X >= Version下的elasticsearch-head：
+    不能放在elasticsearch的plugins、modules目录下
+    不能使用elasticsearch-plugin install
 
 版本：5.5.0
 其他依赖或插件：
@@ -31,18 +31,20 @@
 [wangyu@localhost ~]# yum -y install bzip2 git
 
 [wangyu@localhost ~]# cat >> /etc/security/limits.conf <<eof
-* soft nofile 65536
-* hard nofile 131072
-* soft nproc 2048
-* hard nproc 4096
+* soft nofile 102400
+* hard nofile 102400
+* soft nproc 102400
+* hard nproc 102400
 eof
 
 #修改proc
 [wangyu@localhost ~]# cat >> /etc/sysctl.conf <<eof
 fs.file-max = 1000000
-vm.max_map_count=262144
+vm.max_map_count=655360
 vm.swappiness = 1
 eof
+[wangyu@localhost ~]# vim /etc/security/limits.d/90-nproc.conf  #添加or修改如下参数
+* soft nproc 2048
 
 [wangyu@localhost ~]# sysctl -p
 
@@ -54,7 +56,9 @@ cofnig/log4j2.properties   #日志配置
 #部署elasticsearch MasterNode
 [wangyu@localhost ~]$ cd ~ && tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
 [wangyu@localhost ~]$ vim ~/elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
-cluster.name: ES-Cluster            #加入的集群名称
+path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
+path.logs: /home/wangyu/elasticsearch/elasticsearch-5.5.0/logs
+cluster.name: ES-Cluster            #加入的集群名称
 node.name: "node1"                  #当前节点名称
 network.host: 192.168.133.130       #本节点与其他节点交互时使用的地址，即可访问本节点的路由地址
 transport.tcp.port: 19300           #参与集群事物的端口（使用9200端口接收用户请求）
@@ -67,6 +71,8 @@ discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]
 #部署elasticsearch DataNode/ClientNode （在其他的节点）
 [wangyu@localhost ~]$ tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
 [wangyu@localhost ~]$ vim elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
+path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
+path.logs: /home/wangyu/elasticsearch/elasticsearch-5.5.0/logs
 cluster.name: ES-Cluster
 node.name: "1node1"
 network.host: 10.0.0.3
@@ -108,11 +114,10 @@ connect: {
 }
 EOF
 
-#注意! 必须开启root安装bzip2!
+#注意! 最小化安装的系统在执行如下命令前须开启root安装bzip2，npm下载文件时会使用其对文件进行解压
 [wangyu@localhost head]$ sed -i '4354s/localhost/10.0.0.4/' /home/wangyu/elasticsearch/head/_site/app.js 
 [wangyu@localhost head]$ npm install -g cnpm --registry=https://registry.npm.taobao.org
 [wangyu@localhost head]$ cnpm install
-
 
 #启动ES：
 [wangyu@localhost ~]$ cd ~/elasticsearch/elasticsearch-5.5.0/bin/
