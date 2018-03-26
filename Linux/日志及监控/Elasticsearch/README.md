@@ -83,7 +83,6 @@ http.port: 9200
 node.master: true                   #该节点是否有资格被选举为master，默认true
 discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300"]  #所有节点地址组成的一个列表
 
-
 #安装HEAD
 [wangyu@localhost ~]$ tar -zxf elasticsearch-head.tar.gz -C /home/wangyu/elasticsearch/
 [wangyu@localhost ~]$ mv ~/elasticsearch/elasticsearch-head ~/elasticsearch/head
