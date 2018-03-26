@@ -150,7 +150,7 @@ cd /home/wangyu/elasticsearch/head/node_modules/grunt/bin/ ; nohup ./grunt serve
 #### 测试IK分词插件
 ```bash
 [root@localhost ~]# curl -XGET 'http://10.0.0.3:9200/_analyze?pretty&analyzer=ik_max_word' -d '这是一个测试'
-[root@localhost ~]# curl -XGET 'http://10.0.0.3:9200/_analyze?pretty&analyzer=ik_smart' -d '这是一个测试'                
+[root@localhost ~]# curl -XGET 'http://10.0.0.3:9200/_analyze?pretty&analyzer=ik_smart' -d '这是一个测试'
 {
   "tokens" : [
     {
