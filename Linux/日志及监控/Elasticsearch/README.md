@@ -28,9 +28,8 @@
 [wangyu@localhost ~]$ echo "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
 #ES5对系统ulimit有要求，此操作要Root权限，并且对对安装elasticsearch的用户修改ulimit信息，最终使用非root账户启动
-[wangyu@localhost ~]# yum -y install bzip2 git
-
-[wangyu@localhost ~]# cat >> /etc/security/limits.conf <<eof
+[root@localhost ~]# yum -y install bzip2 git
+[root@localhost ~]# cat >> /etc/security/limits.conf <<eof
 * soft nofile 655350
 * hard nofile 655350
 * soft nproc 655350
@@ -38,16 +37,16 @@
 eof
 
 #修改proc
-[wangyu@localhost ~]# cat >> /etc/sysctl.conf <<eof
+[root@localhost ~]# cat >> /etc/sysctl.conf <<eof
 fs.file-max = 1000000
 vm.max_map_count=262144
 vm.swappiness = 1
 eof
 
-[wangyu@localhost ~]# vim /etc/security/limits.d/90-nproc.conf  #添加or修改如下参数
+[root@localhost ~]# vim /etc/security/limits.d/90-nproc.conf  #添加or修改如下参数
 * soft nproc 102400
 
-[wangyu@localhost ~]# sysctl -p
+[root@localhost ~]# sysctl -p
 
 #ES的三个配置文件说明
 config/elasticsearch.yml   #主配置文件
@@ -122,6 +121,5 @@ connect: {
 [wangyu@localhost bin]$ ./elasticsearch -d
 
 #启动HEAD
-cd /home/wangyu/elasticsearch/head/node_modules/grunt/bin/ && ./grunt server 
-#nohup ./grunt server &
+cd /home/wangyu/elasticsearch/head/node_modules/grunt/bin/ ; nohup ./grunt server &
 ```
