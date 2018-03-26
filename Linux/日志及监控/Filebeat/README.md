@@ -54,3 +54,40 @@ Flags:
 
 Use "filebeat [command] --help" for more information about a command.
 ```
+#### filebeat的配置文件：filebeat.yml
+```yaml
+filebeat:
+  prospectors:
+    -
+       paths:
+         - /www/wwwLog/www.lanmps.com_old/*.log
+         - /www/wwwLog/www.lanmps.com/*.log
+       input_type: log 
+       document_type: nginx-access-www.lanmps.com
+    -
+       paths:
+         - /www/wwwRUNTIME/www.lanmps.com/order/*.log
+       input_type: log 
+       document_type: order-www.lanmps.com
+    -
+       paths:
+         - /www/wwwRUNTIME/www.lanmps.com/pay/*.log
+       input_type: log 
+       document_type: pay-www.lanmps.com
+output:
+    -
+       logstash:
+         hosts: ["10.1.5.65:5044"]
+```
+#### 启动
+```bash
+nohup ./filebeat -e -c filebeat.yml >/dev/null 2>&1 &
+```
+#### logstash端input使用beats插件接收日志数据
+```txt
+input {
+  beats {
+    port => 5044
+  }
+}
+```
