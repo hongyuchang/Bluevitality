@@ -69,11 +69,6 @@ filebeat:
          - /www/wwwRUNTIME/www.lanmps.com/order/*.log
        input_type: log 
        document_type: order-www.lanmps.com
-    -
-       paths:
-         - /www/wwwRUNTIME/www.lanmps.com/pay/*.log
-       input_type: log 
-       document_type: pay-www.lanmps.com
 output:
     -
        logstash:
