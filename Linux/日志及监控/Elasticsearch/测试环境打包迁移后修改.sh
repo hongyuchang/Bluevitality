@@ -6,18 +6,21 @@
 set -e
 set -x
 
+head_address="本机IP地址"
+
 origin_path=$(pwd)
 
-#设置JAVA_HOME/bin路径...
+#设置JAVA_HOME变量
 rm -rf elasticsearch/jdk
-cd elasticsearch/jdk1.8.0_101
-echo "#ES_CLUSTER_VARIABLES" >> ~/.bash_profile #放置JAVA_HOME变量的冲突，此处仅将其bin路径加入PATH
-export PATH=$(pwd):$PATH
-echo "PATH=$PATH" >> ~/.bash_profile && . ~/.bash_profile
+echo "#ES_CLUSTER_VARIABLES" >> ~/.bash_profile
+cd elasticsearch/jdk1.8.0_101/bin
+export PATH=$(pwd):$PATH   #不能存在相同的JAVA_HOME变量，此处仅将JAVA_HOME/bin加入PATH中
+echo "PATH=$PATH" >> ~/.bash_profile
 
-#修改配置文件
+
+#修改配置文件：
 cd $origin_path
-sed  -i '1,2d' elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
+sed  -i '1,2d' elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml       #注意!!!!配置文件中还要修改地址相关
 
 #重新创建软连接，避免旧的软连接失效
 rm -rf elasticsearch/head
@@ -28,19 +31,22 @@ cd elasticsearch/node-v8.1.4-linux-x64/bin
 echo "#ES_CLUSTER_VARIABLES" >> ~/.bash_profile
 export PATH=$(pwd):$PATH
 echo "PATH=$PATH" >> ~/.bash_profile
-. ~/.bash_profile
+
 
 cd $origin_path
 
 sed -i '4354s/10.0.0.4/这里用变量改成要用的值/' elasticsearch/head/_site/app.js 
 
+
 #启动ES：
-cd $origin_path
+cd $origin_path && . ~/.bash_profile
+. ~/.bash_profile
 cd elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
+
 
 #启动HEAD
 cd $origin_path
 cd elasticsearch/head/node_modules/grunt/bin/
-nohup ./grunt server 1> /dev/null  &
+nohup ./grunt server 1> /dev/null &
 
 exit 0
