@@ -55,7 +55,7 @@ cd $origin_path
 sed -i '4354s/10.0.0.4/这里用变量改成要用的值/' elasticsearch/head/_site/app.js 
 
 #启动ES：
-cd $origin_path && . ~/.bash_profile
+cd $origin_path
 . ~/.bash_profile
 cd elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
 
