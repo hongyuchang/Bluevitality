@@ -75,7 +75,7 @@ http.port: 9200                     #使用9200接收用户请求（路由地址
 http.cors.enabled: true             #由head插件使用
 http.cors.allow-origin: "*"         #由head插件使用
 node.master: true
-discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",...........]     #所有节点地址组成的一个列表
+discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",...........]     #所有主节点地址组成的一个列表
 
 #部署elasticsearch DataNode/ClientNode （在其他的节点）
 [wangyu@localhost ~]$ tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
