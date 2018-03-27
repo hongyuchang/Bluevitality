@@ -28,7 +28,7 @@ rm -rf elasticsearch/jdk
 echo "#ES_CLUSTER_VARIABLES" >> ~/.bash_profile
 cd elasticsearch/jdk1.8.0_101/bin
 export PATH=$(pwd):$PATH   #不能存在相同的JAVA_HOME变量，此处仅将JAVA_HOME/bin加入PATH中
-echo "PATH=$PATH" >> ~/.bash_profile
+echo "export PATH=$PATH" >> ~/.bash_profile
 
 #修改配置文件：
 cd $origin_path
@@ -48,7 +48,7 @@ cd ..
 cd elasticsearch/node-v8.1.4-linux-x64/bin
 echo "#ES_CLUSTER_VARIABLES" >> ~/.bash_profile
 export PATH=$(pwd):$PATH
-echo "PATH=$PATH" >> ~/.bash_profile
+echo "export PATH=$PATH" >> ~/.bash_profile
 
 cd $origin_path
 
