@@ -7,15 +7,23 @@
 set -e
 set -x
 
-head_address="本机IP地址"
+#head_address="本机IP地址"
+#es_cluster_name="ES加入的集群名称"
+#es_node_name="ES的Node名字"
+#es_network_host="ES的本机IP地址"
+#es_transport_tcp_port="port"
+#es_discovery_zen_ping_unicast_hosts="[\"1.1.1.1:19300\"]"
+
+head_address="10.0.0.4"
 es_cluster_name="ES-CLUSTER"
 es_node_name="node1"
-es_network_host="本机IP地址"
-es_transport_tcp_port="port"
-es_discovery_zen_ping_unicast_hosts="[1.1.1.1:19300]"
-
+es_network_host="10.0.0.4"
+es_transport_tcp_port="19300"
+es_discovery_zen_ping_unicast_hosts="[\"10.0.0.4:19300\"]"
 
 origin_path=$(pwd)
+
+tar -zxf elasticsearch-cluster-5.5.0.tar.gz
 
 #设置JAVA_HOME变量
 rm -rf elasticsearch/jdk
@@ -23,7 +31,6 @@ echo "#ES_CLUSTER_VARIABLES" >> ~/.bash_profile
 cd elasticsearch/jdk1.8.0_101/bin
 export PATH=$(pwd):$PATH   #不能存在相同的JAVA_HOME变量，此处仅将JAVA_HOME/bin加入PATH中
 echo "PATH=$PATH" >> ~/.bash_profile
-
 
 #修改配置文件：
 cd $origin_path
