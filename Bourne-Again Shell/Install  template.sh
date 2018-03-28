@@ -7,20 +7,12 @@ USERNAME="string"
 
 set -ex
 
-#身份检查
-if [ $(id -u) != "0" ]; then
-    echo "error: user must be an administrator"
-    exit;
-fi
-
-#add user
-if ! id ${USERNAME} &> /dev/null ; then
-    groupadd ${USERNAME}
-    useradd -M -g ${USERNAME} ${USERNAME:?'Undefined ...'} -s /sbin/nologin
-fi
 
 #depend
 yum -y install epel-release gcc gcc-c++ cmake openssl openssl-devel net-tools vim
+
+#目录
+mkdir -p $..../etc
 
 #并行编译
 function make_and_install () {
@@ -32,17 +24,6 @@ function make_and_install () {
     fi
     make install
 }
-
-#erase old file and config ...
-rm -rf {配置目录,安装目录,解压目录,启动文件目录,其他目录...}
-
-#目录
-mkdir -p $..../etc
-
-#using local
-[ -s stunel-4.33.tar.gz ] || exit 1
-......
-......
 
 #关闭SELINUX与防火墙
 function disable_sec() {
