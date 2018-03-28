@@ -33,6 +33,7 @@ cd /home/zyzx/sww/ruby && tar -zxf ruby-2.2.2.tar.gz -C . && cd ruby-2.2.2
 make && make install
 
 export PATH=.:/home/zyzx/ruby/bin:$PATH
+echo "PATH=$PATH" >> ~/.bash_profile
 
 cd /home/zyzx/sww/ruby && tar -zxf rubygems-2.4.6.tgz -C .
 cd rubygems-2.4.6 && ruby setup.rb
