@@ -41,13 +41,13 @@ cd /home/zyzx/sww/ruby && gem install -l redis-3.2.1.gem
 #若上面的步骤出问题，参考：http://www.51testing.com/html/77/497177-3709664.html
 
 # 编译安装Redis
-cd /home/zyzx/sww && tar -zxvf redis-3.0.0.tar.gz -C . && cd redis-3.0.0 && make
+tar -zxvf redis-3.0.0.tar.gz -C . && cd redis-3.0.0 && make
 
 #创建实例的路径并拷贝数据，此处是单机多实例，注意！由于是三主三从的模式，共需启动六个实例!
-mkdir -p /home/zyzx/redis/redis{1..3}/{bin,config,data,log}
-cp -p /home/zyzx/sww/redis-3.0.0/src/* /home/zyzx/redis/redis1/bin/
-cp -p /home/zyzx/sww/redis-3.0.0/src/* /home/zyzx/redis/redis2/bin/
-cp -p /home/zyzx/sww/redis-3.0.0/src/* /home/zyzx/redis/redis3/bin/
+mkdir -p /home/zyzx/redis/redis-master-{1..3}/{bin,config,data,log}
+mkdir -p /home/zyzx/redis/redis-slave-{1..3}/{bin,config,data,log}
+cp -p /home/zyzx/sww/redis-3.0.0/src/* /home/zyzx/redis/redis-master-{1..3}/bin/
+cp -p /home/zyzx/sww/redis-3.0.0/src/* /home/zyzx/redis/redis-slave-{1..3}/bin/
 
 #Redis配置样例
 #具体每个redis为了支持集群和保证在集群中的唯一性，需要更改每个节点的redis.conf配置，部分参数要区别配置
@@ -119,7 +119,7 @@ hz 10
 #### Redis启停脚本样例
 ```bash
 #启动脚本，注意! 部署到现在的六个节点目前还是单实例模式，随后要使用 redis-trib.rb 工具创建集群
-more ~/shell/redis_startAllServer.sh 
+cat redis_startAllServer.sh 
 #!/bin/bash
 
 p=$(pwd)
@@ -144,16 +144,21 @@ cd redis-slave-3/bin
 echo "Redis Service Start Success!"
 
 #停止脚本
-more ~/shell/redis_stopAllServer.sh 
-#!/bin/sh
+cat redis_stopAllServer.sh 
+#!/bin/bash
 
-echo "Redis Service Stop Running!"
-cd /home/zyzx/redis/redis1/bin/
-./redis-cli  -h 172.17.15.149 -p 21301 shutdown
+cd redis-master-1/bin
+./redis-cli  -h 192.168.21.177 -p 21301 shutdown
 sleep 1
-./redis-cli  -h 172.17.15.149 -p 21302 shutdown
+./redis-cli  -h 192.168.21.177 -p 21302 shutdown
 sleep 1
-./redis-cli  -h 172.17.15.149 -p 21303 shutdown
+./redis-cli  -h 192.168.21.177 -p 21303 shutdown
+sleep 1
+./redis-cli  -h 192.168.21.177 -p 22301 shutdown
+sleep 1
+./redis-cli  -h 192.168.21.177 -p 22302 shutdown
+sleep 1
+./redis-cli  -h 192.168.21.177 -p 22303 shutdown
 echo "Redis Service Stop Success!"
 ```
 #### 创建 Redis Cluster
