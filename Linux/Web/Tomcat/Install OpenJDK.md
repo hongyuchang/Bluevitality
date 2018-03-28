@@ -33,3 +33,22 @@ java version "1.8.0_151"
 Java(TM) SE Runtime Environment (build 1.8.0_151-b12)
 Java HotSpot(TM) 64-Bit Server VM (build 25.151-b12, mixed mode)
 ```
+#### .bash_profile
+```bash
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+export PATH
+export JAVA_HOME=/home/aiuap/jdk
+export CLASSPATH=.${JAVA_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
+export LANG=zh_CH.UTF-8
+```

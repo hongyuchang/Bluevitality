@@ -1,1 +1,0 @@
-sed -i "s@<session-timeout>.*</session-timeout>@<session-timeout>6220</session-timeout\>@g" /usr/local/tomcat/conf/web.xml

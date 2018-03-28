@@ -21,5 +21,7 @@
   <session-timeout>30</session-timeout>
 </session-config>
 设置session 的过期时间，单位是分钟
-
 ......
+```bash
+sed -i "s@<session-timeout>.*</session-timeout>@<session-timeout>6220</session-timeout\>@g" /usr/local/tomcat/conf/web.xml
+```
