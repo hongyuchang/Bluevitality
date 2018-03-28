@@ -62,7 +62,7 @@ config/elasticsearch.yml   #主配置文件
 config/jvm.options         #JVM参数配置文件
 cofnig/log4j2.properties   #日志配置
 
-#部署elasticsearch MasterNode
+#部署 MasterNode
 [wangyu@localhost ~]$ cd ~ && tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
 [wangyu@localhost ~]$ vim ~/elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
 path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
@@ -75,9 +75,9 @@ http.port: 9200                     #使用9200接收用户请求（路由地址
 http.cors.enabled: true             #由head插件使用
 http.cors.allow-origin: "*"         #由head插件使用
 node.master: true
-discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",...........]     #所有主节点地址组成的一个列表
+discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",...........]     #所有Master组成的列表
 
-#部署elasticsearch DataNode/ClientNode （在其他的节点）
+#部署 DataNode/ClientNode （在其他的节点）
 [wangyu@localhost ~]$ tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
 [wangyu@localhost ~]$ vim elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
 path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
@@ -96,15 +96,12 @@ discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",..........]
 [wangyu@localhost ~]$ tar -zxf elasticsearch-head-master.tar.gz -C /home/wangyu/elasticsearch/
 [wangyu@localhost ~]$ ln -s ~/elasticsearch/elasticsearch-head-master ~/elasticsearch/head
 
-#安装Nodejs （Node是HEAD插件的依赖）#版本好像太旧
+#安装Nodejs （Node是HEAD插件的依赖）
 [wangyu@localhost ~]$ cd ~ && tar -zxf node-v8.1.4-linux-x64.tar.gz -C /home/wangyu/elasticsearch/
 [wangyu@localhost ~]$ cd /home/wangyu/elasticsearch/node-v8.1.4-linux-x64/
 [wangyu@localhost node-v8.1.4-linux-x64]$ export NODE_HOME=$(pwd)
 [wangyu@localhost node-v8.1.4-linux-x64]$ export PATH=$NODE_HOME/bin:$PATH && echo "PATH=$PATH" >> ~/.bash_profile
-[wangyu@localhost node-v8.1.4-linux-x64]$ . ~/.bash_profile
-[wangyu@localhost node-v8.1.4-linux-x64]$ cd ~ ; node -v && npm -v
-v8.1.4
-5.0.3
+[wangyu@localhost node-v8.1.4-linux-x64]$ . ~/.bash_profile    #验证安装成功： node -v && npm -v
 
 #由于head的代码还是2.6版本，有很多限制，如无法跨机器访问。因此要修改两个地方:
 [wangyu@localhost ~]$ vim +92 /home/wangyu/elasticsearch/head/Gruntfile.js
