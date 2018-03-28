@@ -24,7 +24,7 @@ tar zxf depend/openssl-1.0.2l.tar.gz
 tar zxf depend/pcre-8.41.tar.gz
 tar -xf depend/zlib-1.2.8.tar.gz 
 
-#Lua
+#Lua，用来通过lua扩展nginx功能
 tar -zxvf depend/LuaJIT-2.0.4.tar.gz -C depend/
 cd depend/LuaJIT-2.0.4/
 make && make install PREFIX=${LUA_HOME}
@@ -37,6 +37,7 @@ echo "PATH=$PATH:${LUA_HOME}/bin:${NGINX_HOME}/sbin" >> ~/.bash_profile
 source ~/.bash_profile
 
 cd $p
+#用来做后端服务器健康检查的第三方模块
 unzip ./depend/nginx_upstream_check_module-master.zip -d ./depend/
 patch -p1 < depend/nginx_upstream_check_module-master/check_1.12.1+.patch
 mkdir -p ${NGINX_HOME}/logs
