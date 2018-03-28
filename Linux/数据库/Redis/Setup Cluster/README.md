@@ -120,17 +120,28 @@ hz 10
 ```bash
 #启动脚本，注意! 部署到现在的六个节点目前还是单实例模式，随后要使用 redis-trib.rb 工具创建集群
 more ~/shell/redis_startAllServer.sh 
-#!/bin/sh
+#!/bin/bash
 
-echo "Redis Service Start Running!"
-cd /home/zyzx/redis/redis1/bin/
-./redis-server ../config/redis-21301.conf       #指定每个实例使用的配置文件
+p=$(pwd)
+cd redis-master-1/bin
+./redis-server ../config/redis-21301.conf
 sleep 1
-cd /home/zyzx/redis/redis2/bin/
+cd $P && cd redis-master-2/bin
 ./redis-server ../config/redis-21302.conf
 sleep 1
-cd /home/zyzx/redis/redis3/bin/
+cd $P && cd redis-master-3/bin
 ./redis-server ../config/redis-21303.conf
+sleep 1
+cd $P && cd redis-slave-1/bin
+./redis-server ../config/redis-22301.conf
+sleep 1
+cd $P && cd redis-slave-2/bin
+./redis-server ../config/redis-22302.conf
+sleep 1
+cd $P
+cd redis-slave-3/bin
+./redis-server ../config/redis-22303.conf
+echo "Redis Service Start Success!"
 
 #停止脚本
 more ~/shell/redis_stopAllServer.sh 
@@ -140,13 +151,10 @@ echo "Redis Service Stop Running!"
 cd /home/zyzx/redis/redis1/bin/
 ./redis-cli  -h 172.17.15.149 -p 21301 shutdown
 sleep 1
-cd /home/zyzx/redis/redis2/bin/
 ./redis-cli  -h 172.17.15.149 -p 21302 shutdown
 sleep 1
-cd /home/zyzx/redis/redis2/bin/
 ./redis-cli  -h 172.17.15.149 -p 21303 shutdown
 echo "Redis Service Stop Success!"
-echo "Redis Service Start Success!"
 ```
 #### 创建 Redis Cluster
 ```bash
