@@ -5,3 +5,9 @@ yellow open   1     XZbLJC6KTDOp8HMOG9TCjQ   1   1          0            0      
 
 #删除索引文件以释放空间
 curl -XDELETE http://10.0.0.3:9200/filebeat-2016.12.28
+
+#返回状态非404的
+curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=response=404&pretty'
+
+#查来自Buffalo的
+curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=geoip.city_name=Buffalo&pretty'
