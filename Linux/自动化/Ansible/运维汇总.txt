@@ -6,6 +6,14 @@ ansible_facts["ansible_all_ipv4_addresses"]
 获取版本号的前N个字符
 {{ ansible_distribution[N] }}
 
+
+输出所有主机清单里的主机
+debug: msg={{ item }}
+with_items: "{{ groups['all'] }}"
+
+输出主机清单中不在www中的所有主机
+debug: msg={{ item }}
+with_inventory_hostnames: all:!www
 -------------------------------- Ansible 内置高级变量：hostvars, group_names, groups 
 主机：
   [DB_cluster]
