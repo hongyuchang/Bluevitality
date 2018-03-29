@@ -131,11 +131,12 @@
 │   ├── 日志及监控
 │   │   ├── Elasticsearch
 │   │   │   └── Plugins
-│   │   ├── ELK Stack - Memo
+│   │   ├── ELK Stack
 │   │   │   └── 资料
 │   │   ├── Filebeat
 │   │   │   └── 软件
 │   │   ├── Logrotate
+│   │   ├── Logstash
 │   │   ├── Mutt + Mstmp
 │   │   ├── Rsyslog
 │   │   └── Zabbix
@@ -291,4 +292,4 @@
     │   └── Improve
     └── Tools
 
-291 directories
+292 directories
