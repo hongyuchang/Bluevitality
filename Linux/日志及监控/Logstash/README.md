@@ -7,7 +7,7 @@ filebeat:
         - /home/wangyu/Test/access.log
       input_type: log
       document_type: oslog
-      scan_frequency: 2s              //每2s扫描一次
+      scan_frequency: 2s              #每2s扫描一次
 output.kafka: 
   enabled: true 
   hosts: ["10.0.0.3:9092"]
@@ -24,7 +24,7 @@ output.kafka:
 kafka-topics.sh --create --zookeeper 10.0.0.3:21811 --replication-factor 1 --partitions 1 --topic ES
 ```
 #### Logstash
-```logstash
+```bash
 input{
     kafka {
         bootstrap_servers => "10.0.0.3:9092"    #Kafka Address
