@@ -7,13 +7,13 @@ filebeat:
         - /home/wangyu/Test/access.log
       input_type: log
       document_type: oslog
-      scan_frequency: 2s              #每2s扫描一次
+      scan_frequency: 2s              #Every 2s scan ..
 output.kafka: 
   enabled: true 
   hosts: ["10.0.0.3:9092"]
   topic: ES                           #MQ Topic
   partition.round_robin:
-    required_acks: 1                  #需要ACK回应
+    required_acks: 1                  #Need kafka Ack
     max_message_bytes: 1000000
 #output.console:
 #    pretty: true
