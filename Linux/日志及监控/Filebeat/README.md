@@ -100,13 +100,17 @@ output：
 filebeat:
   prospectors:
     - paths:
-        - /var/log/messages
+        - /home/wangyu/Test/access.log
       input_type: log
       document_type: oslog
+      scan_frequency: 2s
 output.kafka: 
   enabled: true 
   hosts: ["10.0.0.3:9092"] 
   topic: ES
+  partition.round_robin:
+    required_acks: 1
+    max_message_bytes: 1000000
 #output.console:
 #    pretty: true
 ```
