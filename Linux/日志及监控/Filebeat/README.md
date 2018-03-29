@@ -118,7 +118,7 @@ output.kafka:
 ```bash
 nohup ./filebeat -e -c filebeat.yml >/dev/null 2>&1 &
 ```
-#### logstash端input使用beats插件接收日志数据
+#### logstash端input使用beats插件接收filebeat发来的日志数据
 ```txt
 input {
   beats {
