@@ -101,16 +101,16 @@ filebeat:
   prospectors:
     - paths:
         - /home/wangyu/Test/access.log
-      input_type: log
-      document_type: oslog
-      scan_frequency: 2s
+      input_type: log                       #输入类型
+      document_type: oslog
+      scan_frequency: 2s                    #扫描频率
 output.kafka: 
   enabled: true 
   hosts: ["10.0.0.3:9092"] 
   topic: ES
   partition.round_robin:
-    required_acks: 1
-    max_message_bytes: 1000000
+    required_acks: 1                        #需要Kafka端回应ack
+    max_message_bytes: 1000000
 #output.console:
 #    pretty: true
 ```
