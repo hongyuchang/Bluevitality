@@ -13,7 +13,7 @@
 
 #### 补充
 ```txt
-rabbitmq,dubbo,ceph,kubernetes
+ES/logstash/filebeat部署的完善说明，nginx/zk/kafka的部署完善说明，rabbitmq,dubbo,ceph,kubernetes
 stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume，Celery
