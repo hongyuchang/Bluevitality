@@ -14,3 +14,34 @@ curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=response=404&pretty'
 
 #查来自Buffalo的
 curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=geoip.city_name=Buffalo&pretty'
+
+#查看集群负载相关信息
+[root@node3 elasticsearch]# curl -X GET http://localhost:9200/_cat/nodes?v      
+host        ip          heap.percent ram.percent load node.role master name 
+192.168.0.7 192.168.0.7            5          76 0.25 d         m      node3
+192.168.0.6 192.168.0.6            6          67 0.16 d         *      node2 
+192.168.0.5 192.168.0.5            5          68 0.08 d         m      node1   
+
+#查看集群health相关信息
+[root@node1 ~]# curl -X GET http://localhost:9200/_cluster/health?pretty
+{
+  "cluster_name" : "elasticsearch",
+  "status" : "green",
+  "timed_out" : false,
+  "number_of_nodes" : 3,
+  "number_of_data_nodes" : 3,
+  "active_primary_shards" : 0,
+  "active_shards" : 0,
+  "relocating_shards" : 0,
+  "initializing_shards" : 0,
+  "unassigned_shards" : 0,
+  "delayed_unassigned_shards" : 0,
+  "number_of_pending_tasks" : 0,
+  "number_of_in_flight_fetch" : 0,
+  "task_max_waiting_in_queue_millis" : 0,
+  "active_shards_percent_as_number" : 100.0
+}
+
+#查看当前节点health相关信息
+[root@node3 ~]# curl -X GET http://localhost:9200/_cat/health                   
+1514807391 19:49:51 elasticsearch green 1 1 0 0 0 0 0 0 - 100.0%
