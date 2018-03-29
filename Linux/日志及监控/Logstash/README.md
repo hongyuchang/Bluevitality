@@ -57,8 +57,8 @@ filter{
 output{
     elasticsearch {
         hosts => ["10.0.0.3:9200"]
-        index => "ES"
-    }
+        index => "es"                   #索引名不要大写
+    }
     stdout {
         codec => "rubydebug"
     }
