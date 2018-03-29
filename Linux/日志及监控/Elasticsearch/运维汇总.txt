@@ -45,3 +45,6 @@ host        ip          heap.percent ram.percent load node.role master name
 #查看当前节点health相关信息
 [root@node3 ~]# curl -X GET http://localhost:9200/_cat/health                   
 1514807391 19:49:51 elasticsearch green 1 1 0 0 0 0 0 0 - 100.0%
+
+#监视集群中的挂起任务，类似于创建索引、更新映射、分配碎片、故障碎片等
+GET http://localhost:9200/_cluster/pending_tasks
