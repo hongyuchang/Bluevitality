@@ -138,6 +138,8 @@ connect: {
 [wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mkdir -p ~/elasticsearch/elasticsearch-5.5.0/plugins/ik && \
 unzip -d ~/elasticsearch/elasticsearch-5.5.0/plugins/ik ./target/releases/elasticsearch-analysis-ik-5.5.0.zip
 
+cd /home/wangyu/elasticsearch/elasticsearch-5.5.0/plugins/ik && mv elasticsearch/* .
+
 #启动ES：
 cd ~/elasticsearch/elasticsearch-5.5.0/bin/ ; ./elasticsearch -d
 
