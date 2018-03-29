@@ -53,7 +53,7 @@ filter{
 
 output{
     elasticsearch {
-        hosts => ["10.0.0.3:9200"]
+        hosts => ["10.0.0.3:9200"]      #Elasticsearch根据请求体中提供的数据自动创建映射
         index => "es"                   #索引名不要大写!
     }
 #    stdout {
