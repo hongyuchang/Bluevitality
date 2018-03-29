@@ -95,6 +95,21 @@ output：
   console:
     pretty: true
 ```
+#### 输出到 kafka
+```yaml
+filebeat:
+  prospectors:
+    - paths:
+        - /var/log/messages
+      input_type: log
+      document_type: oslog
+output.kafka: 
+  enabled: true 
+  hosts: ["10.0.0.3:9092"] 
+  topic: ES
+#output.console:
+#    pretty: true
+```
 #### 启动
 ```bash
 nohup ./filebeat -e -c filebeat.yml >/dev/null 2>&1 &
