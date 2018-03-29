@@ -1,6 +1,6 @@
 #### filebeat --> kafka --> logstash --> Elastic
 #### filebeat
-```txt
+```yaml
 filebeat:
   prospectors:
     - paths:
@@ -23,7 +23,7 @@ output.kafka:
 kafka-topics.sh --create --zookeeper 10.0.0.3:21811 --replication-factor 1 --partitions 1 --topic ES
 ```
 #### Logstash
-```yaml
+```logstash
 input{
     kafka {
         bootstrap_servers => "10.0.0.3:9092"
