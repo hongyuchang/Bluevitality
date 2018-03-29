@@ -6,18 +6,25 @@ ansible_facts["ansible_all_ipv4_addresses"]
 获取版本号的前N个字符
 {{ ansible_distribution[N] }}
 
---------------------------------
+-------------------------------- Ansible 内置高级变量：hostvars, group_names, groups 
 主机：
-  [web]
+  [DB_cluster]
   192.168.111.222 hostnameA
   192.168.111.211 hostnameB
 
 模板：
-  {% for X in groups['web'] %}
+  {% for X in groups['DB_cluster'] %}
    {{ hostvars[X]['ansible_all_ipv4_addresses'][0] }} {{ hostvars[X]['ansible_hostname'] }}
   {% endfor %}
 
 输出：
   192.168.111.222 hostnameA
   192.168.111.211 hostnameB
+  
+[webservers]
+server1 city=amsterdam
+server2 city=london
+server3 city=shanghai
+
+hosts {{ hostvars['server3'].city }}      #每个主机都输出server3的变量shanghai
 --------------------------------
