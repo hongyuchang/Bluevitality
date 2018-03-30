@@ -1,6 +1,6 @@
 #### 备忘
 ```txt
-filebeat由2个主要组件构成：prospector、harvesters：
+Filebeat由2个主要组件构成：prospector、harvesters：
     1.harvesters：负责进行单个文件内容收集，每个Harvester会对1个文件逐行进行读取并把读到的内容发到配置的output中
     2.prospector：管理Harvsters并找到所有需读取的数据源
       若input type是log则Prospector将去配置的路径下查找所有能匹配到的文件然后为每个文件创建一个Harvster
