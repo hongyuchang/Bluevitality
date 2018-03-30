@@ -1,0 +1,14 @@
+input {
+  stdin {
+    codec => multiline {
+      pattern => "^# User@Host:"
+      negate => true
+      what => previous
+    }
+  }
+}
+
+output {
+  elasticsearch { hosts => ["localhost:9200"] }
+  stdout { codec => rubydebug }
+}
