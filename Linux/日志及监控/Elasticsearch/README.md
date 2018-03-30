@@ -45,15 +45,15 @@ Elastic v5.5.0
 #ES对ulimit有要求，此操作需Root权限对安装ES的用户修改ulimit配额，最终使用非root账户启动ES
 [root@localhost ~]# yum -y install bzip2 git unzip maven
 [root@localhost ~]# cat >> /etc/security/limits.conf <<eof
-* soft nofile 655350
-* hard nofile 655350
+* soft nofile 655350        #
+* hard nofile 655350        #进程最大打开文件描述符
 * soft nproc 655350
 * hard nproc 655350
 eof
 
 #修改 /proc
 [root@localhost ~]# cat >> /etc/sysctl.conf <<eof
-fs.file-max = 1000000
+fs.file-max = 1000000       #系统最大打开文件描述符数
 vm.max_map_count=262144
 vm.swappiness = 1
 eof
@@ -64,8 +64,8 @@ eof
 
 #ES的三个配置文件说明
 config/elasticsearch.yml   #主配置文件
-config/jvm.options         #JVM参数配置文件
-cofnig/log4j2.properties   #日志配置
+config/jvm.options         #JVM参数配置文件   ---> 分配JVM内存: ES_HEAP_SIZE=4g
+cofnig/log4j2.properties   #日志配置
 
 #部署 Master Node
 [wangyu@localhost ~]$ cd ~ && tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
@@ -80,9 +80,15 @@ http.port: 9200                     #使用9200接收用户请求（路由地址
 http.cors.enabled: true             #由HEAD插件使用
 http.cors.allow-origin: "*"         #由HEAD插件使用
 node.master: true                   #非Master节点应设为false
+#node.data: false                   #若Master节点不存储数据时
+discovery.zen.ping.timeout:200s
 discovery.zen.ping.unicast.hosts: ["10.0.0.3:19300",...........]     #所有Master组成的列表
+discovery.zen.ping.multicast.enabled:false
+#index.number_of_shards:5           #以下3行配置建议在HEAD插件中指定
+#index.number_of_replicas:0         #
+#index.refresh_interval:120s        #
 
-#部署 DataNode/ClientNode （在其他的节点）
+#部署 DataNode/ClientNode （在其他的节点，以下的部分配置省略）
 [wangyu@localhost ~]$ tar -zxf elasticsearch-5.5.0.tar.gz -C ./elasticsearch/
 [wangyu@localhost ~]$ vim elasticsearch/elasticsearch-5.5.0/config/elasticsearch.yml
 path.data: /home/wangyu/elasticsearch/elasticsearch-5.5.0/data
@@ -138,15 +144,18 @@ connect: {
 
 #安装IK分词，其版本必须与ES严格一致，IK地址：https://github.com/medcl/elasticsearch-analysis-ik/tree/5.x
 [wangyu@localhost bin]$ cd ~ && unzip elasticsearch-analysis-ik-5.5.0.zip -d ~/elasticsearch/
-[wangyu@localhost bin]$ cd ~/elasticsearch/elasticsearch-analysis-ik-5.5.0 ; mvn package  #内存较小的话比较耗时
-[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mkdir -p ~/elasticsearch/elasticsearch-5.5.0/plugins/ik && \
-unzip -d ~/elasticsearch/elasticsearch-5.5.0/plugins/ik ./target/releases/elasticsearch-analysis-ik-5.5.0.zip
+[wangyu@localhost bin]$ cd ~/elasticsearch/elasticsearch-analysis-ik-5.5.0
+[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mvn package #使用maven对源码进行打包，内存较小的话比较耗时
+[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ mkdir -p ~/elasticsearch/elasticsearch-5.5.0/plugins/ik
+[wangyu@localhost elasticsearch-analysis-ik-5.5.0]$ unzip -d ~/elasticsearch/elasticsearch-5.5.0/plugins/ik \ ./target/releases/elasticsearch-analysis-ik-5.5.0.zip
 
 #启动ES：
-cd ~/elasticsearch/elasticsearch-5.5.0/bin/ ; nohup ./elasticsearch -d &> /dev/null &
+cd ~/elasticsearch/elasticsearch-5.5.0/bin/
+nohup ./elasticsearch -d &> /dev/null &
 
 #启动HEAD
-cd ~/elasticsearch/head/node_modules/grunt/bin/ ; nohup ./grunt server &
+cd ~/elasticsearch/head/node_modules/grunt/bin/
+nohup ./grunt server &> /dev/null &
 ```
 #### 测试ES的IK插件分词功能
 ```bash
