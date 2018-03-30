@@ -28,14 +28,14 @@ kafka-topics.sh --create --zookeeper 10.0.0.3:21811 --replication-factor 1 --par
 input{
     kafka {
         bootstrap_servers => "10.0.0.3:9092"    #Kafka Address
-        group_id => "logstash"                  #消费组，同组中的消费者间同时仅能消费相同主题的1个消息
+        group_id => "logstash"                  #要启用消费组，同组的消费者间"竞争"消费相同主题的1个消息
         topics => "ES"                          #消费主题
-        consumer_threads => 1
-        decorate_events => true
+        consumer_threads => 2
+        decorate_events => true
         auto_commit_interval_ms => 1000         #消费间隔，毫秒
         auto_offset_reset => latest             #
-        codec => "json"
-    }
+        codec => "json"                         #将Filebeat传输的消息解析为JSON格式
+    }
 }
 
 filter{
@@ -46,16 +46,18 @@ filter{
         }
     }
     mutate{ 
-        remove_field => ["tags","topic","source","version","name"]  #屏蔽Logstash中的部分KEY（语义）
+        remove_field => ["tags","topic","source","version","name"]  #删除Logstash中部分不需要的"语义"Key
         add_field => [ "log_ip", "10.0.0.3" ]                       #添加指定KEY
     }
 }
 
 output{
-    elasticsearch {
-        hosts => ["10.0.0.3:9200"]      #Elasticsearch根据请求体中提供的数据自动创建映射
-        index => "es"                   #索引名不要大写!
-    }
+    if [type] == "log" {
+        elasticsearch {
+            hosts => ["10.0.0.3:9200"]          #ES根据请求体中提供的数据自动创建映射 (由Logstash自动创建的模板)
+            index => "es"                       #索引名不要大写!
+        }
+    }
 #    stdout {
 #        codec => "rubydebug"
 #    }
