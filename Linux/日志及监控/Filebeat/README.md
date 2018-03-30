@@ -1,14 +1,14 @@
 #### 备忘
 ```txt
 filebeat由2个主要组件构成：prospector、harvesters：
-    1.harvesters：主要负责进行单个文件内容收集，每个Harvester会对一个文件逐行进行读取并把读到的内容发到配置的output中
-    2.prospector：管理Harvsters并找到所有需进行读取的数据源
-      若input type是log，Prospector将会去配置的路径下查找所有能匹配到的文件然后为每个文件创建一个Harvster
-      每个Prospector都运行在自己的Go routime里
+    1.harvesters：负责进行单个文件内容收集，每个Harvester会对1个文件逐行进行读取并把读到的内容发到配置的output中
+    2.prospector：管理Harvsters并找到所有需读取的数据源
+      若input type是log则Prospector将去配置的路径下查找所有能匹配到的文件然后为每个文件创建一个Harvster
+      每个Prospector都运行在自己的Go Routime里
       
-1、当开启filebeat时会启动一或若干探测器进程"prospectors"去检测指定的日志目录或文件
-2、对探测器找出的每个文件，filebeat都会启动收割进程"harvester"，各收割进程读取其文件新内容并将其发到处理程序"spooler"
-3、处理程序会集合这些事件，最后filebeat会发送集合的数据到你指定的地点
+1、启动Filebeat时会启动一或若干探测器进程"prospectors"去检测指定的日志目录或文件...
+2、对探测器找出的每个文件，Filebeat都会启动收割进程"harvester"，各收割进程读取其文件新内容并将其发到处理程序"spooler"
+3、处理程序会集合这些事件，最后Filebeat会发送集合的数据到指定的地点
 ```
 #### 部署 fliebeat
 ```bash
@@ -80,9 +80,13 @@ filebeat:
   prospectors:
     - 
       paths:
-        - /var/log/messages
-      input_type: log
-      document_type: nginx
+        - /var/log/xxxx.log
+      input_type: log                   #向log中添加标签，提供给logstash用于区分不同客户端不同业务的log
+      document_type: system_log         #跟tags差不多，用于区别不同的日志来源
+　  - drop_event:
+     　　when:
+       　　 regexp:
+          　　 message: "^DBG:"
 output.file:
       path: '/tmp/'
       filename: filebeat.txt
