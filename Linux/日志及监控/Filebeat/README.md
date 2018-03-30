@@ -80,8 +80,9 @@ filebeat:
   prospectors:
     - 
       paths:
-        - /var/log/xxxx.log
-      input_type: log                   #向log中添加标签，提供给logstash用于区分不同客户端不同业务的log
+        - /var/log/*.log
+        - /var/log/sshd/*.log
+      input_type: log                   #向log中添加标签，提供给logstash用于区分不同客户端不同业务的log
       document_type: system_log         #跟tags差不多，用于区别不同的日志来源
 　  - drop_event:
      　　when:
