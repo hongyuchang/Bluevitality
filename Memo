@@ -133,11 +133,10 @@
 │   │   │   └── Plugins
 │   │   ├── ELK Stack
 │   │   │   └── 资料
-│   │   ├── Filebeat
-│   │   │   └── 软件
 │   │   ├── Logrotate
 │   │   ├── Logstash
-│   │   │   └── Demo
+│   │   │   ├── Demo
+│   │   │   └── Filebeat
 │   │   ├── Mutt + Mstmp
 │   │   ├── Rsyslog
 │   │   └── Zabbix
@@ -293,4 +292,4 @@
     │   └── Improve
     └── Tools
 
-293 directories
+292 directories
