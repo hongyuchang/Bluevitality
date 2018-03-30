@@ -1,6 +1,6 @@
 #### filebeat  -->  kafka  -->  logstash  -->  Elasticsearch
 #### filebeat
-```yaml
+```bash
 filebeat:
   prospectors:
     - paths:
@@ -41,7 +41,7 @@ input{
 filter{
     grok {
         match => { 
-            #Grok正则从message语义中获取并分割成Key
+            #Grok从message语义中按Patterns获取并分割成Key，其表达式很像C语言中的宏定义
             "message" => '%{IP:client} - - \[%{DATA:time}\] "%{DATA:verb} %{DATA:url_path} %{DATA:httpversion}" %{NUMBER:response} %{NUMBER:} "-" \"%{DATA:agent}\" "-" \"%{NUMBER:request_time}\" -' 
         }
     }
