@@ -271,7 +271,7 @@
 │   ├── Paramiko
 │   ├── Request
 │   ├── SqlAlchemy
-│   ├── 常用库及第三方包（摘）
+│   ├── 常用库及第三方包
 │   │   └── packages
 │   │       ├── imgs
 │   │       └── scikit_learn
