@@ -126,7 +126,7 @@ filebeat:
       fields_under_root: true               #将新增fields设为顶级的JSON字段，而不是将其放在fields字段下
       document_type: oslog
       scan_frequency: 2s                    #扫描频率，默认10秒，过快会占用CPU
-      encoding：plain                       #编码，默认无，plain不验证或改变输入、latin1、utf-8、utf-16be-bom...
+      encoding: plain                       #默认无编码，plain不验证或改变输入、latin1、utf-8、utf-16be-bom...
       include_lines: ['^ERR','^WARN']       #匹配行，后接正则的列表，默认无，若启用则仅输出匹配行
       exclude_lines: ["^DBG"]               #排除行，意义同上...
       exclude_files: [".gz$"]               #排除文件，后接正则列表，默认无
@@ -134,8 +134,8 @@ filebeat:
       max_bytes: 10485760                   
       #单文件的最大收集字节数，超过此值后的字节将被丢弃，默认10MB，需增大，保持与日志输出配置的单文件最大值一致即可...
       #日志文件中增加一行算一个日志事件，max_bytes限制在一次日志事件中最多上传的字节数...
-      close_older：6h                       #若文件在某个时间段内未发生过更新则关闭监控的文件handle。默认1h
-      force_close_files：true
+      close_older: 6h                       #若文件在某个时间段内未发生过更新则关闭监控的文件handle。默认1h
+      force_close_files: true
       #Flebeat会在未到达close_older之前一直保持文件的handle，若在这个时间窗内删除文件则会有问题
       #所以可将其设为true，只要filebeat检测到文件名字发生变化就会关掉这个handle
       close_removed: true
