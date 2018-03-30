@@ -13,6 +13,7 @@ Filebeat由2个主要组件构成：prospector、harvesters：
 Filebeat如何保持文件状态：
 其保持每个文件的状态并频繁刷新状态到磁盘上的注册文件，用于记忆"harvesters"读取的最后的偏移量并确保所有日志行被发送
 若ES或Logstash的输出不可达时Filebeat将持续追踪发送的最后一样并继续读取文件，尽快变为可用的输出
+当Filebeat被重启时会使用注册文件读取数据重建状态并让每个收割者"harvesters"从最后的位置开始读取
 ```
 #### 部署 Fliebeat
 ```bash
@@ -112,19 +113,26 @@ filebeat:
         - /home/wangyu/Test/access.log
       enabled: true                         #每个prospectors的开关，默认true
       input_type: log                       #输入类型
-      fields: "TEST"                        #添加字段，可用values，arrays，dictionaries或任何嵌套数据
+      fields: 
+        Level: "TEST"                       #添加字段，可用values，arrays，dictionaries或任何嵌套数据
+      fields_under_root: true               #将新增fields设为顶级的JSON字段，而不是将其放在fields字段下
       document_type: oslog
-      scan_frequency: 2s                    #扫描频率，默认10秒
+      scan_frequency: 2s                    #扫描频率，默认10秒，过快会占用CPU
       encoding：plain                       #编码，默认无，plain不验证或改变输入、latin1、utf-8、utf-16be-bom...
       include_lines: ['^ERR','^WARN']       #匹配行，后接正则的列表，默认无，若启用则仅输出匹配行
       exclude_lines: ["^DBG"]               #排除行，意义同上...
       exclude_files: [".gz$"]               #排除文件，后接正则列表，默认无
       ignore_older: 0                       #排除更改时间超过定义的文件，时间可用2h表示2小时，5m表示5分钟，默认0
       max_bytes: 10485760                   
-      #单文件最大收集字节数，超过此值后的字节将被丢弃，默认10MB，需增大
-      #保持与日志输出配置的单文件最大值一致即可...
-      close_removed: true
+      #单文件的最大收集字节数，超过此值后的字节将被丢弃，默认10MB，需增大，保持与日志输出配置的单文件最大值一致即可...
+      #日志文件中增加一行算一个日志事件，max_bytes限制在一次日志事件中最多上传的字节数...
+      close_older：6h                       #若文件在某个时间段内未发生过更新则关闭监控的文件handle。默认1h
+      force_close_files：true
+      #Flebeat会在未到达close_older之前一直保持文件的handle，若在这个时间窗内删除文件则会有问题
+      #所以可将其设为true，只要filebeat检测到文件名字发生变化就会关掉这个handle
+      close_removed: true
       #若文件不存在则关闭处理。若后面又出现了则会在scan_frequency之后继续从最后一个已知position处开始收集，默认true
+      tail_files: true                      #从尾部开始监控并把新增的每行作为1个事件依次发送，而不是从文件的开始处
 output.kafka: 
   enabled: true 
   hosts: ["10.0.0.3:9092"] 
@@ -135,6 +143,15 @@ output.kafka:
   partition.round_robin:
     required_acks: 1                        #需要Kafka端回应ack
     max_message_bytes: 1000000
+```
+#### 多行匹配
+```txt
+multiline：适用于日志中每一条日志占据多行的情况，如各种语言的报错信息调用栈。此配置又包含如下子配置
+    pattern：    多行日志开始的那一行匹配的pattern
+    negate：     是否需要对pattern条件转置使用，不翻转设为true，反转设置为false
+    match：      匹配pattern后，与前面（before）还是后面（after）的内容合并为一条日志
+    max_lines：  合并的最多行数（包含匹配pattern的那一行）
+    timeout：    到了timeout之后，即使没有匹配一个新的pattern（发生新的事件）也把已经匹配的日志事件发送出去
 ```
 #### 启动
 ```bash
