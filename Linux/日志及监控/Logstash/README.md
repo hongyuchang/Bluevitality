@@ -29,9 +29,9 @@ input{
     kafka {
         bootstrap_servers => "10.0.0.3:9092"    #Kafka Address
         group_id => "logstash"                  #要启用消费组，同组的消费者间"竞争"消费相同主题的1个消息
-        topics => "ES"                          #消费主题
+        topics => "ES"                          #消费主题，生产环境中可使用列表类型来订阅多个主题
         consumer_threads => 2
-        decorate_events => true
+        decorate_events => true                 #属性会将当前topic、offset、group、partition等信息也带到message中
         auto_commit_interval_ms => 1000         #消费间隔，毫秒
         auto_offset_reset => latest             #
         codec => "json"                         #将Filebeat传输的消息解析为JSON格式
@@ -56,6 +56,7 @@ output{
         elasticsearch {
             hosts => ["10.0.0.3:9200"]          #ES根据请求体中提供的数据自动创建映射 (由Logstash自动创建的模板)
             index => "es"                       #索引名不要大写!
+            timeout => 300
         }
     }
 #    stdout {
