@@ -22,6 +22,9 @@ replication（副本）、partition（分区）:
     kafka中的producer能直接发送消息到Leader的partition，而producer能来实现将消息推送到哪些partition
     kafka中同一group的consumer不可同时消费同一partition，在同一topic中同一partition同时只能由一个Consumer消费
     对同一个group的consumer，kafka就可认为是一个队列消息服务，各个consumer均衡的消费相应partition中的数据
+
+分区被分布到集群中的多个服务器上，每个服务器处理它分到的分区，根据配置每个分区还可复制到其它服务器作为备份容错。 
+每个分区有一个leader零或多个follower。Leader处理此分区的所有的读写请求而follower被动的复制数据
 ```
 #### 部署 Kafka
 ```bash
