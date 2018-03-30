@@ -1,4 +1,4 @@
-##### filebeat   -->   kafka   -->   logstash   -->   Elasticsearch
+######    filebeat   -->   kafka   -->   logstash   -->   Elasticsearch
 #### filebeat
 ```bash
 filebeat:
