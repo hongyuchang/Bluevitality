@@ -10,7 +10,9 @@
 #ElasticSearch-Head是与Elastic集群交互的Web前台
 #它展现ES集群的拓扑结构，并且可以通过它来进行索引（Index）和节点（Node）级别的操作
 #提供一组针对集群的查询API，并将结果以json和表格形式返回，提供一些快捷菜单以展现集群的各种状态...
-[root@node1 ~]# /usr/share/elasticsearch/bin/plugin install mobz/elasticsearch-head 
+[root@node1 ~]# /usr/share/elasticsearch/bin/plugin install mobz/elasticsearch-head
+#命令"plugin install"后面的这一串"mobz/elasticsearch-head"是github上的一个地址...
+#若安装失败则手动下载该插件的源码包并解压后直接整个目录mv到ES的插件安装路径下: /usr/share/elasticsearch/plugins/
 
 #Kopf是一个ElasticSearch的管理工具，它也提供了对ES集群操作的API
 [root@node1 ~]# /usr/share/elasticsearch/bin/plugin install lmenezes/elasticsearch-kopf/2.0
