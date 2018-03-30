@@ -14,7 +14,7 @@ Filebeat如何保持文件状态：
 其保持每个文件的状态并频繁刷新状态到磁盘上的注册文件，用于记忆"harvesters"读取的最后的偏移量并确保所有日志行被发送
 若ES或Logstash的输出不可达时Filebeat将持续追踪发送的最后一样并继续读取文件，尽快变为可用的输出
 ```
-#### 部署 fliebeat
+#### 部署 Fliebeat
 ```bash
 [wangyu@localhost filebeat-6.2.3-linux-x86_64]$ tar -zxf filebeat-6.2.3-linux-x86_64.tar.gz -C .
 [wangyu@localhost filebeat-6.2.3-linux-x86_64]$ cd filebeat-6.2.3-linux-x86_64
@@ -58,7 +58,7 @@ Flags:
 
 Use "filebeat [command] --help" for more information about a command.
 ```
-#### filebeat的配置文件：filebeat.yml
+#### Filebeat的配置文件：filebeat.yml Demo
 ```yaml
 filebeat:
   prospectors:
@@ -140,7 +140,7 @@ output.kafka:
 ```bash
 nohup ./filebeat -e -c filebeat.yml >/dev/null 2>&1 &
 ```
-#### logstash端input使用beats插件接收filebeat发来的日志数据
+#### Logstash-input-beats 接收 Filebeat 的日志数据
 ```txt
 input {
   beats {
