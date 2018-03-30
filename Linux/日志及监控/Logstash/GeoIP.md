@@ -1,5 +1,5 @@
 #### Logstash-filter-geoip
-```txt
+```bash
 if [message] !~ "^127\.|^192\.168\.|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[01]\.|^10\." {        #排除私网地址
     geoip {
         source => "message"     #设置解析IP地址的字段
@@ -29,8 +29,8 @@ if [message] !~ "^127\.|^192\.168\.|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[01]\.|
     }
 ```
 #### 指定GeoIP输出的字段
-```txt
-GeoIP库数据较多，若不需要这么多内容则可通过fields选项指定自己所需。下例为全部可选内容
+```bash
+#GeoIP库数据较多，若不需要这么多内容则可通过fields选项指定自己所需。下例为全部可选内容
 geoip {
 　　fields => ["city_name", "continent_code", "country_code2", "country_code3", "country_name",
                "dma_code", "ip", "latitude", "longitude", "postal_code", "region_name", "timezone"]
