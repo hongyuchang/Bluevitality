@@ -58,28 +58,26 @@ Use "filebeat [command] --help" for more information about a command.
 ```yaml
 filebeat:
   prospectors:
-    -
-       paths:
-         - /www/wwwLog/www.lanmps.com_old/*.log
-         - /www/wwwLog/www.lanmps.com/*.log
-       input_type: log 
-       document_type: nginx-access-www.lanmps.com
-    -
-       paths:
-         - /www/wwwRUNTIME/www.lanmps.com/order/*.log
-       input_type: log 
-       document_type: order-www.lanmps.com
-output:
-    -
-       logstash:
-         hosts: ["10.1.5.65:5044"]
+    - paths:
+        - /www/wwwLog/www.lanmps.com_old/*.log
+        - /www/wwwLog/www.lanmps.com/*.log
+      input_type: log 
+      document_type: nginx-access-www.lanmps.com
+    - paths:
+        - /www/wwwRUNTIME/www.lanmps.com/order/*.log
+      input_type: log 
+      document_type: order-www.lanmps.com
+output.logstash:
+      hosts: ["10.1.5.65:5044"]         #Worker代表连到每个Logstash的线程数量
+      worker: 2
+      loadbalance: true
+      index: filebeat
 ```
-#### 测试-1 输出到文件
+#### 测试-1 输出到文件/终端
 ```yaml
 filebeat:
   prospectors:
-    - 
-      paths:
+    - paths:
         - /var/log/*.log
         - /var/log/sshd/*.log
       input_type: log                   #向log中添加标签，提供给logstash用于区分不同客户端不同业务的log
@@ -93,6 +91,8 @@ output.file:
       filename: filebeat.txt
       #rotate_every_kb: 10000
       #number_of_files: 7
+#output.console:
+#    pretty: true
 ```
 #### 测试-2 输出到终端
 ```yaml
@@ -116,8 +116,6 @@ output.kafka:
   partition.round_robin:
     required_acks: 1                        #需要Kafka端回应ack
     max_message_bytes: 1000000
-#output.console:
-#    pretty: true
 ```
 #### 启动
 ```bash
