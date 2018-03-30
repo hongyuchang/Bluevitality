@@ -20,7 +20,7 @@ output.kafka:
 ```
 #### kafka
 ```bash
-#在Broker端创建Logstash的消费主题
+#在Kafka的Broker端创建"Logstash"消费的主题
 kafka-topics.sh --create --zookeeper 10.0.0.3:21811 --replication-factor 1 --partitions 1 --topic ES
 ```
 #### Logstash
