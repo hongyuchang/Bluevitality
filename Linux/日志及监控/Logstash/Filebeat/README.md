@@ -14,6 +14,14 @@ Filebeat如何保持文件状态：
 其保持每个文件的状态并频繁刷新状态到磁盘上的注册文件，用于记忆"harvesters"读取的最后的偏移量并确保所有日志行被发送
 若ES或Logstash的输出不可达时Filebeat将持续追踪发送的最后一样并继续读取文件，尽快变为可用的输出
 当Filebeat被重启时会使用注册文件读取数据重建状态并让每个收割者"harvesters"从最后的位置开始读取
+
+默认的Elasticsearch需要的index template在安装Filebeat时已提供，RPM包路径为/etc/filebeat/filebeat.template.json
+可使用如下命令装载该模板：
+[wangyu@localhost ~]# curl -XPUT -d@/etc/filebeat/filebeat.template.json \
+'http://localhost:9200/_template/filebeat?pretty'
+{
+  "acknowledged" : true
+}
 ```
 #### 部署 Fliebeat
 ```bash
