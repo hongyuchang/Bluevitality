@@ -14,7 +14,8 @@ with_items: "{{ groups['all'] }}"
 输出主机清单中不在www中的所有主机
 debug: msg={{ item }}
 with_inventory_hostnames: all:!www
--------------------------------- Ansible 内置高级变量：hostvars, group_names, groups 
+
+---------------------------------------------------------------- Ansible 内置高级变量：hostvars, group_names, groups 
 主机：
   [DB_cluster]
   192.168.111.222 hostnameA
@@ -35,4 +36,4 @@ server2 city=london
 server3 city=shanghai
 
 hosts {{ hostvars['server3'].city }}      #每个主机都输出server3的变量shanghai
---------------------------------
+---------------------------------------------------------------- 
