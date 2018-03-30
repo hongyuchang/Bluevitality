@@ -9,6 +9,8 @@ Zookeeper在kafka中的作用：
     无论kafka集群还是producer和consumer，都依赖于zookeeper来保证系统可用性集群保存一些meta信息
     Kafka使用zookeeper作为其分布式协调框架，很好的将消息生产、消息存储、消息消费的过程结合在一起
     借助ZK，能将生产、消费者和broker在内的组件在无状态情况下建立起生产/消费者的订阅关系，并实现生产与消费的负载均衡
+    Kafka采用zookeeper作为管理，记录了producer到broker的信息以及consumer与broker中partition的对应关系
+    Broker通过ZK进行leader-->followers的选举，消费者通过ZK保存读取的位置Offset以及读取的topic的partition信息
 
     1. 启动zookeeper的server
     2. 启动kafka的server
@@ -22,6 +24,9 @@ replication（副本）、partition（分区）:
     kafka中的producer能直接发送消息到Leader的partition，而producer能来实现将消息推送到哪些partition
     kafka中同一group的consumer不可同时消费同一partition，在同一topic中同一partition同时只能由一个Consumer消费
     对同一个group的consumer，kafka就可认为是一个队列消息服务，各个consumer均衡的消费相应partition中的数据
+
+由于Broker采用了主题topic-->分区的思想，使得某个分区内部的顺序可保证有序性，但分区间的数据不保证有序性...
+消费者可以以分区为单位自定义读取的位置-->offset
 
 分区被分布到集群中的多个服务器上，每个服务器处理它分到的分区，根据配置每个分区还可复制到其它服务器作为备份容错。 
 每个分区有一个leader零或多个follower。Leader处理此分区的所有的读写请求而follower被动的复制数据
