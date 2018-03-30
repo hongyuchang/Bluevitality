@@ -1,3 +1,9 @@
+#### 安装 GeoIP
+```bash
+wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+tar -zxvf GeoLite2-City.tar.gz
+cp GeoLite2-City.mmdb /data/logstash/       #注:"/data/logstash"是Logstash的安装目录
+```
 #### Logstash-filter-geoip
 ```bash
 if [message] !~ "^127\.|^192\.168\.|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[01]\.|^10\." {        #排除私网地址
