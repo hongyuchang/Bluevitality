@@ -161,6 +161,20 @@ multiline：适用于日志中每一条日志占据多行的情况，如各种�
     max_lines：  合并的最多行数（包含匹配pattern的那一行）
     timeout：    到了timeout之后，即使没有匹配一个新的pattern（发生新的事件）也把已经匹配的日志事件发送出去
 ```
+#### Multiline在Filebeat中的配置方式
+```yaml
+filebeat.prospectors:
+  - paths:
+      - /home/project/elk/logs/test.log
+    input_type: log 
+    multiline:
+      pattern: '^\['
+      negate: true
+      match: after
+output:
+  logstash:
+    hosts: ["localhost:5044"]
+```
 #### 启动
 ```bash
 nohup ./filebeat -e -c filebeat.yml >/dev/null 2>&1 &
