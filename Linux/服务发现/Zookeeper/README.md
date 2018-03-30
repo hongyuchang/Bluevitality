@@ -39,10 +39,10 @@ export ZOOKEEPER_HOME=/usr/local/zookeeper-3.4.10/
 export PATH=$ZOOKEEPER_HOME/bin:$PATH
 [root@localhost zookeeper-3.4.10]# source /etc/profile
 
-#配置文件，注意! 为了避免编码问题，生产环境不要使用中文的注释
+#配置ZK，为避免编码问题不要使用中文注释，ZooKeeper集群中每个节点的配置文件都一样，可直接同步配置文件而不做任何修改!
 [root@localhost zookeeper-3.4.10]# cd conf
 [root@localhost conf]# vim zoo.cfg
-#心跳基本时间单位，C/S间交互的基本时间单元"ms"
+#集群间心跳的基本时间单位，C/S间交互的基本时间单元"ms"
 tickTime=2000
 #集群中的Follower与leader之间初始连接时能容忍的最多心跳数，相当于最大等待时间
 initLimit=10
@@ -68,24 +68,20 @@ server.3=192.168.220.128:6888:7888  #同上...
 # C 指明此节点与集群中的Leader服务器交换信息的端口
 # D 标识的是万一集群中的Leader服务器挂了，需要一个端口来重新选出一个新的Leader，此即用来执行选举时服务器间的通信端口
 
-#启动Zookeeper，在分布式环境中，下面的启动命令要尽量在各节点同时启动
+#启动Zookeeper（在分布式环境下ZK的启动命令要尽量在各节点同时执行）
 [root@localhost conf]# cd ../bin/
 [root@localhost bin]# ./zkServer.sh start
 ZooKeeper JMX enabled by default
 Using config: /usr/local/zookeeper-3.4.10/bin/../conf/zoo.cfg
 Starting zookeeper ... STARTED
 
-#查看进程
-[root@localhost bin]# ps -ef | grep zookeeper
-root      24032      1  1 19:39 pts/0    00:00:00 java -Dzookeeper.log.dir=. -Dzookeeper.root.logger=INFO,CONSOLE -cp /usr/local/zookeeper-3.4.10/bin/../build/classes:/usr/local/zookeeper-3.4.10/bin/../build/lib/*.jar:/usr/local/zookeeper-3.4.10/bin/../lib/slf4j-log4j12-1.6.1.jar:/usr/local/zookeeper-3.4.10/bin/../lib/slf4j-api-1.6.1.jar:/usr/local/zookeeper-3.4.10/bin/../lib/netty-3.10.5.Final.jar:/usr/local/zookeeper-3.4.10/bin/../lib/log4j-1.2.16.jar:/usr/local/zookeeper-3.4.10/bin/../lib/jline-0.9.94.jar:/usr/local/zookeeper-3.4.10/bin/../zookeeper-3.4.10.jar:/usr/local/zookeeper-3.4.10/bin/../src/java/lib/*.jar:/usr/local/zookeeper-3.4.10/bin/../conf: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain /usr/local/zookeeper-3.4.10/bin/../conf/zoo.cfg
-
-#查看状态
+#查看Zookeeper状态
 [root@localhost bin]# ./zkServer.sh status
 ZooKeeper JMX enabled by default
 Using config: /usr/local/zookeeper-3.4.10/bin/../conf/zoo.cfg
 Mode: standalone
 
-#使用客户端工具 zkClient.sh 连接ZK服务端
+#使用客户端工具"zkClient.sh"连接ZK服务端
 [root@localhost bin]# ./zkCli.sh –server 127.0.0.1:13331
 Connecting to localhost:2181
 2017-06-28 20:20:29,331 [myid:] - INFO  [main:Environment@100] - Client environment:zookeeper.version=3.4.10-39d3a4f269333c922ed3db283be479f9deacaa0f, built on 03/23/2017 10:13 GMT
@@ -127,4 +123,3 @@ ZooKeeper -server host:port cmd args
         delete path [version]
         setquota -n|-b val path
 ```
-
