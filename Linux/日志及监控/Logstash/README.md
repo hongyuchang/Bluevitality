@@ -57,6 +57,8 @@ output{
             hosts => ["10.0.0.3:9200"]          #ES根据请求体中提供的数据自动创建映射 (由Logstash自动创建的模板)
             index => "es"                       #索引名不要大写!
             timeout => 300
+            flush_size：100                     #默认500，logstash攒够500条数据再一次性向es发送
+            idle_flush_time：2                  #默认1s，如果1s内没攒够500条还是会一次性将攒的数据发出去给es
         }
     }
 #    stdout {
