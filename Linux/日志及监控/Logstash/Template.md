@@ -60,3 +60,40 @@ GET library/_mapping
    }
 }
 ```
+#### 修改已经存在的Mapping
+```txt
+1.如果要推到现有的映射,你得重新建立一个索引.然后重新定义映射
+2.然后把之前索引里的数据导入到新的索引里
+-------具体方法------
+1.给现有的索引定义一个别名,并且把现有的索引指向这个别名,运行步骤2
+2.运行: PUT /现有索引/_alias/别名A
+3.新创建一个索引,定义好最新的映射
+4.将别名指向新的索引.并且取消之前索引的执行,运行步骤5
+5.运行: POST /_aliases
+        {
+            "actions":[
+                {"remove"    :    {    "index":    "现有索引名".    "alias":"别名A"    }}.
+                {"add"        :    {    "index":    "新建索引名",    "alias":"别名A"    }}
+            ]
+        }
+注意:通过这几个步骤就实现了索引的平滑过渡,并且是零停机
+```
+#### 常用指令
+```txt
+获取index为library,type为books的映射
+GET /libraryyry/_mapping/books
+
+获取集群内所有的映射信息
+GET /_all/_mapping/
+
+获取这个集群内某两个或多个type映射信息(books和bank_account映射信息)
+GET /_all/_mapping/books,bank_account
+
+DELETE /libraryry/books
+
+删除books的映射
+DELETE /libraryry/books/_mapping
+
+删除多个映射
+DELETE /libraryry/_mapping/books,bank_acount
+```
