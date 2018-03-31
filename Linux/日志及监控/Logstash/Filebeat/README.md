@@ -150,7 +150,7 @@ output.kafka:
   timeout: 90
   compression_level:0                       #gzip压缩级别，默认0不压缩（耗CPU）
   partition.round_robin:
-    required_acks: 1                        #需要Kafka端回应ack
+    required_acks: 1                        #需要Kafka端回应ack 
     max_message_bytes: 1000000
 ```
 #### 多行匹配
