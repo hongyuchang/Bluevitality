@@ -36,4 +36,4 @@
 #### 查看构建的输出
 ![jenkins-img](资料/Imgaes/12构建输出.png)
 #### 使用Git Parameter插件获取GIt标签
-![Git-Parameter](资料/Images/Git-Parameter.gif)
+![Git-Parameter](资料/Images/GitParameter.gif)
