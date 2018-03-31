@@ -148,7 +148,7 @@ output.kafka:
   topic: ES
   max_retries: 3
   timeout: 90
-  compression_level:0                       #gzip压缩级别，默认0不压缩（耗CPU）
+  compression_level: 0                      #gzip压缩级别，默认0不压缩（耗CPU）
   partition.round_robin:
     required_acks: 1                        #需要Kafka端回应ack 
     max_message_bytes: 1000000
