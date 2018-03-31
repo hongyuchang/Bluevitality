@@ -25,3 +25,38 @@ curl-XPUThttp://10.10.1.244:9200/_template/logstash2-d'
 	}
 }
 ```
+```txt
+其中的"_default_"字段特指针对此索引下所有类型的的JSON定义其映射，也可以修改为单独针对某一特定类型下的JSON映射...
+```
+#### Example
+```json
+GET library/_mapping
+{
+   "library": {
+      "mappings": {
+         "books": {
+            "properties": {
+               "name": {
+                  "type": "string",
+                  "index": "not_analyzed"
+               },
+               "number": {
+                  "type": "object",
+                  "dynamic": "true"
+               },
+               "price": {
+                  "type": "double"
+               },
+               "publish_date": {
+                  "type": "date",
+                  "format": "dateOptionalTime"
+               },
+               "title": {
+                  "type": "string"
+               }
+            }
+         }
+      }
+   }
+}
+```
