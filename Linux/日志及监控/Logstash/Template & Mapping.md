@@ -60,6 +60,30 @@ GET library/_mapping
    }
 }
 ```
+#### 关于 Mapping 中的动态映射
+```txt
+当Elasticsearch遇到文档中以前未遇到的字段，它用"dynamic mapping"来确定字段的数据类型并自动把新的字段添加到类型映射...
+参数"dynamic"可用在根object或任何object类型的字段上。可将dynamic的默认值设置为strict,而只在指定的内部对象中开启它，如：
+PUT /my_index
+{
+    "mappings": {
+        "my_type": {
+            "dynamic":      "strict", 
+            "properties": {
+                "title":  { "type": "string"},
+                "stash":  {
+                    "type":     "object",
+                    "dynamic":  true 
+                }
+            }
+        }
+    }
+}
+---------------------------
+true	动态添加新的字段--缺省
+false	忽略新的字段
+strict	如果遇到新字段抛出异常
+```
 #### 关于 Mapping 中的"index"字段的说明
 ```txt
 {
@@ -69,10 +93,22 @@ GET library/_mapping
     }
 }
 ---------------------------
-值	       解释
-analyzed	首先分析这个字符串，然后索引。换言之，以全文形式索引此字段。
-not_analyzed	索引这个字段，使之可以被搜索，但是索引内容和指定值一样。不分析此字段。
-no		不索引这个字段。这个字段不能为搜索到。
+analyzed：	首先分析这个字符串，然后索引。换言之，以全文形式索引此字段。
+not_analyzed：	索引这个字段，使之可以被搜索，但是索引内容和指定值一样。不分析此字段。
+no：		不索引这个字段。这个字段不能为搜索到。
+```
+#### 指定Analyzed的分析器
+```txt
+{
+    "tweet": {
+        "type":     "string",
+        "analyzer": "english"
+    }
+}
+---------------------------
+对于Analyzed类型的字符串字段可使用参数"Analyzer"来指定哪种分析器将在搜索和索引的时使用
+默认的，Elasticsearch使用standard分析器，但是可通过指定一个内建的分析器来更改它，例如: whitespace、simple、english
+注: Elasticsearch是一个Schema-less的系统，但并不代表No shema，而是尽量根据JSON源数据的基础类型猜测想要的字段类型映射
 ```
 #### 修改已经存在的Mapping
 ```txt
