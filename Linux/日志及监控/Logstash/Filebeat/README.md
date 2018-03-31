@@ -15,6 +15,7 @@ Filebeat如何保持文件状态：
 若ES或Logstash的输出不可达时Filebeat将持续追踪发送的最后一样并继续读取文件，尽快变为可用的输出
 当Filebeat被重启时会使用注册文件读取数据重建状态并让每个收割者"harvesters"从最后的位置开始读取
 
+注: 转发时Filebeat会传输JOSN对象，且原生的Nginx等App的日志文本会作为JSON中的Message字段存在...
 默认的Elasticsearch需要的index template在安装Filebeat时已提供，RPM包路径为/etc/filebeat/filebeat.template.json
 可使用如下命令装载该模板：
 [wangyu@localhost ~]# curl -XPUT -d@/etc/filebeat/filebeat.template.json \
