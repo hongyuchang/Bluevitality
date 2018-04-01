@@ -2,42 +2,46 @@
 
 #### RocketMQ 术语
 ```txt
-Topic：
-    表示消息的第一级类型（对消息分类），如在电商系统中消息可分为：交易消息、物流消息等，1条消息必须属于1个Topic
+Topic
+    表示消息的第一级类型，如在电商系统中消息可分为：交易消息、物流消息等，1条消息必须属于1个Topic
 
-Tag：
+Tag
     表示消息的第二级类型，如交易消息中又可以分为交易创建消息，交易完成消息...
     一条消息可以没有Tag。RocketMQ提供2级消息分类，方便灵活的控制，如过滤...
+    
 Queue 
     在一个Topic下可设置多个queue（消息队列）。当发送消息时必需指定此消息的topic
     RocketMQ会轮询该topic下的所有队列，将消息发送出去。
     
-NameServer: 
-    提供轻量级服务发现和路由。 NS间共享信息，每个NameServer都记录完整的路由信息，提供等效的读写服务并支持快速存储扩展。
-    NameServer无状态，可横向扩展。每个Broker在启动时都要到NameServer进行注册
-    Producer在发送消息前会根据topic到NameServer获取路由(到broker)信息；Consumer也会定时获取topic路由信息...
-    1.接收Broker请求，注册broker的路由信息
-    2.接收Client请求，根据某个topic获取其到broker的路由信息
+NameServer
+    提供轻量级服务发现和路由。 NS间数据是相同的，每个NS都记录完整的路由信息，提供等效的读写服务并支持快速存储扩展
+    NS与NS间没有关系，Broker与每个NameServer进行定时注册，NS无状态，可横向扩展。每个Broker启动时都要到NS进行注册
+    Producer在发送消息前会根据topic到任一NS获取路由(到Broker)信息，Consumer也会定时获取Topic路由信息...
+    1. 接收Broker请求，并注册Broker的路由信息（包括Master和Slave）
+    2. 接收Client请求，根据其请求的Topic获取其到Broker的路由信息
     
-Broker: 
-    通过提供轻量级Topic和Queue机制来处理消息存储,同时支持推"push"和拉"pull"模式以及主从结构的容错机制。
-    是消息的中转者，负责存储和转发消息。可理解为消息队列服务器，提供了消息的接收、存储、拉取和转发服务。
-    Broker是RocketMQ的核心，它不不能挂的! 所以需要保证broker的高可用。
+Broker
+    通过提供轻量级Topic和Queue机制来处理消息存储，同时支持"push"、"pull"模式以及Master/Slave形式的容错机制
+    它是消息中转者，可视为为消息队列服务器，提供了消息的接收、存储、拉取和转发服务
+    Broker是RocketMQ的核心，它是不能挂的! 所以需要保证Broker的高可用，因此建议对每个Broker采用M/S结构。
+    Broker启动时会启动定时任务，每10s向所有Namesrv发送心跳请求，同时也注册Topic信息到Namesrv
+    对于kafka集群，其中1个节点为Master，且不用干预，Master是kafka自动选出的，但RocketMQ的M、S都需手动指定
 
-Producer与Producer Group： 
+Producer与Producer Group
     是消息的生产者，拥有相同Producer Group的Producer组成1个集群。
-    消息队列的本质就是实现了publish-subscribe（发布/订阅）模式，它一般是指业务系统。
-    Producer与NameServer集群中的其中一个节点（随机选择）建立长连接
-    其定期从NameServer获取Topic的路由信息，并向提供Topic服务的Broker Master建立长连接且定时向Broker发心跳
+    消息队列的本质就是实现了publish/subscribe（发布/订阅）模式，它一般是指业务系统。
+    Producer与NameServer集群中的其中1个节点（随机）建立长连接
+    其定期从NS获取Topic的路由信息，并向提供Topic服务的Broker-Master建立长连接且定时向它发送自己的心跳
 
 Consumer与Consumer Group 
     是消息的消费者，一般由后台系统异步消费消息，接收消息进行消费的实例
+    Consumer与一个NameServer长连，若该NameServer断开则从NameServer列表中查找下一个进行连接...
     Consumer Group是一类Consumer的集合名称，这类Consumer通常消费一类消息，且消费逻辑一致。
     Producer只能将消息发到Broker master，但Consumer则不同，其同时和提供Topic服务的Master和Slave建立长连接
     其既可从Broker Master订阅消息，也可以从Broker Slave订阅消息
 
 广播消费：
-    一条消息被若干Consumer消费，即使它们属于相同Consumer Group，消息也会被Consumer Group中的每个Consumer消费1次
+    一条消息被若干Consumer消费，即使它们属于相同Consumer Group，消息也会被Consumer Group中的每个Consumer消费1次!
     在广播消费中的Consumer Group概念可以认为在消息划分方面无意义。
     
 集群消费： 
@@ -97,7 +101,7 @@ serverPooledByteBufAllocatorEnable=false
 brokerClusterName=rocketmq-cluster
 #Broker的名字，注意! 此处不同的配置文件中填写的不一样
 brokerName=broker-a
-#若ID=0则表示其为Master、ID>0则表示其为Slave
+#Id=0为Master，大于0为Slave
 brokerId=0
 #集群中NameServer的所有地址，分号分割
 namesrvAddr=192.168.133.128:10401;192.168.133.130:10401
@@ -156,7 +160,7 @@ flushDiskType=ASYNC_FLUSH
 # - SLAVE
 brokerRole=ASYNC_MASTER
 ```
-##### 关于服务的优化部分，查看bin下的/runbroker.sh、runserver.sh
+##### 关于服务的优化部分查看bin下的 /runbroker.sh、runserver.sh
 #### 服务的启停
 ```bash
 #启动RocketMQ，注意! 先分别在各节点启动"mqnamesrv"，然后再分别启动"mqbroker"
@@ -239,4 +243,11 @@ sh mqadmin consumerProgress -g TOPIC_BUSI_LOG_Consumer_Group -n 192.168.133.128:
 
 # 获取Consumer消费进度
 sh mqadmin getConsumerStatus -g 消费者属组 -t 主题 -i Consumer客户端ip -n NameServerIP:Port
+```
+#### Memo
+```txt
+kafka的topic里面有分区和副本的概念，使用之前都是根据数据量手动创建，对于rocketmq也一样，需要手动创建topic
+rocketmq的topic中有队列(queue)的概念，也就是说一个节点上面可以有多个队列，这样能非常大的提高并发性
+而kafka最多只能是一个分区一个进程消费，这样并发性限制非常大，并且单机分区数量不能过多，超过64个分区就出现明显的不稳定
+但是rocketmq单机支持上万队列，所以并发性能非常好...
 ```
