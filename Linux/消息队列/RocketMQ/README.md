@@ -156,7 +156,7 @@ flushDiskType=ASYNC_FLUSH
 # - SLAVE
 brokerRole=ASYNC_MASTER
 ```
-##### 关于服务的优化部分，查看 bin/runbroker.sh 和 bin/runserver.sh
+##### 关于服务的优化部分，查看bin下的/runbroker.sh、runserver.sh
 #### 服务的启停
 ```bash
 #启动RocketMQ，注意! 先分别在两个节点启动 mqnamesrv，然后再分别启动 mqbroker
