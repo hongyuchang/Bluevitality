@@ -52,7 +52,7 @@ Consumer与Consumer Group
 #    Master2 192.168.133.130  nameServer2,brokerServer1
     
 #部署JDK
-mkdir jdk
+[root@localhost ~]# mkdir jdk
 [root@localhost ~]# tar -zxf jdk.tar.gz -C /root/jdk && cd /root/jdk 
 [root@localhost ~]# mv jdk1.8.0_101 java
 
@@ -60,7 +60,7 @@ mkdir jdk
 [root@localhost ~]# tar -zxf alibaba-rocketmq-master3.tar.gz -C /root
 [root@localhost ~]# mkdir -p /root/alibaba-rocketmq-master3/{store,logs}  #内部的定制版本注意要先删除旧数据
 
-#设置环境变量: ROCKETMQ_HOME 和 JAVA_HOME（生产环境中注意要写入~/.bash_profile）
+#环境变量: ROCKETMQ_HOME、JAVA_HOME（生产环境注意写入~/.bash_profile）
 [root@localhost alibaba-rocketmq-master3]# export ROCKETMQ_HOME=/root/alibaba-rocketmq-master3
 [root@localhost alibaba-rocketmq-master3]# export JAVA_HOME=/home/jdk/java
 
@@ -97,7 +97,7 @@ serverPooledByteBufAllocatorEnable=false
 brokerClusterName=rocketmq-cluster
 #Broker的名字，注意! 此处不同的配置文件中填写的不一样
 brokerName=broker-a
-#若ID为0则表示Master，若ID>0则表示Slave
+#若ID=0则表示其为Master、ID>0则表示其为Slave
 brokerId=0
 #集群中NameServer的所有地址，分号分割
 namesrvAddr=192.168.133.128:10401;192.168.133.130:10401
@@ -159,9 +159,9 @@ brokerRole=ASYNC_MASTER
 ##### 关于服务的优化部分，查看bin下的/runbroker.sh、runserver.sh
 #### 服务的启停
 ```bash
-#启动RocketMQ，注意! 先分别在两个节点启动 mqnamesrv，然后再分别启动 mqbroker
+#启动RocketMQ，注意! 先分别在各节点启动"mqnamesrv"，然后再分别启动"mqbroker"
 [Any-Node@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
-nohup sh mqnamesrv -c /root/alibaba-rocketmq-master3/conf/mqnamesrv.properties &> &
+nohup sh mqnamesrv -c /root/alibaba-rocketmq-master3/conf/mqnamesrv.properties &> /dev/null &
 
 [Any-Node@localhost ~]# cd /root/alibaba-rocketmq-master3/bin/ && \
 nohup sh mqbroker -c /root/alibaba-rocketmq-master3/conf/2m-noslave/broker-a.properties  &> /dev/null &
@@ -200,7 +200,7 @@ updateSubGroup：创建（修订）订阅组
 ```txt
 # 先删除两个节点 logs、store目录下的所有文件......
 
-# 创建topic，在一个节点实例下执行就可以
+# 创建topic，在一个节点实例下执行即可
 cd /root/alibaba-rocketmq-master3/bin/
 sh mqadmin updateTopic -c rocketmq-cluster -n 192.168.133.128:10401 -t TOPIC_ORDER_SNAPSHOT -r 8 -w 8
 sh mqadmin updateSubGroup -g TOPIC_ORDER_SNAPSHOT_Consumer_Group -s true -r 1 -b 192.168.133.128:10411  -n 192.168.133.128:10401
