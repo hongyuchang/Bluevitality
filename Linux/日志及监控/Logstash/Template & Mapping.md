@@ -103,12 +103,16 @@ no：		不索引这个字段。这个字段不能为搜索到。
     "tweet": {
         "type":     "string",
         "analyzer": "english"			<---- 如 "ik_max_word" (使用IK分词的max_word)
+	"search_analyzer": "ik_max_word"
     }
 }
 ---------------------------
 对于Analyzed类型的字符串字段可使用参数"Analyzer"来指定哪种分析器将在搜索和索引的时使用
-默认的，Elasticsearch使用standard分析器，但是可通过指定一个内建的分析器来更改它，例如: whitespace、simple、english
-注: Elasticsearch是一个Schema-less的系统，但并不代表No shema，而是尽量根据JSON源数据的基础类型猜测想要的字段类型映射
+默认的，Elastic使用standard分析器，但可通过指定一个内建的分析器来更改它，例如: whitespace、simple、english
+注: Elastic是一个Schema-less的系统但并不代表No shema，而是尽量根据JSON源数据的基础类型猜测想要的字段类型映射
+
+analyzer 是字段文本的分词器
+search_analyzer 是搜索词的分词器
 ```
 #### 修改已经存在的Mapping
 ```txt
