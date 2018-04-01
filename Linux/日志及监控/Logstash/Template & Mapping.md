@@ -102,7 +102,7 @@ no：		不索引这个字段。这个字段不能为搜索到。
 {
     "tweet": {
         "type":     "string",
-        "analyzer": "english"			<---- ik_max_word (使用IK分词的max_word)
+        "analyzer": "english"			<---- 如 "ik_max_word" (使用IK分词的max_word)
     }
 }
 ---------------------------
