@@ -317,3 +317,9 @@ node3  192.168.0.7:8301  alive   client  0.8.1  2         dc1
 成员失效时Consul会自动尝试对失效节点重连等待并允许其从某些网络条件下恢复起来，而离开的节点则不再继续联系
 若agent作为服务器端，那么优雅的离开是很重要的! 这可以避免引起潜在的可用性故障影响达成一致性协议...
 ```
+#### Consul 内置的DNS与生产环境的原DNS服务间的转发处理
+```txt
+1、原内网服务器，做DNS转发：将consul后缀域的都转发到consul server上
+2、DNS全部跳转到consul DNS服务器上，非consul后缀的使用consul server自身的recurors属性跳转到原DNS服务器上
+3、dnsmap转： server=/consul/10.6.X.X#8600 解析consul后缀的
+```
