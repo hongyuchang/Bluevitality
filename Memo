@@ -133,6 +133,8 @@
 │   │   │   └── Plugins
 │   │   ├── ELK Stack - 2016
 │   │   │   └── 资料
+│   │   ├── Kibana
+│   │   │   └── 资料
 │   │   ├── Logrotate
 │   │   ├── Logstash
 │   │   │   ├── Demo
@@ -292,4 +294,4 @@
     │   └── Improve
     └── Tools
 
-292 directories
+294 directories
