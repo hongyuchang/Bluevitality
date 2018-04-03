@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 #Jenkins启动时读取此环境变量作为其工作空间路径
 export JENKINS_HOME="/home/zyzx/jenkins/tomcat_jenkins2/jenkins"
 
