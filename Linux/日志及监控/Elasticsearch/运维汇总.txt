@@ -14,6 +14,11 @@ yellow open   .kibana               1   1         94            0    102.3kb    
 #删除索引文件以释放空间
 curl -XDELETE http://10.0.0.3:9200/filebeat-2016.12.28
 
+#查看ES集群中各节点的磁盘使用率
+[wangyu@localhost ~]$ curl -XGET 10.0.0.3:9200/_cat/allocation?v
+shards disk.indices disk.used disk.avail disk.total disk.percent host     ip       node
+     7      173.1kb       3gb     14.4gb     17.4gb           17 10.0.0.3 10.0.0.3 node1
+
 #返回状态非404的
 curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=response=404&pretty'
 
