@@ -138,5 +138,5 @@ bin/kafka-console-producer.sh --broker-list 192.168.133.130:9092 --topic ES
 #通过group_id查看当前详细的消费情况
 ./kafka-consumer-groups.sh --group logstash --describe --zookeeper 127.0.0.1:2181
 输出：
-GROUP-消费者组	TOPIC-话题id	PARTITION-分区id	CURRENT-OFFSET-当前已消费条数	LOG-END-OFFSET-总条数	LAG-未消费条数
+GROUP-消费者组 TOPIC-话题id PARTITION-分区id CURRENT-OFFSET-当前已消费条数 LOG-END-OFFSET-总条数 LAG-未消费条数
 ```
