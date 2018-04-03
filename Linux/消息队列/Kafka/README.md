@@ -109,6 +109,9 @@ bin/kafka-server-stop.sh
 #创建主题
 ./kafka-topics.sh --zookeeper 192.168.133.130:2181 --create --replication-factor 1 --partitions 1 --topic ES
 
+#删除主题
+./kafka-topics.sh --zookeeper 192.168.133.130:2181 --delete --topic ES
+
 #查看所有主题
 ./kafka-topics.sh --zookeeper 192.168.133.130:2181 --list
 
