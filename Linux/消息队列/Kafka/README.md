@@ -2,7 +2,7 @@
 ```txt
 kafka是分布式、支持分区、多副本的，是一个基于zookeeper进行协调的分布式消息系统
 其消息能够被持久化到磁盘并且支持数据的备份防止丢失，能支持上千个客户端的同时读写
-Kafka只是分为一个或多个分区的主题的集合，Kafka分区是消息的线性有序序列，其中每个消息由它们的索引(称为偏移)来标识
+Kafka只是分为一个或多个分区的主题的集合，Kafka分区是消息的线性有序序列，其中每个消息由它们的索引 (称为偏移) 来标识
 集群中的所有数据都是不相连的分区联合。传入消息写在分区末尾，消息由消费者顺序读取，通过将消息复制到不同的代理提供持久性
 
 Zookeeper在kafka中的作用：
@@ -103,30 +103,37 @@ bin/kafka-server-stop.sh
 ```
 #### 运维相关命令
 ```bash
+#启动服务
+./kafka-server-start.sh -daemon ../config/server.properties 
+
 #创建主题
-bin/kafka-topics.sh --create --zookeeper 192.168.133.130:2181 --replication-factor 1 --partitions 1 --topic CRM-TRACE-TOPIC
+./kafka-topics.sh --zookeeper 192.168.133.130:2181 --create --replication-factor 1 --partitions 1 --topic ES
 
-#查看所有topic
-bin/kafka-topics.sh --zookeeper 192.168.133.130:2181 --list
+#查看所有主题
+./kafka-topics.sh --zookeeper 192.168.133.130:2181 --list
 
-#查看topic的详细信息
-bin/kafka-topics.sh -zookeeper  192.168.133.130:2181 -describe -topic CRM-TRACE-TOPIC
+#查看主题的详细信息
+./kafka-topics.sh --zookeeper 192.168.133.130:2181 -describe -topic ES
 
-#生产者客户端命令（生产者产生信息是已经总ZK获取到了Broker的数据，因此需填入Broker的地址列表）
-bin/kafka-console-producer.sh --broker-list 192.168.133.130:9092 --topic CRM-TRACE-TOPIC
+#生产者客户端命令（生产者产生信息时已经从ZK获取到了Broker的路由，因此这里要填入Broker的地址列表）
+bin/kafka-console-producer.sh --broker-list 192.168.133.130:9092 --topic ES
 
 #消费者客户端命令
-bin/kafka-console-consumer.sh -zookeeper  192.168.133.130:2181 --from-beginning --topic CRM-TRACE-TOPIC
+./kafka-console-consumer.sh -zookeeper  192.168.133.130:2181 --from-beginning --topic ES
 
-#为topic增加partition
-bin/kafka-topics.sh –zookeeper 127.0.0.1:2181 –alter –partitions 20 –topic CRM-TRACE-TOPIC
+#为Topic增加Partition
+./kafka-topics.sh –-zookeeper 127.0.0.1:2181 -–alter -–partitions 20 -–topic ES 
 
-#为topic增加副本
-bin/kafka-reassign-partitions.sh -zookeeper 127.0.0.1:2181 -reassignment-json-file json/partitions-to-move.json -execute
+#修改消息过期时间 (保存期限)
+./kafka-topics.sh --zookeeper 192.168.133.130:2181 --create \
+--replication-factor 1 --partitions 1 --config delete.retention.ms=86400000
+./kafka-topics.sh –-zookeeper 127.0.0.1:2181 –alter –-topic ES --config delete.retention.ms=1
+
+#为topic增加replication
+./kafka-reassign-partitions.sh --zookeeper 127.0.0.1:2181 -reassignment-json-file json/partitions-to-move.json -execute
 
 #通过group_id查看当前详细的消费情况
-bin/kafka-consumer-groups.sh --group logstash --describe --zookeeper 127.0.0.1:2181
-输出说明：
-GROUP	TOPIC	PARTITION	CURRENT-OFFSET	LOG-END-OFFSET	LAG
-消费者组	话题id	分区id	当前已消费的条数	总条数	 未消费的条数
+./kafka-consumer-groups.sh --group logstash --describe --zookeeper 127.0.0.1:2181
+输出：
+GROUP-消费者组	TOPIC-话题id	PARTITION-分区id	CURRENT-OFFSET-当前已消费条数	LOG-END-OFFSET-总条数	LAG-未消费条数
 ```
