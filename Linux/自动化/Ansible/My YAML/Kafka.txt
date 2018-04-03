@@ -1,7 +1,9 @@
 [kafka]
-10.0.0.4 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa kafka_broker_id=1
-10.0.0.5 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa kafka_broker_id=2
-10.0.0.6 ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa kafka_broker_id=3
+10.0.0.4 kafka_broker_id=1
+10.0.0.5 kafka_broker_id=2
+10.0.0.6 kafka_broker_id=3
+[kafka:vars]
+ansible_ssh_private_key_file=/home/wangyu/.ssh/id_rsa
 ------------------------------------- Playbook ----------------------------------------------------- 
 - hosts: kafka
   remote_user: wangyu
