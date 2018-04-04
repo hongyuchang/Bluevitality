@@ -19,8 +19,8 @@ node {
         stage a[0]
         command = 'cd /home/jenkins/deploy_zhongjianjian' +' && '
         command = command + 'ansible-playbook zhongjianjian.yaml -e'
-        command = command + '"ip='+a[0]+' moudle='+a[1]+' moudle_path='+a[2]+' shoutdown_port='+a[3]+' http_port='+a[4]+' https_port=
-        '+a[5]+' ajp_port='+a[6]+' rmi_port='+a[7]+' dubbo_port='+a[8]+' role=tomcat"'
+        command = command + '"ip='+a[0]+' moudle='+a[1]+' moudle_path='+a[2]+' shoutdown_port='+a[3]+' http_port='+a[4]+' 
+        https_port='+a[5]+' ajp_port='+a[6]+' rmi_port='+a[7]+' dubbo_port='+a[8]+' role=tomcat"'
         sh command
     }
 }
