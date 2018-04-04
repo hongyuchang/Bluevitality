@@ -10,7 +10,13 @@ def ver_keys = [ 'bash', '-c', 'cd /gitrepos/project1; git pull>/dev/null; git b
 ver_keys.execute().text.tokenize('\n')
 ```
 #### Dynamic Choice Parameter 2
-```groovy
+```txt
+----------------------------- Multi-line string parameter
+Name: tomcat_excel
+
+Default Value:
+ip moudle moudle_path shutdown_port http_port https_port ajp_port rmi_port dubbo_port
+----------------------------- pipline scripts
 node {
     def text = "${tomcat_excel}"
     def lines = text.split('\n')
