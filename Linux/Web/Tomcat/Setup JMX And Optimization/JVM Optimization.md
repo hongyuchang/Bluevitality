@@ -37,7 +37,7 @@ $JAVA_OPTS
 #或，使用环境变量的方式调整：export $CATALINA_OPTS="-Xmx256m ......"
 ```
 
-![JVM](资料/JVM.png)
+![JVM](../资料/JVM.png)
 #### Demo
 ```txt
 set CATALINA_OPTS="
