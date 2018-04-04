@@ -1,22 +1,5 @@
 #!/bin/bash
 
-# Check if user is root
-if [ $(id -u) != "0" ]; then
-    printf "Error: You must be root to run this script!\n"
-    exit 1
-fi
-
-#检查源码包是否存在
-if [ ! -f rsync-3.1.1.tar.gz ]; then
-    printf "Error: rsync-3.1.1.tar.gz not found!\n"
-    exit 1
-fi
-
-#若已存在解压的源码目录先删除
-if [ -s rsync-3.1.1 ]; then
-    rm -rf rsync-3.1.1
-fi
-
 #解压安装
 printf "\nInstall Rsync ...\n\n"
 tar zxvf rsync-3.1.1.tar.gz
@@ -25,12 +8,6 @@ cd rsync-3.1.1
 make
 make install
 cd -
-
-#检查是否存在可执行文件
-if [ ! -f /usr/local/rsync/bin/rsync ]; then
-    printf "Error: rsync compile install failed!\n"
-    exit 1
-fi
 
 #创建配置目录和日志目录
 mkdir -p /usr/local/rsync/etc
@@ -83,7 +60,3 @@ if [ "$isSet" == "0" ]; then
     echo "/usr/local/rsync/bin/rsync --daemon --config=/usr/local/rsync/etc/rsyncd.conf" >> /etc/rc.local
 fi
 
-service rsyncd restart
-
-printf "\nRsync is running ...\n\n"
-ps aux | grep rsync | grep -v "grep"
