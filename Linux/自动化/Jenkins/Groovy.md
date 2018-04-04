@@ -10,7 +10,7 @@ def ver_keys = [ 'bash', '-c', 'cd /gitrepos/project1; git pull>/dev/null; git b
 ver_keys.execute().text.tokenize('\n')
 ```
 #### Dynamic Choice Parameter 2
-```txt
+```groovy
 node {
     def text = "${tomcat_excel}"
     def lines = text.split('\n')
