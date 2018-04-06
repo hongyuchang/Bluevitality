@@ -13,9 +13,9 @@
 
 #### 补充
 ```txt
-ES/logstash/filebeat部署的完善说明，nginx/zk/kafka的部署完善说明，rabbitmq,dubbo,ceph,kubernetes
-stunnel，OpenVPN，IPsec + L2TP，PPTP，tcpcopy
+kubernetes，hive，Hbase，spark，Yarn，rabbitmq,dubbo,ceph，会分析Java程序的僵死，死锁等问题
+stunnel，PPTP，tcpcopy
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
-flume，Celery
+flume
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
 ```
