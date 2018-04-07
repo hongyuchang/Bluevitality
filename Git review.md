@@ -98,8 +98,8 @@ git config 环境设置:
     git branch -av
     注：参数-v附加显示各分支的最后一次提交信息，若仅查看远程仓库信息则使用-r
 
-删除分支：( 未进行合并时需要使用强制删除参数:'branch -D' )
-    git branch -d Name
+删除已经进行合并操作之后的分支：
+    git branch -d BName
 
 在本地创建一个分支后推送到远程仓库：  
     git checkout -b BName
@@ -112,7 +112,7 @@ git config 环境设置:
 列出已经并入了当前分支的其他分支： ( 若不需要已经合并的分支可用 "git branch -d Name" 进行删除 )    
     git branch --merged
     
-列出尚未与当前分支进行合并的分支：     
+列出尚未与当前分支进行合并的分支： ( 未进行合并时需要使用强制删除参数:'branch -D' )
     git branch --no-merged
     
 查看暂存区与工作区间的状态：     
@@ -266,5 +266,7 @@ git config 环境设置:
 对标签详细设置其名字及说明以便区分：     
     git tag -a v3.0 -m "tag info..." 3a1f237 
 ```
+#### Flow
+![git-flow-image](https://images.cnblogs.com/cnblogs_com/cnblogsfans/771108/o_git-flow-nvie.png)
 #### 附
 ![img](Tmp/Git.png)
