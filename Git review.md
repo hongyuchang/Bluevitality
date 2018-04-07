@@ -1,11 +1,12 @@
-﻿流程：
+#### 流程
 > **工作区** ---> **暂存区** ---> **版本库** ---> **远程仓库**  
 > 文件的三种状态：已修改（还未add到Index）---> 已暂存（所有的修改还未提交）---> 已提交（存在版本库中）  
 > HEAD是当前分支版本最顶端的别名，即在当前分支的最后一次提交，相当变量  
 > Index暂存区是一系列将被提交到本地仓库文件集合。它也是将成为HEAD的那个commit对象 
 
 ![commit-tree-blob](http://static.open-open.com/lib/uploadImg/20120201/20120201121719_123.png)
-#### 初始化Git环境
+![git-parent](http://static.open-open.com/lib/uploadImg/20120201/20120201121721_705.png)
+#### 初始化环境
 ```
 生成SSH密钥对:
 ssh-keygen -t rsa -C "youremail@example.com"
