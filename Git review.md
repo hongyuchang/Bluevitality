@@ -104,6 +104,17 @@ git config 环境设置:
     git checkout -b A
     git push origin A:B
 
+将当前分支推送到远程仓库与其对应的分支：
+    git push origin 
+
+将本地所有分支推送到远程仓库：
+    git push --all origin
+    若远程主机的版本比本地新，推送时Git会报错，要求先在本地做"git pull"来合并差异然后再推送到远程主机。
+    此时若一定要推送则可使用"–force"选项
+    
+git push不会推送标签，除非使用–tags选项：
+    git push origin --tags
+
 删除远程仓库特定的分支：
     git push origin :Bname ( 相当于：git push origin --delete master )
     注：原理是是推送空分支到远程即删除，但严格讲不应这样执行  ( git push [远程名] [本地分支]:[远程分支] )
@@ -111,6 +122,11 @@ git config 环境设置:
 将远程仓库origin的serverfix分支迁入到本地的serverfix分支中：
     git checkout -b serverfix  origin/serverfix ( 要为本地分支设定不同于远程分支的名字，只需将左边换个名字 )
     git checkout --track  origin/serverfix  ( 新版Git支持 )
+
+推送lbranch-2到已有的rbranch-1，用于补充rbranch-1：
+    git checkout lbranch-2
+    git rebase rbranch-1
+    git push origin lbranch-2:refs/rbranch-1
 
 列出已经并入了当前分支的其他分支： ( 若不需要已经合并的分支可用 "git branch -d Name" 进行删除 )    
     git branch --merged
@@ -249,13 +265,12 @@ git config 环境设置:
 默认情况下创建的标签仅存在于本地仓库，若需要推送到远程需设置：     
     git push origin TagName
  
-    或一次性推送所有标签：
-        git push origin --tags
+    或一次性推送所有标签：  git push origin --tags
      
 若标签已推到远程后要删除远程标签则麻烦一点：
     首先先从本地删除：   git tag -d v1.0
-    再从远程删除：     git push origin :refs/tags/v1.0
-  
+    再从远程删除：     git push origin :refs/tags/v1.0 或： git push origin :tag_name
+   
 针对当前分支的最新的commit创建一个标签：     
     git tag v1.0
 
@@ -267,7 +282,7 @@ git config 环境设置:
     git show v2.0 
     
 对标签详细设置其名字及说明以便区分：     
-    git tag -a v3.0 -m "tag info..." 3a1f237 
+    git tag -a v3.0 -m "tag info..." 3a1f237
 ```
 #### Flow
 ![git-flow-image](https://images.cnblogs.com/cnblogs_com/cnblogsfans/771108/o_git-workflow-release-cycle-4maintenance.png)
