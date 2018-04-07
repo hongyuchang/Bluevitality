@@ -5,29 +5,28 @@
 > Index：暂存区是一系列将被提交到本地仓库文件集合。它也是将成为HEAD的那个commit对象 
 
 
-#### 初始化Git环境设置
+#### 初始化Git环境
 ```
-生成SSH密钥对：   
+生成SSH密钥对:
 ssh-keygen -t rsa -C "youremail@example.com"
 
-初始化当前目录以生成版本库".git"： 
-    git init . 
+初始化当前目录以生成版本库：
+    git init . 
     
-创建Git服务端的无工作区的裸仓库：  
+创建Git服务端形式的无工作区裸仓库：  
     git init --bare workspace.git
     
-环境设置：    
-    选项 
-        --global：   用户全局，配置信息位于  ~/.gitconfig
-        --system：   系统全局，配置信息位于 /etc/gitconfig
-        --local：    仅当前项目生效，配置信息位于 .git/conf
+git config 环境设置:
+    --global：   用户全局，配置位于  ~/.gitconfig
+    --system：   系统全局，配置位于 /etc/gitconfig
+    --local：    针对当前项目，配置位于 .git/conf
     
 跳过命令设置的方式对特定作用范围的配置文件直接进行编辑：   
-    git config -e [--global | --system | --local]
+    git config -e  [--global|--system|--local]
 
-设置用户信息：  
-    git config --global user.name  "bluevitality"
-    git config --global user.email "inmoonlight@163.com"
+设置用户信息：
+    git config  --global user.name  "bluevitality"
+    git config  --global user.email "inmoonlight@163.com"
     
 设置默认的编辑器：  
     git config --system core.editor vim
@@ -44,7 +43,7 @@ ssh-keygen -t rsa -C "youremail@example.com"
 #### 本地 Git 操作 ...
 ```
 克隆远程仓库到本地：
-    git clone git@github.com/bluevitality/xxxxx.git .  
+    git clone git@github.com/bluevitality/Bluevitality.git  ./Bluevitality  
 
 隐藏当前现场处理其他任务，即保存当前工作区与暂存区的状态：
     git stash
@@ -98,24 +97,22 @@ ssh-keygen -t rsa -C "youremail@example.com"
     git branch -av
     注：参数-v附加显示各分支的最后一次提交信息，若仅查看远程仓库信息则使用-r
 
-删除分支：
+删除分支：( 未进行合并时需要使用强制删除参数:'branch -D' )
     git branch -d Name
-    注：未进行合并时需要使用强制删除参数：-D
 
 在本地创建一个分支后推送到远程仓库：  
-    git checkout -b BName  &&  git push BName origin:BName
+    git checkout -b BName
+    git push BName origin:BName
     
 删除远程仓库分支： 
     git push origin :Bname
     注：原理是是推送空分支到远程即为删除操作，但严格讲不应这样执行
 
-查看哪些分支已经并入了当前的分支中：     
+查看哪些分支已经并入了当前的分支中： ( 若不需要保留可用 "git branch -d Name" 进行删除 )    
     git branch --merged
-    注：若不需要保留可用 "git branch -d Name" 进行删除
     
 查看尚未进行合并的分支：     
     git branch --no-merged
-    注：删除未合并的分支时应使用branch的参数：-D
     
 查看暂存区与工作区间的状态：     
     git status     
@@ -183,11 +180,11 @@ ssh-keygen -t rsa -C "youremail@example.com"
 ```
 #### 远程仓库相关操作
 ```txt
-添加远程仓库并将其设置别名为"origin"：
-    git remote add origin git@github.com/xxxxx/xxxxx.git
+添加远程仓库并将其设置为别名"origin"：
+    git remote add origin git@github.com/Bluevitality/Bluevitality.git
 
 删除远程仓库：
-    git remote rm xxx
+    git remote rm <Bluevitality>
 
 查看远程仓库"origin"的信息：    
     git remote show origin
@@ -195,18 +192,18 @@ ssh-keygen -t rsa -C "youremail@example.com"
 将本地的master分支提交到origin远程仓库：
     git push origin master
     
-将本地other分支的内容推送到远程仓库origin的master分支：  
+将本地other分支的内容推送到远程仓库origin的master分支：
     git push origin other:master
 
 建立本地分支和远程分支的关联：  
-    git branch --set-upstream <本地分支名> origin/<远程分支名>
+    git branch --set-upstream <本地分支名>  origin/<远程分支名>
 
 修改远程仓库名称：  
-    git remote rename Oldname Newname
-    
+    git remote rename <OLDname> <NEWname>
+
 从远程仓库拉取本地仓库还没有的数据：  
     git fetch origin
-    注：fetch仅拉取远端数据到本地而不合并，需手工进行合并
+    注：fetch操作仅拉取远端数据到本地而不合并，需手工进行合并
     
 将从远程仓库（fetch下来的数据）与当前分支进行合并操作：
     git merge origin/master
@@ -239,13 +236,10 @@ ssh-keygen -t rsa -C "youremail@example.com"
 ```
 #### Tag
 ```txt
-针对提交历史中特定提交打标签：
+针对提交历史中特定提交打标签 ( 删除特定标签： git tag -d v2.0 )
     git tag v2.0 6723TUYG
     
-删除特定标签： 
-    git tag -d v1.0
-    
-切换到指定的tag：  
+切换到指定tag：  
     git checkout <Tagname>
 
 默认情况下创建的标签仅存在于本地仓库，若需要推送到远程需设置：     
