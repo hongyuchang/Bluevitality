@@ -4,7 +4,7 @@
 > HEAD是当前分支版本最顶端的别名，即在当前分支的最后一次提交，相当变量  
 > Index暂存区是一系列将被提交到本地仓库文件集合。它也是将成为HEAD的那个commit对象 
 
-
+![commit-tree-blob](http://static.open-open.com/lib/uploadImg/20120201/20120201121719_123.png)
 #### 初始化Git环境
 ```
 生成SSH密钥对:
