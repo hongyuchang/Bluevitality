@@ -105,7 +105,7 @@ git config 环境设置:
     git push origin A:B
 
 删除远程仓库特定的分支：
-    git push origin :Bname
+    git push origin :Bname ( 相当于：git push origin --delete master )
     注：原理是是推送空分支到远程即删除，但严格讲不应这样执行  ( git push [远程名] [本地分支]:[远程分支] )
 
 将远程仓库origin的serverfix分支迁入到本地的serverfix分支中：
