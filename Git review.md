@@ -144,8 +144,8 @@ git config 环境设置:
     git reset filename  或： git reset HEAD filename
     注：相当于git add的反操作...
     
-回退到最新的提交版本：   
-    git reset --hard HEAD  
+回退到最新的提交版本：( --hard 即HEAD、暂存区、工作目录都随之改变，--soft 只变HEAD，--mixed 默认即HEAD、暂存区)
+    git reset --hard HEAD  
 
 回退到之前的第二个版本：     
     git reset --hard HEAD^  
@@ -159,7 +159,7 @@ git config 环境设置:
 撤销刚才的提交：   
     git reset --soft HEAD^
     注：使用 --soft 时，index和working directory中的内容不作任何改变，仅仅把HEAD指向 <commit>。
-    这个模式的效果是，执行后，自<commit>以来的所有改变都会显示在git status的"Changes to be committed"中。 
+    这个模式的效果是自 <commit> 之后的所有改变都会显示在 git status 的"Changes to be committed"中
 
 模拟amend提交（覆盖上一次的提交）：   
     git reset --soft HEAD^ ; git -a -m "amend...." 
