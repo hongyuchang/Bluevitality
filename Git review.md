@@ -41,7 +41,7 @@ git config 环境设置:
 查看所有的Git配置信息：  
     git config --list
 ```
-#### 本地 Git 操作 ...
+#### 本地操作
 ```
 克隆远程仓库到本地：
     git clone git@github.com/bluevitality/Bluevitality.git  ./Bluevitality  
@@ -101,13 +101,17 @@ git config 环境设置:
 删除已经进行合并操作之后的分支：
     git branch -d BName
 
-在本地创建一个分支后推送到远程仓库：  
-    git checkout -b BName
-    git push BName origin:BName
-    
-删除远程仓库分支： 
-    git push origin :Bname
-    注：原理是是推送空分支到远程即为删除操作，但严格讲不应这样执行
+在本地创建A分支后推送到远程仓库"origin"的B分支：  
+    git checkout -b A
+    git push origin A:B
+
+删除远程仓库特定的分支：
+    git push origin :Bname
+    注：原理是是推送空分支到远程即删除，但严格讲不应这样执行  ( git push [远程名] [本地分支]:[远程分支] )
+
+将远程仓库origin的serverfix分支迁入到本地的serverfix分支中：
+    git checkout -b serverfix  origin/serverfix ( 要为本地分支设定不同于远程分支的名字，只需将左边换个名字 )
+    git checkout --track  origin/serverfix  ( 新版Git支持 )
 
 列出已经并入了当前分支的其他分支： ( 若不需要已经合并的分支可用 "git branch -d Name" 进行删除 )    
     git branch --merged
