@@ -271,6 +271,8 @@ git config 环境设置:
 ```
 #### Flow
 ![git-flow-image](https://images.cnblogs.com/cnblogs_com/cnblogsfans/771108/o_git-workflow-release-cycle-4maintenance.png)
+#### Checkout
+![git-checkout](http://marklodato.github.io/visual-git-guide/checkout-files.svg)
 #### Diff
 ![git-diff](http://marklodato.github.io/visual-git-guide/diff.svg)
 #### 附
