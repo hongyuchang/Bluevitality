@@ -109,10 +109,10 @@ git config 环境设置:
     git push origin :Bname
     注：原理是是推送空分支到远程即为删除操作，但严格讲不应这样执行
 
-查看哪些分支已经并入了当前的分支中： ( 若不需要保留可用 "git branch -d Name" 进行删除 )    
+列出已经并入了当前分支的其他分支： ( 若不需要已经合并的分支可用 "git branch -d Name" 进行删除 )    
     git branch --merged
-    
-查看尚未进行合并的分支：     
+    
+列出尚未与当前分支进行合并的分支：     
     git branch --no-merged
     
 查看暂存区与工作区间的状态：     
