@@ -267,6 +267,6 @@ git config 环境设置:
     git tag -a v3.0 -m "tag info..." 3a1f237 
 ```
 #### Flow
-![git-flow-image](https://images.cnblogs.com/cnblogs_com/cnblogsfans/771108/o_git-flow-nvie.png)
+![git-flow-image](https://images.cnblogs.com/cnblogs_com/cnblogsfans/771108/o_git-workflow-release-cycle-4maintenance.png)
 #### 附
 ![img](Tmp/Git.png)
