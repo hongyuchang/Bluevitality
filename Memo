@@ -95,9 +95,9 @@
 │   │   ├── Rsync + Inotity
 │   │   │   ├── Configs
 │   │   │   └── Setup
-│   │   ├── Rsync + Sersync
 │   │   ├── Samba
 │   │   │   └── 资料
+│   │   ├── Sersync
 │   │   ├── Vsftp
 │   │   │   └── config-ftp
 │   │   └── 分区脚本
