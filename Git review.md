@@ -202,9 +202,7 @@ git push不会推送标签，除非使用–tags选项：
 ```txt
 添加远程仓库并将其设置为别名"origin"：
     git remote add origin git@github.com/Bluevitality/Bluevitality.git
-
-删除远程仓库：
-    git remote rm <Bluevitality>
+    删除远程仓库： git remote rm <Bluevitality>
 
 查看远程仓库"origin"的信息：    
     git remote show origin
@@ -253,6 +251,10 @@ git push不会推送标签，除非使用–tags选项：
 
 将本地的状态回退到和远程的一样：
     git reset –hard origin/master
+
+查看远程仓库的分支信息：
+    git remote show <origin>
+    git ls-remote <origin>
 ```
 #### Tag
 ```txt
