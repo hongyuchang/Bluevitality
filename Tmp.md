@@ -6,7 +6,6 @@
 - [ ] LVM的快照备份db脚本
 - [ ] heartbeat(安装部分不完善)，研究
 - [ ] disutils项目打包成模块的demo，sockerserver
-- [ ] Rsyslog+LogAnalyzer+MySQL，gfs2+clvm@coroync，crmsh的md更改
 - [ ] demo（模板改用新版本形式：https://www.cnblogs.com/itcomputer/p/6241421.html ） Rsyslog调用日志并使用模板处理
 - [ ] DNS的rndc
 - [ ] kubernets!!!
@@ -18,4 +17,5 @@ stunnel，PPTP，tcpcopy，VIM的py环境IDE，Hadoop
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
+Python3 开发水平，算法，flask
 ```
