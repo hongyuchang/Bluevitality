@@ -43,3 +43,18 @@ with_inventory_hostnames: all:!www
   {% for v in hostvars.iteritems() %}           #输出每个元素各自的主机名?
    {{ v['ansible_hostname'] }}
   {% endfor %}
+
+---------------------------------------------------------------- 
+
+在首次连接或者重装系统之后会出现检查keys的提示：
+The authenticity of host '192.168.0.5 (192.168.0.5)' can't be established.
+ECDSA key fingerprint is 05:51:e5:c4:d4:66:9b:af:5b:c9:ba:e9:e6:a4:2b:fe.
+Are you sure you want to continue connecting (yes/no)?
+
+解决办法:
+vim /etc/ansible/ansible.cfg 或者~/.ansible.cfg
+[defaults]
+host_key_checking = False
+
+也可以通过设置系统环境变量来禁止这样的提示：
+export ANSIBLE_HOST_KEY_CHECKING=False
