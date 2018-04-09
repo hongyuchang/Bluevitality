@@ -78,7 +78,7 @@
     - name: restart apache
       service: name=httpd state=restarted
     - name: transport file
-      file: path=/etc/{{ item | safe }} mode=0600 owner=root  #safe常用语HTML中，用于取消HTML自动转义
+      file: path=/etc/{{ item | safe }} mode=0600 owner=root  #safe常用于HTML中，用于取消HTML自动转义
       with_items:
         - my.cnf
         - shadow
