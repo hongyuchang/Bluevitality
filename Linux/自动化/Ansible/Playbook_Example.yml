@@ -73,7 +73,7 @@
   - name: crontab example             #Crontab...
     cron: name="custom job" minute=*/3 hour=* day=* month=* weekday=* job="/usr/sbin/ntpdate 172.16.254.139"
   - name: Download file
-    get_url: url=http://10.1.1.116/favicon.ico dest=/tmp
+    get_url: url=http://10.1.1.116/favicon.ico dest=/tmp  #支持HTTP、HTTPS、FTP
   handlers:                           #与notify协调，满足特定条件时触发(与host同级)
     - name: restart apache
       service: name=httpd state=restarted
