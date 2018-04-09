@@ -22,7 +22,7 @@ ssh-keygen -t rsa -C "youremail@example.com"
     git init --bare workspace.git
     
 git config 环境设置:
-    --global：   用户全局，配置位于  ~/.gitconfig
+    --global：   用户全局，配置位于 ~/.gitconfig
     --system：   系统全局，配置位于 /etc/gitconfig
     --local：    针对当前项目，配置位于 .git/conf
     
