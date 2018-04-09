@@ -49,7 +49,7 @@ Demo：
     3、大多数的其它变量(命令行转换,play中的变量,included的变量,role中的变量等)
     4、在Inventory定义的其它变量
     5、由系统通过gather_facts方法发现的Facts
-    6、“Role默认变量”, 这个是最默认的值,很容易丧失优先权
+    6、“Role默认变量”, 这个是最默认的值，很容易丧失优先权
 ```
 #### 查看模块信息
 ```bash
@@ -77,18 +77,16 @@ aci_aep                                   Manage attachable Acc
 ```
 #### 使用非对称密钥
 ```bash
-[root@test ~]# ssh-keygen -t rsa
+[root@test ~]# ssh-keygen -t rsa -P ''
 [root@test ~]# ssh-copy-id -i ~/.ssh/id_rsa.pub 192.168.0.3
 ```
 #### ansible-vault
 ```bash
 ansible-vault 
     enctypt  要加密的文件.yaml  将提示输入密码（运行前需解密或指定其密码文件，若需生成解密秘钥需加入相应选项）
-    create   创建一个需要加密的yaml文件
     edit     用于编辑经过ansible-vault加密过的文件
-    rekey    重新修已被加密文件的密码
-    create   创建一个新文件，并直接对其进行加密
     view     查看经过加密的文件
+    create   创建一个需要加密的yaml文件
+    rekey    重新修已被加密文件的密码
     decrypt  解密文件
-
 ```
