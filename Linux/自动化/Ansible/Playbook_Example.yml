@@ -20,7 +20,7 @@
     with_lines: /usr/bin/cat  /home/fg/test
   - name: exec shell scripts
     shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
-    when: foo is defined
+    when: foo is defined and ( ansible_os_family == "RedHat" or ansible_lsb.major_release|int >= 6 )
   - name: install apache              #用yum模块操作（name是输出到屏幕的信息）
     yum: name=httpd state=installed   #安装
   - name: write the apache config file
@@ -36,14 +36,19 @@
     user: name={{ item.name }} state=present groups={{ item.groups }}
     ignore_errors: True
     with_items:
-      - { name: 'user1', groups: 'wheel' }
-      - { name: 'user2', groups: 'root' }
+      - { name: 'user1', groups: 'wheel', id: '1' }
+      - { name: 'user2', groups: 'root', id: '7'}
+    when: item.name == "user1" or item.id > 5
   - name: Create a register to represent the status if the docker-thinpool exsited
     shell: lsblk | grep docker-thinpool
     register: result                  #捕捉变量的输出结果，输出捕捉内容：command: echo {{ result.stdout }}
     ignore_errors: True
     tags: 
       - docker                        #执行特定tag：ansible-playbook x.yml --tags="docker,xxx1,xxx2,..."
+  - shell: cat /etc/motd
+    register: motd_contents
+  - shell: echo "motd contains the word hi"
+    when: motd_contents.stdout.find('hi') != -1   #对输出进行匹配...
   - debug: msg={{ item }}             # show all the hosts matching the pattern, ie all but the group www
     with_inventory_hostnames: all:!www
   - include: tasks/sometasks.yml
