@@ -20,7 +20,7 @@
     shell: touch /$HOME/{{ item }}    #with_lines的命令永远在controller的主机运行，仅shell模块在目标运行（遍历命令的输出）
     with_lines: /usr/bin/cat  /home/fg/test
   - name: exec shell scripts
-    shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
+    shell: echo "I've got '{{ foo | default('No name', true) }}' and am not afraid to use it!"  #当变量foo未定义时使用默认字串
     when: foo is defined and ( ansible_os_family == "RedHat" or ansible_lsb.major_release|int >= 6 )
   - name: install apache              #用yum模块操作（name是输出到屏幕的信息）
     yum: name=httpd state=installed   #安装
@@ -50,12 +50,12 @@
     register: motd_contents
   - shell: echo "motd contains the word hi"
     when: motd_contents.stdout.find('hi') != -1   #对输出进行匹配...
-  - debug: msg={{ item }}             #show all the hosts matching the pattern, ie all but the group www
-    with_inventory_hostnames: all:!www
-  - include: tasks/sometasks.yml
+  - debug: msg={{ item | round}}             #show all the hosts matching the pattern, ie all but the group www
+    with_inventory_hostnames: all:!www       #round过滤器提供四舍五入功能，列表的第一个元素：first，最后一个元素：last，长度：length
+  - include: tasks/sometasks.yml             #求和：sum，排序：sort，列表的元素间加入'|'： join(' | ')
     when: "'reticulating splines' in output"
     sudo: yes
-  - debug: msg={{ item }}
+  - debug: msg={{ item | upper | truncate(3, True) }}     #转为大写后只显示其前3个字符，后面用...显示
     with_random_choice:
       - "go through the door"
       - "drink from the goblet"
@@ -70,11 +70,15 @@
     when: result|success              #result为success时才执行
   - command: /bin/still/something_else
     when: result|skipped              #skipped：已经执行过跳过执行
+  - name: crontab example             #Crontab...
+    cron: name="custom job" minute=*/3 hour=* day=* month=* weekday=* job="/usr/sbin/ntpdate 172.16.254.139"
+  - name: Download file
+    get_url: url=http://10.1.1.116/favicon.ico dest=/tmp
   handlers:                           #与notify协调，满足特定条件时触发(与host同级)
     - name: restart apache
       service: name=httpd state=restarted
     - name: transport file
-      file: path=/etc/{{ item }} mode=0600 owner=root
+      file: path=/etc/{{ item | safe }} mode=0600 owner=root  #safe常用语HTML中，用于取消HTML自动转义
       with_items:
         - my.cnf
         - shadow
