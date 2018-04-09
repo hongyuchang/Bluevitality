@@ -1,3 +1,8 @@
+groups:   包含了所有Hosts文件里面主机组的一个列表
+group_names:  包含了当前主机所在的所有主机组名的一个列表
+inventory_hostname:   通过Hosts文件定义主机的主机名和ansible_home不一定相同
+play_hosts:   将会执行当前任务的所有主机
+
 主机地址
 ansible_ens33["ipv4"]["address"]
 ansible_facts["ansible_all_ipv4_addresses"]
