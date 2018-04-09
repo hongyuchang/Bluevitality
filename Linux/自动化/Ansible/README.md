@@ -51,6 +51,10 @@ Demo：
     5、由系统通过gather_facts方法发现的Facts
     6、“Role默认变量”, 这个是最默认的值，很容易丧失优先权
 ```
+#### 检查 yaml 语法
+```bash
+[root@test ~]# ansible-lint playbook.yml 
+```
 #### 查看模块信息
 ```bash
 [root@test ~]# ansible-doc -l             #查看所有内置模块
