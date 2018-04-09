@@ -13,7 +13,7 @@
     retries: 5
     delay: 10
   - name: Example of looping over a command result    #循环命令的执行结果
-    shell: touch /$HOME/{{ item }}    #with_lines的命令永远在controller的主机运行，仅shell模块在目标运行
+    shell: touch /$HOME/{{ item }}    #with_lines的命令永远在controller的主机运行，仅shell模块在目标运行（遍历命令的输出）
     with_lines: /usr/bin/cat  /home/fg/test
   - name: exec shell scripts
     shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
@@ -33,8 +33,8 @@
     user: name={{ item.name }} state=present groups={{ item.groups }}
     ignore_errors: True
     with_items:
-      - { name: 'testuser1', groups: 'wheel' }
-      - { name: 'testuser2', groups: 'root' }
+      - { name: 'user1', groups: 'wheel' }
+      - { name: 'user2', groups: 'root' }
   - name: Create a register to represent the status if the docker-thinpool exsited
     shell: lsblk | grep docker-thinpool
     register: result                  #捕捉变量的输出结果，输出捕捉内容：command: echo {{ result.stdout }}
@@ -45,6 +45,12 @@
     with_inventory_hostnames: all:!www
   - include: tasks/sometasks.yml
     when: "'reticulating splines' in output"
+  - debug: msg={{ item }}
+    with_random_choice:
+       - "go through the door"
+       - "drink from the goblet"
+       - "press the red button"
+       - "do nothing"
   handlers:                           #与notify协调，满足特定条件时触发(与host同级)
     - name: restart apache
       service: name=httpd state=restarted
