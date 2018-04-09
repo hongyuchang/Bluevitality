@@ -74,7 +74,12 @@
     cron: name="custom job" minute=*/3 hour=* day=* month=* weekday=* job="/usr/sbin/ntpdate 172.16.254.139"
   - name: Download file
     get_url: url=http://10.1.1.116/favicon.ico dest=/tmp  #支持HTTP、HTTPS、FTP
-  handlers:                           #与notify协调，满足特定条件时触发(与host同级)
+  - name: modify /etc/ntp.conf        #正则匹配替换
+    lineinfile: dest=/etc/ntp.conf  regexp="{{item.regexp}}" line="{{item.line}}"
+    with_items:
+      - { regexp: '^restrict',line: 'restrict default ignore' }
+      - { regexp: 'restrict',line: 'restrict 127.0.0.1'}
+  handlers:                           #与notify协调，满足特定条件时触发
     - name: restart apache
       service: name=httpd state=restarted
     - name: transport file
