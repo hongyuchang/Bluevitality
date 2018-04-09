@@ -5,6 +5,11 @@
 
 ![commit-tree-blob](http://static.open-open.com/lib/uploadImg/20120201/20120201121719_123.png)
 ![git-parent](http://static.open-open.com/lib/uploadImg/20120201/20120201121721_705.png)
+#### Git Log Format
+```txt
+git log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) \
+%C(bold blue)%Creset' --abbrev-commit --date=relative
+```
 #### 初始化环境
 ```
 生成SSH密钥对:
