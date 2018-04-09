@@ -109,8 +109,8 @@ git config 环境设置:
     git checkout -b A
     git push origin A:B
 
-将当前分支推送到远程仓库与其对应的分支：
-    git push origin 
+将当前分支推送到远程仓库与其对应的分支：（将本地所有分支推送到远程仓库中与其对应的分支：git push --all）
+    git push origin 
 
 将本地所有分支推送到远程仓库：
     git push --all origin
