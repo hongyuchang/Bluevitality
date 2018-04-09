@@ -1,10 +1,13 @@
----                                   #Python 中的 dict <==> key:value 与 list <==> - value
-- hosts: webservers                   #从Inventory中抽选的主机或组
-  vars:                               #变量定义
-    http_port: 80           
-    max_clients: 200  
-    foo: test 
-  remote_user: root                   #远端的执行权限
+---
+- hosts: webservers                   #存在于Inventory中的特定主机或组
+  gather_facts: false
+  vars:                               #变量
+    - http_port: 80           
+    - max_clients: 200  
+    - foo: test
+  vars_files:
+    - /home/root/ansible_vars.yml
+  remote_user: root                   #远端执行权限
   tasks:                              #针对以上主机/组要执行的动作，name的值将在执行时输出
   - name: Test
     shell: shell /usr/bin/foo
@@ -45,6 +48,7 @@
     with_inventory_hostnames: all:!www
   - include: tasks/sometasks.yml
     when: "'reticulating splines' in output"
+    sudo: yes
   - debug: msg={{ item }}
     with_random_choice:
        - "go through the door"
