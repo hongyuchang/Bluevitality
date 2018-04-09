@@ -49,7 +49,7 @@
     register: motd_contents
   - shell: echo "motd contains the word hi"
     when: motd_contents.stdout.find('hi') != -1   #对输出进行匹配...
-  - debug: msg={{ item }}             # show all the hosts matching the pattern, ie all but the group www
+  - debug: msg={{ item }}             #show all the hosts matching the pattern, ie all but the group www
     with_inventory_hostnames: all:!www
   - include: tasks/sometasks.yml
     when: "'reticulating splines' in output"
@@ -60,6 +60,15 @@
        - "drink from the goblet"
        - "press the red button"
        - "do nothing"
+  - command: /bin/false
+    register: result                  #注册器
+    ignore_errors: True               #忽略错误信息
+  - command: /bin/something  
+    when: result|failed               #第一条命令失败时（result为failed时）才执行第二条命令
+  - command: /bin/something_else  
+    when: result|success              #result为success时才执行
+  - command: /bin/still/something_else
+    when: result|skipped              #skipped：已经执行过跳过执行
   handlers:                           #与notify协调，满足特定条件时触发(与host同级)
     - name: restart apache
       service: name=httpd state=restarted
