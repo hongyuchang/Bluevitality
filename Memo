@@ -216,8 +216,8 @@
 │   │       └── Example
 │   └── 防火墙
 ├── Python
-│   ├── 3.6 Environment
-│   │   └── Install Python 3.6
+│   ├── 3.6 Version
+│   │   └── Python 3.6
 │   ├── BeautifulSoup
 │   │   └── BeautifulSoup 4 文档翻译
 │   │       ├── _build
