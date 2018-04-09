@@ -1,6 +1,6 @@
 #### Tomcat：/usr/local/tomcat/conf/server.xml
 ```xml
-<!-- 以下代码加入到 Engine 容器中 -->
+<!-- 以下代码加入到 Engine 容器中即针对所有 Host 主机生效，也可以单独定义在特定 Host 容器中 -->
 <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster" 
         channelSendOptions="8"> <!-- 发送信道 -->
         <!-- 指明本集群使用的会话管理器 -->
@@ -15,7 +15,7 @@
                         port="45564"
                         frequency="500"
                         dropTime="3000"/>           <!-- 5s/次心跳，30s后剔除 -->
-                <!-- 自身如何接受传递来的会话 (注意不要使用address=auto，要指定具体的网卡名字)-->
+                <!-- 自身如何接受传递来的会话 (注意这里不要使用address=auto，要指定具体的网卡名字)-->
                 <Receiver className="org.apache.catalina.tribes.transport.nio.NioReceiver"
                         address="auto"
                         port="4000"
@@ -42,8 +42,8 @@
         <ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener"/>
 </Cluster>
 <!-- 以上内容定义在Engine容器中，则表示对所有主机均启动用集群功能。如果定义在某Host容器中，则表示仅对此主机启用集群功能。
-此外，需要注意的是，Receiver中的address="auto"一项的值最好改为当前主机集群服务所对应的网络接口的IP地址。
-注意，还要在服务器上开启Membership和Receiver使用的端口，使数据可以传输......     -->
+此外需要注意的是，Receiver中的address="auto"一项的值最好改为当前主机集群服务所对应的网络接口的IP地址。
+注意还要在服务器上开启Membership和Receiver使用的端口，使数据可以传输...... -->
 ```
 #### 在需会话同步的 webapps 的 war 内修改其 web.xml 新增 element （ eg: /tomcat/webapps/<*.War>/WEB-INF/web.xml ）
 ```xml
