@@ -34,7 +34,7 @@
   - file: dest=/var/stuff/{{ item }} state=directory    #定义序列并设置起始值、终值、步长
       with_sequence: start=4 end=16 stride=2
   - name: add several users
-    user: name={{ item.name }} state=present groups={{ item.groups }}
+    user: name={{ item.name }} state=present groups={{ item.groups | regex_replace('^w(.*)$', '\\1')}}  #变量值替换
     ignore_errors: True
     with_items:
       - { name: 'user1', groups: 'wheel', id: '1' }
