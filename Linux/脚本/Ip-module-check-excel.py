@@ -10,10 +10,9 @@ import sys
 HOSTS=list()
 MODULE=list()
 
-#------------------------------- 读取
+#读取
 rb = load_workbook(filename=u'in.xlsx')
-print rb.sheetnames
-rs=rb.get_sheet_by_name(rb.sheetnames[2]) 
+rs=rb.get_sheet_by_name(rb.sheetnames[2]) 	#第2个sheet
 
 #获取所有行
 rows = rs.rows
@@ -24,7 +23,7 @@ for row in rows:
 	HOSTS.append(line[1])
 	MODULE.append(line[3])	
 
-#------------------------------- 写入
+#转换后写入
 wb = Workbook()
 ws = wb.active
 
@@ -55,9 +54,10 @@ CHECK_STR=[
 x=1
 for a in xrange(len(HOSTS)):
 	for b in xrange(len(CHECK_STR)):
-		ws.cell(row=int(x),column=1).value=HOSTS[a]	#根据关键字个数输出N个相同的主机
-		ws.cell(row=int(x),column=2).value=MODULE[a]	#根据关键字个数输出N个相同的模块地址
-		ws.cell(row=int(x),column=3).value=CHECK_STR[b]	#输出关键字
+		ws.cell(row=int(x),column=1).value=HOSTS[a]		#根据关键字个数输出N个相同的主机
+		ws.cell(row=int(x),column=2).value=MODULE[a]		#根据关键字个数输出N个相同的模块地址
+		ws.cell(row=int(x),column=3).value=CHECK_STR[b]		#输出关键字
 		x+=1
+		
 if __name__ == '__main__':
         wb.save(filename="1.xlsx")
