@@ -76,14 +76,14 @@ x=1
 for a in xrange(len(HOSTS)):
 	for b in xrange(len(CHECK_STR)):
 		if len(str(HOSTS[a])) >= 5 and len(str(MODULE[a])) >= 5:
-			ws.cell(row=int(x),column=1).value=HOSTS[a]		    #根据关键字个数输出N个相同的主机
+			ws.cell(row=int(x),column=1).value=HOSTS[a]		#根据关键字个数输出N个相同的主机
 			ws.cell(row=int(x),column=2).value=MODULE[a]		#根据关键字个数输出N个相同的模块地址
 			ws.cell(row=int(x),column=3).value=CHECK_STR[b]		#输出关键字
 			x+=1
 		
 if __name__ == '__main__':
 	OUT_FILENAME=time.strftime("%Y-%m-%d", time.localtime()) 
-    wb.save(filename=str(OUT_FILENAME)+".xlsx")
+	wb.save(filename=str(OUT_FILENAME)+".xlsx")
 	print("--"*30)
 	print("执行成功!... 请查看输出文件: "+str(OUT_FILENAME)+".xlsx")
 	print("共转换输出了 "+str(x-1)+" 行记录")
