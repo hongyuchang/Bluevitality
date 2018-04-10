@@ -2,16 +2,31 @@
 #coding=utf-8
 
 from openpyxl import Workbook
+from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-
-wb = Workbook()
-ws = wb.active
+import os
+import sys
 
 HOSTS=list()
 MODULE=list()
 
-HOSTS=['1.1.1.1','1.1.1.2','1.1.1.3']
-MODULE=['a','a2','a3']
+#------------------------------- 读取
+rb = load_workbook(filename=u'in.xlsx')
+print rb.sheetnames
+rs=rb.get_sheet_by_name(rb.sheetnames[2]) 
+
+#获取所有行
+rows = rs.rows
+
+#迭代所有行的指定列
+for row in rows:
+	line = [col.value for col in row]
+	HOSTS.append(line[1])
+	MODULE.append(line[3])	
+
+#------------------------------- 写入
+wb = Workbook()
+ws = wb.active
 
 #每个模块的LOG检查关键字
 CHECK_STR=[
@@ -44,6 +59,5 @@ for a in xrange(len(HOSTS)):
 		ws.cell(row=int(x),column=2).value=MODULE[a]	#根据关键字个数输出N个相同的模块地址
 		ws.cell(row=int(x),column=3).value=CHECK_STR[b]	#输出关键字
 		x+=1
-		print x
 if __name__ == '__main__':
         wb.save(filename="1.xlsx")
