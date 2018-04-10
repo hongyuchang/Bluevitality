@@ -4,8 +4,6 @@
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-import os
-import sys
 
 HOSTS=list()
 MODULE=list()
