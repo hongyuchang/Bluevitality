@@ -222,7 +222,7 @@ sh mqadmin updateSubGroup -g TOPIC_TRANSACTION_LOG_Consumer_Group -s true -r 1 -
 sh mqadmin updateSubGroup -g TOPIC_BUSI_LOG_Consumer_Group -s true -r 1 -b 192.168.133.130:10411 -n 192.168.133.128:10401
 sh mqadmin updateSubGroup -g TOPIC_TRANSACTION_LOG_Consumer_Group -s true -r 1 -b 192.168.133.130:10411 -n 192.168.133.128:10401
 
-# 查看某个topic消息情况
+# 查看某个topic状态
 sh mqadmin topicStatus -t TOPIC_TRANSACTION_LOG -n 192.168.133.128:10401
 
 # 查看集群情况
