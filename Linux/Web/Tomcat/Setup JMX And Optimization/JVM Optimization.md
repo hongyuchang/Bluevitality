@@ -63,3 +63,24 @@ set CATALINA_OPTS="
 -Duser.timezone=Asia/Shanghai 
 -Djava.awt.headless=true"
 ```
+#### 测试环境
+```txt
+#!/bin/bash
+# 注 "catalina.sh" 默认会引用当前路径下的 "setenv.sh" 脚本，通常在此脚本中设置 "JAVA_OPTS" 变量
+
+project_1=$(cd $(dirname `basename setenv.sh`) && pwd | awk -F '_|/' '{print $6}' | grep -o "[a-z]\{1,\}")
+
+export JAVA_OPTS="${JAVA_OPTS}""
+-Xms256m -Xmx2048m -Dcmos.instance.id=${project_1} -Dfile.encoding=UTF-8 -Doracle.jdbc.V8Compatible=true 
+-Dappframe.server.name=release_tomcat_ecp1 
+-XX:+HeapDumpOnOutOfMemoryError 
+-XX:HeapDumpPath=/home/zyzx/ecp/tomcat_ecp1/logs/oom.hprof 
+-Dcmos-instance-id=release_ecp1 
+-Dlog4j.configurationFile=/home/zyzx/10085_config/ecp/log4j2.xml"
+
+echo "JAVA_OPTS=${JAVA_OPTS}"
+
+JAVA_HOME=/home/zyzx/jdk7
+
+export JAVA_HOME
+```
