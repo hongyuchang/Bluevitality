@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-#本脚本用于搜索所有Tomcat当前日志，根据日志中的内存溢出关键字重启Tomcat服务并导出其溢出原因
+# 本脚本用于搜索所有Tomcat当前日志，根据日志中的内存溢出关键字重启Tomcat服务并导出其溢出原因
+# 本脚本加入crontab：
+# */2 * * * * bash -x /home/zyzx/shell/fupin_gc.sh >> /home/zyzx/test000/cy/fupin_gc.log 2>&1
 
 DATE=$(date +%Y-%m-%d)
 
