@@ -13,6 +13,8 @@ import time
 #JVM内存溢出关键字
 GC_ERROR = str('java.lang.OutOfMemoryError: Java heap space')
 
+#数据库名
+DB_NAME='Tomcat-log-Record.db'
 EXEC_COMMAND = u'''
 kill -9 $(ps -ef | grep /home/zyzx/fupin/tomcat_fupin5 | grep bin/java | awk '{print $2}')
 '''
@@ -26,18 +28,27 @@ if not os.path.isfile(JMAP):
 	sys.exit(1)
 
 #创建数据库用于记录文件位置
-def CREATE_DB(DB_NAME="Tomcat-log-Record.db"):
+def CREATE_DB(DB_NAME=DB_NAME):
 	conn = sqlite3.connect(DB_NAME)
-	print("Opened database successfully!")
 	c = conn.cursor()
 	c.execute('''
 		CREATE TABLE TOMLOG (
-		FILENAME  CHAR(256),
+		FILENAME  TEXT,
 		RECORD    INT);''')
 	conn.commit()
 	conn.close()
 	print("Table created successfully!...")
 
+#日志文件记录
+def WDB(DB_NAME=DB_NAME):
+	conn = sqlite3.connect(DB_NAME)
+	c = conn.cursor()
+	for F,R in LOGS.items():
+		list=[str(F),str(R)]
+		sql=u'''INSERT INTO TOMLOG VALUES(?,?)'''
+		c.execute(sql,list)
+	conn.commit()
+	conn.close()
 
 #搜索指定路径下包含关键字的文件
 LOGS={}
@@ -51,9 +62,11 @@ def search_tomlog(PATH,WORD=GC_ERROR):
 				continue
 			LINE_NUMBER = len(open(fp).readlines())			#获取文件行数
 			with open(fp) as f:
+				inumber=0
 				for line in f:
-					if WORD in line:
-						LOGS[fp] = LINE_NUMBER 	#将搜索到的文件绝对路径加入字典: {文件路径:总行数}
+					inumber+=1				#记录当前匹配的行数(这里需要再去读取历史进度并开始)
+					if WORD in line:	
+						LOGS[fp] = inumber 		#将搜索到的文件绝对路径加入字典: {文件路径:当前出错行}
 						break
 		elif os.path.isdir(fp):
 			#递归调用
@@ -62,6 +75,8 @@ def search_tomlog(PATH,WORD=GC_ERROR):
 #输出被匹配到内容的日志路径
 def report_search_file(LOGS=LOGS):
 	pattern='logs/(.*?)$'
+	#将字典的KV记录到数据库
+	WDB()
 	for FILENAME,LINE_NUMBER in LOGS.items():
 		#print FILENAME,LINE_NUMBER		#输出文件路径和总行数	
 		out=re.sub(pattern,'',FILENAME)		#输出去除logs/*的部分
