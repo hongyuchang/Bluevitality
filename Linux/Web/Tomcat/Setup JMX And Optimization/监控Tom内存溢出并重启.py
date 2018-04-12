@@ -34,8 +34,7 @@ def CREATE_DB():
 		CREATE TABLE TOMLOG (
 		FILENAME      CHAR(256),
 		COUNT  	      INT,
-		RECORD        INT);'''
-	)
+		RECORD        INT);''')
 	conn.commit()
 	print("Table created successfully")
 
