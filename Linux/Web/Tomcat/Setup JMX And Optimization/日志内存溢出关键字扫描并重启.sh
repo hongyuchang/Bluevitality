@@ -9,14 +9,15 @@ DATE=$(date +%Y-%m-%d)
 #获取所有Tomcat当前产生的日志，这里是"/*/Tomcat/logs/catalina.yyyymmdd.out"的文件列表
 TOMCAT_ALL_LOGS=$(find $HOME/fupin/ -name "*$DATE.out")
 
-COUNT_LOG_PATH="$HOME/shell/monitor_gc"
-
 #内存溢出关键字
 GC_ERROR='java.lang.OutOfMemoryError: Java heap space'
 
-[[ -d $COUNT_LOG_PATH ]] || mkdir -p $COUNT_LOG_PATH
+#存储扫描日志的行记录的路径，作为其下次扫描关键字的起使行
+COUNT_LOG_PATH="$HOME/shell/monitor_gc"
 
-#Tom日志列表
+mkdir -p $COUNT_LOG_PATH
+
+#Find搜索到的Tom日志列表
 echo $TOMCAT_ALL_LOGS
 
 #根据项目编号关闭Tom
@@ -31,7 +32,7 @@ function server_stop() {
 function server_start() {
     export LANG=zh_CN.UTF-8
     echo "tomcat_$1 Start Running!"
-    
+
     cd $HOME/fupin/tomcat_$1/bin/ && ./startup.sh
     if [[ "$?" == "0" ]];then
         echo "tomcat_$1 is Running!"
