@@ -58,10 +58,10 @@
 │   │   │   └── 资料
 │   │   ├── CGI
 │   │   ├── Nginx
-│   │   │   ├── conf
+│   │   │   ├── Compile 1.12.1
+│   │   │   ├── Compile 1.12.2
+│   │   │   ├── Configs
 │   │   │   ├── Setup 1.12.1
-│   │   │   ├── Setup 1.12.1 - Compiled
-│   │   │   ├── Setup 1.12.2 - Compiled
 │   │   │   └── 资料
 │   │   ├── Nodejs
 │   │   │   └── Setup 8.1.4
