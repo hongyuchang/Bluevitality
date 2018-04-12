@@ -26,17 +26,17 @@ if not os.path.isfile(JMAP):
 	sys.exit(1)
 
 #创建数据库用于记录文件位置
-def CREATE_DB():
-	conn = sqlite3.connect('Tomcat-log-Record.db')
-	print("Opened database successfully")
+def CREATE_DB(DB_NAME="Tomcat-log-Record.db"):
+	conn = sqlite3.connect(DB_NAME)
+	print("Opened database successfully!")
 	c = conn.cursor()
 	c.execute('''
 		CREATE TABLE TOMLOG (
-		FILENAME      CHAR(256),
-		COUNT  	      INT,
-		RECORD        INT);''')
+		FILENAME  CHAR(256),
+		RECORD    INT);''')
 	conn.commit()
-	print("Table created successfully")
+	conn.close()
+	print("Table created successfully!...")
 
 
 #搜索指定路径下包含关键字的文件
