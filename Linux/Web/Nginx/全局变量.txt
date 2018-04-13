@@ -19,3 +19,11 @@ $server_port ：      请求到达服务器的端口号。
 $request_uri ：      包含请求参数的原始URI，不包含主机名，如：”/foo/bar.php?arg=baz”。
 $uri ：              不带请求参数的当前URI，$uri不包含主机名，如”/foo/bar.html”。
 $document_uri ：     与$uri相同。
+
+例：http://localhost:88/test1/test2/test.php
+$host：localhost
+$server_port：88
+$request_uri：http://localhost:88/test1/test2/test.php
+$document_uri：/test1/test2/test.php
+$document_root：/var/www/html
+$request_filename：/var/www/html/test1/test2/test.php
