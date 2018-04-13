@@ -50,9 +50,19 @@ def monitor_log():
 
 		#动作
 		if new_line:
-			#这里重启TOMCAT
-			os.system('touch okokok')
-			print("OK....")
+			time.sleep(1)
+			#这里重启TOMCAT            
+			pattern='logs/(.*?)$'
+			out = re.sub(pattern,'',F)
+			PID = os.popen("ps -ef | grep %s | grep bin/java | awk '{print $2}'" %(out)).read() #需要KILL
+			DUMP_HEAP = u"%s -dump:format=b,file=%slogs/%s_hprof  %s" %(JMAP,out,DATE,PID)
+			STOP_COMMAND = u"kill -9 %s" %(PID)
+			START_COMMAND = u"%sbin/startup.sh" %(out)
+			print str("heap_info: %slogs/%s_hprof" %(out,DATE))		#记录到日志
+			print "DUMP_HEAP: ",DUMP_HEAP
+			print "STOP: ",STOP_COMMAND
+			print "start: ",START_COMMAND
+
 
 
 if __name__ == '__main__':
@@ -77,4 +87,5 @@ if __name__ == '__main__':
 		process_list.append(p)
 	for i in process_list:
 		i.join()
+
 
