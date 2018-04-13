@@ -24,7 +24,6 @@ def scan_log(PATH):
 				Q.put(str(FILEPATH))
 				print "加入队列的文件名",FILEPATH 
 				print "队列大小",Q.qsize()
-				#把文件名加入队列中
 		elif os.path.isdir(FILEPATH):
 			scan_log(FILEPATH)
 
