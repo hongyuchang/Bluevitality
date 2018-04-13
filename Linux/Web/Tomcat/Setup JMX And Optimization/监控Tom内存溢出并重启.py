@@ -73,10 +73,8 @@ def search_tomlog(PATH,WORD=GC_ERROR):
 			if not str(FILENAME).endswith(str(DATE)+".log"):	#跳过非本日期结尾的日志文件，格式: "YYYY-MM-DD.log" (仅扫描当天的日志)
 				continue
 			if str(FILEPATH) in OLDFILE_AND_RECORD.keys():
-				print str(type(FILENAME))
-				print "shanchu.................."
-				LINE_NUMBER = int(OLDFILE_AND_RECORD[str(FILEPATH)]) + 1
-				print FILEPATH
+				#print "找到旧文件，先删除再匹配"
+				LINE_NUMBER = int(OLDFILE_AND_RECORD[str(FILEPATH)])
 				WDB(DELETE_RECORD = str(FILEPATH))		
 			else:
 				LINE_NUMBER = 0
@@ -85,27 +83,37 @@ def search_tomlog(PATH,WORD=GC_ERROR):
 				with open(fp) as f:
 					i=0
 					for line in f:
-						try:
-							if WORD in line:
-								LOGS[fp] = i 			#将搜索到的文件绝对路径加入字典: {文件路径:当前出错行}
-								break
-							i+=1
-						except IndexError:
-							print "已扫描到文件尾部，当前行:" + str(LINE_NUMBER+1) + " 将从文件起使行开始"
+						if WORD in line:
+							LOGS[fp] = i 			#将搜索到的文件绝对路径加入字典: {文件路径:当前出错行}
+							print "F--------DEBUG:k:%s v:%s" %(fp,i)
+							break
+						i+=1
+						if i == COUNT_NUMBER:
+							LOGS[fp] = i
 			else:
 				with open(fp) as f:
 					contents = f.readlines()
-					for i in xrange(1,COUNT_NUMBER):
-						try:
-							if WORD in contents[ LINE_NUMBER + i ]:
-								LOGS[fp] = LINE_NUMBER + i
-								break
-						except IndexError:
-							print "已扫描到文件尾部，当前行:" + str(LINE_NUMBER+1) + " 将从文件起使行开始"
+					MAX = COUNT_NUMBER - LINE_NUMBER
+					print '--'*20
+					print "当前文件名:%s" %(FILENAME)
+					print "当前在记录的文件总行数：%s" %(COUNT_NUMBER)
+					print "当前在记录的文件位置：%s" %(LINE_NUMBER)
+					print "当前MAX值:",MAX
+					print '--'*20
+					if MAX <= 4:
+						LOGS[fp] = LINE_NUMBER
+						break
+					for i in xrange(1,MAX):
+						if WORD in contents[ LINE_NUMBER + i ]:
+							LOGS[fp] = LINE_NUMBER + i
+							print "O--------DEBUG:k:%s v:%s" %(fp,LINE_NUMBER + i)
+							break
+						else:
+							LOGS[fp] = LINE_NUMBER + i
 		elif os.path.isdir(fp):
 			#递归调用
 			search_tomlog(fp,WORD)
-
+ 
 #输出被匹配到内容的日志路径，并写入到数据库
 def report_search_file(LOGS=LOGS):
 	pattern='logs/(.*?)$'
@@ -141,6 +149,8 @@ if __name__ == "__main__":
 		CREATE_DB()	
 	search_tomlog(PATH=sys.argv[1],WORD=GC_ERROR)
 	report_search_file()	
-	x=RDB()
 	for F in LOGS.keys():
 		TOMCAT_STOP_AND_START(F)
+	print '-----------------------------------------------'
+	for k,v in LOGS.items():
+		print k,v
