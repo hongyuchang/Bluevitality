@@ -41,7 +41,7 @@ def CREATE_DB(DB_NAME=DB_NAME):
 	conn.close()
 	print("Table created successfully!...")
 
-#日志文件记录
+#记录日志文件的扫描行历史位置
 def WDB(DB_NAME=DB_NAME):
 	conn = sqlite3.connect(DB_NAME)
 	c = conn.cursor()
@@ -52,6 +52,20 @@ def WDB(DB_NAME=DB_NAME):
 	conn.commit()
 	conn.close()
 
+#读取日志文件扫描行的历史位置
+def RDB(DB_NAME=DB_NAME):
+	conn = sqlite3.connect(DB_NAME)
+	c = conn.cursor()
+	cursor = c.execute("SELECT FILENAME,RECORD FROM TOMLOG")
+	HISTORY_TOM_LOG={}
+	print '--'
+	for row in cursor:
+		HISTORY_TOM_LOG[row[0]]=row[1]
+	for k,v in HISTORY_TOM_LOG.items():
+		print k,v
+	conn.close()
+	return HISTORY_TOM_LOG
+
 #搜索指定路径下包含关键字的文件
 LOGS={}
 def search_tomlog(PATH,WORD=GC_ERROR):
@@ -59,15 +73,16 @@ def search_tomlog(PATH,WORD=GC_ERROR):
 	for FILENAME in os.listdir(PATH):
 		fp = os.path.join(PATH, FILENAME)
 		FILEPATH=str(fp)
+		print FILEPATH
 		if os.path.isfile(fp):
-			if not str(FILENAME).endswith(str(DATE)+".log"):	#跳过非本日期结尾的日志文件(仅扫描当天的日志)
+			if not str(FILENAME).endswith(str(DATE)+".log"):	#跳过非本日期结尾的日志文件，格式: "YYYY-MM-DD.log" (仅扫描当天的日志)
 				continue
 			LINE_NUMBER = len(open(fp).readlines())			#获取文件行数
 			with open(fp) as f:
 				inumber=0
 				for line in f:
 					inumber+=1				#记录当前匹配的行数(这里需要再去读取历史进度并开始)
-					if WORD in line:	
+					if WORD in line:
 						LOGS[fp] = inumber 		#将搜索到的文件绝对路径加入字典: {文件路径:当前出错行}
 						break
 		elif os.path.isdir(fp):
@@ -94,3 +109,5 @@ if __name__ == "__main__":
 		CREATE_DB()	
 	search_tomlog(PATH=sys.argv[1],WORD=GC_ERROR)
 	report_search_file()	
+	x=RDB()
+
