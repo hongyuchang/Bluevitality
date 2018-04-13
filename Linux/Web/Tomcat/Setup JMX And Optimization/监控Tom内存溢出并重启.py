@@ -13,8 +13,10 @@ import time
 #JVM内存溢出关键字
 GC_ERROR = str('java.lang.OutOfMemoryError: Java heap space')
 
-#数据库名
+#数据库名，用于记录各TOM节点的日志及扫描位置
 DB_NAME='Tomcat-log-Record.db'
+
+#查找对应的TOM的PID并Kill
 EXEC_COMMAND = u'''
 kill -9 $(ps -ef | grep /home/zyzx/fupin/tomcat_fupin5 | grep bin/java | awk '{print $2}')
 '''
@@ -86,7 +88,6 @@ def report_search_file(LOGS=LOGS):
 
 def TOMCAT_STOP_AND_START():
 	pass	
-
 
 if __name__ == "__main__":
 	if not os.path.exists('Tomcat-log-Record.db'):
