@@ -12,6 +12,8 @@ import time
 #PATH = sys.argv[1]
 #WORD = sys.argv[2]
 
+DATE=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+
 #JVM内存溢出关键字
 GC_ERROR = str('java.lang.OutOfMemoryError: Java heap space')
 
@@ -62,7 +64,6 @@ def RDB(DB_NAME=DB_NAME):
 #搜索指定路径下包含关键字的文件，输出到LOGS字典：{'文件名',关键字所在行'} 若存在数据库则从其记录位置开始扫描
 LOGS={}
 def search_tomlog(PATH,WORD=GC_ERROR):
-	DATE=time.strftime('%Y-%m-%d',time.localtime(time.time()))
 	if os.path.isfile(DB_NAME):
 		OLDFILE_AND_RECORD=RDB()		#改逻辑，若存在则从此位置进行读取，文件名：OLDFILE_AND_RECORD[文件名]
 	for FILENAME in os.listdir(PATH):
@@ -117,11 +118,13 @@ def report_search_file(LOGS=LOGS):
 		print "去除被匹配的日志路径的logs部分:",out
 
 def TOMCAT_STOP_AND_START(PATH):
-	#DUMP_HEAP = u"%s -dump:format=b,file=. " %(JMAP,)	#导出堆信息，未完成
+	PID=os.popen("ps -ef | grep %s | grep bin/java | awk '{print $2}'" %(PATH)).read()
+	DUMP_HEAP = u"%s -dump:format=b,file=%s.%s_hprof  %s" %(JMAP,PATH,DATE,PID)	#导出堆信息，未完成
 	KILL_COMMAND = u"kill -9 $(ps -ef | grep %s | grep bin/java | awk '{print $2}')" %(PATH)
 	START_COMMAND = u"%s/bin/startup.sh" %(PATH)
 	print KILL_COMMAND
 	print START_COMMAND
+	print DUMP_HEAP
 	#result_kill_code=os.system(KILL_COMMAND)	
 	#time.sleep(0.5)
 	#if result_kill_code == 0:
