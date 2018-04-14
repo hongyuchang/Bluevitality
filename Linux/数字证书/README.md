@@ -3,9 +3,9 @@ OpenSSL Version 1.0.1e
 by inmoonlight@163.com 2017.05.2
 
 
-## CA环境设置
+## Openssl CA 环境设置
 
-### 1.设置CA工作目录：/etc/pki/tls/openssl.cnf 
+### 1.设置CA工作目录 /etc/pki/tls/openssl.cnf 
 ```Bash
 [ CA_default ]
 
@@ -26,22 +26,22 @@ private_key     = $dir/private/cakey.pem # The private key
 RANDFILE        = $dir/private/.rand    # private random number file
 ```
 
-### 2.初始化CA证书编号初始值
+### 2.初始化CA证书编号的初始值
 ```Bash
-cd /etc/pki/CA && echo 01 > serial
+cd /etc/pki/CA
+echo 01 > serial
 ```
 ### 3.创建CA根私钥
 ```Bash
 CA_dir="/etc/pki/CA"
-openssl genrsa -out ${CA_dir:=/etc/pki/CA}/private/cakey.pem 2048
-chmod 700 ${CA_dir:=/etc/pki/CA}/private/cakey.pem
+openssl genrsa -out ${CA_dir}/private/cakey.pem 2048
+chmod 700 ${CA_dir}/private/cakey.pem
 ```
 
 ### 4.创建CA根证书
 ```Bash
 CA_dir="/etc/pki/CA"
-openssl req -new -x509 -days 3650 -key ${CA_dir:=/etc/pki/CA}/private/cakey.pem \
--out ${CA_dir:=/etc/pki/CA}/cacert.pem
+openssl req -new -x509 -days 3650 -key ${CA_dir}/private/cakey.pem -out ${CA_dir}/cacert.pem
 
 Country Name (2 letter code) [XX]:CN					#国家（大写缩写）
 State or Province Name (full name) []:shanghai				#省份或洲
@@ -50,10 +50,11 @@ Organization Name (eg, company) [Default Company Ltd]:company		#公司
 Organizational Unit Name (eg, section) []:yanfa				#部门    
 Common Name (eg, your name or your server’s hostname)[]:xx.xx.xx.xx	#须与证书能解析到的名字一致
 Email Address []:admin@paybay.cn
+
 #以上参数可通过配置文件修改：/etc/pki/tls/openssl.cnf
 ```
 
-## Server环境设置
+## Server 环境设置
 ### 1.创建服务器私钥
 ```Bash
 mkdir /etc/certs && cd /etc/certs && openssl genrsa -out ./webserv.key 2048
