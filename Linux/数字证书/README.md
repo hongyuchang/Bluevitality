@@ -138,7 +138,8 @@ cd /etc/pki/CA/crl &&  openssl ca -gencrl -out ca.crl
 ## 附
 ### 以非交互的命令行方式生成服务器端X.509证书
 ```Bash
-openssl req -new -newkey rsa:2048 -sha256 -nodes -out example_com.csr -keyout example_com.key -subj \ "/C=CN/ST=ShenZhen/L=ShenZhen/O=Example Inc./OU=Web Security/CN=example.com"
+openssl req -new -newkey rsa:2048 -sha256 -nodes -out example_com.csr -keyout example_com.key -subj \
+"/C=CN/ST=ShenZhen/L=ShenZhen/O=Example Inc./OU=Web Security/CN=example.com"
 
 # C：	Country ，单位所在国家，为两位数的国家缩写，如：CN
 # ST： 	State/Province ，单位所在州或省
