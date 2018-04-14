@@ -136,10 +136,18 @@ echo 01 > /etc/pki/CA/crlnumber
 cd /etc/pki/CA/crl &&  openssl ca -gencrl -out ca.crl
 ```
 ## 附
-### 以命令行方生成X509证书信息（非交互）
+### 以非交互的命令行方式生成服务器端X.509证书
 ```Bash
-openssl req -new -newkey rsa:2048 -sha256 -nodes -out example.csr -keyout example.key \
--subj "/C=CN/ST=ShenZ/L=ShenZ/O=Example/OU=Web/CN=eg.cn"
+openssl req -new -newkey rsa:2048 -sha256 -nodes -out example_com.csr -keyout example_com.key -subj \ "/C=CN/ST=ShenZhen/L=ShenZhen/O=Example Inc./OU=Web Security/CN=example.com"
+
+# C：	Country ，单位所在国家，为两位数的国家缩写，如：CN
+# ST： 	State/Province ，单位所在州或省
+# L： 	Locality ，单位所在城市 / 或县区
+# O： 	Organization ，此网站的单位名称
+# OU： 	Organization Unit，下属部门名称;常用于显示其他证书相关信息，如证书类型，证书产品名或身份验证类型或验证内容等
+# CN： 	Common Name ，网站的域名
+#
+# 生成 csr 后提供给 CA 并签署成功后会得到 example.crt 证书，SSL 证书文件获得后，就可以在 Nginx 里配置 HTTPS 了
 ```
 ### 其他常用命令
 - 测算法速度：	openssl speed <算法>
