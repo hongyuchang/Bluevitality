@@ -51,3 +51,4 @@ ref：
     http://www.linuxidc.com/Linux/2013-08/88522.htm
     http://blog.csdn.net/leshami/article/details/49636955
 ```
+![LB](https://assets.digitalocean.com/articles/high_availability/ha-diagram-animated.gif)
