@@ -34,4 +34,29 @@
 　　3. 数据重复且分布平均的表字段，因此应该只为最经常查询和最经常排序的数据列建立索引。
 　　注意：如果某个数据列包含许多重复的内容，为它建立索引就没有太大的实际效果。
 ```
+#### mysqldumpslow
+```txt
+mysqldumpslow --help
+　　s:   表示按何种方式排序
+　　c:   访问次数
+　　l:   锁定时间
+　　r:   返回记录
+　　t:   查询时间
+　　al:  平均锁定时间
+　　ar:  平均返回记录数
+　　at:  平均查询时间
+　　t:   返回前面多少条的数据
+　　g:   后边搭配一个正则匹配模式，大小写不敏感的
 
+得到返回记录集最多的10个SQL
+mysqldumpslow -s r -t 10 /var/lib/mysql/show.log
+
+得到访问次数最多的10个SQL
+mysqldumpslow -s c -t 10 /var/lig/mysql/show.log
+
+得到按照时间排序的前10条里面含有左连接的查询语句
+mysqldumpslow -s t -t 10 -g "left join" /var/lig/mysql/show.log
+
+另外建议在使用这些命令时结合|与more，否则有可能刷屏
+mysqldumpslow -s r -t 10 /var/lig/mysql/show.log | more
+```
