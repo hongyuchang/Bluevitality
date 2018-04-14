@@ -17,5 +17,6 @@ stunnel，PPTP，tcpcopy，VIM的py环境IDE，Hadoop
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
-Python3 开发水平，算法，flask
+Python3 开发，算法，flask
+TB收藏的书及相关内容进行性学习
 ```
