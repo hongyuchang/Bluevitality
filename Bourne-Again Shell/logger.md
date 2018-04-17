@@ -39,7 +39,7 @@ level：
 ```
 
 #### Example：
-```txt
+```bash
 service rsyslog restart
 
 logger System Rebooted          #往系统日志例程中写入“System Rebooted”可在/var/log/syslog中查看
