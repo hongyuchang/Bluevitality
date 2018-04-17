@@ -738,7 +738,9 @@
     }
 
     终端快捷键{
-
+        Shift+上/下         # 终端屏幕上下滚动
+        Shift+Ctrl+C	    # 复制
+        Shift+Ctrl+V	    # 粘贴
         Ctrl+A        　    # 行前
         Ctrl+E        　    # 行尾
         Ctrl+S        　    # 终端锁屏
