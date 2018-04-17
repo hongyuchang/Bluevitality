@@ -15,7 +15,7 @@
 kubernetes，hive，Hbase，spark，Yarn，HDFS，rabbitmq，dubbo，ceph，会分析Java程序的僵死，死锁等问题
 stunnel，PPTP，tcpcopy，VIM的py环境IDE，Hadoop
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
-flume
+flume，ffmpeg
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
 Python3 开发，算法，flask
 TB收藏的书及相关内容进行性学习
