@@ -28,48 +28,50 @@ rpmbuild
 └── SRPMS                                         #存放制作完成后的src格式rpm包（如：xxx.src.rpm，其没有平台依赖）
 
 5 directories, 0 files
-[root@localhost ~]# cd rpmbuild/SPECS/
-[root@localhost SPECS]# rpmdev-newspec -o Name-version.spec     #生成默认的SPEC模板
-Name-version.spec created; type minimal, rpm version >= 4.11.
+[root@localhost ~]# cd rpmbuild/SPECS/ && rpmdev-newspec -o Name-version.spec  #生成默认的SPEC模板
 [root@localhost SPECS]# cat Name-version.spec     # 示例 demo（k:v中的key可以%{key}的形式在spec中全局多引用..）
-Name:           Name                              # 查询此处定义RPM的信息：rpm -qi xxx.rpm
-Version:        x.x.x                             # 版本需严格匹配（%setup -q将自动使用这些宏进行一系列解压和cd操作）
+Name:           Name                              # 若查询此处定义的RPM信息则使用命令 "rpm -qi xxx.rpm"
+Version:        x.x.x                             # 版本需严格匹配（%setup -q阶段将用这些宏进行一系列解压、cd操作）
 Release:        1%{?dist}                         # "?": 即若存在dist宏（el5,el6,centos...）则替换
 Summary:        A brief description of the package
 Group:          Applications/Server
-Distribution:   Linux                             # 发行版系列 
+Distribution:   Linux                             # 发行版
 License:        GPLv2
 Vender:         bluevitality <inmoonlight@163.com>
 URL:            https://github.com/bluevitality
-Source0:        %{name}.xxx                       # 明确说明源文件，默认将基于rpmbuild的SOURCES目录查找
+Source0:        %{name}-%{version}.tar.gz         # 明确说明源文件，默认将从rpmbuild的SOURCES路径下查找
 Source1:        xxxxx                             # 默认将SOURCES下的源文件在rpmbuild的BUILD目录进行解压缩操作
 Source2:        xxxxx
 
-BuildRoot:      %{_topdir}/%{name}-%{version}-%{release}-root
-# make install 时使用的虚拟根路径！（对OS不进行实际的安装操作）变量 $RPM_BUILD_ROOT 即对宏："%{BuildRoot}"的引用
-#凡在此目录生成的文件必须做进rpm否则报错（可在install阶段先删除）
+BuildRoot:      %{_topdir}/%{name}-%{version}-%{release}-root   
+# 或使用 "%{_topdir}/BUILDROOT"
+# BuildRoot是make install时使用的虚拟根路径!（对OS不进行实际安装操作）变量 $RPM_BUILD_ROOT 即对 "%{BuildRoot}" 的引用
+# 凡在此目录生成的文件必须做进rpm否则报错（可在install阶段先删除）
                                                   
-BuildRequires:  gcc,automake,binutils,pcre-devel  # 制作时依赖的软件
-Requires:       openssl,xxx,xxx                   # 安装时依赖的软件
+BuildRequires:  gcc,automake,binutils,pcre-devel  # 制作时依赖的软件，如若有版本依赖则设为形如 gcc >=4.2.2 的形式
+Requires:       openssl,xxx,xxx                   # 安装时依赖的软件，同上...
 
 Require(pre):   bash >= 3.0                       # 执行脚本时的依赖
 Require(post):  python(flask) >= x.x              # 可指定依赖于特定语言的某个模块并指定依赖版本
 Require(preun):
 Require(postun):
 
-%define   MACORS_NAME   VALUE                     # 用户自定义的SPEC宏，引用：%{MACORS_NAME}
+%define   MACORS_NAME   VALUE                     # 自定义的SPEC宏，引用自定义宏 ---> %{MACORS_NAME}
 
 %description                                      # rpm -qi xxx.rpm
-Fill in the details about the package here
+Fill in the details about the package here        # 软件包的详细说明信息，最多只能有80个英文字符
 ......
 
-%prep                                             # 准备阶段
-%setup -q                                         # 建议用"%setup -q"替代"%prep"的内容（此宏能够自动完成解压和cd）
+%prep                                             # 准备阶段，若有补丁的需要在则在此阶段进行打补丁操作
+%setup -q                                         # 建议用"%setup -q"替代"%prep"的内容（此宏可自动完成源码解压和cd）
+                                                  # 源码包必须是name-version.tar.gz的格式才能被 "setup -q" 处理
 
 %build                                            # 编译阶段
 export DESTDIR=%{BuildRoot}
 %configure                                        # rpmbuild --showrc | grep configure
 make %{?_smp_mflags}
+# 这里的 %configure 是个宏常量，会自动将 prefix 设为 /usr
+# 另外此宏还可接受额外的参数，若某些软件有某些高级特性需要开启，可通过给 %configure 宏传参数来开启
 
 %install                                          # 安装阶段（在此阶段可实现删除不需要加入rpm包的文件）
 rm -rf $RPM_BUILD_ROOT                            # 来自于宏定义，查看： rpmbuild --showrc | grep RPM_BUILD_ROOT
@@ -80,28 +82,28 @@ rm -rf $RPM_BUILD_ROOT                            # 来自于宏�
 %clean                                            # 安装完成后的清理阶段
 rm -fr %{buildroot}                               
 
-%files                                            # 文件阶段
-%defattr(-, root, root, 0755)                     # 定义其下方对象的默认权限（-,user,group,perm）
+%files                                            # 文件阶段，说明将 %{buildroot} 下的哪些文件/目录最终打包到RPM
+%defattr(-, root, root, 0755)                     # 定义对象的默认权限 ---> %defattr(文件权限,属主,属组,目录权限)
 %doc %{pecl_docdir}/%{pecl_name}                  # 指明文档文件，不指目标路径则位于/usr/share/doc/name-verion
-%config(noreplace) %{_sysconfdir}/%{name}.conf    # 指明配置文件，此处设置位于%{BuildRoot}的：/etc/<name>.conf
-/usr/local/bin/xxx                                # 将整个目录包含进rpm包中（此处的'/'即从从%{BuildRoot}开始的/）
+%config(noreplace) %{_sysconfdir}/%{name}.conf    # 指明配置文件，此处设置位于 %{BuildRoot} 的：/etc/<name>.conf
+/usr/local/bin/xxx                                # 将整个目录包含进rpm包中（此处'/'即从从 %{BuildRoot} 开始的/）
 %dir %attr(0755, redis, root) /lib/%{name}        # 引入空目录
 %attr(0755,root,root) /etc/rc.d/init.d/daemon     # 引入启动脚本（%attr用来明确定义单个文件的属性）
 
+# 写要打包的文件列表时既可以宏开头，也可为"/"开头，无任何本质区别，都表示从 %{buildroot} 中拷贝文件到最终的rpm包里
+# 如果是相对路径则表示要拷贝的文件位于 %{_builddir} 目录
 
 %doc
 
-%pre                                              # 在执行RPM的安装命令之前执行的shell脚本（脚本段可留空）
+%pre                                              # 执行RPM的安装命令之前执行的shell脚本，可留空
 
-%post                                             # 安装之后执行
+%post                                             # 安装后执行
 
-%preun                                            # 卸载之前执行
+%preun                                            # 卸载前执行，定义卸载前的动作，如杀掉此RPM包的进程等.....
 
-%postun                                           # 写在之后执行
+%postun                                           # 卸载后执行，如删除备份、配置文件
 
-%preun                                            # 脚本段，定义卸载前的动作，如杀掉进程.....
-
-%changelog                                        # 变更日志（下面是摘来的例子）
+%changelog                                        # 变更日志，下面是摘来的例子......
 * date +"%a %b %d %Y"  修改人  <邮箱>  本次版本-License修订号
 - XXXXX ......
 
@@ -112,20 +114,19 @@ rm -fr %{buildroot}
 * Tue Jul 06 2010 Silas Sewell <inmoonlight@163.com> - 1.2.6-1
 - Initial package
 ```
-#### 构建
+#### 构建RPM包
 ```txt
 rpmbuild：
     -bl          检查spec中的%file段来查看文件是否齐全（检查有没有未被引入rpm包的文件）
-    -ba          建立二进制格式rpm包&源码包
+    -ba          建立二进制格式rpm包及spec.rpm源码包
     -bb          建立二进制格式rpm包
     -bp          执行到 prep 阶段
     -bc          执行到 build 阶段
     -bi          执行到 install 阶段
 
-制作：    
-    cd /usr/src/redhat/SPECS/
-    rpmbuild -ba nginx.spec
-    将生成：/usr/src/redhat/RPMS/i386/nginx-1.2.1-1.el5.ngx.i386.rpm
+开始构建:
+    cd /usr/src/redhat/SPECS/ && rpmbuild -ba nginx.spec
+    执行后将生成 /usr/src/redhat/RPMS/i386/nginx-1.2.1-1.el5.ngx.i386.rpm
     
 src.rpm格式是rpm源码包，查看内容：    rpm2cpio filename.src.rpm | cpio -t
 展开src.rpm格式文件内的SPEC文件：    rpm2cpio filename.src.rpm | cpio -id
@@ -164,7 +165,7 @@ User Interface/Desktops（用户界面/桌面）
 User Interface/X （用户界面/X窗口）
 User Interface/X Hardware Support （用户界面/X硬件支持）
 ```
-#### macros
+#### macros ( 默认位于"~/.rpmmacros"，若不存在可创建，不推荐修改"/usr/lib/rpm/macros" )
 ```txt
 %{_sysconfdir}        	/etc
 %{_prefix}            	/usr
