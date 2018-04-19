@@ -1,8 +1,4 @@
 # deploy NTP server for Linux
-# file: deploy_ntp_server.shell
-
-# 运行本脚本的前提：
-# 1. 配置好了YUM服务
 
 # 变量
 sys_file_ntp_conf="/etc/ntp.conf"
@@ -14,25 +10,13 @@ ip_network=`echo "$ntp_server_ip" | awk -F. '{print $1"."$2"."$3".0"}'`
 # 每次等待间隔（单位：秒）
 sleep_sec="60"
 
-# 运行时
-
-# 脚本开始
-echo "%%%%%%%%%%% start: `date`"
-
 # 系统配置
-echo "@@@ Linux: stop/disable iptables."
 service iptables stop
-chkconfig iptables off
-
-echo "@@@ Linux: disable SELinux"
-#setenforce 0
+chkconfig iptables off --level 235
+setenforce 0
 
 # 安装
-echo "@@@ YUM: install ntp*.rpm"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 yum install -y ntp
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo ""
 
 # 设置开机启动服务
 echo "---- ntpd: chkconfig on"
@@ -92,9 +76,6 @@ server $ntp_server_ip prefer
 #eg:
 #server time-nw.nist.gov
 #server s1b.time.edu.cn	
-
-# 结束
-
 NTP
 
 echo "@@@ file - $sys_file_ntp_conf:"
@@ -107,13 +88,6 @@ echo ""
 
 # 启用
 service ntpd restart
-
-# 查看状态
-echo "@@@ NTP - status:"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "---- ntp - version:"
-ntpq -c version
-echo ""
 
 echo "---- sleep $sleep_sec, for ntp re-start done."
 while_count=1
@@ -128,18 +102,11 @@ do
 	echo ""
 
 	let while_count=while_count+1
-
 done
 
 echo "---- ntpstat:"
 ntpstat
-echo ""
 
-echo "---- ntpq"
+echo "---- ntpq -p:"
 ntpq -p
-echo ""
 
-# 脚本结束
-echo "%%%%%%%%%%% done: `date`"
-
-# 结束
