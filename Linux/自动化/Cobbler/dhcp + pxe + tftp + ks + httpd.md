@@ -11,7 +11,7 @@ subnet 192.168.5.0 netmask 255.255.255.0 {
   range 192.168.5.2 192.168.5.250;
   default-lease-time 600;
   max-lease-time 7200;
-  filename "pxelinux.0";            #引导文件（它由syslinux提供：yum install syslinux 此文件仅针对其所在平台）
+  filename "pxelinux.0";            #PXE引导文件（由syslinux提供 "yum install syslinux" 此文件仅针对其所在平台）
   next-server 192.168.5.1;          #引导文件所在服务器地址
 }
 [root@localhost ~]# systemctl start dhcpd && systemctl enable dhcpd
@@ -20,7 +20,7 @@ udp        0      0 0.0.0.0:26300           0.0.0.0:*                 2250/dhcpd
 udp        0      0 0.0.0.0:67              0.0.0.0:*                 2250/dhcpd          
 udp6       0      0 :::46281                :::*                      2250/dhcpd   
 ```
-#### Server 端设置
+#### 服务端设置
 ```bash
 [root@localhost ~]# yum -y install xinetd tftp-server syslinux system-config-kickstart httpd
 [root@localhost ~]# cat /etc/xinetd.d/tftp
@@ -86,9 +86,8 @@ display boot.msg
 label linux
   kernel vmlinuz
   append initrd=initrd.img text ks=http://192.168.5.1:80/Centos7/ks.cfg
-    
 
 [root@localhost ~]# chmod 644 /var/lib/tftpboot/pxelinux.cfg/default
 ```
-#### Client端
-`开启网卡的PXE功能....`
+#### 客户端
+`进入BIOS开启网卡的PXE功能后重启即可`
