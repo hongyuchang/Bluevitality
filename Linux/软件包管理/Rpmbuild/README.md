@@ -1,4 +1,3 @@
-#### 备忘
 ```txt
 制作RPM包时不可以使用管理员的身份进行!
 
@@ -13,7 +12,7 @@ xxx.src.rpm
   需要使用rpmbuild命令将其编译为适合当前平台的rpm包之后再进行Install
 ```
 
-#### 准备
+#### 使用rpmbuild构建rpm包
 ```bash
 [root@localhost ~]# yum -y install rpmdevtools pcre-devel       #包含rpmbuild，rpmdev-newspec，rpmdev-setuptree
 [root@localhost ~]# cat ~/.rpmmacros                            #宏文件，此处指定RPM包制作的车间目录：'%_topdir'
@@ -114,11 +113,11 @@ rm -fr %{buildroot}
 * Tue Jul 06 2010 Silas Sewell <inmoonlight@163.com> - 1.2.6-1
 - Initial package
 ```
-#### 构建RPM包
+#### 构建
 ```txt
 rpmbuild：
     -bl          检查spec中的%file段来查看文件是否齐全（检查有没有未被引入rpm包的文件）
-    -ba          建立二进制格式rpm包及spec.rpm源码包
+    -ba          建立二进制格式rpm包及src.rpm源码包
     -bb          建立二进制格式rpm包
     -bp          执行到 prep 阶段
     -bc          执行到 build 阶段
