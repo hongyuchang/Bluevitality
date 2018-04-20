@@ -1,5 +1,7 @@
 #### Demo
 ```txt
+[root@localhost ~]# systemd-analyze 
+Startup finished in 1.461s (kernel) + 1.637s (initrd) + 10.185s (userspace) = 13.284s
 [root@localhost /]# tree /etc/systemd/ -L 2
 /etc/systemd/
 ├── bootchart.conf
