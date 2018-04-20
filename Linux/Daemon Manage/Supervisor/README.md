@@ -24,7 +24,7 @@ port=127.0.0.1:9001         ; Web管理后台运行的 IP 和端口，若开
 username=user               ; 登录管理的用户名
 password=123                ; 登录管理的密码
 
-[supervisor]
+[supervisord]
 nodaemon=true               ; 当在Docker容器内用于管理后台守护进程时需将Supervisor设置为前台启动!
 
 [program:usercenter]        ; usercenter 是应用的唯一标识，不能重复。对其的操作如：start, restart等..都通过此名字实现
