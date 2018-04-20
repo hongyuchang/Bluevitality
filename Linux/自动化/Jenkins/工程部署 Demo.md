@@ -15,7 +15,7 @@ lrwxrwxrwx 1 smrz smrz       18 2018-04-20 15:33 bootctl -> /home/smrz/bootctl
 drwxr-x--- 2 smrz smrz       50 2018-04-20 16:55 logs
 drwxrwxr-x 3 smrz smrz       17 2018-04-20 16:51 tmp
 ```
-#### Post Steps -->  @Jenkins
+#### Post Steps --> Execute shell @Jenkins
 ```txt
 #拷贝
 cp $WORKSPACE/edcebs-service-impl/target/edcebs-core.jar /home/smrz/ansible/dist/
