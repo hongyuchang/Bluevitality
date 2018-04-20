@@ -7,24 +7,23 @@ RPM生成要素
   3. 根据spec文件加工源码/文件的工具rpmbuild
 
 xxx.src.rpm
-  带有src后缀的rpm不是编译好的二进制程序
-  其内部包含了源程序代码与SPEC文件!...
+  带有src后缀的rpm不是编译好的二进制程序，其内部包含了源程序代码与SPEC文件!...
   需要使用rpmbuild命令将其编译为适合当前平台的rpm包之后再进行Install
 ```
 
 #### 使用rpmbuild构建rpm包
 ```bash
-[root@localhost ~]# yum -y install rpmdevtools pcre-devel       #包含rpmbuild，rpmdev-newspec，rpmdev-setuptree
-[root@localhost ~]# cat ~/.rpmmacros                            #宏文件，此处指定RPM包制作的车间目录：'%_topdir'
-%_topdir %(echo $HOME)/rpmbuild
-[root@localhost ~]# rpmdev-setuptree                            #生成~/rpmbuild及子目录
-[root@localhost ~]# tree rpmbuild                               #RPM包的制作车间（遵循一定的目录结构规范）
+[root@localhost ~]# yum -y install rpmdevtools pcre-devel       # 含rpmbuild，rpmdev-newspec，rpmdev-setuptree
+[root@localhost ~]# cat ~/.rpmmacros                            # 宏文件，此处指定RPM包制作的车间目录：'%_topdir'
+%_topdir %(echo $HOME)/rpmbuild 
+[root@localhost ~]# rpmdev-setuptree                            # 生成~/rpmbuild及子目录
+[root@localhost ~]# tree rpmbuild                               # RPM包的制作车间（遵循一定的目录结构规范）
 rpmbuild
-├── BUILD                                         #解压后的文件所在（创建RPM时将自动在此目录执行某些操作）
-├── RPMS                                          #存放制作完成后的二进制包（含以各平台命名的子目录及对应包）
-├── SOURCES                                       #原材料位置，如源码包，文档...
-├── SPECS                                         #存放管理rpm制作过程的描述文件（含宏及各阶段的定义和脚本等...）
-└── SRPMS                                         #存放制作完成后的src格式rpm包（如：xxx.src.rpm，其没有平台依赖）
+├── BUILD                                         # 解压后的文件所在（创建RPM时将自动在此目录执行某些操作）
+├── RPMS                                          # 存放制作完成后的二进制包（含以各平台命名的子目录及对应包）
+├── SOURCES                                       # 原材料位置，如源码包，文档...
+├── SPECS                                         # 存放管理rpm制作过程的描述文件（含宏及各阶段的定义和脚本等...）
+└── SRPMS                                         # 存放制作完成后的src格式rpm包（如：xxx.src.rpm，其没有平台依赖）
 
 5 directories, 0 files
 [root@localhost ~]# cd rpmbuild/SPECS/ && rpmdev-newspec -o Name-version.spec  #生成默认的SPEC模板
@@ -38,9 +37,9 @@ Distribution:   Linux                             # 发行版
 License:        GPLv2
 Vender:         bluevitality <inmoonlight@163.com>
 URL:            https://github.com/bluevitality
-Source0:        %{name}-%{version}.tar.gz         # 明确说明源文件，默认将从rpmbuild的SOURCES路径下查找
-Source1:        xxxxx                             # 默认将SOURCES下的源文件在rpmbuild的BUILD目录进行解压缩操作
-Source2:        xxxxx
+Source0:        %{name}-%{version}.tar.gz         # 明确说明源文件，默认从rpmbuild的SOURCES路径下查找
+Source1:        xxxxx                             # 默认将SOURCES下的源文件在rpmbuild的BUILD目录内进行解压缩操作
+Source2:        xxxxx.conf
 
 BuildRoot:      %{_topdir}/%{name}-%{version}-%{release}-root   
 # 或使用 "%{_topdir}/BUILDROOT"
@@ -49,6 +48,7 @@ BuildRoot:      %{_topdir}/%{name}-%{version}-%{release}-root  
                                                   
 BuildRequires:  gcc,automake,binutils,pcre-devel  # 制作时依赖的软件，如若有版本依赖则设为形如 gcc >=4.2.2 的形式
 Requires:       openssl,xxx,xxx                   # 安装时依赖的软件，同上...
+Provides:                                         # 指明本软件提供的功能以便其他rpm识别（依赖）
 
 Require(pre):   bash >= 3.0                       # 执行脚本时的依赖
 Require(post):  python(flask) >= x.x              # 可指定依赖于特定语言的某个模块并指定依赖版本
@@ -64,10 +64,13 @@ Fill in the details about the package here        # 软件包的详细说明
 %prep                                             # 准备阶段，若有补丁的需要在则在此阶段进行打补丁操作
 %setup -q                                         # 建议用"%setup -q"替代"%prep"的内容（此宏可自动完成源码解压和cd）
                                                   # 源码包必须是name-version.tar.gz的格式才能被 "setup -q" 处理
+# 一般用%setup -c就可以了，但有两种情况：
+# 一是同时编译多个源码包
+# 二是源码的tar包的名称与解压出来的目录不一致，此时，就需要使用-n参数指定一下了 格式：%setup -n %{name}-%{version} 
 
 %build                                            # 编译阶段
 export DESTDIR=%{BuildRoot}
-%configure                                        # rpmbuild --showrc | grep configure
+%configure  --prefix=/usr/local/nginx             # rpmbuild --showrc | grep configure
 make %{?_smp_mflags}
 # 这里的 %configure 是个宏常量，会自动将 prefix 设为 /usr
 # 另外此宏还可接受额外的参数，若某些软件有某些高级特性需要开启，可通过给 %configure 宏传参数来开启
@@ -91,6 +94,8 @@ rm -fr %{buildroot}
 
 # 写要打包的文件列表时既可以宏开头，也可为"/"开头，无任何本质区别，都表示从 %{buildroot} 中拷贝文件到最终的rpm包里
 # 如果是相对路径则表示要拷贝的文件位于 %{_builddir} 目录
+
+%exclude                                          # 列出不想打包到rpm中的文件，若%exclude指定的文件不存在会出错
 
 %doc
 
@@ -131,7 +136,21 @@ src.rpm格式是rpm源码包，查看内容：    rpm2cpio filename.src.rpm | cp
 展开src.rpm格式文件内的SPEC文件：    rpm2cpio filename.src.rpm | cpio -id
 使用src.rpm格式的文件制作成rpm包：    rpmbuild --rebuild filename.src.rpm  (默认将制作好的rpm包放至用户制作车间)
 ```
+#### %prep 下的 %setup 说明
+```txt
+%setup 不加任何选项，仅将软件包打开。 
+%setup -n newdir 将软件包解压在newdir目录。 
+%setup -c 解压缩之前先产生目录。 
+%setup -b num 将第num个source文件解压缩。 
+%setup -T 不使用default的解压缩操作。 
+%setup -T -b 0 将第0个源代码文件解压缩。 
+%setup -c -n newdir 指定目录名称newdir，并在此目录产生rpm套件。 
 
+%patch 最简单的补丁方式，自动指定patch level。 
+%patch 0 使用第0个补丁文件，相当于%patch ?p 0。 
+%patch -s 不显示打补丁时的信息。 
+%patch -T 将所有打补丁时产生的输出文件删除。
+```
 #### 软件包所属类别
 ```txt
 Amusements/Games （娱乐/游戏）
