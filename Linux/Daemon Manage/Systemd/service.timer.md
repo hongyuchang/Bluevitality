@@ -1,3 +1,4 @@
+#### /etc/systemd/system/*.service
 ```bash
 #创建需要执行的脚本
 [root@node1 ~]# chmod a+x /usr/bin/myscript
@@ -15,9 +16,9 @@ Description=MyScript
 [Service]
 Type=simple
 ExecStart=/usr/bin/myscript
-
-
-
+```
+#### /etc/systemd/system/*.Timer
+```
 #创建Timer
 [root@node1 system]# chmod a+x Myscripts.timer 
 [root@node1 system]# cat Myscripts.timer
