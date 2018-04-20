@@ -72,7 +72,7 @@ Fill in the details about the package here        # 软件包的详细说明
 export DESTDIR=%{BuildRoot}
 %configure  --prefix=/usr/local/nginx             # rpmbuild --showrc | grep configure
 make %{?_smp_mflags}
-# 这里的 %configure 是个宏常量，会自动将 prefix 设为 /usr
+# 这里的 %configure 是个宏常量，会自动将 prefix 设为 /usr ，/etc下的配置文件要用 %{_sysconfdir} 标识
 # 另外此宏还可接受额外的参数，若某些软件有某些高级特性需要开启，可通过给 %configure 宏传参数来开启
 
 %install                                          # 安装阶段（在此阶段可实现删除不需要加入rpm包的文件）
@@ -106,6 +106,12 @@ rm -fr %{buildroot}
 %preun                                            # 卸载前执行，定义卸载前的动作，如杀掉此RPM包的进程等.....
 
 %postun                                           # 卸载后执行，如删除备份、配置文件
+# 不同的操作会传不同的参数给%postun段。当传给%postun段的第一个参数是0时代表卸载
+if [ "$1" = "0" ] ; then
+ conf_path="/path......"
+ sed -i 's/^xxx/xxx/g' $conf_path
+fi 
+
 
 %changelog                                        # 变更日志，下面是摘来的例子......
 * date +"%a %b %d %Y"  修改人  <邮箱>  本次版本-License修订号
@@ -150,6 +156,16 @@ src.rpm格式是rpm源码包，查看内容：    rpm2cpio filename.src.rpm | cp
 %patch 0 使用第0个补丁文件，相当于%patch ?p 0。 
 %patch -s 不显示打补丁时的信息。 
 %patch -T 将所有打补丁时产生的输出文件删除。
+```
+#### RPM包各阶段传递的参数说明
+```txt
+%pre和%post段
+  当传递的第一个参数为1时，表示新安装一个rpm包。
+  当传递的第一个参数为2时，表示升级一个已经存在的包。
+
+%preun和%postun段
+  当传递的第一个参数为0时，表示删除一个包。
+  当传递的第一个参数为1时，表示更新一个包。
 ```
 #### 软件包所属类别
 ```txt
