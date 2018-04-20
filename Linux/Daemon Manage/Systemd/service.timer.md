@@ -18,7 +18,7 @@ Type=simple
 ExecStart=/usr/bin/myscript
 ```
 #### /etc/systemd/system/*.Timer
-```
+```bash
 #创建Timer
 [root@node1 system]# chmod a+x Myscripts.timer 
 [root@node1 system]# cat Myscripts.timer
@@ -39,6 +39,7 @@ WantedBy=multi-user.target
 [root@node1 system]# systemctl daemon-reload
 [root@node1 system]# systemctl start timers.target
 [root@node1 system]# systemctl start Myscripts.timer
+[root@node1 system]# systemctl enable Myscripts.timer
 
 #查看
 [root@node1 ~]# systemctl status Myscripts.timer
