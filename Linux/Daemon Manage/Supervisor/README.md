@@ -35,6 +35,7 @@ autostart = true                                    ; 在 super
 startsecs = 5                                       ; 启动 5 秒后没有异常退出就当作已正常启动
 autorestart = true                                  ; 程序异常退出后自动重启
 startretries = 3                                    ; 启动失败后的重试次数，默认 3
+exitcodes=0,2                                       ; 期望或者说预料中的进程退出码
 user = leon                                         ; 用哪个用户身份启动
 redirect_stderr = true                              ; 把 stderr 重定向到 stdout，默认 false
 stdout_logfile_maxbytes = 20MB                      ; stdout 日志文件大小，默认 50MB
