@@ -13,12 +13,16 @@ if [ $(id -u) != "0" ]; then
     exit;
 fi
 
+#使用阿里源
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
 #依赖
-yum -y install net-snmp net-snmp-devel php-common php-devel perl-DBI php-gd php-xml php-bcmath fping OpenIPMI-devel php-mbstring  \
-php-xmlrpc php-mhash patch unzip httpd mariadb mariadb-devel php php-mysql zlib-devel glibc-devel curl curl-devel gcc automake \
-libidn-devel openssl-devel rpm-devel php-odbc php-pear unixODBC-devel
-yum -y install httpd-devel mysql mysql-devel java-devel wget unzip libxml2 libxml2-devel ncurses-devel \
-unixODBC* libssh2-devel libevent-devel java-1.7.0-openjdk-devel mariadb-server ntpdate 
+yum -y install zlib-devel glibc-devel curl curl-devel gcc automake
+yum -y install net-snmp net-snmp-devel php-common php-devel perl-DBI php-gd php-xml php-bcmath fping OpenIPMI-devel php-mbstring
+yum -y install php-xmlrpc php-mhash patch unzip httpd mariadb mariadb-devel php php-mysql
+yum -y install libidn-devel openssl-devel rpm-devel php-odbc php-pear unixODBC-devel
+yum -y install httpd-devel mysql mysql-devel java-devel wget unzip libxml2 libxml2-devel ncurses-devel
+yum -y install unixODBC* libssh2-devel libevent-devel java-1.7.0-openjdk-devel mariadb-server ntpdate 
 
 #同步时间
 ntpdate asia.pool.ntp.org
@@ -127,6 +131,7 @@ END
 /etc/init.d/zabbix_agentd start
 /usr/local/zabbix_3.4/sbin/zabbix_java/startup.sh
 
+sed -i 's/DirectoryIndex.*/& index.php/g' /etc/httpd/conf/httpd.conf
 systemctl start httpd.service
 systemctl enable httpd.service
 systemctl enable mariadb
@@ -156,6 +161,9 @@ disable_sec
 chmod a+x /etc/rc.local
 
 echo -e "\nScript Execution Time： \033[32m${SECONDS}s\033[0m"
+
+# 账号密码：
+# Admin / zabbix
 
 exit 0
 
