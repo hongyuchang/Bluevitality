@@ -2,7 +2,7 @@
 ```txt
 $TTL  1h
 $ORIGIN zwtzwt.com.
-@ IN SOA ns.zwtzwt.com. inmoonlight.163.com. (
+@	IN	SOA	ns.zwtzwt.com.	inmoonlight.163.com. (
 
 ; 上面的SOA记录指明zwtzwt.com.域（即"@"）的授权主机名是ns.zwtzwt.com. 每个区文件都需要SOA记录，且只能有一个
 
@@ -13,7 +13,7 @@ $ORIGIN zwtzwt.com.
                     86400       ; 最小默认TTL值，若第1行无$TTL则用该值
 ) 
 
-@	IN	NS	www.zwtzwt.com.
+@	IN	NS	www.zwtzwt.com.		; 符号'@'代表区域文件"named.conf"中定义的区域名称
 www	IN	A	172.16.10.76
 ftp     IN	CNAME	www
 forum   IN	CNAME	www
