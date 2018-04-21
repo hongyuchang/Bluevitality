@@ -20,13 +20,15 @@ dig：
 		+tries=A		向服务器查询的重试次数，默认3次
 
 查询163.com域下所有记录：	dig -t ANY 163.com	即163.com下的所有主机
-查询163.com主机的MX记录：	dig -t MX  163.com	参数+short快速返回，信息量少
-根据查询的MX记录查询A记录：	dig -t A   163mx00.mxmail.netease.com.
-仅查询163.com主机的A记录：	dig 163.com A +noall +answer
-快速返回域名的NS服务器：	dig -t NS www.baidu.com +short
+查询163.com主机的MX记录：	dig -t MX 163.com	参数+short快速返回，信息量少
+根据查询的MX记录查询A记录：	dig -t A 163mx00.mxmail.netease.com.
+仅查询163主机的A记录：	dig -t A 163 @8.8.8.8 +noall +answer
+快速返回域名的NS服务器：	dig  +short -t NS www.baidu.com @8.8.8.8
 反向解析：	dig -x 210.52.83.228
 查找域的授权dns服务器：	dig 163.com. +nssearch
 从根开始追踪域名解析过程：	dig 163.com +trace
+完全区域传送：	dig -t axfr 163.com
+增量区域传送：	dig -t ixfr 163.com
 ```
 #### Demo
 ```bash
