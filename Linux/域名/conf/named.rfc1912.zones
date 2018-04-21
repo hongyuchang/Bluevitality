@@ -12,18 +12,15 @@ view "South_China" {
 	zone "example2.com" IN  {   
 	        type slave;
 		master { 192.168.10.254; };
-		transfer-source 192.168.10.100;
 	        file "slaves/example2.com.zone" ;
+		transfer-source 192.168.10.100;
 		allow-transfer { 192.168.10.253 ; };
 		allow-update { none; };
 	};
 	
-	zone “example3.com” IN {
+	zone "example3.com" IN {
 		type forward;
-		forwarders { 
-			8.8.8.8; 
-			114.114.114.114;
-		};
+		forwarders { 114.114.114.114; };
 	};
 }
 
