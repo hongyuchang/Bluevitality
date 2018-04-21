@@ -15,6 +15,7 @@ view "South_China" {
 		transfer-source 192.168.10.100;
 	        file "slaves/example2.com.zone" ;
 		allow-transfer { 192.168.10.253 ; };
+		allow-update { none; };
 	};
 	
 	zone “example3.com” IN {
