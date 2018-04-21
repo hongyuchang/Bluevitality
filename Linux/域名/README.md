@@ -4,7 +4,7 @@ $TTL  1h
 $ORIGIN zwtzwt.com.
 @	IN	SOA	ns.zwtzwt.com.	inmoonlight.163.com. (
 
-; 上面的SOA记录指明zwtzwt.com.域（即"@"）的授权主机名是ns.zwtzwt.com. 每个区文件都需要一个SOA记录
+; 上面的SOA记录指明zwtzwt.com.域（即"@"）的授权主机名（权威的）是ns.zwtzwt.com. 每个区文件都需要一个SOA记录
 
                     2006102001  ; 版本号
                     28800       ; 主辅DNS周期同步的间隔，默认单位是秒，可用时间单位
