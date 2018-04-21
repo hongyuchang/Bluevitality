@@ -1,4 +1,4 @@
-#### 区域数据文件Example： named.zwtzwt.com
+#### 区域数据文件： named.zwtzwt.com
 ```txt
 $TTL  1h
 $ORIGIN zwtzwt.com.
@@ -28,6 +28,11 @@ sub	IN	NS	dns.sub.zwtzwt.com.	; 子域授权
 dns.sub IN	A	172.16.20.1		; 
 
 ; 注: 区域数据文件默认在 /var/named 下，并且其文件权限要求为640、属主为named...
+```
+#### 配置检查
+```txt
+检查Bind配置：	named-checkconf
+检查区域配置文件：	named-checkzone "www.zwtzwt.com." /var/named/named.zwtzwt.com.zone
 ```
 #### 解析流程
 ```txt
