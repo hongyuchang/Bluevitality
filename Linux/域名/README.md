@@ -1,29 +1,35 @@
-#### Example：named.zwtzwt.com
+#### 区域数据文件Example： named.zwtzwt.com
 ```txt
-$TTL    6h
+$TTL  1h
 $ORIGIN zwtzwt.com.
-@ IN SOA linux.yft.com. inmoonlight@163.com. ( 
-                    2006102001  ;版本号
-                    28800       ;主从周期同步的时间间隔；time默认单位秒（可用时间单位）
-                    14400       ;从服务器重试时间间隔
-                    720000      ;从服务器解析库失效时长
-                    86400       ;最小默认TTL值，若第1行无$TTL则用该值
-)
+@ IN SOA ns.zwtzwt.com. inmoonlight.163.com. (
+
+; 上面的SOA记录指明zwtzwt.com.域（即"@"）的授权主机名是ns.zwtzwt.com. 每个区文件都需要SOA记录，且只能有一个
+
+                    2006102001  ; 版本号
+                    28800       ; 主辅DNS周期同步的间隔，默认单位是秒，可用时间单位
+                    14400       ; 辅助服务器重试时间间隔
+                    720000      ; 辅助服务器解析库失效时长
+                    86400       ; 最小默认TTL值，若第1行无$TTL则用该值
+) 
 
 @	IN	NS	www.zwtzwt.com.
 www	IN	A	172.16.10.76
 ftp     IN	CNAME	www
 forum   IN	CNAME	www
-	IN	mx 19	mail.zwtzwt.com.
+	IN	mx 19	mail.zwtzwt.com.	; 数字越小邮件服务器的优先权越高。
 pop3	IN	CNAME	mail.zwtzwt.com.
+imap	IN	CNAME	mail.zwtzwt.com.
 mail	IN	A	172.16.10.77
 winxp   IN	A	172.16.10.48
-@	IN	NS	slave1.zwtzwt.com.	;DNS从服务器信息（为了触发同步区域数据文件的需要）
-slave1	IN	A	172.16.10.1		;
-sub	IN	NS	dns.sub.zwtzwt.com.	;子域授权
-dns.sub IN	A	172.16.20.1		;
+@	IN	NS	slave1.zwtzwt.com.	; DNS从服务器信息（为了触发同步区域数据文件的需要）
+slave1	IN	A	172.16.10.1		; 
+sub	IN	NS	dns.sub.zwtzwt.com.	; 子域授权
+dns.sub IN	A	172.16.20.1		; 
+
+; 注: 区域数据文件默认在 /var/named 下，并且其文件权限要求为640、属主为named...
 ```
-#### 名字解析流程
+#### 解析流程
 ```txt
 1、在浏览器中输入www.qq.com域名，操作系统会先检查自己本地的hosts文件是否有这个网址映射关系
    如果有，就先调用这个IP地址映射，完成域名解析。 
