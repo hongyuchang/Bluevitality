@@ -2,16 +2,15 @@
 # 仅用于RPM或YUM安装的Vsftp服务
 # 默认将随机产生的账号密码输出到脚本所在目录: Ftp_Users.txt
 
-#账号（密码默认随机或修改循环中的"Password"变量）及FTP根路径
+#账号（密码默认随机或修改循环中的"Password"）及FTP根路径
 userlist=(shangftp wangftp)             
 chroot_dir=/data
 
-set -e
-set -x
+set -ex
 
 yum -y install vsftpd
 
-[ -d ${chroot_dir} ] || mkdir -p ${chroot_dir}
+mkdir -p ${chroot_dir}
 
 #身份检查
 if [ $(id -u) != "0" ]
@@ -28,10 +27,9 @@ do
         else
                 #统一密码需修改这里
                 Password=${RANDOM}   
-                useradd -d ${chroot_dir} -M ${username} -s /bin/nologin
-                echo $Password | passwd  ${username} --stdin 2>&-
+                useradd -d ${chroot_dir} -M ${username} -s /bin/nologin && echo $Password | passwd  ${username} --stdin 2>&-
                 echo -e "$username   $Password" >> ./Ftp_Users.txt
-                echo -e "\033[32m create  ${username} .....\033[0m"
+                echo -e "\033[32m CREATE USER: ${username}\033[0m"
         fi
 done
 
@@ -107,4 +105,3 @@ exit 0
 # 中文成为被动模式，工作原理：FTP客户端连接到FTP服务器的21端口，发送用户名和密码
 # 登录成功后要list或者读取数据时发送PASV命令到服务器， 服务器在本地随机开放一个端口（N>1024），然后把开放的端口告诉客户端
 # 客户端再连接到服务器开放的端口进行传输
-
