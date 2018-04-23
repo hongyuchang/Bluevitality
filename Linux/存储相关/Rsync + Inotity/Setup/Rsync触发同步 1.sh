@@ -1,5 +1,9 @@
 #!/bin/bash
 
+sysctl -w fs.inotify.max_queued_events="99999999"
+sysctl -w fs.inotify.max_user_watches="99999999"
+sysctl -w fs.inotify.max_user_instances="65535"
+
 if [ ! -f /etc/1.pas ];
   then echo "123456" > /etc/1.pas
   chmod 600 /etc/1.pas
