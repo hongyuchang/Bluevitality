@@ -6,6 +6,10 @@
 # this script will push these changes to 10.10.67.81 with rsync
 # Created by shidegang at 2013.11.04
 
+sysctl -w fs.inotify.max_queued_events="99999999"
+sysctl -w fs.inotify.max_user_watches="99999999"
+sysctl -w fs.inotify.max_user_instances="65535"
+
 src=/Data/nfs/upload/
 user=rsync_user
 host=10.10.67.81
