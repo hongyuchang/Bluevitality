@@ -1,3 +1,46 @@
+```txt
+ipip 
+需要内核模块 ipip.ko ，该方式最为简单！但是你不能通过IP-in-IP隧道转发广播或者IPv6数据包。
+你只是连接了两个一般情况下无法直接通讯的IPv4网络而已。至于兼容性，这部分代码已有很长一段历史，其兼容性可上溯到1.3版的内核。
+据网上查到信息，Linux的IP-in-IP隧道不能与其他操作系统或路由器互相通讯。它很简单，也很有效。
+
+GRE
+需要内核模块 ip_gre.ko ，GRE是最初由CISCO开发出来的隧道协议，能够做一些IP-in-IP隧道做不到的事情。
+比如，你可以使用GRE隧道传输多播数据包和IPv6数据包。
+
+sit
+他的作用是连接 ipv4 与 ipv6 的网络。个人感觉不如gre使用广泛 。
+```
+#### 相关模块
+```bash
+# sit模块
+[root@localhost ~]# modinfo sit
+filename:       /lib/modules/2.6.32-642.el6.x86_64/kernel/net/ipv6/sit.ko
+alias:          netdev-sit0
+license:        GPL
+srcversion:     AF73F62BA39C407E20C4F05
+depends:        ipv6,tunnel4
+vermagic:       2.6.32-642.el6.x86_64 SMP mod_unload modversions
+# ipip模块
+[root@localhost ~]# modinfo ipip
+filename:       /lib/modules/2.6.32-642.el6.x86_64/kernel/net/ipv4/ipip.ko
+alias:          netdev-tunl0
+license:        GPL
+srcversion:     AF7433BD67CBFC54C10C108
+depends:        tunnel4
+vermagic:       2.6.32-642.el6.x86_64 SMP mod_unload modversions
+# ip_gre模块
+[root@localhost ~]# modinfo ip_gre
+filename:       /lib/modules/2.6.32-642.el6.x86_64/kernel/net/ipv4/ip_gre.ko
+alias:          netdev-gretap0
+alias:          netdev-gre0
+alias:          rtnl-link-gretap
+alias:          rtnl-link-gre
+license:        GPL
+srcversion:     163303A830259507CA00C15
+depends:        ip_tunnel
+vermagic:       2.6.32-642.el6.x86_64 SMP mod_unload modversions 
+```
 #### 环境
 Host A : `121.207.22.123`  
 Host B : `111.2.33.28`
