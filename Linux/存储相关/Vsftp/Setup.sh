@@ -8,7 +8,7 @@ chroot_dir=/data
 
 set -ex
 
-yum -y install vsftpd
+yum -y install vsftpd psmisc net-tools systemd-devel libdb-devel perl-DBI
 
 mkdir -p ${chroot_dir}
 
