@@ -27,7 +27,7 @@
 │   │   │   └── Setup 3.0.5
 │   │   └── LVS + Keepalive
 │   │       ├── Check Scripts
-│   │       ├── LVS
+│   │       ├── Lvs
 │   │       └── 资料
 │   ├── Daemon Manage
 │   │   ├── Supervisor
