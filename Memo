@@ -91,10 +91,9 @@
 │   │   │   ├── Configs
 │   │   │   └── Setup
 │   │   ├── Samba
-│   │   │   └── 资料
 │   │   ├── Sersync
 │   │   ├── Vsftp
-│   │   │   └── config-ftp
+│   │   │   └── conf
 │   │   └── 分区脚本
 │   ├── 防火墙
 │   ├── 服务发现
@@ -294,4 +293,4 @@
     │   └── Improve
     └── Tools
 
-294 directories
+293 directories
