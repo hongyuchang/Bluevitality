@@ -41,6 +41,7 @@ srcversion:     163303A830259507CA00C15
 depends:        ip_tunnel
 vermagic:       2.6.32-642.el6.x86_64 SMP mod_unload modversions 
 ```
+---
 #### 环境
 Host A : `121.207.22.123`  
 Host B : `111.2.33.28`
@@ -77,7 +78,7 @@ PING 10.10.10.2 (10.10.10.2) 56(84) bytes of data.
 ip link set gre1 down
 ip tunnel del gre1
 ```
-
+---
 #### 环境
                                                   |
             1.1.1.1               2.2.2.2         |
