@@ -7,18 +7,9 @@ MYSQL_HOST="127.0.0.1"
 MYSQL_PORT="3306"
 BACKUP_HOME="/data/db_backup"
 
-#身份检查
-if [ $(id -u) != "0" ]; then
-    echo "error: user must be an administrator"
-    exit;
-fi
-
 mkdir -p ${BACKUP_HOME:?error}
 
-mysqldump \
--u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} \
--h ${MYSQL_HOST} \
--P ${MYSQL_PORT} \
+mysqldump -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} -h ${MYSQL_HOST} -P ${MYSQL_PORT} \
 --default-character-set=UTF8 \
 --single-transaction \
 --delete-master-logs \
