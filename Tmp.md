@@ -17,4 +17,6 @@ VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html
 Python3 开发，算法，flask
 TB收藏的书及相关内容研究性学习
 Bit Coin
+
+研究三个命令：pstack/strace/ipcs
 ```
