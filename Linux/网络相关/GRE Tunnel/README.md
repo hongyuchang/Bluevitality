@@ -2,7 +2,7 @@
 Host A : `121.207.22.123`  
 Host B : `111.2.33.28`
 
-#### HostA
+#### Host A
 > 创建GRE类型隧道设备gre1, 并设置对端IP为111.2.33.28。  
 > 隧道数据包将被从121.207.22.123也就是本地IP地址发起，其TTL字段被设置为255。  
 > 隧道设备分配的IP地址为10.10.10.1，掩码为255.255.255.0。  
@@ -13,7 +13,7 @@ sysctl -w net.ipv4.ip_forward=1
 sysctl -p
 ```
 
-#### HostB
+#### Host B
 ```Bash
 ip tunnel add GRE1 mode gre remote 121.207.22.123 local 111.2.33.28 ttl 255 && ip link set GRE1 up
 ip addr add 10.10.10.2 peer 10.10.10.1 dev GRE1
@@ -45,13 +45,13 @@ ip tunnel del gre1
                                                   | 192.168.1.0/24 
 
 
-#### ServerA
+#### Server A
 ```Bash
 ip tunnel add a2b mode ipip remote 2.2.2.2 local 1.1.1.1
 ifconfig a2b 192.168.2.1 netmask 255.255.255.0
 /sbin/route add -net 192.168.1.0/24 gw 192.168.2.2
 ```
-#### ServerB
+#### Server B
 ```Bash
 ip tunnel add a2b mode ipip remote 1.1.1.1 local 2.2.2.2
 ifconfig a2b 192.168.2.2 netmask 255.255.255.0
@@ -59,4 +59,4 @@ iptables -t nat -A POSTROUTING -s 192.168.2.1 -d 192.168.1.0/24 -j MASQUERADE
 sysctl -w net.ipv4.ip_forward=1
 sed -i '/net.ipv4.ip_forward/ s/0/1/'  /etc/sysctl.conf
 ```
-至此，完成了两端的配置，ServerA可直接访问ServerB所接的私网了
+至此完成了两端的配置，ServerA可直接访问ServerB所接的私网了
