@@ -16,7 +16,7 @@ flume，ffmpeg
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html、VIM脚本
 Python3 开发，算法，flask
 TB收藏的书及相关内容研究性学习
-Bit Coin
+Bit Coin、PAM认证
 
 研究三个命令：pstack/strace/ipcs
 ```
