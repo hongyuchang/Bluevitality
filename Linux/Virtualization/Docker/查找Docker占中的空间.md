@@ -1,4 +1,4 @@
-##### /var/lib/docker
+##### 数据存放位置 /var/lib/docker
 ```bash
 1、/var/lib/docker/devicemapper/devicemapper/data       #用来存储相关的存储池数据      
 2、/var/lib/docker/devicemapper/devicemapper/metadata   #用来存储相关的元数据。
@@ -31,3 +31,11 @@ docker volume rm $(docker volume ls -qf dangling=true)
 ```
 #### 新版DOCKER增加了清理占用资源的命令
 ![img](Swarm/资料/清理Docker资源.png)
+#### docker 1.13 版本之后支持使用的数据清除命令
+```bash
+docker image prune      删除无用的镜像
+docker container prune  删除无用的容器
+docker volume prune     删除无用的卷
+docker network prune    删除无用的网络
+docker system prune     删除无用的镜像、容器、卷、网络
+```
