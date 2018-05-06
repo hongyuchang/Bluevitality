@@ -48,7 +48,7 @@ DOCKER_NETWORK_OPTIONS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock \
 # –cluster-advertise=   决定了所使用网卡以及docker daemon端口信息
 
 #在Node1节点创建overlay网络（在node1创建的multihost会通过consul同步到node2上面）
-[root@node1 ~]#  docker network create -d overlay  multihost
+[root@node1 ~]#  docker network create -d overlay --subnet 172.18.0.0/16 multihost
 56656e3e6af2eedb600f305ea96f6b7f453c5d2d6e296ccf54461e6d0a6f3719
 
 [root@node2 ~]# docker network ls   #node2实时同步...
@@ -60,7 +60,8 @@ d523566ec70f        none                null                local
 ```
 #### 测试
 ```bash
-[root@node2 ~]# docker run -it --net=multihost --name=node2_c1 docker.io/bash  
+#下面的--network-alias用于指定容器在用户定义网络中的别名，使本网络内其他的容器可通过此别名进行通信
+[root@node2 ~]# docker run -it --net=multihost --network-alias test-server --name=node2_c1 docker.io/bash 
 bash-4.4# ip address
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -70,18 +71,18 @@ bash-4.4# ip address
        valid_lft forever preferred_lft forever
 6: eth0@if7: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1450 qdisc noqueue state UP 
     link/ether 02:42:0a:00:00:03 brd ff:ff:ff:ff:ff:ff
-    inet 10.0.0.3/24 scope global eth0
-       valid_lft forever preferred_lft forever
+    inet 10.0.0.3/24 scope global eth0                           #此IP地址用于-p映射到主机地址使用？
+       valid_lft forever preferred_lft forever
     inet6 fe80::42:aff:fe00:3/64 scope link 
        valid_lft forever preferred_lft forever
 9: eth1@if10: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
     link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
-    inet 172.18.0.2/16 scope global eth1
-       valid_lft forever preferred_lft forever
+    inet 172.18.0.2/16 scope global eth1                         #自定义网络中可直接ping其--name指定的容器名
+       valid_lft forever preferred_lft forever
     inet6 fe80::42:acff:fe12:2/64 scope link 
        valid_lft forever preferred_lft forever
 
-[root@node1 ~]# docker run -it --net=multihost --name=node1_c1 docker.io/bash  
+[root@node1 ~]# docker run -it --net=multihost --network-alias test-server2 --name=node1_c1 docker.io/bash
 bash-4.4# ip address
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
