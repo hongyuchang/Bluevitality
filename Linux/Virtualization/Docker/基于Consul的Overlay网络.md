@@ -1,19 +1,25 @@
 #### 环境
 ```txt
-      consul-server            consul-agent
+      consul-server            consul-agent
              |                      |
             [Node1]   <------>  [Node2]
              /                       \
-    主机IP:192.168.0.3            主机IP:192.168.0.4
+    主机IP:192.168.0.3            主机IP:192.168.0.4
+----------------------------------------------------------------------------
+docker主机集群通过key/value存储共享数据，在7946端口上相互间通过gossip协议学习各宿主机运行了哪些容器
+守护进程根据这些数据来在vxlan1设备上生成静态MAC转发表
+
+overlay网络依赖宿主机三层网络的组播实现，需要在所有宿主机的防火墙上打开下列端口：
+      4789/udp	      容器之间流量的vxlan端口
+      7946/udp/tcp	docker守护进程的控制端口
 ```
 #### 部署流程
 ```bash
 [root@node1 ~]# setenforce 0                                    #在各节点均进行如下设置
-[root@node1 ~]# systemctl stop firewalld                        #
+[root@node1 ~]# systemctl stop firewalld                        
 [root@node1 ~]# hostnamectl set-hostname node1                  #节点名称必须不同!...
-[root@node1 ~]# vim /etc/sysconfig/network #---> hostname=node1 #
-[root@node1 ~]# unzip consul_0.8.1_linux_amd64.zip              #
-[root@node1 ~]# mv consul /bin/                                 #
+[root@node1 ~]# vim /etc/sysconfig/network                      #---> hostname=node1 
+[root@node1 ~]# unzip consul_0.8.1_linux_amd64.zip && mv consul /bin/
 
 #启动consul服务端
 [root@node1 ~]# nohup consul agent -server -bootstrap -data-dir /home/consul -bind=192.168.0.3 -client=0.0.0.0 &
