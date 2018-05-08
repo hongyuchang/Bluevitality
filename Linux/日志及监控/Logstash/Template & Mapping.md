@@ -7,7 +7,7 @@ Logstash自带的模版其实也挺好，不过有一个参数 "refresh_interval
 将模板中优先级字段"order"定义的比Logstash自带的模版高，而模版匹配规则又一样，所以这个自定义模版的配置会覆盖原模版 (合并)
 ```
 ```json
-curl-XPUThttp://10.10.1.244:9200/_template/logstash2-d'
+curl-XPUT http://10.10.1.244:9200/_template/logstash2-d'
 {
 	"order": 1,
 	"template": "logstash-*",
