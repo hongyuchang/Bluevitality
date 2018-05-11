@@ -1,3 +1,5 @@
+    <!-- SCHEMA >>> DATANODE >>> DATAHOST -->
+    
 <?xml version="1.0"?>
 <!DOCTYPE mycat:schema SYSTEM "schema.dtd">
 <mycat:schema xmlns:mycat="http://io.mycat/">
