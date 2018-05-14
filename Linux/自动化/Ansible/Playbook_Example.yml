@@ -1,5 +1,5 @@
 ---
-- hosts: webservers                   #存在于Inventory中的特定主机或组
+- hosts: "{{ webservers }}"           #环境变量传入的、存在于Inventory中的特定主机、组
   gather_facts: false
   vars:                               #变量
     - http_port: 80           
