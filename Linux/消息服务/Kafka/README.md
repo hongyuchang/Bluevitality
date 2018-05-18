@@ -106,8 +106,9 @@ bin/kafka-server-stop.sh
 #启动服务
 ./kafka-server-start.sh -daemon ../config/server.properties 
 
-#创建主题
-./kafka-topics.sh --zookeeper 192.168.133.130:2181 --create --replication-factor 1 --partitions 1 --topic ES
+#创建主题（保存时常：delete.retentin.ms）
+./kafka-topics.sh --zookeeper 192.168.133.130:2181 --create --replication-factor 1 --partitions 1 --topic ES \
+--config delete.retentin.ms=86400000
 
 #删除主题
 ./kafka-topics.sh --zookeeper 192.168.133.130:2181 --delete --topic ES
@@ -121,7 +122,7 @@ bin/kafka-server-stop.sh
 #生产者客户端命令（生产者产生信息时已经从ZK获取到了Broker的路由，因此这里要填入Broker的地址列表）
 bin/kafka-console-producer.sh --broker-list 192.168.133.130:9092 --topic ES
 
-#消费者客户端命令
+#消费者客户端命令（从头消费：--from-beginning）
 ./kafka-console-consumer.sh -zookeeper  192.168.133.130:2181 --from-beginning --topic ES
 
 #为Topic增加Partition
