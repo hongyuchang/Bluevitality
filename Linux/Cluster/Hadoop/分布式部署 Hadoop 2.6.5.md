@@ -1,4 +1,3 @@
-#### 环境说明
 ```txt
 因虚拟机资源限制，将SN,NN,YARN仍放在1个节点 (Node1) , 需注意Hadoop集群中各节点间ntp同步及各个节点的主机名调整
 
@@ -15,10 +14,9 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 [root@localhost ~]# systemctl stop firewalld && setenforce 0    #生产环境要写入配置
 [root@localhost ~]# date -s "yyyy-mm-dd HH:MM"      #生产环境要使用ntpdate，若不进行同步在执行YARN任务时会报错
 [root@localhost ~]# yum -y install java-1.7.0-openjdk.x86_64 java-1.7.0-openjdk-devel.x86_64
-[root@localhost ~]# echo "export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.161-2.6.12.0.el7_4.x86_64" \
+[root@localhost ~]# echo "export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/" \
 > /etc/profile.d/java.sh && . /etc/profile.d/java.sh
-[root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /
-[root@localhost ~]# chown -R root.root /hadoop-2.6.5/
+[root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /  &&  chown -R root.root /hadoop-2.6.5/
 [root@localhost ~]# ln -sv /hadoop-2.6.5/ /hadoop
 [root@localhost ~]# cat > /etc/profile.d/hadoop.sh <<'eof'
 export HADOOP_PREFIX="/hadoop"                          
@@ -46,10 +44,9 @@ eof
 [hadoop@localhost ~]$ for nd in 1 2 3 4;do ssh node${nd} "echo test" ;done
 [hadoop@localhost ~]$ exit
 [root@localhost ~]# mkdir -p  /data/hadoop/hdfs/{nn,snn,dn}         #创建HDFS各角色使用的元数据及块数据等路径
-[root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/       #修改属主属组是必须的...
+[root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/       #修改属主属组
 [root@localhost ~]# cd /hadoop
-[root@localhost hadoop]# mkdir logs
-[root@localhost hadoop]# chmod -R g+w /hadoop/logs                  #日志路径...
+[root@localhost hadoop]# mkdir -p logs && chmod -R g+w /hadoop/logs #日志路径...
 [root@localhost hadoop]# chown -R hadoop.hadoop /hadoop/            #
 [root@localhost hadoop]# chown -R hadoop.hadoop /hadoop             #软连接
 [root@localhost hadoop]# ll /hadoop
@@ -64,6 +61,10 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <name>fs.defaultFS</name>                                   #
         <value>hdfs://node1:8020/</value>                           #指明HDFS的Master节点访问接口（监听的RPC端口）
         <final>true</final>
+    </property>
+    <property>
+         <name>io.file.buffer.size</name>
+         <value>131072</value>
     </property>
  </configuration>
  
@@ -109,7 +110,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <name>yarn.resourcemanager.scheduler.class</name> 
         <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value>
     </property>
-<configuration>
+</configuration>
 
 [root@node1 hadoop]# vim etc/hadoop/hdfs-site.xml
 #主要用于配置HDFS相关属性，如复制因子（数据块副本数），NN和DN用于存储数据的路径等...
@@ -172,12 +173,12 @@ eof
 ```bash
 [root@node1 hadoop]# su - hadoop 
 [hadoop@node1 ~]$ cd /hadoop/etc/hadoop
-[hadoop@node1 ~]$ for n in {1..4};do scp core-site.xml  hadoop@node${nd}::/hadoop/etc/hadoop/core-site.xml ;done   
-[hadoop@node1 ~]$ for n in {1..4};do scp yarn-site.xml  hadoop@node${nd}::/hadoop/etc/hadoop/yarn-site.xml ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp mapred-site.xml  hadoop@node${nd}::/hadoop/etc/hadoop/mapred-site.xml ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp hdfs-site.xml  hadoop@node${nd}::/hadoop/etc/hadoop/hdfs-site.xml ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp slaves  hadoop@node${nd}::/hadoop/etc/hadoop/slaves ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp masters  hadoop@node${nd}::/hadoop/etc/hadoop/masters ;done
+[hadoop@node1 ~]$ for n in {1..4};do scp core-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/core-site.xml ;done   
+[hadoop@node1 ~]$ for n in {1..4};do scp yarn-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/yarn-site.xml ;done 
+[hadoop@node1 ~]$ for n in {1..4};do scp mapred-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/mapred-site.xml ;done 
+[hadoop@node1 ~]$ for n in {1..4};do scp hdfs-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/hdfs-site.xml ;done 
+[hadoop@node1 ~]$ for n in {1..4};do scp slaves  hadoop@node${n}:/hadoop/etc/hadoop/slaves ;done 
+[hadoop@node1 ~]$ for n in {1..4};do scp masters  hadoop@node${n}:/hadoop/etc/hadoop/masters ;done
 #core-site.xml，mapred-site.xml，hdfs-site.xml，master，slave等配置文件在各节点中都是一样的
 ```
 #### 启动 Hadoop Cluster
