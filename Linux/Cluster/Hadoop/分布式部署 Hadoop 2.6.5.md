@@ -43,8 +43,11 @@ eof
 [hadoop@localhost ~]$ for ip in 3 4 7 8;do ssh-copy-id -i .ssh/id_rsa.pub hadoop@192.168.0.${ip};done 
 [hadoop@localhost ~]$ for nd in 1 2 3 4;do ssh node${nd} "echo test" ;done
 [hadoop@localhost ~]$ exit
-[root@localhost ~]# mkdir -p  /data/hadoop/hdfs/{nn,snn,dn}    #在各节点创建HDFS各角色使用的元数据及块数据等路径
-[root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/  #修改属主属组，注意权限问题可能引起DN启动失败!
+
+#在各节点创建HDFS各角色使用的元数据及块数据等路径，修改属主属组，注意权限问题可能引起DN启动失败!
+[root@localhost ~]# mkdir -p  /data/hadoop/hdfs/{nn,snn,dn}
+[root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/
+
 [root@localhost ~]# cd /hadoop
 [root@localhost hadoop]# mkdir -p logs && chmod -R g+w /hadoop/logs #日志路径...
 [root@localhost hadoop]# chown -R hadoop.hadoop /hadoop/            #
