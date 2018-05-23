@@ -7,8 +7,8 @@
 ```bash
 [root@harbor ~]# yum -y install epel-release
 [root@harbor ~]# yum -y install python-pip
-[root@harbor ~]# curl -L https://github.com/docker/compose/releases/download/1.13.0\
-/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+[root@harbor ~]# sudo curl -L https://github.com/docker/compose/releases/download\
+/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 [root@harbor ~]# chmod a+x /usr/local/bin/docker-compose
 [root@harbor ~]# docker-compose --version               #验证安装
 docker-compose version 1.13.0, build 1719ceb
