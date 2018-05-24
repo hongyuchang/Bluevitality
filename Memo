@@ -133,7 +133,8 @@
 │   │   └── 银行网点终端巡检
 │   ├── 日志及监控
 │   │   ├── Elasticsearch
-│   │   │   └── Plugins
+│   │   │   ├── Plugins
+│   │   │   └── Template
 │   │   ├── ELK Stack - 2016
 │   │   │   └── 资料
 │   │   ├── Kibana
@@ -293,4 +294,4 @@
     │   └── Improve
     └── Tools
 
-293 directories
+294 directories
