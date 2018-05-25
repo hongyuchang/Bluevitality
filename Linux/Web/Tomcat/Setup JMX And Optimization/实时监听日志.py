@@ -58,7 +58,7 @@ def monitor_log():
 			PID = os.popen("ps -ef | grep %s | grep bin/java | awk '{print $2}'" %(out)).read() #需要KILL
 			DUMP_HEAP = u"%s -dump:format=b,file=%slogs/%s_hprof  %s" %(JMAP,out,DATE,PID)
 			STOP_COMMAND = u"kill -9 %s" %(PID)
-			START_COMMAND = u"%sbin/startup.sh" %(out)
+			START_COMMAND = u"bash %sbin/startup.sh" %(out)
             		#命令
 			print str("heap_info: %slogs/%s_hprof" %(out,DATE))		#记录到日志
 			print "DUMP_HEAP: ",DUMP_HEAP
