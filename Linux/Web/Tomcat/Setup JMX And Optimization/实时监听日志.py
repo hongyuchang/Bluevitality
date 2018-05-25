@@ -18,7 +18,7 @@ def scan_log(PATH):
 	for FILENAME in os.listdir(PATH):
 		FILEPATH = os.path.join(PATH, FILENAME)
 		if os.path.isfile(FILEPATH):
-            #日志必须是catalina.yyyy-mm-dd.log结尾，否则不录入
+            		#日志必须是catalina.yyyy-mm-dd.log结尾，否则不录入
 			if not str(FILENAME).endswith(str(DATE)+".log"):
 				continue
 			else:
@@ -59,15 +59,15 @@ def monitor_log():
 			DUMP_HEAP = u"%s -dump:format=b,file=%slogs/%s_hprof  %s" %(JMAP,out,DATE,PID)
 			STOP_COMMAND = u"kill -9 %s" %(PID)
 			START_COMMAND = u"%sbin/startup.sh" %(out)
-            #命令
+            		#命令
 			print str("heap_info: %slogs/%s_hprof" %(out,DATE))		#记录到日志
 			print "DUMP_HEAP: ",DUMP_HEAP
 			print "STOP: ",STOP_COMMAND
 			print "start: ",START_COMMAND
-            #执行
-            subprocess.Popen(str(DUMP_HEAP),shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-            subprocess.Popen(str(STOP_COMMAND),shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-            subprocess.Popen(str(START_COMMAND),shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            		#执行
+            		subprocess.Popen(str(DUMP_HEAP),shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            		subprocess.Popen(str(STOP_COMMAND),shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            		subprocess.Popen(str(START_COMMAND),shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 if __name__ == '__main__':
 	#检查Jmap命令是否位于$JAVA_HOME/bin下
