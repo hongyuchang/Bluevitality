@@ -9,14 +9,13 @@
 
 #### 2018.4.22~2019.12.12学习规划
 ```txt
-kubernetes，hive，Hbase，spark，Yarn，HDFS，rabbitmq，dubbo，ceph，会分析Java程序的僵死，死锁等问题
+kubernetes，hive，Hbase，spark，Yarn，HDFS高可用，rabbitmq，dubbo，ceph
 stunnel，中间人转发，PPTP，tcpcopy，VIM的py环境IDE，Hadoop
 Corosync + Pacemaker + GFS2 + LVM2 + crmsh 下的 ISCSI 多路径HA
 flume，ffmpeg
 VIM： https://www.w3cschool.cn/vim/cjtr1pu3.html、VIM脚本
 Python3 开发，算法，flask
 TB收藏的书及相关内容研究性学习
-Bit Coin、PAM认证
 
 研究三个命令：pstack/strace/ipcs
 ```
