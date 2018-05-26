@@ -1,4 +1,7 @@
-说明：安装hive前提是要先安装hadoop集群，并且hive只需要再hadoop的namenode节点集群里安装即可(需要再所有namenode上安装)，可以不在datanode节点的机器上安装。另外还需要说明的是，虽然修改配置文件并不需要你已经把hadoop跑起来，但是本文中用到了hadoop命令，在执行这些命令前你必须确保hadoop是在正常跑着的，而且启动hive的前提也是需要hadoop在正常跑着，所以建议你先将hadoop跑起来在按照本文操作。有关如何安装和启动hadoop集群，请参考： 
+#说明：安装hive前提是要先安装hadoop集群，并且hive只需要再hadoop的namenode节点集群里安装即可(需要再所有namenode上安装)
+#可以不在datanode节点的机器上安装。另外还需要说明的是，虽然修改配置文件并不需要你已经把hadoop跑起来，但是本文中用到了hadoop命令
+#在执行这些命令前你必须确保hadoop是在正常跑着的，而且启动hive的前提也是需要hadoop在正常跑着
+#所以建议你先将hadoop跑起来在按照本文操作。有关如何安装和启动hadoop集群，请参考： 
 
 [hadoop@localhost ~]$ tar -zxf apache-hive-2.3.3-bin.tar.gz
 [hadoop@localhost ~]$ ln -sv apache-hive-2.3.3-bin hive
