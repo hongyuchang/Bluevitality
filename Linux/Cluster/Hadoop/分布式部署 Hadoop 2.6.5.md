@@ -38,11 +38,11 @@ eof
 [root@localhost ~]# echo "123456" | passwd --stdin hadoop            
 
 #使所有Hadoop集群中的节点能够以"hadoop"用户的身份进行免密钥互通（Master启动时将通过SSH的方式启动各节点的daemon进程）
+#注意设置namenode节点到datanode节点的免密码登陆...
 [root@localhost ~]# su - hadoop                                                                       
 [hadoop@localhost ~]$ ssh-keygen -t rsa -P ''                                                         
 [hadoop@localhost ~]$ for ip in 3 4 7 8;do ssh-copy-id -i .ssh/id_rsa.pub hadoop@192.168.0.${ip};done 
 [hadoop@localhost ~]$ for nd in 1 2 3 4;do ssh node${nd} "echo test" ;done
-[hadoop@localhost ~]$ exit
 
 #在各节点创建HDFS各角色使用的元数据及块数据等路径，修改属主属组，注意权限问题可能引起DN启动失败!
 [root@localhost ~]# mkdir -p  /data/hadoop/hdfs/{nn,snn,dn}
@@ -128,6 +128,11 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <name>dfs.namenode.name.dir</name> 
         <value>file:///data/hadoop/hdfs/nn</value>
     </property>
+    <!--  是指定 secondary 的节点? （此配置是后补充加入的） -->
+    <property>
+        <name>dfs.namenode.secondary.http-address</name>
+        <value>192.168.146.201:50090</value>
+    </property>
     <!--指定hdfs中datanode的存储位置，数据的目录为前面的步骤中专门为其创建的路径-->
     <property>
         <name>dfs.datanode.data.dir</name>
@@ -163,10 +168,12 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 </configuration>
 
 [root@localhost ~]# cat > etc/hadoop/masters <<eof
-node1
+#输入 SecondaryNameNode 节点的主机名或 IP 
+node1   
 eof
 
 [root@node1 hadoop]# cat > etc/hadoop/slaves <<eof
+#输入 Datanode节点的主机名或 IP 
 node2
 node3
 node4
