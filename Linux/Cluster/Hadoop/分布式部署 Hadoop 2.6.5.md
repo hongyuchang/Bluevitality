@@ -59,7 +59,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 ```bash
 [root@node1 hadoop]# vim etc/hadoop/core-site.xml
 <configuration>
-    <!--指定NameNode地址，即Hadoop集群中HDFS的RPC服务端口-->
+    <!-- 指定NameNode地址，即Hadoop集群中HDFS的RPC服务端口，NN在哪台机器及端口，可说是HDFS的入口 -->
     <property>
         <name>fs.defaultFS</name>                                   #
         <value>hdfs://node1:8020/</value>                           #指明HDFS的Master节点访问接口（监听的RPC端口）
@@ -167,6 +167,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
     </property>
 </configuration>
 
+# conf/slaves配置DN，conf/masters 配置SNN
 [root@localhost ~]# cat > etc/hadoop/masters <<eof
 #输入 SecondaryNameNode 节点的主机名或 IP 
 node1   
