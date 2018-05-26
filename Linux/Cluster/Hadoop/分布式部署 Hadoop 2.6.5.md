@@ -19,7 +19,7 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 [root@localhost ~]# echo "export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/" \
 > /etc/profile.d/java.sh && . /etc/profile.d/java.sh    #2.7+版本应使用1.7+的JDK
 
-#解压软件包并设置其环境变量
+#在所有节点解压软件包并设置环境变量
 [root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /  &&  chown -R root.root /hadoop-2.6.5/
 [root@localhost ~]# ln -sv /hadoop-2.6.5/ /hadoop
 [root@localhost ~]# cat > /etc/profile.d/hadoop.sh <<'eof'
@@ -208,7 +208,7 @@ eof
 #     2. 在Master节点使用Apache官方提供的脚本启动整个集群
 
 [root@node1 ~]# su - hadoop
-[hadoop@node1 ~]$ start-dfs.sh                          #自动通过配置信息到所有NN/DN启动（关闭使用：stop-dfs.sh）
+[hadoop@node1 ~]$ start-dfs.sh                          #自动通过配置信息到所有NN/DN启动（关闭：stop-dfs.sh）
 Starting namenodes on [node1]
 node1: starting namenode, logging to /hadoop/logs/hadoop-hadoop-namenode-node1.out
 node4: starting datanode, logging to /hadoop/logs/hadoop-hadoop-datanode-node4.out
