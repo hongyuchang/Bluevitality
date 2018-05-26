@@ -187,7 +187,7 @@ node3
 node4
 eof
 ```
-#### 在Hadoop集群中的Master节点将配置文件使用hadoop用户推送到集群中的各节点
+#### 在集群的Master节点将配置文件使用hadoop用户推送到各节点
 ```bash
 [root@node1 hadoop]# su - hadoop 
 [hadoop@node1 ~]$ cd /hadoop/etc/hadoop
@@ -203,8 +203,7 @@ eof
 ```bash
 [root@node1 hadoop]# su - hadoop                        #先在Master节点对NN进行格式化，然后才能启动hdfs
 [hadoop@node1 ~]$ hdfs namenode -format
-
-# 有2种启动方式：
+# 注：有2种启动方式
 #     1. 在各节点分别启动要启动的服务
 #     2. 在Master节点使用Apache官方提供的脚本启动整个集群
 
