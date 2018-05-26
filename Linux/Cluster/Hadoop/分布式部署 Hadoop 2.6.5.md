@@ -1,9 +1,9 @@
 ```txt
-因虚拟机资源限制，将SN,NN,YARN仍放在1个节点 (Node1) , 需注意Hadoop集群中各节点间ntp同步及各个节点的主机名调整
+NameNode 和 DataNode 内存调整在 hadoop-env.sh 文件中
+因虚拟机资源限制，将SN,NN,YARN仍放在1个节点 (Node1) , 需注意集群中各节点间ntp同步及各个节点的主机名调整
 
 Node1(192.168.0.3)作为Master：   NN，SNN，YARN(RsourceManager) 
 Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
-
 
     [Node1] ----- [Node2]
            \ ---- [Node3]
@@ -13,18 +13,22 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 ```bash
 [root@localhost ~]# systemctl stop firewalld && setenforce 0    #生产环境要写入配置
 [root@localhost ~]# date -s "yyyy-mm-dd HH:MM"      #生产环境要使用ntpdate，若不进行同步在执行YARN任务时会报错
+
+#部署OpenJdk环境
 [root@localhost ~]# yum -y install java-1.7.0-openjdk.x86_64 java-1.7.0-openjdk-devel.x86_64
 [root@localhost ~]# echo "export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/" \
-> /etc/profile.d/java.sh && . /etc/profile.d/java.sh
-[root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /  &&  chown -R root.root /hadoop-2.6.5/
+> /etc/profile.d/java.sh && . /etc/profile.d/java.sh    #2.7+版本应使用1.7+的JDK
+
+#解压软件包并设置其环境变量
+[root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /  &&  chown -R root.root /hadoop-2.6.5/
 [root@localhost ~]# ln -sv /hadoop-2.6.5/ /hadoop
 [root@localhost ~]# cat > /etc/profile.d/hadoop.sh <<'eof'
 export HADOOP_PREFIX="/hadoop"                          
-export PATH=$PATH:$HADOOP_PREFIX/bin:$HADOOP_PREFIX/sbin
-export HADOOP_COMMON_HOME=${HADOOP_PREFIX}              
-export HADOOP_HDFS_HOME=${HADOOP_PREFIX}                
-export HADOOP_MAPRED_HOME=${HADOOP_PREFIX}              
-export HADOOP_YARN_HOME=${HADOOP_PREFIX}   
+export PATH=$PATH:${HADOOP_PREFIX}/bin:${HADOOP_PREFIX}/sbin
+export HADOOP_COMMON_HOME=${HADOOP_PREFIX}
+export HADOOP_HDFS_HOME=${HADOOP_PREFIX}
+export HADOOP_MAPRED_HOME=${HADOOP_PREFIX}
+export HADOOP_YARN_HOME=${HADOOP_PREFIX}
 eof
 [root@localhost ~]# . /etc/profile
 [root@localhost ~]# cat >> /etc/hosts <<eof
@@ -33,9 +37,9 @@ eof
 192.168.0.7   node3
 192.168.0.8   node4
 eof
-[root@localhost ~]# groupadd hadoop                                  
-[root@localhost ~]# useradd hadoop -g hadoop        #此处仅使用hadoop用户
-[root@localhost ~]# echo "123456" | passwd --stdin hadoop            
+
+#此处仅使用hadoop用户，降低root权限被劫持的风险
+[root@localhost ~]# groupadd hadoop && useradd hadoop -g hadoop && echo "123456" | passwd --stdin hadoop            
 
 #使所有Hadoop集群中的节点能够以"hadoop"用户的身份进行免密钥互通（Master启动时将通过SSH的方式启动各节点的daemon进程）
 #注意设置namenode节点到datanode节点的免密码登陆...
@@ -45,24 +49,23 @@ eof
 [hadoop@localhost ~]$ for nd in 1 2 3 4;do ssh node${nd} "echo test" ;done
 
 #在各节点创建HDFS各角色使用的元数据及块数据等路径，修改属主属组，注意权限问题可能引起DN启动失败!
-[root@localhost ~]# mkdir -p  /data/hadoop/hdfs/{nn,snn,dn}
+[root@localhost ~]# mkdir -p /data/hadoop/hdfs/{nn,snn,dn}
 [root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/
 
-[root@localhost ~]# cd /hadoop
-[root@localhost hadoop]# mkdir -p logs && chmod -R g+w /hadoop/logs #日志路径...
-[root@localhost hadoop]# chown -R hadoop.hadoop /hadoop/            #
-[root@localhost hadoop]# chown -R hadoop.hadoop /hadoop             #软连接
-[root@localhost hadoop]# ll /hadoop
+[root@localhost ~]# mkdir -p /hadoop/logs && chmod -R g+w /hadoop/logs    #日志路径...
+[root@localhost ~]# chown -R hadoop.hadoop /hadoop/            #
+[root@localhost ~]# chown -R hadoop.hadoop /hadoop             #软连接
+[root@localhost ~]# ll /hadoop
 lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 ```
-#### 在Hadoop集群中的Master节点，即本文环境中的NN,SNN,YARN节点（node1）执行如下
+#### 在Hadoop集群中的Master节点，即本环境中的NN、SNN、YARN节点（node1）配置如下
 ```bash
 [root@node1 hadoop]# vim etc/hadoop/core-site.xml
 <configuration>
-    <!-- 指定NameNode地址，即Hadoop集群中HDFS的RPC服务端口，NN在哪台机器及端口，可说是HDFS的入口 -->
+    <!-- 指定NameNode地址，即集群中HDFS的RPC服务端口，NN在哪台机器及端口，它可以认为是HDFS的入口 -->
     <property>
-        <name>fs.defaultFS</name>                                   #
-        <value>hdfs://node1:8020/</value>                           #指明HDFS的Master节点访问接口（监听的RPC端口）
+        <name>fs.defaultFS</name>
+        <value>hdfs://node1:8020/</value>           #HDFS中Master（即NN）的访问接口（其监听的RPC端口）
         <final>true</final>
     </property>
     <property>
@@ -73,42 +76,46 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
  
 [root@node1 hadoop]# vim etc/hadoop/yarn-site.xml  #用于配置YARN进程及其相关属性，本文件中的node1指的是yarn节点地址
 <configuration>
-    <!--Hadoop集群中YARN的ResourceManager守护所在的主机和监听的端口，对于伪分布式模型来讲其主机为localhost-->
+    <!-- Hadoop集群中YARN的ResourceManager守护所在的主机和监听的端口，对伪分布式来讲为localhost -->
+    <!-- ResourceManager 对客户端暴露的地址。客户端通过该地址向RM提交应用程序，杀死应用程序等 -->
     <property>    
         <name>yarn.resourcemanager.address</name> 
         <value>node1:8032</value>                           
     </property>
-    <!--Hadoop集群中YARN的ResourceManager使用的scheduler（作业任务的调度器）-->
+    <!-- Hadoop集群中YARN的ResourceManager使用的scheduler（作业任务的调度器）所在的地址 -->
+    <!-- ResourceManager对ApplicationMaster暴露的访问地址。DN中的ApplicationMaster通过该地址向RM申请、释放资源等 -->
     <property>    
         <name>yarn.resourcemanager.scheduler.address</name> 
         <value>node1:8030</value>
     </property>
-    <!--资源追踪器的地址-->
+    <!-- 资源追踪器的地址 -->
+    <!-- ResourceManager对NodeManager暴露的地址。NodeManager通过该地址向RM汇报心跳，领取任务等 -->
     <property>    
         <name>yarn.resourcemanager.resource-tracker.address</name> 
         <value>node1:8031</value>
     </property>
-    <!--YARN的管理地址-->
+    <!-- YARN管理地址，它是ResourceManager对管理员暴露的访问地址。管理员通过该地址向RM发送管理命令等-->
     <property>    
         <name>yarn.resourcemanager.admin.address</name> 
         <value>node1:8033</value>
     </property>
-    <!--YARN的内置WEB管理地址提供服务的地址及端口-->
+    <!-- YARN的内置WEB管理地址提供服务的地址及端口 -->
     <property>    
         <name>yarn.resourcemanager.webapp.address</name> 
         <value>node1:8088</value>
     </property>
-    <!--nomenodeManager获取数据的方式是shuffle(辅助服务)-->
+    <!-- nomenodeManager获取数据的方式是shuffle (辅助服务) -->
+    <!-- NodeManager上运行的附属服务。需设为"mapreduce_shuffle"才可运行MapReduce程序 -->
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
-    <!--使用的shuffleHandler类-->
+    <!-- 使用的shuffleHandler类 -->
     <property>
         <name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
         <value>org.apache.hadoop.mapred.ShuffleHandler</value>
     </property>
-    <!--使用的调度器的类-->
+    <!-- 启用的资源调度器的主类，目前可用的有FIFO、Capacity Scheduler和Fair Scheduler -->
     <property>
         <name>yarn.resourcemanager.scheduler.class</name> 
         <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value>
@@ -116,39 +123,39 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 </configuration>
 
 [root@node1 hadoop]# vim etc/hadoop/hdfs-site.xml
-#主要用于配置HDFS相关属性，如复制因子（数据块副本数），NN和DN用于存储数据的路径等...
+#主要用于配置HDFS相关属性，如复制因子（数据块的副本数）、NN和DN用于存储数据的路径等信息
 <configuration>
-    <!--指定hdfs保存数据的副本数量,即Hadoop集群中HDFS的DN下的数据冗余份数，对于伪分布式的Hadoop应设为1-->
+    <!-- 指定HDFS保存数据的副本数量，即HDFS的DN下的数据冗余份数，对于伪分布式的Hadoop应为1 -->
     <property>
         <name>dfs.replication</name>
-        <value>2</value>                                                        #
+        <value>3</value>
     </property>
-    <!--指定hdfs中namenode的存储位置，数据的目录为前面的步骤中专门为其创建的路径-->
+    <!-- 指定hdfs中namenode的存储位置，数据的目录为前面的步骤中专门为其创建的路径 -->
     <property>
         <name>dfs.namenode.name.dir</name> 
         <value>file:///data/hadoop/hdfs/nn</value>
     </property>
-    <!--  是指定 secondary 的节点? （此配置是后补充加入的） -->
+    <!-- 指定 secondary 的节点? （此配置是后补充加入的） -->
     <property>
         <name>dfs.namenode.secondary.http-address</name>
         <value>192.168.146.201:50090</value>
     </property>
-    <!--指定hdfs中datanode的存储位置，数据的目录为前面的步骤中专门为其创建的路径-->
+    <!-- 指定hdfs中datanode的存储位置，数据的目录为前面的步骤中专门为其创建的路径 -->
     <property>
         <name>dfs.datanode.data.dir</name>
         <value>file:///data/hadoop/hdfs/dn</value>
     </property>
-    <!--设置hdfs中checkpoint即SNN的追加日志文件路径，数据的目录为前面的步骤中专门为其创建的路径-->
+    <!-- 设置hdfs中checkpoint文件路径（即SNN的追加日志文件路径）此路径为之前步骤中专门为其创建的路径 -->
     <property>
         <name>fs.checkpoint.dir</name>
         <value>file:///data/hadoop/hdfs/snn</value>
     </property>
-    <!--设置hdfs中checkpoint即的编辑目录-->
+    <!--设置hdfs中checkpoint的编辑目录-->
     <property>
         <name>fs.checkpoint.edits.dir</name>
         <value>file:///data/hadoop/hdfs/snn</value>
     </property>
-    <!--若需要其他用户对HDFS有写入权限，还需要再添加如下属性的定义-->
+    <!-- 若需要其他用户对HDFS有写入权限，还需要再添加如下属性的定义，此处的配置为不会权限进行严格的限定 -->
     <property>
         <name>dfs.permissions</name>
         <value>false</value>
@@ -160,8 +167,8 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 [root@node1 hadoop]# vim etc/hadoop/mapred-site.xml
 <!-- 用于配置集群的MapReduce framework，此处应该指定使用yarn，另外的可用值还有：local/classic -->
 <configuration>
-    <!--告诉hadoop的MR(Map/Reduce)运行在YARN上(version 2.0+)，而不是自己直接运行-->
     <property>
+          <!-- 告诉hadoop的MR(Map/Reduce)运行在YARN之上(version 2.0+)，而不是让其直接运行在HDFS之上 -->
           <name>mapreduce.framework.name</name>
           <value>yarn</value>
     </property>
@@ -194,7 +201,7 @@ eof
 ```
 #### 启动 Hadoop Cluster
 ```bash
-[root@node1 hadoop]# su - hadoop                        #先在Master节点格式化NN
+[root@node1 hadoop]# su - hadoop                        #先在Master节点对NN进行格式化，然后才能启动hdfs
 [hadoop@node1 ~]$ hdfs namenode -format
 
 # 有2种启动方式：
@@ -360,7 +367,7 @@ swap    2
 under   1
 xfs     2
 ```
-#### 附 YARN 命令相关参数
+#### 附 yarn 命令相关参数
 ```txt
 [root@node4 hadoop]# yarn
 Usage: yarn [--config confdir] COMMAND
@@ -388,4 +395,17 @@ where COMMAND is one of:
  or
   CLASSNAME                             run the class named CLASSNAME
 Most commands print help when invoked w/o parameters.
+```
+#### hadoop-daemon.sh
+```txt
+单独启动某个服务:
+    hadoop-deamon.sh start namenode
+    
+demo：
+    ./hadoop-daemon.sh start datanode
+    ./hadoop-daemon.sh start namenode
+    ./hadoop-daemon.sh start secondarynamenode
+    ./hadoop-daemon.sh start nodemanager
+    ./hadoop-daemon.sh start jobtracker
+    ./hadoop-daemon.sh start tasktracker
 ```
