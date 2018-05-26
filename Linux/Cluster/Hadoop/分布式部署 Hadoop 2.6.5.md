@@ -318,6 +318,8 @@ drwxr-xr-x   - hadoop supergroup          0 2017-01-13 21:36 /test
 drwxr-xr-x   - hadoop supergroup          0 2018-01-13 21:53 /test/fstab.analyze.out
 -rw-r--r--   2 hadoop supergroup          0 2018-01-13 21:53 /test/fstab.analyze.out/_SUCCESS
 -rw-r--r--   2 hadoop supergroup        397 2018-01-13 21:53 /test/fstab.analyze.out/part-r-00000
+
+#查看分词统计后的输出到HDFS的执行结果 ( Mapper + Reducer 处理后的) ：
 [hadoop@node1 mapreduce]$ hdfs dfs -cat /test/fstab.analyze.out/part-r-00000
 #       7
 '/dev/disk'     1
