@@ -101,21 +101,23 @@ Initialization script hive-schema-2.3.0.mysql.sql
 Initialization script completed
 schemaTool completed
 
-执行成功后，在mysql的hive数据库里已生成metadata数据表
+#执行成功后，在mysql的hive数据库里已生成metadata数据表
 
-启动Hive
+#启动Hive
 cd $HIVE_HOME/bin #进入Hive的bin目录
 ./hive #执行hive启动
 
-简单测试
-成功启动Hive后，会进入hive的命令行模式,下面进行一系列简单测试:
+#简单测试
+#成功启动Hive后，会进入hive的命令行模式,下面进行一系列简单测试:
 hive> show functions;
 OK
 
-执行一系列HIVE命令
+#执行一系列HIVE命令
 
-在Hadoop的HDFS页面的数据浏览页面上查看
+#在Hadoop的HDFS页面的数据浏览页面上查看
 
+#注：
+#thrift是facebook开发的一个软件框架，它用来进行可扩展且跨语言的服务的开发，hive集成了该服务，能让不同的编程语言调用hive的接口
 
 
 
