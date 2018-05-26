@@ -246,8 +246,9 @@ drwxr-xr-x   - hadoop supergroup          0 2017-01-13 21:36 /test
 ![img](资料/Hadoop分布式WEB.gif)
 ```bash
 #在Master节点通过YARN执行Apache提供的MapReduce的 "wordcount"（单词统计）jar包测试运行状态
+#以下命令将执行结果保存在HDFS的"/test/fstab.analyze.out"目录内，需使用 "hdfs dfs -cat" 命令进行查看
 [hadoop@node1 mapreduce]$ yarn jar /hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.5.jar \
-> wordcount /test/fstab /test/fstab.analyze.out
+> wordcount /test/fstab /test/fstab.analyze.out         
 18/01/13 21:52:36 INFO client.RMProxy: Connecting to ResourceManager at node1/192.168.0.3:8032
 18/01/13 21:52:37 INFO input.FileInputFormat: Total input paths to process : 1
 18/01/13 21:52:37 INFO mapreduce.JobSubmitter: number of splits:1
