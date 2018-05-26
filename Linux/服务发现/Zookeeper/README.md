@@ -123,3 +123,19 @@ ZooKeeper -server host:port cmd args
         delete path [version]
         setquota -n|-b val path
 ```
+```bash
+[zk: localhost:2181(CONNECTED) 23] get /yarn-leader-election/appcluster-yarn/ActiveBreadCrumb
+appcluster-yarnrm1
+cZxid = 0x1b00133dc0 #Created ZXID,表示该ZNode被创建时的事务ID
+ctime = Tue Jan 03 15:44:42 CST 2017 #Created Time,表示该ZNode被创建的时间
+mZxid = 0x1d00000063 #Modified ZXID，表示该ZNode最后一次被更新时的事务ID
+mtime = Fri Jan 06 08:44:25 CST 2017 #Modified Time，表示该节点最后一次被更新的时间
+pZxid = 0x1b00133dc0 #表示该节点的子节点列表最后一次被修改时的事务ID。注意，只有子节点列表变更了才会变更pZxid，子节点内容变更不会影响pZxid。
+cversion = 0 #子节点的版本号
+dataVersion = 11 #数据节点的版本号
+aclVersion = 0 #ACL版本号
+ephemeralOwner = 0x0 #创建该节点的会话的seddionID。如果该节点是持久节点，那么这个属性值为0。
+dataLength = 22 #数据内容的长度
+numChildren = 0  #子节点的个数
+#在ZooKeeper中，version属性是用来实现乐观锁机制中的『写入校验』的（保证分布式数据原子性操作）。
+```
