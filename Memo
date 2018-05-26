@@ -16,6 +16,7 @@
 │   │   │   ├── 软件
 │   │   │   └── 资料
 │   │   ├── Hadoop
+│   │   │   ├── Hive
 │   │   │   ├── xml
 │   │   │   └── 资料
 │   │   ├── HAproxy
@@ -294,4 +295,4 @@
     │   └── Improve
     └── Tools
 
-294 directories
+295 directories
