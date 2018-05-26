@@ -228,16 +228,17 @@ node4: starting nodemanager, logging to /hadoop/logs/yarn-hadoop-nodemanager-nod
 46120 NodeManager
 46265 Jps
 ```
-#### 在Master节点通过YARN执行软件包内Apache官方提供的MapReduce的 "wordcount"（单词统计）jar包测试运行状态
+#### 在Master节点通过YARN执行Apache提供的MapReduce的 "wordcount"（单词统计）jar包测试运行状态
 ```bash
 [hadoop@node1 ~]$ hdfs dfs -mkdir /test
 [hadoop@node1 ~]$ hdfs dfs -ls -R /
 drwxr-xr-x   - hadoop supergroup          0 2017-01-13 21:36 /test
-[hadoop@node1 ~]$ hdfs dfs -put /etc/fstab /test/fstab
+[hadoop@node1 ~]$ hdfs dfs -put /etc/fstab /test/fstab          #灌入数据到HDFS
 ```
-###### 通过HDFS内建的WEB页面查看
+###### 通过HDFS内建的WEB页面查看 
 ![img](资料/Hadoop分布式WEB.gif)
 ```bash
+#在Master节点通过YARN执行Apache提供的MapReduce的 "wordcount"（单词统计）jar包测试运行状态
 [hadoop@node1 mapreduce]$ yarn jar /hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.5.jar \
 > wordcount /test/fstab /test/fstab.analyze.out
 18/01/13 21:52:36 INFO client.RMProxy: Connecting to ResourceManager at node1/192.168.0.3:8032
