@@ -39,12 +39,12 @@ eof
 eof
 
 #此处仅使用hadoop用户，降低root权限被劫持的风险
-[root@localhost ~]# groupadd hadoop && useradd hadoop -g hadoop && echo "123456" | passwd --stdin hadoop            
+[root@localhost ~]# groupadd hadoop && useradd hadoop -g hadoop && echo "123456" | passwd --stdin hadoop
 
 #使所有Hadoop集群中的节点能够以"hadoop"用户的身份进行免密钥互通（Master启动时将通过SSH的方式启动各节点的daemon进程）
 #注意设置namenode节点到datanode节点的免密码登陆...
-[root@localhost ~]# su - hadoop                                                                       
-[hadoop@localhost ~]$ ssh-keygen -t rsa -P ''                                                         
+[root@localhost ~]# su - hadoop                  
+[hadoop@localhost ~]$ ssh-keygen -t rsa -P ''    
 [hadoop@localhost ~]$ for ip in 3 4 7 8;do ssh-copy-id -i .ssh/id_rsa.pub hadoop@192.168.0.${ip};done 
 [hadoop@localhost ~]$ for nd in 1 2 3 4;do ssh node${nd} "echo test" ;done
 
