@@ -160,18 +160,33 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <name>dfs.permissions</name>
         <value>false</value>
     </property>
+    
+    <property>  
+        <name>dfs.webhdfs.enabled</name>  
+        <value>true</value>  
+    </property>
 </configuration>
 
 #mapred-site.xml默认不存在，但有模块文件mapred-site.xml.template，只需要将其复制为mapred-site.xml即可
 [root@node1 hadoop]# cp etc/hadoop/mapred-site.xml.template etc/hadoop/mapred-site.xml
 [root@node1 hadoop]# vim etc/hadoop/mapred-site.xml
-<!-- 用于配置集群的MapReduce framework，此处应该指定使用yarn，另外的可用值还有：local/classic -->
 <configuration>
     <property>
+          <!-- 用于配置集群的MapReduce framework，此处应该指定使用yarn，另外的可用值还有：local/classic -->
           <!-- 告诉hadoop的MR(Map/Reduce)运行在YARN之上(version 2.0+)，而不是让其直接运行在HDFS之上 -->
           <name>mapreduce.framework.name</name>
           <value>yarn</value>
     </property>
+
+#   <!--配置历史服务器-->
+#   <property>
+#       <name>mapreduce.jobhistory.address</name>
+#       <value>node1:10020</value>
+#   </property>
+#   <property>
+#       <name>mapreduce.jobhistory.webapp.address</name>
+#       <value>node1:19888</value>
+#   </property>
 </configuration>
 
 # conf/slaves配置DN，conf/masters 配置SNN
