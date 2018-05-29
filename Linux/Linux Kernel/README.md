@@ -299,7 +299,7 @@ kernel.hostname = "Linux"
 #Sysfs文件系统是一个类似于proc文件系统的特殊文件系统
 #用于将系统中的设备组织成层次结构并向用户模式程序提供详细的内核数据结构信息。
 #其实就是在用户态可通过对sys文件系统的访问来看内核态的一些驱动或设备等...
-#udev（用户空间）通过此l路径下对应的设备文件输出的信息动态的为各个设备创建所需要的设备文件到/dev
+#udev（用户空间）通过此"/sys"路径下对应的设备文件输出的信息动态的为各个设备创建所需要的设备文件到"/dev"路径下!
 [root@localhost sys]# tree /sys -d -L 1 
 /sys
 |-- block
@@ -314,7 +314,7 @@ kernel.hostname = "Linux"
 |-- module
 `-- power
 
-#udev的规则文件所在：
+#udev的规则文件所在
 [root@localhost ~]# ll /etc/udev/rules.d/
 total 8
 -rw-r--r--. 1 root root 709 Nov 20  2015 70-persistent-ipoib.rules
