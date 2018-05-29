@@ -1,5 +1,5 @@
 ```txt
-NameNode 和 DataNode 内存调整在 hadoop-env.sh 文件中
+Hadoop单独使用的JAVA_HOME、NameNode 和 DataNode 的内存配置信息在 etc/hadoop/hadoop-env.sh 文件中
 因虚拟机资源限制，将SN,NN,YARN仍放在1个节点 (Node1) , 需注意集群中各节点间ntp同步及各个节点的主机名调整
 
 Node1(192.168.0.3)作为Master：   NN，SNN，YARN(RsourceManager) 
@@ -217,7 +217,7 @@ eof
 #### 启动 Hadoop Cluster
 ```bash
 [root@node1 hadoop]# su - hadoop                        #先在Master节点对NN进行格式化，然后才能启动hdfs
-[hadoop@node1 ~]$ hdfs namenode -format
+[hadoop@node1 ~]$ hdfs namenode -format                 #第一次启动Hadoop集群时需要对NameNode进行格式化
 # 注：有2种启动方式
 #     1. 在各节点分别启动要启动的服务
 #     2. 在Master节点使用Apache官方提供的脚本启动整个集群
@@ -251,9 +251,12 @@ node4: starting nodemanager, logging to /hadoop/logs/yarn-hadoop-nodemanager-nod
 46004 DataNode
 46120 NodeManager
 46265 Jps
+
+#除上述start-dfs.sh、start-yarn.sh的顺序启动方式外，还有"start-all.sh"脚本用于一次性启动Hadoop集群...
 ```
 #### 在Master节点通过YARN执行Apache提供的MapReduce的 "wordcount"（单词统计）jar包测试运行状态
 ```bash
+#执行分词统计前先录入需要分析的数据到HDFS
 [hadoop@node1 ~]$ hdfs dfs -mkdir /test
 [hadoop@node1 ~]$ hdfs dfs -ls -R /
 drwxr-xr-x   - hadoop supergroup          0 2017-01-13 21:36 /test
@@ -414,7 +417,7 @@ where COMMAND is one of:
   CLASSNAME                             run the class named CLASSNAME
 Most commands print help when invoked w/o parameters.
 ```
-#### hadoop-daemon.sh
+#### hadoop-daemon.sh （Hadoop集群的其他启动命令）
 ```txt
 单独启动某个服务:
     hadoop-deamon.sh start namenode
