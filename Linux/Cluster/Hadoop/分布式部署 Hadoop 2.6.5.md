@@ -223,7 +223,9 @@ eof
 #     2. 在Master节点使用Apache官方提供的脚本启动整个集群
 
 [root@node1 ~]# su - hadoop
-[hadoop@node1 ~]$ start-dfs.sh                          #自动通过配置信息到所有NN/DN启动（关闭：stop-dfs.sh）
+
+#启动HDFS，注：自动通过配置信息到所有NN/DN启动（关闭：stop-dfs.sh）
+[hadoop@node1 ~]$ start-dfs.sh
 Starting namenodes on [node1]
 node1: starting namenode, logging to /hadoop/logs/hadoop-hadoop-namenode-node1.out
 node4: starting datanode, logging to /hadoop/logs/hadoop-hadoop-datanode-node4.out
@@ -237,7 +239,8 @@ hadoop@0.0.0.0\'s password:
 46321 Jps
 46248 DataNode
 
-[hadoop@node1 ~]$ start-yarn.sh                         #在Master节点启动YARN，此操作也会将所有DN节点的NM启动
+#启动Yarn，注：在Master节点启动YARN，此操作也会将所有DN节点的NM启动
+[hadoop@node1 ~]$ start-yarn.sh
 starting yarn daemons
 starting resourcemanager, logging to /hadoop/logs/yarn-hadoop-resourcemanager-node1.out
 node2: starting nodemanager, logging to /hadoop/logs/yarn-hadoop-nodemanager-node2.out
