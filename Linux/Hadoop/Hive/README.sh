@@ -88,7 +88,7 @@ export HIVE_AUX_JARS_PATH=${HIVE_CONF_DIR}/lib
 
 #对MySQL数据库初始化，首先进入到hive的bin目录
 [hadoop@localhost bin]$ cd $HIVE_HOME/bin
-[hadoop@localhost bin]$ schematool -initSchema -dbType mysql    #对数据库进行初始化
+[hadoop@localhost bin]$ ./schematool -initSchema -dbType mysql    #对数据库进行初始化
 SLF4J: Class path contains multiple SLF4J bindings.
 SLF4J: Found binding in [jar:file:/home/hadoop/apache-hive-2.3.3-bin/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
 SLF4J: Found binding in [jar:file:/hadoop-2.7.6/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
