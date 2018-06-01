@@ -1,6 +1,7 @@
 ```txt
 Hadoop单独使用的JAVA_HOME、NameNode 和 DataNode 的内存配置信息在 etc/hadoop/hadoop-env.sh 文件中
 因虚拟机资源限制，将SN,NN,YARN仍放在1个节点 (Node1) , 需注意集群中各节点间ntp同步及各个节点的主机名调整
+注意! 在 Hadoop 2.0 中不再需要 secondary namenode 或 backup namenode，它们的工作由 Standby namenode 承担
 
 Node1(192.168.0.3)作为Master：   NN，SNN，YARN(RsourceManager) 
 Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
