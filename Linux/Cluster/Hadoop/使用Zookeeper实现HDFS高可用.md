@@ -42,7 +42,8 @@
 标识NameNode将写入/读取编辑的JN组的URI
 其提供的共享编辑存储JournalNodes，通过活动NameNode写入和备用NameNode读取此存储区，使2个NN数据尽可能一致
 日志ID是此名称服务的唯一标识符，它允许一组JournalNodes为多个联邦名称系统提供存储。虽然不是要求但重用日志标识符的名称服务ID是个好主意
-若此群集的JournalNodes在机器: node1.example.com、node2.example.com、node3.example.com上运行且名称服务ID'mycluster'，则可使用以下作为此设置的值 -->
+若此群集的JournalNodes在机器: node1.example.com、node2.example.com、node3.example.com上运行且名称服务ID'mycluster'
+则可使用以下作为此设置的值 -->
 <property>
     <name>dfs.namenode.shared.edits.dir</name>
     <value>qjournal://node1:8485;node2:8485;node3:8485/sxt</value>
