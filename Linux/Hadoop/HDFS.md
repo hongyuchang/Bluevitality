@@ -2,12 +2,12 @@
 清空回收站     hadoop fs -expunge
 复制文件到本地文件系统     hadoop fs -get /user/hadoop/file localfile
 将源目录中所有的文件连接成本地目标文件   hadoop fs -getmerge <src> <localdst>
-创建一个名为 /foodir 的目录		bin/hadoop dfs -mkdir /foodir
-创建一个名为 /foodir 的目录		bin/hadoop dfs -mkdir /foodir
+创建一个名为 /foodir 的目录    bin/hadoop dfs -mkdir /foodir
+创建一个名为 /foodir 的目录    bin/hadoop dfs -mkdir /foodir
 查看名为 /foodir/myfile.txt 的文件内容		bin/hadoop dfs -cat /foodir/myfile.txt
-将集群置于安全模式				bin/hadoop dfsadmin -safemode enter
-显示Datanode列表				bin/hadoop dfsadmin -report
-使Datanode节点 datanodename退役				bin/hadoop dfsadmin -decommission datanodename
+将集群置于安全模式   bin/hadoop dfsadmin -safemode enter
+显示Datanode列表    bin/hadoop dfsadmin -report
+使Datanode节点 datanodename退役    bin/hadoop dfsadmin -decommission datanodename
 
 将文件从源路径移动到目标路径。这个命令允许有多个源路径，此时目标路径必须是一个目录
   hadoop fs -mv /user/hadoop/file1 /user/hadoop/file2
