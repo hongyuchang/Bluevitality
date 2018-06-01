@@ -166,7 +166,7 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 #ZKFailoverController作为NameNode机器上一个独立的进程启动 (在hdfs启动脚本之中的进程名为"zkfc")
 #当ZKFC启动时，他们将自动选择一个NameNode变为活动状态
 
-    start-dfs.sh
+    start-dfs.sh （若其他节点未启动NN则在那个节点执行: hadoop-daemon.sh start namenode）
 ```
 #### FAQ
 ```txt
