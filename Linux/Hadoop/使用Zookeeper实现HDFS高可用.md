@@ -1,6 +1,24 @@
 ```txt
 部署HA之前请先将ZK服务先部署完毕~! 
 需要zookeeper最少3台，需要journalnode最少三台，目前最多支持2台namenode，不过节点可以复用，但是不建议
+
+Active NameNode、Standby NameNode：
+    两台NameNode形成互备，一台处于Active状态，为主NameNode
+    另外一台处于Standby状态，为备NameNode，只有主NameNode才能对外提供读写服务
+
+主备切换控制器 ZKFailoverController：
+    ZKFailoverController作为独立进程运行，对NameNode的主备切换进行总体控制
+    ZKFailoverController能及时检测到NameNode健康状况
+    在主NameNode故障时借助Zookeeper实现自动的主备选举和切换，当然NameNode也支持不依赖Zookeeper的手动主备切换
+
+Zookeeper集群：
+    为主备切换控制器提供主备选举支持
+    
+共享存储系统：
+    共享存储系统是实现NN高可用最为关键的部分，共享存储系统保存了NameNode运行过程中所产生的HDFS元数据。
+    Active NameNode和Standby NameNode通过共享存储系统实现元数据同步。
+    在进行主备切换时新的主NameNode在确认元数据完全同步之后才能继续对外提供服务。
+    DataNode同时向主NameNode和备NameNode上报数据块的位置信息
 ```
 
 #### vim etc/hadoop/hdfs-site.xml
