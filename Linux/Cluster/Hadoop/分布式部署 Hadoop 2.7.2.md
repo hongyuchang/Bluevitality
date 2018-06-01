@@ -125,6 +125,11 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <name>yarn.resourcemanager.scheduler.class</name> 
         <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value>
     </property>
+    <!-- resourcemanager 失联后重新链接的时间 -->    
+    <property>    
+        <name>yarn.resourcemanager.connect.retry-interval.ms</name>  
+        <value>2000</value>    
+    </property>
 </configuration>
 
 [root@node1 hadoop]# vim etc/hadoop/hdfs-site.xml
