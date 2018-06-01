@@ -9,22 +9,31 @@
 
 这样，每个用户组下的用户提交任务时候，会到相应的资源池中，而不影响其他业务
 ```
-#### ResourceManager 的 fair-scheduler.xml
+#### 配置YARN使用公平调度器: vim etc/hadoop/yarn-site.xml
+```xml
+<!-- 启用的资源调度器的主类，目前可用的有FIFO、Capacity Scheduler和Fair Scheduler -->
+<property>
+    <name>yarn.resourcemanager.scheduler.class</name> 
+    <!-- <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value> -->
+    <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
+</property>
+```
+#### ResourceManager 的 fair-scheduler.xml (HADOOP_HOME/conf/fair-scheduler.xml.template)
 ```xml
 <?xml version="1.0"?>
 <allocations>  
   <!-- users max running apps -->
   <userMaxAppsDefault>30</userMaxAppsDefault>
-<queue name="root">
+  <queue name="root">
   <aclSubmitApps> </aclSubmitApps>
   <aclAdministerApps> </aclAdministerApps>
   
-  <queue name="default">
-          <minResources>2000mb,1vcores</minResources>
-          <maxResources>10000mb,1vcores</maxResources>
-          <maxRunningApps>1</maxRunningApps>
-          <schedulingMode>fair</schedulingMode>
-          <weight>0.5</weight>
+  <queue name="default"> <!-- 队列名 -->
+          <minResources>2000mb,1vcores</minResources> <!-- 最小资源 -->
+          <maxResources>10000mb,1vcores</maxResources> <!-- 最大资源 -->
+          <maxRunningApps>1</maxRunningApps> <!-- 可同时运行的作业数 -->
+          <schedulingMode>fair</schedulingMode> <!-- 队列内部调度策略 -->
+          <weight>0.5</weight> <!-- 权值 ( 以非比例的方式与其它资源池共享集群 )-->
           <aclSubmitApps>*</aclSubmitApps>
   </queue>
        
@@ -57,8 +66,7 @@
           <aclSubmitApps> business1_group</aclSubmitApps>
           <aclAdministerApps> hadoop,business1_group</aclAdministerApps>
   </queue>
-                                                             
-                                                                          
+                                                                                                                                  
   <queue name="business2_group">
       <minResources>75000mb,15vcores</minResources>
       <maxResources>102400mb,20vcores</maxResources>
