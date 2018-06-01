@@ -72,11 +72,11 @@ $ start-yarn.sh
 # Step2 在另外配置的ResourceManger上启动服务（单独启用备用resourcemanager）
 $ yarn-daemon.sh start resourcemanager
 
-#查看状态
-$ yarn rmadmin -getServiceState rm1
- active
-$ yarn rmadmin -getServiceState rm2
- standby
+#查看YARN的高可用环境下各角色的状态
+[hadoop@node1 hadoop]$ yarn rmadmin -getServiceState rm1
+active
+[hadoop@node1 hadoop]$ yarn rmadmin -getServiceState rm2
+standby
 ```
 ```txt
 Configuration Property	Description
