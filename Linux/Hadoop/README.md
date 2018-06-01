@@ -145,55 +145,64 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 [root@node1 hadoop]# vim etc/hadoop/hdfs-site.xml
 #主要用于配置HDFS相关属性，如复制因子（数据块的副本数）、NN和DN用于存储数据的路径等信息
 <configuration>
-    <!-- Hadoop允许打开最大文件数，默认4096，不设置的话会提示xcievers exceeded错误 -->    
     <property>
         <name>dfs.datanode.max.transfer.threads</name>    
-        <value>409600</value>    
+        <value>409600</value> 
+        <description>Hadoop允许打开最大文件数，默认4096，不设置的话会提示xcievers exceeded错误</description>
     </property> 
-    <!-- 指定HDFS保存数据的副本数量，即HDFS的DN下的数据冗余份数，对于伪分布式的Hadoop应为1 -->
+
     <property>
         <name>dfs.replication</name>
         <value>3</value>
+        <description>HDFS保存数据的副本数量，即HDFS的DN下的数据冗余份数，对伪分布式来说应为1</description>
     </property>
-    <!-- 指定磁盘预留多少空间，防止磁盘被撑满用完，单位为bytes，此处预留100G -->   
+
     <property>  
         <name>dfs.datanode.du.reserved</name>  
-        <value>107374182400</value>  
+        <value>107374182400</value>
+        <description>指定磁盘预留多少空间，防止磁盘被撑满用完，单位为bytes，此处预留100G</description>
     </property> 
-    <!-- 指定hdfs中namenode的存储位置，数据的目录为前面的步骤中专门为其创建的路径 -->
+
     <property>
         <name>dfs.namenode.name.dir</name> 
         <value>file:///data/hadoop/hdfs/nn</value>
+        <description>指定hdfs中namenode的存储位置，数据的目录为前面的步骤中专门为其创建的路径</description>
     </property>
-    <!-- 指定 secondary 的节点? （此配置是后补充加入的） -->
+    
     <property>
         <name>dfs.namenode.secondary.http-address</name>
         <value>192.168.146.201:50090</value>
+        <description>指定 secondary 的节点? （此配置是后补充加入的）</description>
     </property>
-    <!-- 指定hdfs中datanode的存储位置，数据的目录为前面的步骤中专门为其创建的路径 -->
+
     <property>
         <name>dfs.datanode.data.dir</name>
         <value>file:///data/hadoop/hdfs/dn</value>
+        <description>指定hdfs中datanode的存储位置，数据的目录为前面的步骤中专门为其创建的路径</description>
     </property>
-    <!-- 设置hdfs中checkpoint文件路径（即SNN的追加日志文件路径）此路径为之前步骤中专门为其创建的路径 -->
+    
     <property>
         <name>fs.checkpoint.dir</name>
         <value>file:///data/hadoop/hdfs/snn</value>
+        <description>设置hdfs中checkpoint文件路径（SNN的追加日志文件路径）此路径为之前专门为其创建的路径</description>
     </property>
-    <!--设置hdfs中checkpoint的编辑目录-->
+
     <property>
         <name>fs.checkpoint.edits.dir</name>
         <value>file:///data/hadoop/hdfs/snn</value>
+        <description>设置hdfs中checkpoint的编辑目录</description>
     </property>
-    <!-- 若需要其他用户对HDFS有写入权限，还需要再添加如下属性的定义，此处的配置为不会权限进行严格的限定 -->
+
     <property>
         <name>dfs.permissions</name>
         <value>false</value>
+        <description>若需要其他用户对HDFS有写入权限，还需要再添加此定义，此处设为不对权限进行严格的限定</description>
     </property>
     
     <property>  
-        <name>dfs.webhdfs.enabled</name>  
-        <value>true</value>  
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+        <description>提供web访问hdfs的权限</description>
     </property>
     
     <property>  
@@ -226,7 +235,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 
 # conf/slaves配置DN，conf/masters 配置SNN
 [root@node1 hadoop]# cat > etc/hadoop/masters <<eof
-#输入 SecondaryNameNode 节点的主机名或 IP ，在Namenode的HA环境中此配置应略过?
+#输入 SecondaryNameNode 节点的主机名或 IP ，在Namenode的HA环境中此配置应略过!?
 node1
 eof
 
