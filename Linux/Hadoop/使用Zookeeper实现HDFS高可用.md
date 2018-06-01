@@ -40,6 +40,7 @@ Zookeeper集群：
 </property>
 
 <!-- 每个NameNode监听的完全限定的RPC地址，对于之前配置的NameNode ID，需要设置NameNode进程的完整地址和IPC端口 -->
+<!-- 此处的RPC地址实际就是"dfs.defaultFS"地址 -->
 <property>
     <name>dfs.namenode.rpc-address.sxt.nn1</name>
     <value>node1:8020</value>
@@ -80,10 +81,17 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
     <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
 </property>
 
-<!-- SSH到活动NameNode并杀死进程，故障转移期间将用于遏制活动NameNode的脚本或Java类的列表 -->
+<!-- 设置切换时执行的程序，此处SSH到活动NameNode并杀死进程，故障转移期间将用于遏制活动NameNode的脚本或Java类的列表
+当NN发生切换时原来active的NN可能仍在写edit log，此时若standby开始写edit log则元数据会"脑裂"。
+因此要在切换前杀掉原来active的NN，此处的sshfence即通过SSH登录到原来active的NN并使用fuser命令KILL掉旧的NN进程-->
 <property>
     <name>dfs.ha.fencing.methods</name>
     <value>sshfence</value>
+</property>
+
+<property>
+    <name>dfs.ha.fencing.ssh.connect-timeout</name>
+    <value>30000</value>
 </property>
 
 <!-- SSH必须能在不提供密码的情况下通过SSH连接到目标。因此还必须配置dfs.ha.fencing.ssh.private-key-files选项 -->
@@ -92,7 +100,7 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
     <value>/root/.ssh/id_rsa</value>
 </property>
 
-<!-- 启用故障转移 -->
+<!-- 启用HDFS的HA环境下的自动故障转移 -->
 <property>
     <name>dfs.ha.automatic-failover.enabled</name>
     <value>true</value>
@@ -100,20 +108,21 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 ```
 #### vim etc/hadoop/core-site.xml
 ```xml
-<!-- 可将Hadoop客户端的默认路径配置为使用新的启用HA的逻辑URI。
-如果之前使用“mycluster”作为名称服务标识，则这将是所有HDFS路径的权限部分的值。这可能是这样配置的 -->
+<!-- 可将Hadoop客户端的默认路径配置为使用新的启用HA的逻辑URI
+一旦使用HDFS HA，那么fs.defaultFS就不能写成host:port，而要写成服务方式，即写上"nameservice id"
+如果之前使用"mycluster"作为名称服务标识，则这将是所有HDFS路径的权限部分的值。这可能是这样配置的 -->
 <property>
     <name>fs.defaultFS</name>
     <value>hdfs://sxt</value>
 </property>
 
-<!-- JournalNode守护进程将存储其本地状态的路径 -->
+<!-- JournalNode守护进程将存储其本地状态的路径，即其自己的数据目录 -->
 <property>
     <name>dfs.journalnode.edits.dir</name>
     <value>/opt/data/journal</value>
 </property>
 
-<!-- 写入ZK信息 -->
+<!-- 添加zookeer的server列表 -->
 <property>
     <name>ha.zookeeper.quorum</name>
     <value>node1:2181,node2:2181,node3:2181</value>
@@ -121,8 +130,8 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 ```
 #### 启动顺序
 ```bash
-#启动所有journalnode：
-#基于QJM的共享存储系统主要用于保存EditLog，并不保存FSImage文件。FSImage文件还是在NameNode的本地磁盘上
+#启动所有journalnode节点：
+#基于QJM的共享存储系统主要用于保存EditLog（并不保存FSImage文件。FSImage文件还是在NameNode的本地磁盘上）
 #基于QJM共享存储的基本思想来自Paxos算法，采用多个称为JournalNode的节点组成的JournalNode集群来存储EditLog
 #每个JournalNode保存同样的EditLog副本。每次NN写EditLog的同时也会向JournalNode集群中的每个JournalNode发送EditLog的写请求
 #在设置了所有必要的配置选项之后，必须先在集群中启动JournalNode守护进程，通过如下命令启动并等待守护进程在每台相关机器上启动
@@ -137,8 +146,8 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 
     hdfs namenode -format
 
-# 附：
-#     #将给定NameNode的状态转换为Active或Standby
+# 附：手动切换HA下的NN节点
+#     #将给定NameNode的状态转换为Active或Standby（不使用fencing措施，因此一般不用这2个命令，用hdfs haadmin -failover）
 #     hdfs haadmin -transitionToActive <serviceId>
 #     hdfs haadmin -transitionToStandby <serviceId>
 #     #在两个NameNode之间启动故障转移
@@ -153,7 +162,15 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 
 #由于上文中配置中启用了自动故障转移功能，因此"start-dfs.sh"脚本将自动在任何运行NameNode的计算机上启动zkfc守护程序
 #ZKFailoverController作为NameNode机器上一个独立的进程启动 (在hdfs启动脚本之中的进程名为"zkfc")
-#当ZKFC启动时，他们将自动选择一个NameNode变为活动状态。
+#当ZKFC启动时，他们将自动选择一个NameNode变为活动状态
 
     start-dfs.sh
+```
+#### FAQ
+```txt
+1.ZKFC和NAMENODE有没有特定的启动顺序 
+2.需要对ZKFC进程做监控，某些时候自动切换失效是因为ZKFC挂了 
+3.如果zookeeper挂了则自动failover失效，但不会到HDFS服务有影响。当zookeeper启动后自动failover功能恢复正常 
+4.当前并不能人为的设置某个namenode为primary或者preferred 
+5.在自动HA的情况下，可以人为的切换namenode，执行hdfs hadmin命令。
 ```
