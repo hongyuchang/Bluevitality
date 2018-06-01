@@ -78,7 +78,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <value>hdfs://node1:8020/</value>
         <final>true</final>
     </property>
-    <!-- 开启垃圾回收站功能，HDFS文件删除后先进入回收站，其最长保留数据时间为1天，超过一天后删除 --> 
+    <!-- 开启垃圾回收站功能，文件删除后先进入回收站，值为检查点被删除的分钟数，超过后删除，设为0为禁用 --> 
     <property>  
         <name>fs.trash.interval</name>  
         <value>1440</value>  
