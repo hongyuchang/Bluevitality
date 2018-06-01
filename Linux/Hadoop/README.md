@@ -2,10 +2,11 @@
 Hadoop单独使用的JAVA_HOME、NameNode 和 DataNode 的内存配置信息在 etc/hadoop/hadoop-env.sh 文件中
 因虚拟机资源限制，将SN,NN,YARN仍放在1个节点 (Node1) , 需注意集群中各节点间ntp同步及各个节点的主机名调整
 注意! 在 Hadoop 2.0 中不再需要 secondary namenode 或 backup namenode，它们的工作由 Standby namenode 承担
+JobTracker在 Hadoop 2.0 中已被整合到 YARN 的 ResourceManger 中
 
 journalNode的作用是存放EditLog的：
     在MR1中editlog是和fsimage存放在一起的然后SecondNamenode做定期合并
-    后来的Yarn不用SecondNamanode了
+    后来的Yarn不用SecondNamanode...
 
 Node1(192.168.0.3)作为Master：   NN，SNN，YARN(RsourceManager) 
 Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
@@ -23,6 +24,7 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 [root@localhost ~]# yum -y install java-1.7.0-openjdk.x86_64 java-1.7.0-openjdk-devel.x86_64
 [root@localhost ~]# cat > /etc/profile.d/java.sh <<eof
 export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/
+export PATH=$JAVA_HOME/bin:$PATH
 eof    
 
 #在所有节点解压软件包并设置环境变量
@@ -50,7 +52,7 @@ eof
 [root@localhost ~]# groupadd hadoop && useradd hadoop -g hadoop && echo "123456" | passwd --stdin hadoop
 
 #使所有Hadoop集群中的节点能够以"hadoop"用户的身份进行免密钥互通（Master启动时将通过SSH的方式启动各节点的daemon进程）
-#注意设置namenode节点到datanode节点的免密码登陆...
+#注意设置namenode节点到datanode节点的免密码登陆（集群环境的使用必须通过ssh无密码登陆来执行）
 [root@localhost ~]# su - hadoop                  
 [hadoop@localhost ~]$ ssh-keygen -t rsa -P ''    
 [hadoop@localhost ~]$ for ip in 3 4 7 8;do ssh-copy-id -i .ssh/id_rsa.pub hadoop@192.168.0.${ip};done 
@@ -60,9 +62,9 @@ eof
 [root@localhost ~]# mkdir -p /data/hadoop/hdfs/{nn,snn,dn}
 [root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/
 
-[root@localhost ~]# mkdir -p /hadoop/logs && chmod -R g+w /hadoop/logs    #日志路径...
-[root@localhost ~]# chown -R hadoop.hadoop /hadoop/            #
-[root@localhost ~]# chown -R hadoop.hadoop /hadoop             #软连接
+[root@localhost ~]# mkdir -p /hadoop/logs && chmod -R g+w /hadoop/logs      #日志路径
+[root@localhost ~]# chown -R hadoop.hadoop /hadoop/
+[root@localhost ~]# chown -R hadoop.hadoop /hadoop                          #软连接
 [root@localhost ~]# ll /hadoop
 lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 ```
@@ -70,10 +72,10 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 ```bash
 [root@node1 hadoop]# vim etc/hadoop/core-site.xml
 <configuration>
-    <!-- 指定NameNode地址，即集群中HDFS的RPC服务端口，NN在哪台机器及端口，它可以认为是HDFS的入口 -->
+    <!-- 指定NameNode地址，即集群中HDFS的RPC服务端口（NN在哪台机器及端口）可将其认为是HDFS的入口 -->
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://node1:8020/</value>           #HDFS中Master（即NN）的访问接口（其监听的RPC端口）
+        <value>hdfs://node1:8020/</value>
         <final>true</final>
     </property>
     <!-- 开启垃圾回收站功能，HDFS文件删除后先进入回收站，其最长保留数据时间为1天，超过一天后删除 --> 
@@ -225,7 +227,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 # conf/slaves配置DN，conf/masters 配置SNN
 [root@node1 hadoop]# cat > etc/hadoop/masters <<eof
 #输入 SecondaryNameNode 节点的主机名或 IP 
-node1   
+node1
 eof
 
 [root@node1 hadoop]# cat > etc/hadoop/slaves <<eof
