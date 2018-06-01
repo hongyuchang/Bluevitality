@@ -79,13 +79,12 @@ cp /home/dtadmin/spark_cluster/mysql-connector-java-5.1.36.jar $HIVE_HOME/lib/
 cd $HIVE_CONF_DIR
 cp hive-env.sh.template hive-env.sh     #基于模板创建hive-env.sh
 vim hive-env.sh     #编辑配置文件并加入以下配置
-export HADOOP_HOME=/home/hadoop/hadoop-2.7.3
-export HIVE_CONF_DIR=/usr/local/apache-hive-2.1.1/conf
-export HIVE_AUX_JARS_PATH=/usr/local/apache-hive-2.1.1/lib
+export HADOOP_HOME=/hadoop
+export HIVE_CONF_DIR=/home/hadoop/hive/conf
+export HIVE_AUX_JARS_PATH=${HIVE_CONF_DIR}/lib
 
 #此处有关安装与配置MySQL数据库的步骤略过
 #将数据映射成数据库和一张张的表，库和表的元数据信息一般存在关系型数据库上
-
 
 #对MySQL数据库初始化，首先进入到hive的bin目录
 [hadoop@localhost bin]$ cd $HIVE_HOME/bin
