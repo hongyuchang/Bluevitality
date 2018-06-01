@@ -17,19 +17,21 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 ```
 #### 在部署Hadoop集群前先在所有节点执行如下
 ```bash
-[root@localhost ~]# systemctl stop firewalld && setenforce 0    #生产环境要写入配置
+[root@localhost ~]# systemctl disable firewalld
+[root@localhost ~]# systemctl stop firewalld
+[root@localhost ~]# sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux &&　setenforce 0
 [root@localhost ~]# date -s "yyyy-mm-dd HH:MM"      #生产环境要使用ntpdate，若不进行同步在执行YARN任务时会报错
 
 #2.7+版本的hadoop应使用"1.7+"的JDK环境
 [root@localhost ~]# yum -y install java-1.7.0-openjdk.x86_64 java-1.7.0-openjdk-devel.x86_64
-[root@localhost ~]# cat > /etc/profile.d/java.sh <<eof
+[root@localhost ~]# cat > /etc/profile.d/java.sh <<'eof'
 export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/
 export PATH=$JAVA_HOME/bin:$PATH
-eof    
+eof
 
 #在所有节点解压软件包并设置环境变量
-[root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /  &&  chown -R root.root /hadoop-2.6.5/
-[root@localhost ~]# ln -sv /hadoop-2.6.5/ /hadoop
+[root@localhost ~]# tar -zxf hadoop-2.7.6.tar.gz -C /  &&  chown -R root.root /hadoop-2.7.6
+[root@localhost ~]# ln -sv /hadoop-2.7.6/ /hadoop
 [root@localhost ~]# cat > /etc/profile.d/hadoop.sh <<'eof'
 export HADOOP_PREFIX="/hadoop"                          
 export PATH=$PATH:${HADOOP_PREFIX}/bin:${HADOOP_PREFIX}/sbin
@@ -56,11 +58,12 @@ eof
 [root@localhost ~]# su - hadoop                  
 [hadoop@localhost ~]$ ssh-keygen -t rsa -P ''    
 [hadoop@localhost ~]$ for ip in 3 4 7 8;do ssh-copy-id -i .ssh/id_rsa.pub hadoop@192.168.0.${ip};done 
-[hadoop@localhost ~]$ for nd in 1 2 3 4;do ssh node${nd} "echo test" ;done
+[hadoop@localhost ~]$ for nd in {1..4};do ssh node${nd} "echo test" ;done
+[hadoop@localhost ~]$ exit
 
 #在各节点创建HDFS各角色使用的元数据及块数据等路径，修改属主属组，注意权限问题可能引起DN启动失败!
 [root@localhost ~]# mkdir -p /data/hadoop/hdfs/{nn,snn,dn}
-[root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs/
+[root@localhost ~]# chown -R hadoop.hadoop /data/hadoop/hdfs    #要在所有节点执行，出过一次故障...
 
 [root@localhost ~]# mkdir -p /hadoop/logs && chmod -R g+w /hadoop/logs      #日志路径
 [root@localhost ~]# chown -R hadoop.hadoop /hadoop/
@@ -70,7 +73,10 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 ```
 #### 在Hadoop集群中的Master节点，即本环境中的NN、SNN、YARN节点（node1）配置如下
 ```xml
+[root@node1 hadoop]# cd $HADOOP_PREFIX
 [root@node1 hadoop]# vim etc/hadoop/core-site.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
     <!-- 指定NameNode地址，即集群中HDFS的RPC服务端口（NN在哪台机器及端口）可将其认为是HDFS的入口 -->
     <property>
@@ -87,9 +93,10 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
          <name>io.file.buffer.size</name>
          <value>131072</value>
     </property>
- </configuration>
+</configuration>
  
 [root@node1 hadoop]# vim etc/hadoop/yarn-site.xml  #用于配置YARN进程及其相关属性，本文件中的node1指的是yarn节点地址
+<?xml version="1.0"?>
 <configuration>
     <!-- Hadoop集群中YARN的ResourceManager守护所在的主机和监听的端口，对伪分布式来讲为localhost -->
     <!-- ResourceManager 对客户端暴露的地址。客户端通过该地址向RM提交应用程序，杀死应用程序等 -->
@@ -144,6 +151,8 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 
 [root@node1 hadoop]# vim etc/hadoop/hdfs-site.xml
 #主要用于配置HDFS相关属性，如复制因子（数据块的副本数）、NN和DN用于存储数据的路径等信息
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
     <property>
         <name>dfs.datanode.max.transfer.threads</name>    
@@ -214,6 +223,8 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 #mapred-site.xml默认不存在，但有模块文件mapred-site.xml.template，只需要将其复制为mapred-site.xml即可
 [root@node1 hadoop]# cp etc/hadoop/mapred-site.xml.template etc/hadoop/mapred-site.xml
 [root@node1 hadoop]# vim etc/hadoop/mapred-site.xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
     <property>
           <!-- 用于配置集群的MapReduce framework，此处应该指定使用yarn，另外的可用值还有：local/classic -->
@@ -249,7 +260,7 @@ eof
 #### 在集群的Master节点将配置文件使用hadoop用户推送到各节点
 ```bash
 [root@node1 hadoop]# su - hadoop 
-[hadoop@node1 ~]$ cd /hadoop/etc/hadoop
+[hadoop@node1 ~]$ cd ${HADOOP_PREFIX}/etc/hadoop
 [hadoop@node1 ~]$ for n in {1..4};do scp core-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/core-site.xml ;done   
 [hadoop@node1 ~]$ for n in {1..4};do scp yarn-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/yarn-site.xml ;done 
 [hadoop@node1 ~]$ for n in {1..4};do scp mapred-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/mapred-site.xml ;done 
