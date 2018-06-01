@@ -226,7 +226,7 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 
 # conf/slaves配置DN，conf/masters 配置SNN
 [root@node1 hadoop]# cat > etc/hadoop/masters <<eof
-#输入 SecondaryNameNode 节点的主机名或 IP 
+#输入 SecondaryNameNode 节点的主机名或 IP ，在Namenode的HA环境中此配置应略过?
 node1
 eof
 
