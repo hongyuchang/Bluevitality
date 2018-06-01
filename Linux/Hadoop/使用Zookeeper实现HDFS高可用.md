@@ -1,6 +1,5 @@
 ```txt
-部署HA之前请先将ZK服务先部署完毕~! 
-需要zookeeper最少3台，需要journalnode最少三台，目前最多支持2台namenode，不过节点可以复用，但是不建议
+部署HA之前应先将ZK集群部署完毕，需要ZK最少3台、journalnode最少3台，目前最多支持2台NN的HA，不过节点可以复用，但不建议
 
 Active NameNode、Standby NameNode：
     两台NameNode形成互备，一台处于Active状态，为主NameNode
