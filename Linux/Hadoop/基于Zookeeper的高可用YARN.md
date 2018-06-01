@@ -40,4 +40,24 @@
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle</value>
 </property>
+<!--开启故障自动切换-->    
+<property>  
+    <name>yarn.resourcemanager.ha.automatic-failover.enabled</name>  
+    <value>true</value>  
+</property>
+
+<property>  
+    <name>yarn.resourcemanager.ha.automatic-failover.zk-base-path</name>  
+    <value>/yarn-leader-election</value>  
+</property> 
+
+<!--开启自动恢复功能-->    
+<property>   
+    <name>yarn.resourcemanager.recovery.enabled</name>    
+    <value>true</value>    
+</property>   
+<property>  
+    <name>yarn.resourcemanager.store.class</name>  
+    <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>  
+</property>  
 ```
