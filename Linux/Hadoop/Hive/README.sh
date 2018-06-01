@@ -1,7 +1,8 @@
+#因为Hive语句最终会生成MapReduce任务去计算，所以不适用于实时计算的场景，它适用于离线分析
 #安装hive的前提是要先安装hadoop集群，并且hive只需要在hadoop的NN节点集群里安装即可（要在所有的namenode节点上安装）
 #可以不在datanode节点上安装。另外还需说明的是，虽然修改配置文件并不需要你已经把hadoop跑起来，但是本文中用到了hadoop命令...
 #在执行这些命令前你必须确保hadoop是在正常跑着的，而且启动hive的前提也是需要hadoop在正常跑着
-#所以建议先将hadoop跑起来在按照本文操作 
+#所以建议先将hadoop跑起来在按照本文操作
 
 [hadoop@localhost ~]$ tar -zxf apache-hive-2.3.3-bin.tar.gz
 [hadoop@localhost ~]$ ln -sv apache-hive-2.3.3-bin hive
@@ -83,6 +84,7 @@ export HIVE_CONF_DIR=/usr/local/apache-hive-2.1.1/conf
 export HIVE_AUX_JARS_PATH=/usr/local/apache-hive-2.1.1/lib
 
 #此处有关安装与配置MySQL数据库的步骤略过
+#将数据映射成数据库和一张张的表，库和表的元数据信息一般存在关系型数据库上
 
 
 #对MySQL数据库初始化，首先进入到hive的bin目录
