@@ -45,9 +45,9 @@ initLimit=10
 #Leader与Follower之间发送消息，请求和应答的时间长度
 syncLimit=5
 #保存ZK数据的路径，即内存数据库快照存放地址，此路径要事先创建
-dataDir=/home/smrz/wangyu/zookeeper-3.4.10/data
+dataDir=/usr/local/zookeeper-3.4.10/data
 #保存ZK日志的路径，当此配置不存在时默认路径与dataDir一致，此路径要事先创建
-dataLogDir=/home/smrz/wangyu/zookeeper-3.4.10/logs
+dataLogDir=/usr/local/zookeeper-3.4.10/logs
 #客户端访问ZK时使用的端口
 clientPort=21811
 #默认1000，当Server没有空闲来处理更多的客户端请求时，还是允许C端将请求提交到S以提高吞吐性能
