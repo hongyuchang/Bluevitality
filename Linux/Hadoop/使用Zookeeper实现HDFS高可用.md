@@ -4,6 +4,9 @@
 Active NameNode、Standby NameNode：
     两台NameNode形成互备，一台处于Active状态，为主NameNode
     另外一台处于Standby状态，为备NameNode，只有主NameNode才能对外提供读写服务
+    Active NameNode和StandbyNameNode使用JouranlNode集群来进行数据同步
+    Active NameNode首先把EditLog提交到JournalNode集群，然后Standby NameNode再从JournalNode集群定时同步EditLog
+    当N进入Standby状态时会启动EditLogTailer线程，其调用EditLogTailer类的doTailEdits方法从JournalNode集群同步EditLog
 
 主备切换控制器 ZKFailoverController：
     ZKFailoverController作为独立进程运行，对NameNode的主备切换进行总体控制
@@ -12,6 +15,8 @@ Active NameNode、Standby NameNode：
 
 Zookeeper集群：
     为主备切换控制器提供主备选举支持
+    Zookeeper过于敏感：Hadoop的配置项中Zookeeper的session timeout参数"ha.zookeeper.session-timeout.ms"默认值为5000
+    也就是5s，这个值比较小，会导致Zookeeper比较敏感，建议将其调大，避免因网络抖动等原因引起 NameNode 进行无谓的主备切换
     
 共享存储系统：
     共享存储系统是实现NN高可用最为关键的部分，共享存储系统保存了NameNode运行过程中所产生的HDFS元数据。
@@ -117,7 +122,10 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 #### 启动顺序
 ```bash
 #启动所有journalnode：
-#在设置了所有必要的配置选项之后，必须先在集群中启动JournalNode守护进程，通过如下命令启动并等待守护进程在每台相关机器上启动。
+#基于QJM的共享存储系统主要用于保存EditLog，并不保存FSImage文件。FSImage文件还是在NameNode的本地磁盘上
+#基于QJM共享存储的基本思想来自Paxos算法，采用多个称为JournalNode的节点组成的JournalNode集群来存储EditLog
+#每个JournalNode保存同样的EditLog副本。每次NN写EditLog的同时也会向JournalNode集群中的每个JournalNode发送EditLog的写请求
+#在设置了所有必要的配置选项之后，必须先在集群中启动JournalNode守护进程，通过如下命令启动并等待守护进程在每台相关机器上启动
 
     hadoop-daemon.sh start journalnode
 
@@ -143,8 +151,8 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
     
     hdfs zkfc -formatZK
 
-
-#由于配置中启用了自动故障转移功能，因此start-dfs.sh脚本将自动在任何运行NameNode的计算机上启动ZKFC守护程序。
+#由于上文中配置中启用了自动故障转移功能，因此"start-dfs.sh"脚本将自动在任何运行NameNode的计算机上启动zkfc守护程序
+#ZKFailoverController作为NameNode机器上一个独立的进程启动 (在hdfs启动脚本之中的进程名为"zkfc")
 #当ZKFC启动时，他们将自动选择一个NameNode变为活动状态。
 
     start-dfs.sh
