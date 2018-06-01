@@ -1,9 +1,10 @@
-<!--
-        部署HA之前请先将ZK服务先部署完毕~! 
-        需要zookeeper最少3台，需要journalnode最少三台，目前最多支持2台namenode，不过节点可以复用，但是不建议
--->
+```txt
+部署HA之前请先将ZK服务先部署完毕~! 
+需要zookeeper最少3台，需要journalnode最少三台，目前最多支持2台namenode，不过节点可以复用，但是不建议
+```
 
-vim etc/hadoop/hdfs-site.xml
+#### vim etc/hadoop/hdfs-site.xml
+```xml
 <!-- 名称服务的逻辑名称 -->
 <property>
     <name>dfs.nameservices</name>
@@ -72,8 +73,9 @@ vim etc/hadoop/hdfs-site.xml
     <name>dfs.ha.automatic-failover.enabled</name>
     <value>true</value>
 </property>
-
-vim etc/hadoop/core-site.xml
+```
+#### vim etc/hadoop/core-site.xml
+```xml
 <!-- 可将Hadoop客户端的默认路径配置为使用新的启用HA的逻辑URI。
 如果之前使用“mycluster”作为名称服务标识，则这将是所有HDFS路径的权限部分的值。这可能是这样配置的 -->
 <property>
@@ -92,9 +94,9 @@ vim etc/hadoop/core-site.xml
     <name>ha.zookeeper.quorum</name>
     <value>node1:2181,node2:2181,node3:2181</value>
 </property>
-
-<!--
----------------------------------------------------------------------------------------- 启动顺序
+```
+#### 启动顺序
+```bash
 #启动所有journalnode：
 #在设置了所有必要的配置选项之后，必须先在集群中启动JournalNode守护进程，通过如下命令启动并等待守护进程在每台相关机器上启动。
 
@@ -127,5 +129,4 @@ vim etc/hadoop/core-site.xml
 #当ZKFC启动时，他们将自动选择一个NameNode变为活动状态。
 
     start-dfs.sh
-
--->
+```
