@@ -97,7 +97,7 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 <!-- SSH必须能在不提供密码的情况下通过SSH连接到目标。因此还必须配置dfs.ha.fencing.ssh.private-key-files选项 -->
 <property>
     <name>dfs.ha.fencing.ssh.private-key-files</name>
-    <value>/root/.ssh/id_rsa</value>
+    <value>/home/hadoop/.ssh/id_rsa</value>
 </property>
 
 <!-- 启用HDFS的HA环境下的自动故障转移 -->
