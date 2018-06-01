@@ -25,7 +25,10 @@
   <!-- users max running apps -->
   <userMaxAppsDefault>30</userMaxAppsDefault>
   <queue name="root">
+  <!-- 可向队列中提交应用程序的Linux用户或用户组列表，默认为"*"，即任何用户均可向该队列提交应用程序
+  配置该属性时，用户或组之间用"，"分割，用户和用户组之间用空格分割，比如"user1,user2 group1,group2" -->
   <aclSubmitApps> </aclSubmitApps>
+  <!-- 该队列的管理员列表，一个队列的管理员可管理该队列中的资源和应用程序，比如可杀死任意应用程序 -->
   <aclAdministerApps> </aclAdministerApps>
   
   <queue name="default"> <!-- 队列名 -->
