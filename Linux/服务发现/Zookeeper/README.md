@@ -1,12 +1,12 @@
 #### 备忘
 ```
 在ZooKeeper集群中有三种角色：
-    1.Leader
-    2.Follower
-    3.Observer
-    在ZooKeeper集群中同一时刻只有一个Leader，其他都是Follower或Observer。
-
-ZooKeeper配置简单，每个节点的配置文件 zoo.cfg 都是相同的，仅date/myid文件内的ID不一样
+    集群中同一时刻只有一个Leader，其他都是Follower或Observer
+        1.Leader
+        2.Follower
+        3.Observer
+    
+ZK配置简单，各节点配置文件"zoo.cfg"都是相同的，仅date/myid文件内的ID不同
 
 Zookeeper类似于集群工作中的协调者，又可作为一种集群中存放"全局"变量的角色（不适应存放大容量）
 它是分布式，开源的分布式应用程序协调服务，它是集群的管理者，监视着集群中各节点状态根据节点提交的反馈进行下一步合理操作。
@@ -25,18 +25,14 @@ contrib     lib              recipes               zookeeper-3.4.10.jar.sha1
 dist-maven  LICENSE.txt      src
 
 #创建Zookeeper下的Data及日志目录，ID
-[root@localhost zookeeper-3.4.10]# mkdir -p {data,logs} ; touch data/myid
-[root@localhost zookeeper-3.4.10]# echo '<本节点的ID号>' > data/myid
+[root@localhost zookeeper-3.4.10]# mkdir -p {data,logs} && touch data/myid
+[root@localhost zookeeper-3.4.10]# echo '<本节点ID>' > data/myid
 
 #设置环境变量（此处略过JAVA的安装及JAVA_HOME的配置）
-[root@localhost zookeeper-3.4.10]# pwd -P
-/usr/local/zookeeper-3.4.10
-[root@localhost zookeeper-3.4.10]# export ZOOKEEPER_HOME=/usr/local/zookeeper-3.4.10/
-[root@localhost zookeeper-3.4.10]# export PATH=$ZOOKEEPER_HOME/bin:$PATH
-[root@localhost zookeeper-3.4.10]# export PATH
-[root@localhost zookeeper-3.4.10]# vim /etc/profile.d/zookeeper.sh
+[root@localhost zookeeper-3.4.10]# cat > /etc/profile.d/zookeeper.sh <<eof
 export ZOOKEEPER_HOME=/usr/local/zookeeper-3.4.10/
 export PATH=$ZOOKEEPER_HOME/bin:$PATH
+eof
 [root@localhost zookeeper-3.4.10]# source /etc/profile
 
 #配置ZK，为避免编码问题不要使用中文注释，ZooKeeper集群中每个节点的配置文件都一样，可直接同步配置文件而不做任何修改!
