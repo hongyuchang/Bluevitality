@@ -15,10 +15,6 @@
 │   │   │   ├── conf
 │   │   │   ├── 软件
 │   │   │   └── 资料
-│   │   ├── Hadoop
-│   │   │   ├── Hive
-│   │   │   ├── xml
-│   │   │   └── 资料
 │   │   ├── HAproxy
 │   │   │   ├── conf
 │   │   │   ├── Setup 1.6.7
@@ -37,6 +33,11 @@
 │   │   │   └── conf
 │   │   └── Xinetd
 │   │       └── conf
+│   ├── Hadoop
+│   │   ├── Hive
+│   │   ├── xml
+│   │   └── 资料
+│   │       └── 文档
 │   ├── Linux Kernel
 │   │   └── Images
 │   ├── Virtualization
@@ -295,4 +296,4 @@
     │   └── Improve
     └── Tools
 
-295 directories
+296 directories
