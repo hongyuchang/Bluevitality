@@ -63,6 +63,9 @@
 ```
 #### 启动YARN、查看Yarn节点状态
 ```bash
+# 拷贝YARN的HA配置文件到另一个节点
+$ cp etc/hadoop/yarn-site.xml node2:$(pwd)
+
 # Step1 正常启动hadoop集群
 $ start-yarn.sh
 
