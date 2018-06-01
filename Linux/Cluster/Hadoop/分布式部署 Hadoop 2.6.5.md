@@ -68,6 +68,11 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
         <value>hdfs://node1:8020/</value>           #HDFS中Master（即NN）的访问接口（其监听的RPC端口）
         <final>true</final>
     </property>
+    <!-- 开启垃圾回收站功能，HDFS文件删除后先进入回收站，其最长保留数据时间为1天，超过一天后删除 --> 
+    <property>  
+        <name>fs.trash.interval</name>  
+        <value>1440</value>  
+    </property>
     <property>
          <name>io.file.buffer.size</name>
          <value>131072</value>
