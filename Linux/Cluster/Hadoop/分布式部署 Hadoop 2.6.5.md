@@ -130,11 +130,21 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 [root@node1 hadoop]# vim etc/hadoop/hdfs-site.xml
 #主要用于配置HDFS相关属性，如复制因子（数据块的副本数）、NN和DN用于存储数据的路径等信息
 <configuration>
+    <!-- Hadoop允许打开最大文件数，默认4096，不设置的话会提示xcievers exceeded错误 -->    
+    <property>
+        <name>dfs.datanode.max.transfer.threads</name>    
+        <value>409600</value>    
+    </property> 
     <!-- 指定HDFS保存数据的副本数量，即HDFS的DN下的数据冗余份数，对于伪分布式的Hadoop应为1 -->
     <property>
         <name>dfs.replication</name>
         <value>3</value>
     </property>
+    <!-- 指定磁盘预留多少空间，防止磁盘被撑满用完，单位为bytes，此处预留100G -->   
+    <property>  
+        <name>dfs.datanode.du.reserved</name>  
+        <value>107374182400</value>  
+    </property> 
     <!-- 指定hdfs中namenode的存储位置，数据的目录为前面的步骤中专门为其创建的路径 -->
     <property>
         <name>dfs.namenode.name.dir</name> 
@@ -169,6 +179,11 @@ lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
     <property>  
         <name>dfs.webhdfs.enabled</name>  
         <value>true</value>  
+    </property>
+    
+    <property>  
+        <name>dfs.client.socket-timeout</name>  
+        <value>600000</value>  
     </property>
 </configuration>
 
