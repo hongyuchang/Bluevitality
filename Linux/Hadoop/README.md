@@ -19,10 +19,11 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 [root@localhost ~]# systemctl stop firewalld && setenforce 0    #生产环境要写入配置
 [root@localhost ~]# date -s "yyyy-mm-dd HH:MM"      #生产环境要使用ntpdate，若不进行同步在执行YARN任务时会报错
 
-#部署OpenJdk环境
+#2.7+版本的hadoop应使用"1.7+"的JDK环境
 [root@localhost ~]# yum -y install java-1.7.0-openjdk.x86_64 java-1.7.0-openjdk-devel.x86_64
-[root@localhost ~]# echo "export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/" \
-> /etc/profile.d/java.sh && . /etc/profile.d/java.sh    #2.7+版本应使用1.7+的JDK
+[root@localhost ~]# cat > /etc/profile.d/java.sh <<eof
+export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/
+eof    
 
 #在所有节点解压软件包并设置环境变量
 [root@localhost ~]# tar -zxf hadoop-2.6.5.tar.gz -C /  &&  chown -R root.root /hadoop-2.6.5/
@@ -36,6 +37,8 @@ export HADOOP_MAPRED_HOME=${HADOOP_PREFIX}
 export HADOOP_YARN_HOME=${HADOOP_PREFIX}
 eof
 [root@localhost ~]# . /etc/profile
+
+#节点间主机名映射信息
 [root@localhost ~]# cat >> /etc/hosts <<eof
 192.168.0.3   node1 master
 192.168.0.4   node2
@@ -43,7 +46,7 @@ eof
 192.168.0.8   node4
 eof
 
-#此处仅使用hadoop用户，降低root权限被劫持的风险
+#使用hadoop用户进行部署和使用，降低root权限被劫持的风险
 [root@localhost ~]# groupadd hadoop && useradd hadoop -g hadoop && echo "123456" | passwd --stdin hadoop
 
 #使所有Hadoop集群中的节点能够以"hadoop"用户的身份进行免密钥互通（Master启动时将通过SSH的方式启动各节点的daemon进程）
