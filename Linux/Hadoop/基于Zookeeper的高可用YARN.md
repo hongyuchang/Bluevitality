@@ -63,10 +63,10 @@
 ```
 #### 启动YARN、查看Yarn节点状态
 ```bash
-#启动YARN
+# Step1 正常启动hadoop集群
 $ start-yarn.sh
 
-#单独启用备用resourcemanager
+# Step2 在另外配置的ResourceManger上启动服务（单独启用备用resourcemanager）
 $ yarn-daemon.sh start resourcemanager
 
 #查看状态
