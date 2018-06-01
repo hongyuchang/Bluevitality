@@ -136,7 +136,9 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 #每个JournalNode保存同样的EditLog副本。每次NN写EditLog的同时也会向JournalNode集群中的每个JournalNode发送EditLog的写请求
 #在设置了所有必要的配置选项之后，必须先在集群中启动JournalNode守护进程，通过如下命令启动并等待守护进程在每台相关机器上启动
 
-    hadoop-daemon.sh start journalnode
+    在各节点启动： hadoop-daemon.sh start journalnode      #必须是在所有节点执行...
+    在各节点验证： jps | grep JournalNode
+
 
 #在其中一个namenode节点执行格式化：
 #如果正在设置新的HDFS集群，则应首先在NameNode之一上运行format命令
