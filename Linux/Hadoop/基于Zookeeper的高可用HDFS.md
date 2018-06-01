@@ -73,7 +73,7 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
     <value>qjournal://node1:8485;node2:8485;node3:8485/sxt</value>
 </property>
 
-<!-- HDFS客户端用于联系Active NameNode的Java类 
+<!-- HDFS客户端用于联系Active NameNode的Java类 （配置自动故障切换实现方式）
 配置将由DFS客户端使用的Java类的名称，以确定哪个NameNode是当前的Active，以及哪个NameNode当前正在为客户端请求提供服务
 目前Hadoop附带的唯一的实现是ConfiguredFailoverProxyProvider，所以使用这个，除非你使用的是自定义的 -->
 <property>
