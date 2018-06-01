@@ -69,7 +69,7 @@ eof
 lrwxrwxrwx. 1 hadoop hadoop 14 1月  12 07:00 /hadoop -> /hadoop-2.6.5/
 ```
 #### 在Hadoop集群中的Master节点，即本环境中的NN、SNN、YARN节点（node1）配置如下
-```bash
+```xml
 [root@node1 hadoop]# vim etc/hadoop/core-site.xml
 <configuration>
     <!-- 指定NameNode地址，即集群中HDFS的RPC服务端口（NN在哪台机器及端口）可将其认为是HDFS的入口 -->
