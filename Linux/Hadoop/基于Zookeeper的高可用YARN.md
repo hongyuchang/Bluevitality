@@ -61,8 +61,15 @@
     <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>  
 </property>  
 ```
-#### 查看Yarn节点状态
+#### 启动YARN、查看Yarn节点状态
 ```bash
+#启动YARN
+$ start-yarn.sh
+
+#单独启用备用resourcemanager
+$ yarn-daemon.sh start resourcemanager
+
+#查看状态
 $ yarn rmadmin -getServiceState rm1
  active
 $ yarn rmadmin -getServiceState rm2
