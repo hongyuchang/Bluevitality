@@ -128,25 +128,27 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
     <value>node1:2181,node2:2181,node3:2181</value>
 </property>
 ```
-#### 启动顺序
+#### 启动顺序 ref: https://blog.csdn.net/zilong_zilong/article/details/51703399
 ```bash
+在所有节点执行：
+    chown hadoop.hadoop -R /opt/data/journal
+    chmod u+rwx -R /opt/data/journal
+
 #启动所有journalnode节点：
 #基于QJM的共享存储系统主要用于保存EditLog（并不保存FSImage文件。FSImage文件还是在NameNode的本地磁盘上）
 #基于QJM共享存储的基本思想来自Paxos算法，采用多个称为JournalNode的节点组成的JournalNode集群来存储EditLog
 #每个JournalNode保存同样的EditLog副本。每次NN写EditLog的同时也会向JournalNode集群中的每个JournalNode发送EditLog的写请求
 #在设置了所有必要的配置选项之后，必须先在集群中启动JournalNode守护进程，通过如下命令启动并等待守护进程在每台相关机器上启动
 
-    在各节点启动： hadoop-daemon.sh start journalnode      #必须是在所有节点执行...
-    在各节点验证： jps | grep JournalNode
+    在所有点启动： hadoop-daemon.sh start journalnode      #必须是在所有节点执行...
+    在所有点验证： jps | grep JournalNode
 
-
-#在其中一个namenode节点执行格式化：
 #如果正在设置新的HDFS集群，则应首先在NameNode之一上运行format命令
 #如果您已经格式化NameNode，或正在将未启用HA的群集转换为启用HA，则现在应该通过运行命令" hdfs namenode - "
 #将您的NameNode元数据目录的内容复制到另一个未格式化的NameNode，bootstrapStandby放在未格式化的NameNode上。
 #运行此命令还将确保JournalNodes（由dfs.namenode.shared.edits.dir配置）包含足够的编辑事务，以便能够启动两个NameNode。
 
-    hdfs namenode -format
+    在其中一个namenode节点执行格式化:   hdfs namenode -format
 
 # 附：手动切换HA下的NN节点
 #     #将给定NameNode的状态转换为Active或Standby（不使用fencing措施，因此一般不用这2个命令，用hdfs haadmin -failover）
@@ -162,11 +164,25 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
     
     hdfs zkfc -formatZK
 
-#由于上文中配置中启用了自动故障转移功能，因此"start-dfs.sh"脚本将自动在任何运行NameNode的计算机上启动zkfc守护程序
+#启动namenode、同步备用namenode、启动备用namenode
+    在NN节点执行：    hadoop-daemon.sh start namenode
+    在备用NN节点执行：  hdfs namenode -bootstrapStandby 
+    在备用NN节点执行：  hadoop-daemon.sh start namenode
+
+#启动DFSZKFailoverController
 #ZKFailoverController作为NameNode机器上一个独立的进程启动 (在hdfs启动脚本之中的进程名为"zkfc")
 #当ZKFC启动时，他们将自动选择一个NameNode变为活动状态
 
-    start-dfs.sh （若其他节点未启动NN则在那个节点执行: hadoop-daemon.sh start namenode）
+    在主备2个NN节点执行：    hadoop-daemon.sh start zkfc
+
+#只需要在NN节点执行如下1条命令即启动所有DN：
+
+    hadoop-daemons.sh start datanode
+
+# 若启动过程中某个节点jps观察，出现问题需要重启时，应先执行如下命令删除已经存在的数据：
+    rm -rf /data/hadoop/hdfs/snn/*
+    rm -rf /data/hadoop/hdfs/dn/*
+    rm -rf /data/hadoop/hdfs/nn/*
 ```
 #### FAQ
 ```txt
