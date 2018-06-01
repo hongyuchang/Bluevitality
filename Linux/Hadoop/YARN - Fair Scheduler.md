@@ -70,7 +70,7 @@
           <aclSubmitApps> business1_group</aclSubmitApps>
           <aclAdministerApps> hadoop,business1_group</aclAdministerApps>
   </queue>
-                                                                                                                                  
+
   <queue name="business2_group">
       <minResources>75000mb,15vcores</minResources>
       <maxResources>102400mb,20vcores</maxResources>
