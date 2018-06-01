@@ -134,7 +134,8 @@ bin/kafka-console-producer.sh --broker-list 192.168.133.130:9092 --topic ES
 ./kafka-topics.sh –-zookeeper 127.0.0.1:2181 –alter –-topic ES --config delete.retention.ms=1
 
 #为topic增加replication
-./kafka-reassign-partitions.sh --zookeeper 127.0.0.1:2181 -reassignment-json-file json/partitions-to-move.json -execute
+./kafka-reassign-partitions.sh --zookeeper 127.0.0.1:2181 \
+-reassignment-json-file json/partitions-to-move.json -execute
 
 #通过group_id查看当前详细的消费情况
 ./kafka-consumer-groups.sh --group logstash --describe --zookeeper 127.0.0.1:2181
