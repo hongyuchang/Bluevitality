@@ -1,4 +1,4 @@
-spark部署：
+#!/bin/bash
 
 #准备安装包：
 #    scala-2.10.4.tgz
