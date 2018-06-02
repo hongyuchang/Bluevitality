@@ -27,7 +27,7 @@ tar -zxf spark-1.3.0-bin-hadoop2.4.tgz && ln -sv spark-1.3.0-bin-hadoop2.4.tgz s
 
 cd ~/spark/conf && cp spark-env.sh.template spark-env.sh
 cat > spark-env.sh <<'eof'
-export JAVA_HOME=/home/hadoop/jdk1.8    #部署Spark应使用大于等于1.8以上的版本，否则会报错!
+export JAVA_HOME=/home/hadoop/jdk1.8    #部署Spark应使用大于等于1.8以上的版本，否则会报错! ( 与1.7环境完全分离!执行应用时报错... )
 export SCALA_HOME=/home/hadoop/scala
 export HADOOP_HOME=/hadoop
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
