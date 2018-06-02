@@ -75,6 +75,10 @@ $ jps | grep -iE "Master|Worker"
     --master yarn-cluster \  # can also be `yarn-client`
     lib/spark-examples*.jar \
     10
+    
+#计算圆周率
+./spark-submit --class org.apache.spark.examples.SparkPi \
+--master yarn-cluster ../examples/jars/spark-examples_2.11-2.3.0.jar
 
 #基本概念：
 #RDD（resillient distributed dataset）：弹性分布式数据集
