@@ -20,11 +20,12 @@ YARN的公平调度器由facebook贡献，适合于多用户共享集群的环�
     <!-- <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler</value> -->
     <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
 </property>
-<!-- 指定YARN调度器配置文件名，默认就是 "fair-scheduler.xml" -->
+<!-- 指定YARN调度器配置文件名，默认就是 "fair-scheduler.xml"
 <property>
      <name>yarn.scheduler.fair.allocation.file</name> 
      <value>/hadoop/etc/hadoop/fair-scheduler.xml</value> 
 </property>
+-->
 ```
 #### ResourceManager 的 fair-scheduler.xml (HADOOP_HOME/conf/fair-scheduler.xml.template)
 ```xml
