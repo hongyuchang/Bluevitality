@@ -22,7 +22,7 @@ Node2-4(192.168.0.4/7/8)作为：   DN(NodeManager)
 [root@localhost ~]# sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux &&　setenforce 0
 [root@localhost ~]# date -s "yyyy-mm-dd HH:MM"      #生产环境要使用ntpdate，若不进行同步在执行YARN任务时会报错
 
-#2.7+版本的hadoop应使用"1.7+"的JDK环境
+#2.7+版本的Hadoop在生产环境中应使用"1.8+"的JDK环境，否则执行Spark任务时易出现报错
 [root@localhost ~]# yum -y install java-1.7.0-openjdk.x86_64 java-1.7.0-openjdk-devel.x86_64
 [root@localhost ~]# cat > /etc/profile.d/java.sh <<'eof'
 export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.5.el7.x86_64/
