@@ -5,8 +5,7 @@
 #    spark-2.3.0-bin-hadoop2.7.tgz
 
 #安装scala
-tar -zxvf scala-2.10.4.tgz
-ln -sv scala-2.10.4.tgz scala
+tar -zxvf scala-2.10.4.tgz && ln -sv scala-2.10.4.tgz scala
 
 cat > /etc/profile.d/scala.sh <<'eof'
 export SCALA_HOME=/home/hadoop/scala
@@ -15,20 +14,16 @@ eof
 
 source /etc/profile
 
-#验证：
-scala -version
+#验证： scala -version
 
 
 #安装spark
-tar -zxvf spark-1.3.0-bin-hadoop2.4.tgz
-ln -sv spark-1.3.0-bin-hadoop2.4.tgz spark
+tar -zxvf spark-1.3.0-bin-hadoop2.4.tgz && ln -sv spark-1.3.0-bin-hadoop2.4.tgz spark
 
-cd ~/spark/conf
-cp spark-env.sh.template spark-env.sh
+cd ~/spark/conf && cp spark-env.sh.template spark-env.sh
 cat > spark-env.sh <<'eof'
 export SCALA_HOME=/home/hadoop/scala
-#部署Spark应使用大于等于1.8以上的版本，否则会报错!
-export JAVA_HOME=/home/hadoop/jdk1.8
+export JAVA_HOME=/home/hadoop/jdk1.8    #部署Spark应使用大于等于1.8以上的版本，否则会报错!
 export HADOOP_HOME=/hadoop
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 SPARK_MASTER_IP=node1
@@ -46,14 +41,11 @@ scp slave hadoop@:$(pwd)
 #启动Spark
 sbin/start-all.sh
 
-
 #验证 Spark 是否安装成功
 $ jps | grep -iE "Master|Worker"
 7805 Master
 
-#访问：
-http://master:8080
-
+#访问：    http://master:8080
 ---------------------------------------------------------------
 
 #运行示例
