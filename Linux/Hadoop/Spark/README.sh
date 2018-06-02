@@ -80,6 +80,21 @@ $ jps | grep -iE "Master|Worker"
 ./spark-submit --class org.apache.spark.examples.SparkPi \
 --master yarn-cluster ../examples/jars/spark-examples_2.11-2.3.0.jar
 
+
+说明：
+./bin/spark-submit \
+  --class <main-class> \    指定jar包的入口位置,不是物理位置 ( 作业的主类 )
+  --master <master-url> \   指定spark执行的master和端口号，可以在程序中SparkConf中进行指定
+  --deploy-mode client \    client 模式表示作业的AM会放在Master节点运行。若设置此参数则需同时指定上面 master 为 yarn
+  --conf <key>=<value> \
+  --executor-cores 2  \     各 executor 使用的并发线程数目，即每个 executor 最大可并发执行的 Task 数
+  --executor-memory 20G \   各 executor 使用的最大内存，不可超过单机的最大可使用内存
+  --num-executors 50 \  创建多少个 executor
+  ... # other options \
+  <application-jar> \   编译好jar包的位置
+  [application-arguments]
+-----------------------------------------------------------------------------------------
+
 #基本概念：
 #RDD（resillient distributed dataset）：弹性分布式数据集
 #Task：具体执行任务。Task分为ShuffleMapTask和ResultTask两种。ShuffleMapTask、ResultTask分别类似于Hadoop中的Map、Reduce
