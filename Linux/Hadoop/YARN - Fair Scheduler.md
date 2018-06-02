@@ -1,4 +1,4 @@
-### 基于YARN的公平调度器配置
+### YARN的公平调度器配置
 ```txt
 YARN的公平调度器由facebook贡献，适合于多用户共享集群的环境的调度器，其吞吐率高于FIFO调度...
 假设在生产环境的Yarn中共有四类用户需要使用集群：开发用户、测试用户、业务1用户、业务2用户
@@ -12,7 +12,7 @@ YARN的公平调度器由facebook贡献，适合于多用户共享集群的环�
     这样每个用户组下的用户提交任务时候，会到相应的资源池中，而不影响其他业务
     
 ```
-#### 配置YARN使用公平调度器: vim etc/hadoop/yarn-site.xml
+#### 使用公平调度器: vim etc/hadoop/yarn-site.xml
 ```xml
 <!-- 启用的资源调度器的主类，目前可用的有FIFO、Capacity Scheduler和Fair Scheduler -->
 <property>
@@ -23,7 +23,7 @@ YARN的公平调度器由facebook贡献，适合于多用户共享集群的环�
 <!-- 指定YARN调度器配置文件名，默认就是 "fair-scheduler.xml" -->
 <property>
      <name>yarn.scheduler.fair.allocation.file</name> 
-     <value>/soft/hadoop/etc/hadoop/fair-scheduler.xml</value> 
+     <value>/hadoop/etc/hadoop/fair-scheduler.xml</value> 
 </property>
 ```
 #### ResourceManager 的 fair-scheduler.xml (HADOOP_HOME/conf/fair-scheduler.xml.template)
