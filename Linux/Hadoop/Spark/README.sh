@@ -16,7 +16,6 @@ source /etc/profile
 
 #验证： scala -version
 
-
 #安装spark
 tar -zxvf spark-1.3.0-bin-hadoop2.4.tgz && ln -sv spark-1.3.0-bin-hadoop2.4.tgz spark
 
