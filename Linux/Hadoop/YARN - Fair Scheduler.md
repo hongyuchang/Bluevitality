@@ -30,7 +30,7 @@ YARN的公平调度器由facebook贡献，适合于多用户共享集群的环�
 ```xml
 <?xml version="1.0"?>
 <allocations>  
-  <queue name="root">
+    <queue name="root">
         <!-- 可向队列中提交应用程序的Linux用户或用户组列表，默认为"*"，即任何用户均可向该队列提交应用程序
         配置该属性时，用户或组之间用"，"分割，用户和用户组之间用空格分割，比如"user1,user2 group1,group2" -->
         <aclSubmitApps> </aclSubmitApps>
@@ -84,7 +84,7 @@ YARN的公平调度器由facebook贡献，适合于多用户共享集群的环�
                 <aclSubmitApps>business2_group</aclSubmitApps>
                 <aclAdministerApps>hadoop,root</aclAdministerApps>
             </queue>
-        </queue>
+    </queue>
     
   <queuePlacementPolicy>
       <rule name="primaryGroup" create="false" />
