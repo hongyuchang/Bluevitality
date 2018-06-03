@@ -166,12 +166,12 @@ URI的格式"qjournal://host1:port1;host2:port2;host3:port3/journalId"。
 
 #启动namenode、同步备用namenode、启动备用namenode
     在NN节点执行：    hadoop-daemon.sh start namenode
-    在备用NN节点执行：  hdfs namenode -bootstrapStandby 
-    在备用NN节点执行：  hadoop-daemon.sh start namenode
+    在备用NN节点执行：  hdfs namenode -bootstrapStandby     #从ActiveNameNode拷贝FSImage到本地（避免元数据的不一致）
+    在备用NN节点执行：  hadoop-daemon.sh start namenode     #当StandbyNameNode同步FSImage后才能启动此节点的NN
 
 #启动DFSZKFailoverController
-#ZKFailoverController作为NameNode机器上一个独立的进程启动 (在hdfs启动脚本之中的进程名为"zkfc")
-#当ZKFC启动时，他们将自动选择一个NameNode变为活动状态
+#ZKFailoverController作为NameNode机器上的一个独立进程启动 (在hdfs启动脚本之中的进程名为"zkfc")
+#当ZKFC启动时将自动选择1个NameNode变为活动状态，它们将创建相应的Znode并写入数据....
 
     在主备2个NN节点执行：    hadoop-daemon.sh start zkfc
 
