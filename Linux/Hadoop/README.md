@@ -261,11 +261,11 @@ eof
 ```bash
 [root@node1 hadoop]# su - hadoop 
 [hadoop@node1 ~]$ cd ${HADOOP_PREFIX}/etc/hadoop
-[hadoop@node1 ~]$ for n in {1..4};do scp core-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/core-site.xml ;done   
-[hadoop@node1 ~]$ for n in {1..4};do scp yarn-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/yarn-site.xml ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp mapred-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/mapred-site.xml ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp hdfs-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/hdfs-site.xml ;done 
-[hadoop@node1 ~]$ for n in {1..4};do scp slaves  hadoop@node${n}:/hadoop/etc/hadoop/slaves ;done 
+[hadoop@node1 ~]$ for n in {1..4};do scp core-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/core-site.xml ;done
+[hadoop@node1 ~]$ for n in {1..4};do scp yarn-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/yarn-site.xml ;done
+[hadoop@node1 ~]$ for n in {1..4};do scp mapred-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/mapred-site.xml ;done
+[hadoop@node1 ~]$ for n in {1..4};do scp hdfs-site.xml  hadoop@node${n}:/hadoop/etc/hadoop/hdfs-site.xml ;done
+[hadoop@node1 ~]$ for n in {1..4};do scp slaves  hadoop@node${n}:/hadoop/etc/hadoop/slaves ;done
 [hadoop@node1 ~]$ for n in {1..4};do scp masters  hadoop@node${n}:/hadoop/etc/hadoop/masters ;done
 #core-site.xml，mapred-site.xml，hdfs-site.xml，master，slave等配置文件在各节点中都是一样的
 ```
