@@ -251,7 +251,7 @@ node1
 eof
 
 [root@node1 hadoop]# cat > etc/hadoop/slaves <<eof
-#输入 Datanode节点的主机名或 IP （ 指明集群中有哪些主机 ）
+#输入Datanode节点主机名或IP（指明集群中有哪些主机）当执行"start-dfs.sh"时其根据此列表来确定集群中DN节点的信息...
 node2
 node3
 node4
