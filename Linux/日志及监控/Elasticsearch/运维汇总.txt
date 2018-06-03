@@ -2,6 +2,34 @@
 分片数过多会导致检索时打开较多文件，另外也会导致多台服务器间通讯，而分片数过少会导至单个分片索引过大，所以检索速度也会慢。
 建议单个分片最多存储20G左右的索引数据，所以分片数量=数据总量/20G
 -------------------------------------------------
+#显示集群系统信息，包括CPU JVM等等
+[wangyu@localhost Test]$ curl -XGET 10.116.182.65:9200/_cluster/stats?pretty=true
+
+#集群的详细信息。包括节点、分片等
+[wangyu@localhost Test]$ curl -XGET 10.116.182.65:9200/_cluster/state?pretty=true
+
+#获取集群堆积的任务
+[wangyu@localhost Test]$ curl -XGET 10.116.182.65:9200/_cluster/pending_tasks?pretty=true
+
+#修改集群配置 ( transient 表示临时的，persistent表示永久的 )
+#举例：
+[wangyu@localhost Test]$ curl -XPUT localhost:9200/_cluster/settings -d '{
+    "persistent" : {
+        "discovery.zen.minimum_master_nodes" : 2
+    }
+}'
+
+#统计ES某个索引数据量：
+[wangyu@localhost Test]$ curl -XGET '10.110.79.22:9200/_cat/count/new-sgs-rbil-core-sys
+
+#获取mapping
+[wangyu@localhost Test]$ curl -XGET http://localhost:9200/{index}/{type}/_mapping?pretty
+
+#查看模板：
+[wangyu@localhost Test]$ curl -XGET 10.116.182.65:9200/_template/fvp_waybillnewstatus_template
+
+#关闭指定192.168.1.1节点
+[wangyu@localhost Test]$ curl -XPOST 'http://localhost:9200/_cluster/nodes/192.168.1.1/_shutdown'
 
 #查看所有的索引文件
 [wangyu@localhost Test]$ curl localhost:9200/_cat/indices?v
@@ -23,7 +51,7 @@ shards disk.indices disk.used disk.avail disk.total disk.percent host     ip    
 curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=response=404&pretty'
 
 #查来自Buffalo的
-curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=geoip.city_name=Buffalo&pretty'
+curl -XGET 'localhost:9200/logstash-2015.12.23/_search?q=geoip.city_name:Buffalo&pretty'
 
 #查看集群负载相关信息
 [root@node3 elasticsearch]# curl -X GET http://localhost:9200/_cat/nodes?v      
