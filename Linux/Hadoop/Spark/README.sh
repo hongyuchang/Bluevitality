@@ -7,6 +7,7 @@
 #Spark官网声称性能比Hadoop快100倍
 
 #准备安装包：
+#    jdk1.8.tar.gz
 #    scala-2.10.4.tgz
 #    spark-2.3.0-bin-hadoop2.7.tgz
 
@@ -18,12 +19,12 @@ export SCALA_HOME=/home/hadoop/scala
 export PATH=$SCALA_HOME/bin:$PATH
 eof
 
-source /etc/profile
+source /etc/profile.d/scala.sh
 
 #验证： scala -version
 
 #安装spark
-tar -zxf spark-1.3.0-bin-hadoop2.4.tgz && ln -sv spark-1.3.0-bin-hadoop2.4.tgz spark
+tar -zxf spark-2.3.0-bin-hadoop2.7.tgz && ln -sv spark-2.3.0-bin-hadoop2.7 spark
 
 cd ~/spark/conf && cp spark-env.sh.template spark-env.sh
 cat > spark-env.sh <<'eof'
@@ -32,23 +33,33 @@ export SCALA_HOME=/home/hadoop/scala
 export HADOOP_HOME=/hadoop
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export SPARK_LOG_DIR=/home/hadoop/spark/logs
-export SPARK_MASTER_IP=node1            #集群的Master节点的ip地址
+export SPARK_PID_DIR=/home/hadoop/spark
+export SPARK_DAEMON_JAVA_OPTS="-Dspark.deploy.recoveryMode=ZOOKEEPER
+-Dspark.deploy.zookeeper.url=node1:2181,node2:2181,node3:2181 -Dspark.deploy.zookeeper.dir=/spark"
+#export SPARK_MASTER_IP=node1           #集群的Master节点的ip地址（由于使用Zookeeper实现了HA，此配置可省略）
 export SPARK_LOCAL_DIRS=/home/hadoop/spark
 export SPARK_WORKER_CORES=16            #每个worker节点所占有的CPU核数目
 export SPARK_DRIVER_MEMORY=64G          #每个Worker节点能够最大分配给exectors的内存大小
 export SPARK_WORKER_INSTANCES=1         #每台机器上开启的worker节点的数目
 eof
 
-vim slave
+cat > slaves <<'eof'
 #在Slaves文件下填上Spark的各节点主机名
+node2
+node3
+eof
+
 
 #将配置文件拷贝给所有Spark节点（需要注意的是其他的Slave节点同样也需要安装Scala!）
 #当Spark与Hadoop节点不在同一主机时需要拷贝hdfs-site.xml、yarn-site.xml、hive-site.xml等文件到Spark的conf下
-scp spark-env.sh hadoop@:$(pwd)
-scp slave hadoop@:$(pwd)
+scp spark-env.sh  X.X.X.X:$(pwd)
+scp slave  X.X.X.X:$(pwd)
 
-#启动Spark ( start-master.sh + start-slaves.sh ==> start-sll.sh )
+#在主节点启动Spark ( start-master.sh + start-slaves.sh ==> start-sll.sh )
 sbin/start-all.sh
+
+#在备节点启动Master，其将自动转为监听状态来监听主节点存活，可通过其URL:8080查看状态...
+sbin/start-master.sh
 
 #各节点验证 Spark 是否安装成功
 $ jps | grep -iE "Master|Worker"
@@ -56,7 +67,7 @@ $ jps | grep -iE "Master|Worker"
 
 #URL：    http://master:8080
 #CLI：    cd ~/spark/bin && ./spark-shell
---------------------------------------------------------------- 运行示例
+---------------------------------------------------------------  Example
 
 #本地模式两线程运行
 ./bin/run-example SparkPi 10 --master local[2]
