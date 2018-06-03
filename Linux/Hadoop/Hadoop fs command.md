@@ -38,3 +38,74 @@ hadoop fs -ls /user/hadoop/file1
   如果是目录，则返回它直接子文件的一个列表，就像在Unix中一样。目录返回列表的信息如下：
   目录名 <dir> 修改日期 修改时间 权限 用户ID 组ID 
 ```
+#### 查看 HDFS 状态
+```bash
+[root@node1 sbin]# curl http://192.168.44.128:50070/jmx 以JSON形式查看各节点JMX信息...
+[root@node1 sbin]# hadoop dfsadmin -report
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+
+Configured Capacity: 53018099712 (49.38 GB)
+Present Capacity: 45228580864 (42.12 GB)
+DFS Remaining: 45089046528 (41.99 GB)
+DFS Used: 139534336 (133.07 MB)
+DFS Used%: 0.31%
+Under replicated blocks: 0
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+Missing blocks (with replication factor 1): 0
+
+-------------------------------------------------
+Live datanodes (3):
+
+Name: 192.168.44.129:50010 (node2)
+Hostname: node2
+Decommission Status : Normal
+Configured Capacity: 17672699904 (16.46 GB)
+DFS Used: 8192 (8 KB)
+Non DFS Used: 3288526848 (3.06 GB)
+DFS Remaining: 14384164864 (13.40 GB)
+DFS Used%: 0.00%
+DFS Remaining%: 81.39%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Jun 03 22:08:06 CST 2018
+
+Name: 192.168.44.130:50010 (node3)
+Hostname: node3
+Decommission Status : Normal
+Configured Capacity: 17672699904 (16.46 GB)
+DFS Used: 69767168 (66.54 MB)
+Non DFS Used: 2908540928 (2.71 GB)
+DFS Remaining: 14694391808 (13.69 GB)
+DFS Used%: 0.39%
+DFS Remaining%: 83.15%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Jun 03 22:08:07 CST 2018
+
+Name: 192.168.44.131:50010 (node4)
+Hostname: node4
+Decommission Status : Normal
+Configured Capacity: 17672699904 (16.46 GB)
+DFS Used: 69758976 (66.53 MB)
+Non DFS Used: 1592451072 (1.48 GB)
+DFS Remaining: 16010489856 (14.91 GB)
+DFS Used%: 0.39%
+DFS Remaining%: 90.59%
+Configured Cache Capacity: 0 (0 B)
+Cache Used: 0 (0 B)
+Cache Remaining: 0 (0 B)
+Cache Used%: 100.00%
+Cache Remaining%: 0.00%
+Xceivers: 1
+Last contact: Sun Jun 03 22:08:06 CST 2018
+```
