@@ -70,6 +70,17 @@ eof
     <value>*******</value>
 </property>
 
+<property>
+     <name>hive.server2.webui.host</name>  <!-- WEB-UI 地址 -->
+     <value>192.168.44.128</value>
+</property>
+
+<property>
+     <name>hive.server2.webui.port</name>  <!-- WEB-UI 端口 -->
+     <value>10002</value>
+</property>
+
+
 #将MySQL驱动包上载到Hive的lib目录下
 #需要下载mysql的jdbc<mysql-connector-java-5.1.28.jar>，然后将下载后的jdbc放到hive安装包的lib目录
 #下载链接：http://dev.mysql.com/downloads/connector/j/ 
@@ -106,7 +117,8 @@ schemaTool completed
 
 #启动Hive
 cd $HIVE_HOME/bin
-./hive #执行hive启动
+./hive #执行hive启动 
+#hive --service hiveserver2 &    （ WEB-UI? ）
 
 #简单测试
 #成功启动Hive后，会进入hive的命令行模式，下面进行一系列简单测试
