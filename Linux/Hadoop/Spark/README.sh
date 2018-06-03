@@ -46,7 +46,7 @@ vim slave
 scp spark-env.sh hadoop@:$(pwd)
 scp slave hadoop@:$(pwd)
 
-#启动Spark
+#启动Spark ( start-master.sh + start-slaves.sh ==> start-sll.sh )
 sbin/start-all.sh
 
 #各节点验证 Spark 是否安装成功
@@ -55,9 +55,7 @@ $ jps | grep -iE "Master|Worker"
 
 #URL：    http://master:8080
 #CLI：    cd ~/spark/bin && ./spark-shell
----------------------------------------------------------------
-
-#运行示例
+--------------------------------------------------------------- 运行示例
 
 #本地模式两线程运行
 ./bin/run-example SparkPi 10 --master local[2]
@@ -93,6 +91,7 @@ $ jps | grep -iE "Master|Worker"
   ... # other options \
   <application-jar> \   编译好jar包的位置
   [application-arguments]
+  
 -----------------------------------------------------------------------------------------
 
 #基本概念：
