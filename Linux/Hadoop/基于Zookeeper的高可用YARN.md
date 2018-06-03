@@ -1,20 +1,21 @@
 #### vim yarn-site.xml
 ```xml
-<!-- 启用RM高可用 -->
+<!-- 启用RM的高可用 -->
 <property>
     <name>yarn.resourcemanager.ha.enabled</name>
     <value>true</value>
 </property>
-<!-- 自定义RM的id -->
+<!-- 自定义RM的Cluster ID -->
 <property>
     <name>yarn.resourcemanager.cluster-id</name>
     <value>yrc</value>
 </property>
+<!-- 指定RM的逻辑ID -->
 <property>
     <name>yarn.resourcemanager.ha.rm-ids</name>
     <value>rm1,rm2</value>
 </property>
-<!-- 指定分配RM服务的地址 -->
+<!-- 分别指定各RM的逻辑ID所在的地址 -->
 <property>
     <name>yarn.resourcemanager.hostname.rm1</name>
     <value>master1</value>
@@ -31,11 +32,16 @@
     <name>yarn.resourcemanager.webapp.address.rm2</name>
     <value>master2:8088</value>
 </property>
-<!-- 指定zk集群地址 -->  
+<!-- 指定Zookeeper集群的地址，Yarn依赖其实现HA功能 -->  
 <property>
     <name>yarn.resourcemanager.zk-address</name>
     <value>master1:2181,master2:2181,worker1:2181</value>
 </property>
+<property>  
+    <name>yarn.resourcemanager.ha.automatic-failover.zk-base-path</name>  
+    <value>/yarn-leader-election</value>  
+</property>
+<!-- Mapper数据到Reducer处理使用"shuffle"的方式 -->
 <property>
     <name>yarn.nodemanager.aux-services</name>
     <value>mapreduce_shuffle</value>
@@ -45,11 +51,6 @@
     <name>yarn.resourcemanager.ha.automatic-failover.enabled</name>  
     <value>true</value>  
 </property>
-
-<property>  
-    <name>yarn.resourcemanager.ha.automatic-failover.zk-base-path</name>  
-    <value>/yarn-leader-election</value>  
-</property> 
 
 <!--开启自动恢复功能-->    
 <property>   
