@@ -251,7 +251,7 @@ node1
 eof
 
 [root@node1 hadoop]# cat > etc/hadoop/slaves <<eof
-#输入 Datanode节点的主机名或 IP 
+#输入 Datanode节点的主机名或 IP （ 指明集群中有哪些主机 ）
 node2
 node3
 node4
@@ -294,7 +294,7 @@ hadoop@0.0.0.0\'s password:
 46321 Jps
 46248 DataNode
 
-#启动Yarn，注：在Master节点启动YARN，此操作也会将所有DN节点的NM启动
+#启动Yarn，注：在Master节点启动YARN，此操作也会将所有DN节点的"NodeManager"启动
 [hadoop@node1 ~]$ start-yarn.sh
 starting yarn daemons
 starting resourcemanager, logging to /hadoop/logs/yarn-hadoop-resourcemanager-node1.out
@@ -309,7 +309,7 @@ node4: starting nodemanager, logging to /hadoop/logs/yarn-hadoop-nodemanager-nod
 
 #除上述start-dfs.sh、start-yarn.sh的顺序启动方式外，还有"start-all.sh"脚本用于一次性启动Hadoop集群...
 ```
-#### 在Master节点通过YARN执行Apache提供的MapReduce的 "wordcount"（单词统计）jar包测试运行状态
+#### 在Master节点通过YARN执行Apache提供的MapReduce的 "wordcount.jar"测试运行状态（单词统计）
 ```bash
 #执行分词统计前先录入需要分析的数据到HDFS
 [hadoop@node1 ~]$ hdfs dfs -mkdir /test
