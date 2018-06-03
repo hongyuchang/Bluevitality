@@ -40,9 +40,10 @@ export SPARK_WORKER_INSTANCES=1         #每台机器上开启的worker节点的
 eof
 
 vim slave
-#在Slaves文件下填上Spark的Slave主机名
+#在Slaves文件下填上Spark的各节点主机名
 
 #将配置文件拷贝给所有Spark节点（需要注意的是其他的Slave节点同样也需要安装Scala!）
+#当Spark与Hadoop节点不在同一主机时需要拷贝hdfs-site.xml、yarn-site.xml、hive-site.xml等文件到Spark的conf下
 scp spark-env.sh hadoop@:$(pwd)
 scp slave hadoop@:$(pwd)
 
