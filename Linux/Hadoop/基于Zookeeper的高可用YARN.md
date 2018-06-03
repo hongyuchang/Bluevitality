@@ -64,7 +64,7 @@
 ```
 #### 启动YARN、查看Yarn节点状态
 ```bash
-# 拷贝YARN的HA配置文件到另一个节点
+# 拷贝YARN的HA配置文件到另一个节点，注：建议YARN和HDFS使用相同的"slaves"文件内容，使NM与DN运行在相同机器中
 $ cp etc/hadoop/yarn-site.xml node2:$(pwd)
 
 # Step1 正常启动hadoop集群 （包括NodeManager 但不启动备用ResourceManager） 建议先检查YARN到所有NM的免密登陆是否可用
