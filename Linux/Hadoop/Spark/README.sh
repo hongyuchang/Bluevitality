@@ -34,6 +34,7 @@ export HADOOP_HOME=/hadoop
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export SPARK_LOG_DIR=/home/hadoop/spark/logs
 export SPARK_PID_DIR=/home/hadoop/spark
+#通过加入Zookeeper写入Znode数据，实现Spark集群中Master节点的高可用...
 export SPARK_DAEMON_JAVA_OPTS="-Dspark.deploy.recoveryMode=ZOOKEEPER
 -Dspark.deploy.zookeeper.url=node1:2181,node2:2181,node3:2181 -Dspark.deploy.zookeeper.dir=/spark"
 #export SPARK_MASTER_IP=node1           #集群的Master节点的ip地址（由于使用Zookeeper实现了HA，此配置可省略）
@@ -49,16 +50,15 @@ node2
 node3
 eof
 
-
 #将配置文件拷贝给所有Spark节点（需要注意的是其他的Slave节点同样也需要安装Scala!）
 #当Spark与Hadoop节点不在同一主机时需要拷贝hdfs-site.xml、yarn-site.xml、hive-site.xml等文件到Spark的conf下
 scp spark-env.sh  X.X.X.X:$(pwd)
 scp slave  X.X.X.X:$(pwd)
 
-#在主节点启动Spark ( start-master.sh + start-slaves.sh ==> start-sll.sh )
+#选个主节点启动Spark ( start-master.sh + start-slaves.sh ==> start-sll.sh ) 其将顺便依slaves的信息启动所有Slave节点
 sbin/start-all.sh
 
-#在备节点启动Master，其将自动转为监听状态来监听主节点存活，可通过其URL:8080查看状态...
+#选个备节点启动Master，其将自动转为监听状态来监听主节点存活，可通过其URL:8080查看状态...
 sbin/start-master.sh
 
 #各节点验证 Spark 是否安装成功
