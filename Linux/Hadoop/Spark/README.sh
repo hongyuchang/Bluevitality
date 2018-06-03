@@ -107,7 +107,7 @@ $ jps | grep -iE "Master|Worker"
 -----------------------------------------------------------------------------------------
 
 #基本概念：
-#RDD（resillient distributed dataset）：弹性分布式数据集
+#RDD（resillient distributed dataset）：弹性分布式数据集（RDD的每个partition实际上是1个用于计算的task。这些task被分布在集群里并行计算）
 #Task：具体执行任务。Task分为ShuffleMapTask和ResultTask两种。ShuffleMapTask、ResultTask分别类似于Hadoop中的Map、Reduce
 #Job：用户提交的作业。一个Job可能由一到多个Task组成
 #Stage：Job分成的阶段。一个Job可能被划分为一到多个Stage
@@ -123,7 +123,10 @@ $ jps | grep -iE "Master|Worker"
 #   目前，Standalone、YARN、Mesos、EC2等都可以作为Spark的集群管理器
 #Worker：
 #   Spark的工作节点。对Spark应用程序来说，由集群管理器分配得到资源的Worker节点主要负责以下工作：
-#   创建Executor，将资源和任务进一步分配给Executor，同步资源信息给Cluster Manager
+#   1、创建Executor，将资源和任务进一步分配给Executor
+#   2、同步资源信息给Cluster Manager
+#   集群中每台计算机是1个节点。1个节点可以有1或多个worker，一般就配1个worker
+#   每个worker可以申请1或多个核心（这里的核心实际上代表起的线程），核心数量一般不超过CPU物理核心数量
 #Executor：
 #   执行计算任务的一线进程。主要负责任务的执行以及与Worker、Driver App的信息同步
 #Driver App：
