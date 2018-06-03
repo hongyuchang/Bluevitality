@@ -62,7 +62,7 @@
     <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>  
 </property>  
 ```
-#### 启动YARN、查看Yarn节点状态
+#### 启动YARN并查看各节点状态
 ```bash
 # 拷贝YARN的HA配置文件到另一个节点，注：建议YARN和HDFS使用相同的"slaves"文件内容，使NM与DN运行在相同机器中
 $ cp etc/hadoop/yarn-site.xml node2:$(pwd)
