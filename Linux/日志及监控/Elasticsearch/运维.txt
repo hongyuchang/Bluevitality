@@ -10,6 +10,9 @@
 
 #获取集群堆积的任务
 [wangyu@localhost Test]$ curl -XGET 10.116.182.65:9200/_cluster/pending_tasks?pretty=true
+{
+  "tasks" : []
+}
 
 #修改集群配置 ( transient 表示临时的，persistent表示永久的 )
 #举例：
