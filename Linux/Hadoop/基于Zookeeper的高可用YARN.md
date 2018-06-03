@@ -67,10 +67,10 @@
 # 拷贝YARN的HA配置文件到另一个节点
 $ cp etc/hadoop/yarn-site.xml node2:$(pwd)
 
-# Step1 正常启动hadoop集群
+# Step1 正常启动hadoop集群 （包括NodeManager 但不启动备用ResourceManager） 建议先检查YARN到所有NM的免密登陆是否可用
 $ start-yarn.sh
 
-# Step2 在另外配置的ResourceManger上启动服务（单独启用备用resourcemanager）
+# Step2 在另外配置的ResourceManger上启动服务（单独启用备用ResourceManager）
 $ yarn-daemon.sh start resourcemanager
 
 #查看YARN的高可用环境下各角色的状态
